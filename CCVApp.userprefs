@@ -1,0 +1,17 @@
+﻿<Properties StartupItem="iOS/iOS.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.3" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Tasks/NotesTask/NotesTask.cs">
+    <Files>
+      <File FileName="Droid/Tasks/NotesTask/NotesTask.cs" Line="47" Column="21" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="App.Shared/Notes/Controls/Note.cs" line="533" offsetX="1058" offsetY="7980" expression="state" liveUpdate="False" />
+    <Watch file="Droid/Tasks/NotesTask/NotesDetailsFragment.cs" line="215" offsetX="1268" offsetY="3210" expression="ThumbnailPlaceholder" liveUpdate="False" />
+    <Watch file="../Rock.Mobile/PlatformUI/Droid/DroidLabel.cs" line="78" offsetX="733" offsetY="1155" expression="transparentColor" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.ItemProperties.Droid MonoForAntroid.PreferredDevice="Nexus 4" AndroidDesignerPreferredDevice="Nexus 4" />
+</Properties>

@@ -1,0 +1,19 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.1" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="FacebookSample.iOS/FacebookLoginElement.cs">
+    <Files>
+      <File FileName="FacebookSample.iOS/AppDelegate.cs" Line="44" Column="44" />
+      <File FileName="FacebookSample.iOS/FacebookLoginElement.cs" Line="28" Column="28" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/samples/FacebookSample.iOS/FacebookSample.iOS/FacebookLoginElement.cs" line="95" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="../../../../CCVApp.Shared/Notes/Controls/Note.cs" line="533" offsetX="1058" offsetY="7980" expression="state" liveUpdate="False" />
+    <Watch file="../../../../iOS/UserManagement/ImageCropViewController.cs" line="498" offsetX="806" offsetY="7455" expression="resultTransform" liveUpdate="False" />
+    <Watch file="../../../../Droid/Tasks/NotesTask/NotesDetailsFragment.cs" line="215" offsetX="1268" offsetY="3210" expression="ThumbnailPlaceholder" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+</Properties>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{E6C9AE3A-C70B-4AD7-924D-950870FEC080}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>App.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)RockApi\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Notes\" />
+    <Folder Include="$(MSBuildThisFileDirectory)UI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockMobileUser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\BaseControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Canvas.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\ControlStyles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Header.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\IUIControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\List.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\ListItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Note.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\NoteText.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Paragraph.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Parser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Quote.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\RevealBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\StackPanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\TextInput.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\UserNote.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Models\MobileNote.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Config.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockGeneralData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockNews.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockLaunchData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockNetworkManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VimeoManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Models\Series.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FacebookManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectLink.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GroupFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analytics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIJoinGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIResultView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIBlockerView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIOOBE.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UISplash.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupFinderSearch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PrivateConfig.cs" />
+  </ItemGroup>
+</Project>

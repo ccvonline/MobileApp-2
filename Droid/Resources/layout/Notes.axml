@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:id="@+id/notes_relative_layout"
+    android:background="#ff000000">
+    <Button
+        android:width="@android:dimen/notification_large_icon_width"
+        android:height="@android:dimen/notification_large_icon_height"
+        android:text="Refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/refreshButton" />
+    <ProgressBar
+        android:layout_below="@id/refreshButton"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

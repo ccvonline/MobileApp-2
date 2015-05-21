@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Styles>
+     <Note Padding="5%" BackgroundColor="#262626FF"/>
+     <Paragraph/>
+     <RevealBox FontName="OpenSans-Bold" FontSize="18" FontColor="#c8c8c8FF"/>
+     <Quote MarginTop="5%" MarginBottom="5%" FontName="OpenSans-Italic" FontSize="18" FontColor="#ec3e3eFF"/>
+
+     <TextInput BorderWidth="2" BorderRadius="5" FontName="OpenSans-Regular" FontSize="16" FontColor="#AFAFAFFF"/>
+     
+     <UserNote FontColor="#AFAFAFFF" FontName="OpenSans-Regular" FontSize="16" BorderWidth="2" BorderRadius="5" BorderColor="#777777FF" TextInputBackgroundColor="#FFFFFFFF"/>
+     
+     <Header.Container MarginBottom="5%" Alignment="Left"/>
+     <Header.Title Alignment="Center" FontName="OpenSans-Bold" FontSize="24" FontColor="#AFAFAFFF"/>
+     <Header.Speaker FontName="OpenSans-Light" FontSize="16" FontColor="#AFAFAFFF"/>
+     <Header.Date FontName="OpenSans-Light" FontSize="16" FontColor="#AFAFAFFF"/>
+     
+     <Text FontName="OpenSans-Regular" FontSize="18" FontColor="#AFAFAFFF"/>
+     
+     <List Indentation="5%" BulletPoint="・"/>
+     <ListItem PaddingBottom="5%"/>
+</Styles>

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/springboard_relative_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="0dp"
+                android:id="@+id/springboard_profile_image_container"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/springboard_profile_image_layout"
+                    android:layout_gravity="center_horizontal">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:text="W"
+                        android:id="@+id/springboard_profile_image"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            <!--Relative layout that wraps the "Welcome: Jered" with a button surrounding it-->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="center_horizontal">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/springboard_login_button" />
+                    <LinearLayout
+                        android:background="@android:color/transparent"
+                        android:id="@+id/profile_name_linearlayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content">
+                        <TextView
+                            android:id="@+id/profile_prefix"
+                            android:text="Welcome:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/profile_name"
+                            android:text="Jered"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content" />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/view_profile"
+                        android:text="View Profile"
+                        android:layout_below="@+id/profile_name_linearlayout"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content" />
+                </RelativeLayout>
+            <!--End "Welcome: Jered"-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_below="@+id/springboard_profile_image_container"
+                android:id="@+id/springboard_container"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:id="@+id/springboard_news_frame"
+                    android:layout_marginTop="40dp"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="News"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_news_frame"
+                    android:id="@+id/springboard_connect_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Connect"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_connect_frame"
+                    android:id="@+id/springboard_notes_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Messages"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_notes_frame"
+                    android:id="@+id/springboard_prayer_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Prayer"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_prayer_frame"
+                    android:id="@+id/springboard_give_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Give"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_give_frame"
+                    android:id="@+id/springboard_about_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="More"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+                <View
+                    android:layout_below="@id/springboard_about_frame"
+                    android:id="@+id/end_seperator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#FFF00FFF" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#FFF00FFF" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+<!--Bottom toolbar with Campus and Settings-->
+    <RelativeLayout
+        android:id="@+id/campus_container"
+        android:background="#FFFF0000"
+        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/campus_selection_button"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/campus_selection_text"
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center_vertical" />
+        <TextView
+            android:id="@+id/campus_selection_icon"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="10dp"
+            android:text="S"
+            android:layout_toRightOf="@+id/campus_selection_text"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical" />
+    </RelativeLayout>
+</RelativeLayout>

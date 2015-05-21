@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NoteDB>
+	<HostDomain>http://ccv.church/ccvmobile/</HostDomain>
+
+	<SeriesList>
+		<!--Start Series-->
+		<Series>
+			<Message>
+				<Name>ARE ALL FAITHS EQUAL?</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>5/10/2015</Date>
+				<NoteUrl>xml/message_5_9_2015.xml</NoteUrl>
+			</Message>
+
+			<Name>YOU ASKED FOR IT</Name>
+			<Description>
+				Do you have a tough question about life or faith that you just can't seem to find a good answer for?
+				We will take on some of your top questions.
+			</Description>
+			<DateRanges>5/9/2015 - 6/1/2015</DateRanges>
+			<BillboardUrl>images/you_asked_for_it.png</BillboardUrl>
+			<ThumbnailUrl>images/you_asked_for_it_thumb.png</ThumbnailUrl>
+
+		</Series>
+		<!--End Series-->
+
+		<!--Start Series-->
+		<Series>
+			<Message>
+				<Name>RELIGION</Name>
+				<Speaker>Dr. Mark Moore</Speaker>
+				<Date>5/3/2015</Date>
+				<NoteUrl>xml/message_5_2_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Detox/Detox_Wk4_Religion_New.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/126836226.m3u8?p=high,standard,mobile&amp;s=101a4897f5628219e36cb41dca3b7060</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=506</ShareUrl>
+			</Message>
+
+			<Message>
+				<Name>HIDDEN SINS</Name>
+				<Speaker>Ashley Wooldridge</Speaker>
+				<Date>4/26/2015</Date>
+				<NoteUrl>xml/message_4_25_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/126318868.m3u8?p=high,standard,mobile&amp;s=1c40c66636fcc1e3fe19b091e2afe2fc</WatchUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Detox/Detox_Wk3_HiddenSins.mp3</AudioUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=505</ShareUrl>
+			</Message>
+
+			<Message>
+				<Name>COMPARISON</Name>
+				<Speaker>Ashley Wooldridge</Speaker>
+				<Date>4/19/2015</Date>
+				<NoteUrl>xml/message_4_18_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Detox/Detox_Wk2_ComparisonEnvy.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/125484474.m3u8?p=high,standard,mobile&amp;s=23c06443a0ef9f0a668c669f63f8380f</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=504</ShareUrl>
+			</Message>
+
+			<Message>
+				<Name>DOUBT</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>4/12/2015</Date>
+				<NoteUrl>xml/message_4_11_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/124855889.m3u8?p=high,standard,mobile&amp;s=5a20cbfadb3301a1ac8e6d19373c8fbe</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=503</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Detox/Detox_Wk1_Doubt.mp3</AudioUrl>
+			</Message>
+
+			<Name>DETOX</Name>
+			<Description>
+				Detox Description
+			</Description>
+			<DateRanges>4/12/2015 - 5/3/2015</DateRanges>
+			<BillboardUrl>images/detox.png</BillboardUrl>
+			<ThumbnailUrl>images/detox_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+
+		<!--Start Series-->
+		<Series>
+			<Message>
+				<Name>EASTER AT THE STADIUM</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>4/5/2015</Date>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=502</ShareUrl>
+				<WatchUrl>http://player.vimeo.com/external/124277343.m3u8?p=high,standard,mobile&amp;s=5f1b56fdbb5091f5bae897254da8849c</WatchUrl>
+			</Message>
+
+			<Name>EASTER AT THE STADIUM</Name>
+			<Description>
+				Easter 2015 at the University of Phoenix Stadium
+			</Description>
+			<DateRanges>4/5/2015</DateRanges>
+			<BillboardUrl>images/easter_2015.png</BillboardUrl>
+			<ThumbnailUrl>images/easter_2015_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+
+		<!--Start Series-->
+		<Series>
+			<Message>
+				<Name>CHURCH</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>3/29/2015</Date>
+				<NoteUrl>xml/message_3_28_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Unstoppable/Unstoppable_WK2_Church.mp3</AudioUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=500</ShareUrl>
+				<WatchUrl>http://player.vimeo.com/external/123553864.m3u8?p=high,standard,mobile&amp;s=e6e99fb3afaf7af70d66e0cf63738cec</WatchUrl>
+			</Message>
+
+			<Message>
+				<Name>CHRISTIAN</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>3/22/2015</Date>
+				<NoteUrl>xml/message_3_21_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Unstoppable/Unstoppable_WK1_Christian_New.mp3</AudioUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=499</ShareUrl>
+				<WatchUrl>http://player.vimeo.com/external/122988865.m3u8?p=high,standard,mobile&amp;s=77188d6063e76c3e8a26a8fc436a55e4</WatchUrl>
+			</Message>
+
+			<Name>UNSTOPPABLE</Name>
+			<Description>
+				The Message of Jesus Christ is one that has stood the test of time. It has held up to the most extreme criticism and scrutiny over thousands of years. Yet we live in a time where it’s easy to doubt what the future holds. What would happen if Christians and the church fully embraced our mission with confidence? The world we live in would literally be changed. Join us for this series and hear how God wants each and every one of us to play a key role in His UNSTOPPABLE mission.
+			</Description>
+			<DateRanges>3/22/2015 - 3/29/2015</DateRanges>
+			<BillboardUrl>images/unstoppable.png</BillboardUrl>
+			<ThumbnailUrl>images/unstoppable_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+
+	</SeriesList>
+</NoteDB>

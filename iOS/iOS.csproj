@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{8493BB83-6542-4BAE-BE1B-FCFE349AF1E6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>iOS</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>iOS</AssemblyName>
+    <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchLink>None</MtouchLink>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>i386</MtouchArch>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer: Jon Edmiston (H9Y636R8ZP)</CodesignKey>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7</MtouchArch>
+    <BuildIpa>true</BuildIpa>
+    <IpaPackageName>
+    </IpaPackageName>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer: Jon Edmiston (H9Y636R8ZP)</CodesignKey>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <IpaPackageName>
+    </IpaPackageName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <BuildIpa>true</BuildIpa>
+    <CodesignProvision>2531bc11-da55-4fbb-b469-040e52c916f7</CodesignProvision>
+    <CodesignKey>iPhone Developer: Jered McFerron (5U8BJ9M783)</CodesignKey>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>2531bc11-da55-4fbb-b469-040e52c916f7</CodesignProvision>
+    <CodesignKey>iPhone Developer: Jered McFerron (5U8BJ9M783)</CodesignKey>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.MonoTouch">
+      <HintPath>..\Components\restsharp-105.0.1.0\lib\ios-unified\RestSharp.MonoTouch.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\Components\facebook-sdk-6.2.2\lib\ios-unified\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="iOSLocalytics">
+      <HintPath>..\Libs\iOSLocalytics.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\Assets\Fonts\Bevan.ttf">
+      <Link>Resources\Fonts\Bevan.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
+      <Link>Resources\Fonts\ChangaOne-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
+      <Link>Resources\Fonts\ChangaOne-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
+      <Link>Resources\Fonts\DroidSerif-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
+      <Link>Resources\Fonts\DroidSerif-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
+      <Link>Resources\Fonts\DroidSerif-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif.ttf">
+      <Link>Resources\Fonts\DroidSerif.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Black.ttf">
+      <Link>Resources\Fonts\Merriweather-Black.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Bold.ttf">
+      <Link>Resources\Fonts\Merriweather-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-HeavyItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Italic.ttf">
+      <Link>Resources\Fonts\Merriweather-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Light.ttf">
+      <Link>Resources\Fonts\Merriweather-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-LightItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Regular.ttf">
+      <Link>Resources\Fonts\Merriweather-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Montserrat-Bold.ttf">
+      <Link>Resources\Fonts\Montserrat-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Montserrat-Regular.ttf">
+      <Link>Resources\Fonts\Montserrat-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Bold.ttf">
+      <Link>Resources\Fonts\OpenSans-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
+      <Link>Resources\Fonts\OpenSans-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-ExtraBold.ttf">
+      <Link>Resources\Fonts\OpenSans-ExtraBold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-ExtraBoldItalic.ttf">
+      <Link>Resources\Fonts\OpenSans-ExtraBoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Italic.ttf">
+      <Link>Resources\Fonts\OpenSans-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Light.ttf">
+      <Link>Resources\Fonts\OpenSans-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-LightItalic.ttf">
+      <Link>Resources\Fonts\OpenSans-LightItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Regular.ttf">
+      <Link>Resources\Fonts\OpenSans-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Semibold.ttf">
+      <Link>Resources\Fonts\OpenSans-Semibold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-SemiboldItalic.ttf">
+      <Link>Resources\Fonts\OpenSans-SemiboldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Black.ttf">
+      <Link>Resources\Fonts\PassionOne-Black.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Bold.ttf">
+      <Link>Resources\Fonts\PassionOne-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Regular.ttf">
+      <Link>Resources\Fonts\PassionOne-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Bold.ttf">
+      <Link>Resources\Fonts\Quicksand-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Light.ttf">
+      <Link>Resources\Fonts\Quicksand-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Regular.ttf">
+      <Link>Resources\Fonts\Quicksand-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Light.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-LightItalic.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-LightItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Thin.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\FontAwesome.ttf">
+      <Link>Resources\Fonts\FontAwesome.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Bh.ttf">
+      <Link>Resources\Fonts\Bh.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\spot_mask.png">
+      <Link>Resources\spot_mask.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\facebook_login.png">
+      <Link>Resources\facebook_login.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\facebook_login%402x.png">
+      <Link>Resources\facebook_login%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\facebook_login%403x.png">
+      <Link>Resources\facebook_login%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\baptism_thumb.png">
+      <Link>Resources\baptism_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\starting_point_thumb.png">
+      <Link>Resources\starting_point_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\placeholder_news_details.png">
+      <Link>Resources\placeholder_news_details.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\placeholder_news_main.png">
+      <Link>Resources\placeholder_news_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\placeholder_notes_main.png">
+      <Link>Resources\placeholder_notes_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\placeholder_notes_thumb.png">
+      <Link>Resources\placeholder_notes_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\oobe_splash_bg.png">
+      <Link>Resources\oobe_splash_bg.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\note_tutorial_ipad_ls.png">
+      <Link>Resources\note_tutorial_ipad_ls.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\groupfinder_thumb.png">
+      <Link>Resources\groupfinder_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\connect_banner.png">
+      <Link>Resources\connect_banner.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\connect_banner%402x.png">
+      <Link>Resources\connect_banner%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\connect_banner%403x.png">
+      <Link>Resources\connect_banner%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\note_tutorial_portrait.png">
+      <Link>Resources\note_tutorial_portrait.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\note_tutorial_portrait%402x.png">
+      <Link>Resources\note_tutorial_portrait%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\note_tutorial_portrait%403x.png">
+      <Link>Resources\note_tutorial_portrait%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\serve_thumb.png">
+      <Link>Resources\serve_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
+      <Link>Resources\Fonts\DINOffc-CondBlack.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_header.png">
+      <Link>Resources\default_news_a_header.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_header%402x.png">
+      <Link>Resources\default_news_a_header%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_header%403x.png">
+      <Link>Resources\default_news_a_header%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_main.png">
+      <Link>Resources\default_news_a_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_main%402x.png">
+      <Link>Resources\default_news_a_main%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_a_main%403x.png">
+      <Link>Resources\default_news_a_main%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_header.png">
+      <Link>Resources\default_news_b_header.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_header%402x.png">
+      <Link>Resources\default_news_b_header%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_header%403x.png">
+      <Link>Resources\default_news_b_header%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_main.png">
+      <Link>Resources\default_news_b_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_main%402x.png">
+      <Link>Resources\default_news_b_main%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_b_main%403x.png">
+      <Link>Resources\default_news_b_main%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_header.png">
+      <Link>Resources\default_news_c_header.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_header%402x.png">
+      <Link>Resources\default_news_c_header%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_header%403x.png">
+      <Link>Resources\default_news_c_header%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_main.png">
+      <Link>Resources\default_news_c_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_main%402x.png">
+      <Link>Resources\default_news_c_main%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\default_news_c_main%403x.png">
+      <Link>Resources\default_news_c_main%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_ipad_landscape.png">
+      <Link>Resources\splash_logo_ipad_landscape.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_ipad_portrait.png">
+      <Link>Resources\splash_logo_ipad_portrait.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_iphone4s.png">
+      <Link>Resources\splash_logo_iphone4s.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_iphone5.png">
+      <Link>Resources\splash_logo_iphone5.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_iphone6.png">
+      <Link>Resources\splash_logo_iphone6.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_iphone6p.png">
+      <Link>Resources\splash_logo_iphone6p.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\navbarLogo.png">
+      <Link>Resources\navbarLogo.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\navbarLogo%402x.png">
+      <Link>Resources\navbarLogo%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_ipad_landscape_2x.png">
+      <Link>Resources\splash_bg_ipad_landscape_2x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_ipad_landscape.png">
+      <Link>Resources\splash_bg_ipad_landscape.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_ipad_portrait_2x.png">
+      <Link>Resources\splash_bg_ipad_portrait_2x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_ipad_portrait.png">
+      <Link>Resources\splash_bg_ipad_portrait.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_iphone4s.png">
+      <Link>Resources\splash_bg_iphone4s.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_iphone5.png">
+      <Link>Resources\splash_bg_iphone5.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_iphone6.png">
+      <Link>Resources\splash_bg_iphone6.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_bg_iphone6p.png">
+      <Link>Resources\splash_bg_iphone6p.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_ipad_landscape_2x.png">
+      <Link>Resources\splash_logo_ipad_landscape_2x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\splash_logo_ipad_portrait_2x.png">
+      <Link>Resources\splash_logo_ipad_portrait_2x.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+    <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="SpringboardViewController.cs" />
+    <Compile Include="SpringboardViewController.designer.cs">
+      <DependentUpon>SpringboardViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainUINavigationController.cs" />
+    <Compile Include="ContainerViewController.cs" />
+    <Compile Include="ContainerViewController.designer.cs">
+      <DependentUpon>ContainerViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NavToolbar.cs" />
+    <Compile Include="Tasks\Notes\NotesViewController.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskUIViewController.cs" />
+    <Compile Include="Tasks\TaskUIViewController.designer.cs">
+      <DependentUpon>TaskUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\About\AboutTask.cs" />
+    <Compile Include="Tasks\Give\GiveTask.cs" />
+    <Compile Include="Tasks\News\NewsTask.cs" />
+    <Compile Include="Tasks\Notes\NotesTask.cs" />
+    <Compile Include="Tasks\Prayer\PrayerTask.cs" />
+    <Compile Include="UserManagement\LoginViewController.cs" />
+    <Compile Include="UserManagement\LoginViewController.designer.cs">
+      <DependentUpon>LoginViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserManagement\ProfileViewController.cs" />
+    <Compile Include="UserManagement\ProfileViewController.designer.cs">
+      <DependentUpon>ProfileViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\News\NewsMainUIViewController.cs" />
+    <Compile Include="Tasks\News\NewsMainUIViewController.designer.cs">
+      <DependentUpon>NewsMainUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\News\NewsDetailsUIViewController.cs" />
+    <Compile Include="Tasks\About\AboutMainPageUIViewController.cs" />
+    <Compile Include="Tasks\About\AboutMainPageUIViewController.designer.cs">
+      <DependentUpon>AboutMainPageUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserManagement\ImageCropViewController.cs" />
+    <Compile Include="Tasks\Prayer\PrayerMainUIViewController.cs" />
+    <Compile Include="Tasks\Prayer\PrayerMainUIViewController.designer.cs">
+      <DependentUpon>PrayerMainUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Give\GIveMainPageUIViewController.cs" />
+    <Compile Include="Tasks\Give\GIveMainPageUIViewController.designer.cs">
+      <DependentUpon>GIveMainPageUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Notes\NotesDetailsUIViewController.cs" />
+    <Compile Include="Tasks\Notes\NotesMainUIViewController.cs" />
+    <Compile Include="Tasks\Notes\NotesMainUIViewController.designer.cs">
+      <DependentUpon>NotesMainUIViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Notes\NotesWatchUIViewController.cs" />
+    <Compile Include="Tasks\Prayer\Prayer_CreateUIViewController.cs" />
+    <Compile Include="Tasks\Prayer\Prayer_PostUIViewController.cs" />
+    <Compile Include="ControlStyling.cs" />
+    <Compile Include="Tasks\Connect\ConnectTask.cs" />
+    <Compile Include="Tasks\Connect\GroupFinderViewController.cs" />
+    <Compile Include="Tasks\Connect\GroupFinderViewController.designer.cs">
+      <DependentUpon>GroupFinderViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Connect\ConnectMainPageViewController.cs" />
+    <Compile Include="Tasks\Connect\ConnectMainPageViewController.designer.cs">
+      <DependentUpon>ConnectMainPageViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserManagement\RegisterViewController.cs" />
+    <Compile Include="UserManagement\RegisterViewController.designer.cs">
+      <DependentUpon>RegisterViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Connect\GroupFinderJoinViewController.cs" />
+    <Compile Include="UserManagement\OOBEViewController.cs" />
+    <Compile Include="Tasks\TaskUINavigationController.cs" />
+    <Compile Include="Tasks\TaskWebViewController.cs" />
+    <Compile Include="UserManagement\SplashViewController.cs" />
+  </ItemGroup>
+  <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
+  <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
+  <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <InterfaceDefinition Include="MainStoryboard.storyboard" />
+    <InterfaceDefinition Include="Tasks\News\NewsStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="Tasks\Give\GiveStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="UserManagement\UserManagement.storyboard" />
+    <InterfaceDefinition Include="Tasks\Prayer\PrayerStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="Tasks\Notes\NotesStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="Tasks\Connect\ConnectStoryboard_iPhone.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Fonts\" />
+    <Folder Include="Tasks\" />
+    <Folder Include="UserManagement\" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="json.net">
+      <Version>6.0.8.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="restsharp">
+      <Version>105.0.1.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="facebook-sdk">
+      <Version>6.2.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-60%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-76%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-50%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-72%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone6p.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone6.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone4s.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone5.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_portrait.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_portrait_2x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_landscape.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_landscape_2x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone4.png" />
+  </ItemGroup>
+</Project>

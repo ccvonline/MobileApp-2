@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Name Fields-->
+        <RelativeLayout
+            android:id="@+id/first_name_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_alignParentBottom="true" />
+            <EditText
+                android:hint="First Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_border"
+                android:id="@+id/prayer_create_firstNameText"
+                android:inputType="textPersonName"
+                android:layout_marginLeft="10dp"
+                android:maxLength="16"
+                android:maxLines="1" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/last_name_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_alignParentBottom="true" />
+            <EditText
+                android:hint="Last Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/middle_border"
+                android:id="@+id/prayer_create_lastNameText"
+                android:inputType="textPersonName"
+                android:layout_marginLeft="10dp"
+                android:maxLength="12"
+                android:maxLines="1" />
+        </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Prayer Request-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/prayerRequest_background">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_alignParentBottom="true" />
+            <EditText
+                android:hint="Prayer Request"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/top_border"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:maxLines="10"
+                android:scrollbars="vertical"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/prayer_create_requestText" />
+        </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Spinner-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/spinner_background">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="#FFFFFFFF"
+                android:layout_alignParentBottom="true" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_border"
+                android:id="@+id/categorySpinner"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="5dp"
+                android:spinnerMode="dropdown" />
+        </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Toggle Switches-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/switch_background">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_alignParentBottom="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/postAnonymous"
+                        android:layout_marginLeft="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Post Anonymously" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                    <Switch
+                        android:id="@+id/postAnonymousSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_gravity="right" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/makePublic"
+                        android:layout_marginLeft="15dp"
+                        android:layout_below="@+id/postAnonymousSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Make Public" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                    <Switch
+                        android:layout_below="@+id/postAnonymousSwitch"
+                        android:id="@+id/makePublicSwitch"
+                        android:layout_marginRight="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Submit Button-->
+        <Button
+            android:text="Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/prayer_create_submitButton"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    </LinearLayout>
+</ScrollView>

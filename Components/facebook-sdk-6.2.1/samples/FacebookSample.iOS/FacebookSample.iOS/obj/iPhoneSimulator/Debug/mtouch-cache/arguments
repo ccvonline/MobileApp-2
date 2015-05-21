@@ -1,0 +1,31 @@
+# Version: 8.4.0.43 (840a925)
+# [first argument, ignore] # /Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/samples/FacebookSample.iOS/FacebookSample.iOS/bin/iPhoneSimulator/Debug/mtouch.exe
+/Library/Frameworks/Xamarin.iOS.framework/Versions/8.4.0.43/bin/mtouch \
+	-sdkroot \
+	/Applications/Xcode.app/Contents/Developer \
+	--cache \
+	/Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/samples/FacebookSample.iOS/FacebookSample.iOS/obj/iPhoneSimulator/Debug/mtouch-cache \
+	--nomanifest \
+	--nosign \
+	-sim \
+	/Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/samples/FacebookSample.iOS/FacebookSample.iOS/bin/iPhoneSimulator/Debug/FacebookSampleiOS.app \
+	-r \
+	/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/2.1/System.dll \
+	-r \
+	/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/2.1/System.Xml.dll \
+	-r \
+	/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/2.1/System.Core.dll \
+	-r \
+	/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/2.1/monotouch.dll \
+	-r \
+	/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/2.1/MonoTouch.Dialog-1.dll \
+	-r \
+	/Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/lib/ios/Facebook.dll \
+	-debug \
+	-nolink \
+	-sdk \
+	8.1 \
+	-targetver \
+	5.1 \
+	--abi=i386 \
+	/Users/jered/Projects/CCVApp/Components/facebook-sdk-6.2.1/samples/FacebookSample.iOS/FacebookSample.iOS/bin/iPhoneSimulator/Debug/FacebookSampleiOS.exe \

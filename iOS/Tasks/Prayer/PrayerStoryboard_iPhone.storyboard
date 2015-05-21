@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="5">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Prayer MainUI View Controller-->
+        <scene sceneID="4">
+            <objects>
+                <viewController storyboardIdentifier="PrayerMainUIViewController" id="5" customClass="PrayerMainUIViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="673"/>
+                        <viewControllerLayoutGuide type="bottom" id="674"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="645">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="647">
+                                        <rect key="frame" x="-10" y="57" width="340" height="33"/>
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="649">
+                                                <rect key="frame" x="15" y="2" width="310" height="30"/>
+                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="649" secondAttribute="trailing" constant="15" id="Jpb-m3-2LB"/>
+                                            <constraint firstItem="649" firstAttribute="leading" secondItem="647" secondAttribute="leading" constant="15" id="tFa-y9-Aok"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="653">
+                                        <rect key="frame" x="-14" y="150" width="349" height="155"/>
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="654">
+                                                <rect key="frame" x="19" y="44" width="310" height="66"/>
+                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="654" firstAttribute="leading" secondItem="653" secondAttribute="leading" constant="19" id="9zL-Hc-lCS"/>
+                                            <constraint firstAttribute="trailing" secondItem="654" secondAttribute="trailing" constant="20" id="CbF-3a-TQm"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="667">
+                                        <rect key="frame" x="10" y="350" width="300" height="30"/>
+                                        <state key="normal" title="Retry">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="647" firstAttribute="leading" secondItem="645" secondAttribute="leading" constant="-10" id="Ftr-Kg-4gD"/>
+                                    <constraint firstItem="667" firstAttribute="leading" secondItem="645" secondAttribute="leading" constant="10" id="Gri-eY-aRG"/>
+                                    <constraint firstAttribute="trailing" secondItem="667" secondAttribute="trailing" constant="10" id="h6N-12-b2X"/>
+                                    <constraint firstItem="653" firstAttribute="leading" secondItem="645" secondAttribute="leading" constant="-14" id="kJF-xq-lzz"/>
+                                    <constraint firstAttribute="trailing" secondItem="653" secondAttribute="trailing" constant="-15" id="vm1-T4-fky"/>
+                                    <constraint firstAttribute="trailing" secondItem="647" secondAttribute="trailing" constant="-10" id="xBV-CJ-r6X"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="645" firstAttribute="bottom" secondItem="674" secondAttribute="top" id="AE9-6s-E38"/>
+                            <constraint firstItem="645" firstAttribute="top" secondItem="6" secondAttribute="top" id="QAY-3p-vRy"/>
+                            <constraint firstItem="645" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="cdQ-Ax-X0m"/>
+                            <constraint firstAttribute="trailing" secondItem="645" secondAttribute="trailing" id="xPE-0K-bZC"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="ResultBackground" destination="653" id="name-outlet-653"/>
+                        <outlet property="ResultLabel" destination="654" id="name-outlet-654"/>
+                        <outlet property="RetrievingPrayersView" destination="645" id="name-outlet-645"/>
+                        <outlet property="RetryButton" destination="667" id="name-outlet-667"/>
+                        <outlet property="StatusBackground" destination="647" id="name-outlet-647"/>
+                        <outlet property="StatusLabel" destination="649" id="name-outlet-649"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="162" y="120"/>
+        </scene>
+        <!--Prayer PostUI View Controller-->
+        <!--Prayer CreateUI View Controller-->
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

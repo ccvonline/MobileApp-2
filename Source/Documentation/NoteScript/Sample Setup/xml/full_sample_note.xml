@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--Begin the note. Set a 5% padding around all edges-->
+<Note Padding="5%" StyleSheet="xml/default_style.xml">
+
+    <!--Demonstrate the default header-->
+    <Header>
+        <Title>A BIG IMPORTANT TITLE!</Title>
+        <Speaker>Mr. Speaker</Speaker>
+        <Date>July 31st, 2014</Date>
+    </Header>
+        
+
+    <!--Demonstrate basic text-->
+    <Paragraph>Here's some basic text.</Paragraph>
+    
+    <!--Show a reveal box on its own-->
+    <Paragraph>Click below!</Paragraph>
+    <RevealBox>REVEALED!</RevealBox>
+    
+    <!--Show a paragraph with a reveal box embedded in it.-->
+    <Paragraph FontName="Montserrat-Bold"
+               FontColor="#FF0000FF"
+               FontSize="16">
+        Another Paragraph 
+        <RevealBox>EMBEDDED REVEAL!</RevealBox> 
+        with a reveal box embedded!
+        Note that this paragraph is using its own font.
+    </Paragraph>
+    
+    <!--A stack can be within another stack when you want to do custom layouts-->
+    <StackPanel>
+    
+        <StackPanel Debug="True" 
+                    Width="50%" 
+                    PaddingLeft="5%">
+                    
+            <Paragraph>
+            An inner stack with 5 percent padding only on the left!! 
+            Note it wants only 50 percent of the width of its parent. 
+            Also notice how this text stays away from the edges thanks to the padding.
+            </Paragraph>
+            
+        </StackPanel>
+        
+    </StackPanel>
+    
+    <!--Another stack to show the flexibility in laying out text.-->
+    <StackPanel Debug="True" 
+                Width="50%" 
+                Alignment="Right" 
+                Padding="5%">
+                
+        <Paragraph>
+        This stack has 5 percent padding and requests right alignment within its parent. 
+        We also set this width to 50 percent. Again the text stays away from the edges thanks to padding.
+        </Paragraph>
+        
+    </StackPanel>
+    
+    <!--Text in a paragraph can be positioned within its parent, and the text itself can be aligned-->
+    <Paragraph Debug="True" 
+               Width="50%" 
+               MarginTop="25" 
+               Alignment="Center" 
+               ChildAlignment="Right">
+     
+     Heres some text in a paragraph. The width is set to 50 percent, and we set its top margin 25 pixels down from 
+     the control above it. We request the paragraph container to be centered, and this text within it to 
+     be right aligned. Pretty cool huh?
+     </Paragraph>
+     
+     <!--Demonstrate a canvas that allows laying out stacks side by side.-->
+     <Canvas MarginTop="5"
+             Alignment="Center"
+             Debug="True">
+             
+        <Paragraph>Heres a canvas, which allows absolute positioning!</Paragraph>
+        
+        <StackPanel Debug="True"
+                    Top="10%"
+                    Width="50%"
+                    Padding="2%"
+                    Alignment="Left">
+                    
+            <Paragraph>A stack panel on the LEFT side.</Paragraph>
+            <Paragraph>More text in the stack panel!</Paragraph>
+        
+        </StackPanel>
+        
+        <StackPanel Debug="True"
+                    Top="10%"
+                    Width="50%"
+                    Padding="2%"
+                    Alignment="Right">
+                    
+            <Paragraph>A stack panel on the RIGHT side.</Paragraph>
+            <Paragraph>More text in the stack panel!</Paragraph>
+        
+        </StackPanel>
+        
+     </Canvas>       
+     
+     <!--Demonstrate numbered and bullet lists-->
+     <List Type="Numbered">
+        <ListItem FontColor="#FF0000FF">First Entry in a numbered list.</ListItem>
+        <ListItem>
+            <List Type="Bullet">
+                <ListItem>
+                    First Entry in a bullet list.
+                    
+                    <Quote Citation="Author">
+                        A great example of a list item with a quote!
+                    </Quote>
+                </ListItem>
+                
+                <ListItem>Second Entry in a bullet list.</ListItem>
+                <ListItem>Third Entry in a bullet list.</ListItem>
+            </List>
+         </ListItem>
+        <ListItem>Second Entry in a numbered list.</ListItem>
+        
+    </List>
+    
+</Note>

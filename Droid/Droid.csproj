@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{68BFCE9C-3ABC-4ACC-9054-BA9340AA598C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Droid</RootNamespace>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <AssemblyName>Droid</AssemblyName>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AndroidLinkMode>None</AndroidLinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Components\json.net-4.5.11\lib\android\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\Components\restsharp-104.4.0\lib\android\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\Components\facebook-sdk-6.2.1\lib\android\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v4">
+      <HintPath>..\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.AppCompat">
+      <HintPath>..\packages\Xamarin.Android.Support.v7.AppCompat.21.0.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.MediaRouter">
+      <HintPath>..\packages\Xamarin.Android.Support.v7.MediaRouter.21.0.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
+    </Reference>
+    <Reference Include="GooglePlayServicesLib">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.22.0.0.0\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
+    </Reference>
+    <Reference Include="AndroidLocalytics">
+      <HintPath>..\Libs\AndroidLocalytics.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Springboard.cs" />
+    <Compile Include="NavbarFragment.cs" />
+    <Compile Include="Tasks\NotesTask\NotesFragment.cs" />
+    <Compile Include="Tasks\NewsTask\NewsTask.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskFragment.cs" />
+    <Compile Include="Tasks\NewsTask\NewsDetailsFragment.cs" />
+    <Compile Include="Tasks\NewsTask\NewsPrimaryFragment.cs" />
+    <Compile Include="Tasks\PlaceholderTask.cs" />
+    <Compile Include="NavToolbar.cs" />
+    <Compile Include="UserManagement\LoginFragment.cs" />
+    <Compile Include="UserManagement\ProfileFragment.cs" />
+    <Compile Include="UserManagement\ImageCropFragment.cs" />
+    <Compile Include="Tasks\AboutTask\AboutTask.cs" />
+    <Compile Include="Tasks\PrayerTask\PrayerPrimaryFragment.cs" />
+    <Compile Include="Tasks\PrayerTask\PrayerTask.cs" />
+    <Compile Include="Tasks\PrayerTask\PrayerCreateFragment.cs" />
+    <Compile Include="Tasks\GiveTask\GivePrimaryFragment.cs" />
+    <Compile Include="Tasks\GiveTask\GiveTask.cs" />
+    <Compile Include="Tasks\NotesTask\NotesPrimaryFragment.cs" />
+    <Compile Include="Tasks\NotesTask\NotesDetailsFragment.cs" />
+    <Compile Include="Tasks\NotesTask\NotesTask.cs" />
+    <Compile Include="Tasks\NotesTask\NotesWatchFragment.cs" />
+    <Compile Include="ControlStyling.cs" />
+    <Compile Include="Tasks\ConnectTask\ConnectPrimaryFragment.cs" />
+    <Compile Include="Tasks\ConnectTask\ConnectTask.cs" />
+    <Compile Include="Tasks\ConnectTask\GroupFinderFragment.cs" />
+    <Compile Include="Tasks\PrayerTask\PrayerPostFragment.cs" />
+    <Compile Include="Tasks\NotesTask\NotesListenFragment.cs" />
+    <Compile Include="UserManagement\RegisterFragment.cs" />
+    <Compile Include="Tasks\ConnectTask\JoinGroupFragment.cs" />
+    <Compile Include="UserManagement\OOBEFragment.cs" />
+    <Compile Include="Tasks\TaskWebFragment.cs" />
+    <Compile Include="UserManagement\SplashFragment.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+    <AndroidResource Include="..\Assets\androidPhotoMask%402x.png">
+      <Link>Resources\drawable-hdpi\androidPhotoMask.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\shadow.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\shadow.9.png" />
+    <AndroidResource Include="..\Assets\Icons\Icon%402x.png">
+      <Link>Resources\drawable-hdpi\Icon.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="..\Assets\Icons\Icon.png">
+      <Link>Resources\drawable-mdpi\Icon.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Prayer_Create.axml" />
+    <AndroidResource Include="Resources\layout\Profile.axml" />
+    <AndroidResource Include="Resources\layout\Notes.axml" />
+    <AndroidResource Include="Resources\layout\Main.axml" />
+    <AndroidResource Include="Resources\layout\ImageCrop.axml" />
+    <AndroidResource Include="Resources\layout\navbar.axml" />
+    <AndroidResource Include="Resources\layout\Give_Primary.axml" />
+    <AndroidResource Include="Resources\layout\Prayer_Primary.axml" />
+    <AndroidResource Include="Resources\layout\News_Details.axml" />
+    <AndroidResource Include="Resources\layout\News_Primary.axml" />
+    <AndroidResource Include="Resources\layout\Login.axml" />
+    <AndroidResource Include="Resources\layout\Notes_Details.axml" />
+    <AndroidResource Include="Resources\layout\Notes_Primary.axml" />
+    <AndroidResource Include="Resources\layout\Springboard.axml" />
+    <AndroidResource Include="..\Assets\facebook_login%403x.png">
+      <Link>Resources\drawable-hdpi\facebook_login.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\dark_cursor.axml" />
+    <AndroidResource Include="Resources\drawable\light_cursor.axml" />
+    <AndroidResource Include="Resources\values\themes.xml" />
+    <AndroidResource Include="Resources\values-v21\themes.xml" />
+    <AndroidResource Include="Resources\layout\DatePicker.axml" />
+    <AndroidResource Include="Resources\layout\Connect_Primary.axml" />
+    <AndroidResource Include="Resources\layout\Connect_GroupFinder.axml" />
+    <AndroidResource Include="Resources\layout\Splash.axml" />
+    <AndroidResource Include="Resources\layout\Prayer_Post.axml" />
+    <AndroidResource Include="Resources\layout\Register.axml" />
+    <AndroidResource Include="Resources\layout\JoinGroup.axml" />
+    <AndroidResource Include="Resources\layout\OOBEView.axml" />
+    <AndroidResource Include="Resources\layout\TaskWebView.axml" />
+    <AndroidResource Include="Resources\drawable\RoundButton.axml" />
+    <AndroidResource Include="..\Assets\navbarLogo%402x.png">
+      <Link>Resources\drawable-hdpi\navbarLogo.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="..\Assets\splash_combo_android.png">
+      <Link>Resources\drawable-hdpi\splash_combo_android.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
+  <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
+  <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
+    <Folder Include="Tasks\" />
+    <Folder Include="Tasks\NewsTask\" />
+    <Folder Include="Tasks\NotesTask\" />
+    <Folder Include="Resources\layout-sw600dp\" />
+    <Folder Include="Resources\drawable-hdpi\" />
+    <Folder Include="Resources\drawable-mdpi\" />
+    <Folder Include="Resources\layout-sw320dp\" />
+    <Folder Include="UserManagement\" />
+    <Folder Include="Tasks\AboutTask\" />
+    <Folder Include="Tasks\PrayerTask\" />
+    <Folder Include="Tasks\GiveTask\" />
+    <Folder Include="Resources\layout\" />
+    <Folder Include="Resources\layout-sw480dp\" />
+    <Folder Include="Resources\drawable\" />
+    <Folder Include="Resources\values-v21\" />
+    <Folder Include="Tasks\ConnectTask\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\Assets\Fonts\Bevan.ttf">
+      <Link>Assets\Fonts\Bevan.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
+      <Link>Assets\Fonts\ChangaOne-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
+      <Link>Assets\Fonts\ChangaOne-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
+      <Link>Assets\Fonts\DroidSerif-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
+      <Link>Assets\Fonts\DroidSerif-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
+      <Link>Assets\Fonts\DroidSerif-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif.ttf">
+      <Link>Assets\Fonts\DroidSerif.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Black.ttf">
+      <Link>Assets\Fonts\Merriweather-Black.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Bold.ttf">
+      <Link>Assets\Fonts\Merriweather-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-HeavyItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Italic.ttf">
+      <Link>Assets\Fonts\Merriweather-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Light.ttf">
+      <Link>Assets\Fonts\Merriweather-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-LightItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Regular.ttf">
+      <Link>Assets\Fonts\Merriweather-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Bold.ttf">
+      <Link>Assets\Fonts\Montserrat-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Regular.ttf">
+      <Link>Assets\Fonts\Montserrat-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Bold.ttf">
+      <Link>Assets\Fonts\OpenSans-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
+      <Link>Assets\Fonts\OpenSans-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-ExtraBold.ttf">
+      <Link>Assets\Fonts\OpenSans-ExtraBold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-ExtraBoldItalic.ttf">
+      <Link>Assets\Fonts\OpenSans-ExtraBoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Italic.ttf">
+      <Link>Assets\Fonts\OpenSans-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Light.ttf">
+      <Link>Assets\Fonts\OpenSans-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-LightItalic.ttf">
+      <Link>Assets\Fonts\OpenSans-LightItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Regular.ttf">
+      <Link>Assets\Fonts\OpenSans-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Semibold.ttf">
+      <Link>Assets\Fonts\OpenSans-Semibold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-SemiboldItalic.ttf">
+      <Link>Assets\Fonts\OpenSans-SemiboldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Black.ttf">
+      <Link>Assets\Fonts\PassionOne-Black.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Bold.ttf">
+      <Link>Assets\Fonts\PassionOne-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Regular.ttf">
+      <Link>Assets\Fonts\PassionOne-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Bold.ttf">
+      <Link>Assets\Fonts\Quicksand-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Light.ttf">
+      <Link>Assets\Fonts\Quicksand-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Regular.ttf">
+      <Link>Assets\Fonts\Quicksand-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Light.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-LightItalic.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-LightItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Thin.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\spot_mask.png">
+      <Link>Assets\spot_mask.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\FontAwesome.ttf">
+      <Link>Assets\Fonts\FontAwesome.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Bh.ttf">
+      <Link>Assets\Fonts\Bh.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\baptism_thumb.png">
+      <Link>Assets\baptism_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\starting_point_thumb.png">
+      <Link>Assets\starting_point_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\placeholder_news_details.png">
+      <Link>Assets\placeholder_news_details.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\placeholder_news_main.png">
+      <Link>Assets\placeholder_news_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\placeholder_notes_main.png">
+      <Link>Assets\placeholder_notes_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\placeholder_notes_thumb.png">
+      <Link>Assets\placeholder_notes_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg.png">
+      <Link>Assets\oobe_splash_bg.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\groupfinder_thumb.png">
+      <Link>Assets\groupfinder_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\connect_banner%403x.png">
+      <Link>Assets\connect_banner.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\note_tutorial_portrait%403x.png">
+      <Link>Assets\note_tutorial_portrait.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\note_tutorial_ipad_ls.png">
+      <Link>Assets\note_tutorial_ipad_ls.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\serve_thumb.png">
+      <Link>Assets\serve_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
+      <Link>Assets\Fonts\DINOffc-CondBlack.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_a_header%402x.png">
+      <Link>Assets\default_news_a_header.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_a_main%402x.png">
+      <Link>Assets\default_news_a_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_b_header%402x.png">
+      <Link>Assets\default_news_b_header.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_b_main%402x.png">
+      <Link>Assets\default_news_b_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_c_header%402x.png">
+      <Link>Assets\default_news_c_header.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\default_news_c_main%402x.png">
+      <Link>Assets\default_news_c_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\RSCApp\Assets\splash_logo_android.png">
+      <Link>Assets\splash_logo_android.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="json.net">
+      <Version>4.5.11</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="restsharp">
+      <Version>104.4.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="facebook-sdk">
+      <Version>6.2.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="googleplayservices">
+      <Version>22.0.0.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+  </ItemGroup>
+</Project>

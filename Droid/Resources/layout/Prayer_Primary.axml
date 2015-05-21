@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FF000000">
+<!--Status Fields-->
+    <RelativeLayout
+        android:id="@+id/status_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <View
+            android:id="@+id/top_border"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFFFF" />
+        <View
+            android:id="@+id/bottom_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFFFF"
+            android:layout_below="@+id/text" />
+        <TextView
+            android:text="Submitting..."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_border"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:id="@+id/text"
+            android:maxLines="1" />
+    </RelativeLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+<!--Result Window-->
+    <RelativeLayout
+        android:id="@+id/result_background"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true">
+        <View
+            android:id="@+id/top_border"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFFFF" />
+        <View
+            android:id="@+id/bottom_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#FFFFFFFF" />
+        <TextView
+            android:text="X"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_border"
+            android:gravity="center"
+            android:id="@+id/resultSymbol"
+            android:maxLines="1" />
+        <TextView
+            android:text="Prayer posted successfully. As soon as it is approved you'll see it in the Prayer Requests."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/resultSymbol"
+            android:gravity="center"
+            android:id="@+id/text" />
+    </RelativeLayout>
+<!--Submit Button-->
+    <Button
+        android:text="Retry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/retryButton"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentBottom="true" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prayer_primary_activityIndicator"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+</RelativeLayout>

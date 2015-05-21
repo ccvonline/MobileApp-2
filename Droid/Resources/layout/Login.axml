@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFF0000">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/navbar" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#FFFF00FF" />
+        <View
+            android:id="@+id/navbar_border"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FF000000" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#FFFF00FF" />
+    <!--Name Fields-->
+        <RelativeLayout
+            android:background="#FF0000FF"
+            android:id="@+id/login_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_below="@+id/passwordText" />
+            <EditText
+                android:hint="Username"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_border"
+                android:id="@+id/usernameText"
+                android:inputType="textPersonName"
+                android:layout_marginLeft="10dp"
+                android:maxLength="16"
+                android:maxLines="1" />
+            <View
+                android:id="@+id/middle_border"
+                android:layout_below="@+id/usernameText"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:background="#FF0000FF"
+            android:id="@+id/password_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true">
+            <EditText
+                android:hint="Password"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/middle_border"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/passwordText"
+                android:inputType="textPersonName"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:password="true" />
+        </RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+    <!--Submit Button-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:text="Login"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/loginButton"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1" />
+            <Button
+                android:text="Register"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/registerButton"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <RelativeLayout
+            android:background="#FF0000FF"
+            android:id="@+id/result_background"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true">
+            <View
+                android:id="@+id/top_border"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF" />
+            <View
+                android:id="@+id/bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFFFF"
+                android:layout_below="@+id/loginResult" />
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_border"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/loginResult"
+                android:maxLines="1" />
+        </RelativeLayout>
+        <ImageButton
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:id="@+id/facebookButton"
+            android:src="@drawable/facebook_login"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelButton"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_progressBar"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+</RelativeLayout>

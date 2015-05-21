@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/navbar" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFFF00FF" />
+    <View
+        android:id="@+id/navbar_border"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FF000000" />
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000">
+        <RelativeLayout
+            android:id="@+id/scroll_linear_background"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+            <!--Username / Password-->
+                <RelativeLayout
+                    android:id="@+id/username_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/top_border"
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                    <View
+                        android:id="@+id/bottom_border"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF"
+                        android:layout_alignParentBottom="true" />
+                    <EditText
+                        android:hint="Username"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/top_border"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/userNameText"
+                        android:maxLines="1" />
+                    <View
+                        android:id="@+id/username_border"
+                        android:layout_below="@+id/userNameText"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/password_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Password"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/username_border"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/passwordText"
+                        android:maxLines="1" />
+                    <View
+                        android:id="@+id/password_border"
+                        android:layout_below="@+id/passwordText"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/confirmPassword_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Confirm Password"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/password_border"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/confirmPasswordText"
+                        android:maxLines="1" />
+                </RelativeLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+            <!--Name Fields-->
+                <RelativeLayout
+                    android:id="@+id/firstname_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/top_border"
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                    <View
+                        android:id="@+id/bottom_border"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF"
+                        android:layout_alignParentBottom="true" />
+                    <EditText
+                        android:hint="First Name"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/top_border"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/nickNameText"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                    <View
+                        android:id="@+id/middle_border"
+                        android:layout_below="@+id/nickNameText"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/lastname_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Last Name"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_below="@+id/middle_border"
+                        android:id="@+id/lastNameText"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </RelativeLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+            <!--Contact-->
+                <RelativeLayout
+                    android:id="@+id/email_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/top_border"
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                    <View
+                        android:id="@+id/bottom_border"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF"
+                        android:layout_alignParentBottom="true" />
+                    <EditText
+                        android:hint="Email Address"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/top_border"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/emailAddressText"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
+                    <View
+                        android:id="@+id/middle_border"
+                        android:layout_below="@+id/emailAddressText"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/cellphone_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Cell Phone"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_below="@+id/middle_border"
+                        android:id="@+id/cellPhoneText"
+                        android:inputType="phone"
+                        android:maxLines="1" />
+                </RelativeLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+            <!--Submit Button-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:text="Register"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:id="@+id/registerButton"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="top|center_horizontal" />
+                    <Button
+                        android:text="Cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/registerButton"
+                        android:id="@+id/cancelButton"
+                        android:layout_centerHorizontal="true" />
+                </RelativeLayout>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+            <RelativeLayout
+                android:background="@android:color/black"
+                android:id="@+id/progressBarBlocker"
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progressBar"
+                    android:indeterminate="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
