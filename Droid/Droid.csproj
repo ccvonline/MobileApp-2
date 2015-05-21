@@ -163,9 +163,9 @@
       <Link>Resources\drawable-hdpi\splash_combo_android.png</Link>
     </AndroidResource>
   </ItemGroup>
-  <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
-  <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
+  <Import Project="..\..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
+  <Import Project="..\..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\..\Rock.Mobile\Rock.Mobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Assets\Fonts\" />
@@ -382,7 +382,7 @@
     <AndroidAsset Include="..\Assets\default_news_c_main%402x.png">
       <Link>Assets\default_news_c_main.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\..\RSCApp\Assets\splash_logo_android.png">
+    <AndroidAsset Include="..\Assets\splash_logo_android.png">
       <Link>Assets\splash_logo_android.png</Link>
     </AndroidAsset>
   </ItemGroup>
