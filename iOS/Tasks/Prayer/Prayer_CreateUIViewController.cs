@@ -81,7 +81,7 @@ namespace iOS
 
             // create our keyboard adjustment manager, which works to make sure text fields scroll into visible
             // range when a keyboard appears
-            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View, ScrollView );
+            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View );
 
 
             // setup the First Name field
@@ -422,8 +422,6 @@ namespace iOS
 
         void OnTextChanged( NSNotification notification )
         {
-            KeyboardAdjustManager.OnTextFieldChanged( notification );
-
             TogglePlaceholderText( );
         }
 
@@ -450,6 +448,8 @@ namespace iOS
             }
 
             ObserverHandles.Clear( );
+
+            KeyboardAdjustManager.FreeObservers( );
         }
 
         public override void ViewWillAppear(bool animated)
@@ -472,16 +472,7 @@ namespace iOS
             }
 
             // monitor for text field being edited, and keyboard show/hide notitications
-            NSObject handle = NSNotificationCenter.DefaultCenter.AddObserver (Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextFieldDidBeginEditingNotification, KeyboardAdjustManager.OnTextFieldDidBeginEditing);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver (Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextFieldChangedNotification, OnTextChanged);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillHideNotification, KeyboardAdjustManager.OnKeyboardNotification);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillShowNotification, KeyboardAdjustManager.OnKeyboardNotification);
+            NSObject handle = NSNotificationCenter.DefaultCenter.AddObserver( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextControlChangedNotification, OnTextChanged);
             ObserverHandles.Add( handle );
         }
 

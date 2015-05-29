@@ -140,12 +140,6 @@ namespace iOS
         int OrientationState { get; set; }
 
         /// <summary>
-        /// A list of the handles returned when adding observers to OS events
-        /// </summary>
-        /// <value>The observer handles.</value>
-        List<NSObject> ObserverHandles { get; set; }
-
-        /// <summary>
         /// The overlay displayed the first time the user enters Notes
         /// </summary>
         UIImageView TutorialOverlay { get; set; }
@@ -188,7 +182,6 @@ namespace iOS
 
         public NotesViewController( ) : base( )
         {
-            ObserverHandles = new List<NSObject>();
         }
 
         public override void DidReceiveMemoryWarning( )
@@ -308,9 +301,7 @@ namespace iOS
 
                 PrepareCreateNotes( );
             };
-
-            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View, UIScrollView );
-
+            
             ResultView = new UIResultView( UIScrollView, View.Frame.ToRectF( ), OnResultViewDone );
 
             ResultView.Hide( );
@@ -340,59 +331,17 @@ namespace iOS
             // since we're reappearing, we know we're safe to reset our download count
             NoteDownloadRetries = MaxDownloadAttempts;
             Rock.Mobile.Util.Debug.WriteLine( "Resetting Download Attempts" );
-
-            //PrepareCreateNotes( );
         }
 
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
-            // monitor for text field being edited, and keyboard show/hide notitications
-            NSObject handle = NSNotificationCenter.DefaultCenter.AddObserver( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextFieldDidBeginEditingNotification, KeyboardAdjustManager.OnTextFieldDidBeginEditing);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextFieldChangedNotification, KeyboardAdjustManager.OnTextFieldChanged);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillHideNotification, KeyboardAdjustManager.OnKeyboardNotification);
-            ObserverHandles.Add( handle );
-
-            handle = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillShowNotification, KeyboardAdjustManager.OnKeyboardNotification);
-            ObserverHandles.Add( handle );
+            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View );
 
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
         }
-
-        /*public void OnTextFieldDidBeginEditing( NSNotification notification )
-        {
-            KeyboardAdjustManager.OnTextFieldDidBeginEditing( notification );
-
-            // when a user note is edited, make sure that we allow enough scroll height to accomodate it.
-            TryExpandHeightForUserNote( );
-        }
-
-        public void OnTextFieldChanged( NSNotification notification )
-        {
-            KeyboardAdjustManager.OnTextFieldChanged( notification );
-
-            // when a user note is edited, make sure that we allow enough scroll height to accomodate it.
-            // if we're going to grow
-
-            // as they edit, we want to scroll with them so the bottom of the note doesn't go below the screne.
-            // so take the current size of the scroll area
-            nfloat contentSizeDelta = UIScrollView.ContentSize.Height;
-
-            TryExpandHeightForUserNote( );
-
-            // get the change, but clamp to 0. We want to follow them editing down, but not if they delete,
-            // which will shrink the box
-            contentSizeDelta = (nfloat)Math.Max( 0, (double)(UIScrollView.ContentSize.Height - contentSizeDelta) );
-
-            // and update our scroll offset by that.
-            UIScrollView.ContentOffset = new CGPoint( 0, UIScrollView.ContentOffset.Y + contentSizeDelta );
-        }*/
 
         CGRect GetTappedTextFieldFrame( RectangleF textFrame )
         {
@@ -411,12 +360,7 @@ namespace iOS
         {
             base.ViewDidDisappear(animated);
 
-            foreach ( NSObject handle in ObserverHandles )
-            {
-                NSNotificationCenter.DefaultCenter.RemoveObserver( handle );
-            }
-
-            ObserverHandles.Clear( );
+            KeyboardAdjustManager.FreeObservers( );
         }
 
         public override void ViewWillDisappear(bool animated)
