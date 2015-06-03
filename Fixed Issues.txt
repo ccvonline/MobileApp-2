@@ -1,12 +1,8 @@
-Changes
--------
-
 Both
-
+Fixed an issue causing the "Take Notes" banner to show up reading bible verses.
+Fixed an issue causing the phone to go to sleep when reading bible verses.
 
 iOS
-
-
+Fixed an issue causing a pixel to still be visible when Reveal Boxes are hidden
 
 Android
-	

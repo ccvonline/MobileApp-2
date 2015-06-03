@@ -87,7 +87,8 @@ namespace Droid
 
                 public bool IsReadingNotes( )
                 {
-                    return NotesPage.IsVisible;
+                    // if we're taking notes or in the web view, return true.
+                    return (NotesPage.IsVisible || WebViewPage.IsVisible);
                 }
 
                 public override void OnClick(Android.App.Fragment source, int buttonId, object context = null)
@@ -172,6 +173,7 @@ namespace Droid
                         else if ( source == NotesPage )
                         {
                             // the context is the activeURL to visit.
+                            WebViewPage.DisableIdleTimer = true;
                             WebViewPage.DisplayUrl( (string)context );
 
                             PresentFragment( WebViewPage, true );

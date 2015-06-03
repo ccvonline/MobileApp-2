@@ -147,10 +147,13 @@ namespace iOS
 
         UIActivityIndicatorView ActivityIndicator { get; set; }
 
-        public TaskWebViewController ( string displayUrl, Task parentTask ) : base ( )
+        bool DisableIdleTimer { get; set; }
+
+        public TaskWebViewController ( string displayUrl, Task parentTask, bool disableIdleTimer = false ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
+            DisableIdleTimer = disableIdleTimer;
 		}
 
         public override void ViewDidLoad()
@@ -213,6 +216,60 @@ namespace iOS
 
             // by default, show the toolbar
             Task.NavToolbar.Reveal( true );
+
+            UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );
+        }
+
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );
+        }
+
+        public override void OnActivated()
+        {
+            base.OnActivated();
+
+            UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );
+        }
+
+        public override void WillEnterForeground( )
+        {
+            base.WillEnterForeground( );
+
+            UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );
+
+            // force a redraw so the notes are recreated
+            LayoutChanged( );
+        }
+
+        public override void AppOnResignActive()
+        {
+            base.AppOnResignActive();
+
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer ON" ) );
+        }
+
+        public override void AppWillTerminate()
+        {
+            base.AppWillTerminate();
+
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer ON" ) );
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
+            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer ON" ) );
         }
 
         public override void LayoutChanged()

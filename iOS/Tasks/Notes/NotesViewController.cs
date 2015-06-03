@@ -545,7 +545,7 @@ namespace iOS
 
                         DestroyNotes( );
 
-                        TaskWebViewController viewController = new TaskWebViewController( activeUrl, Task );
+                        TaskWebViewController viewController = new TaskWebViewController( activeUrl, Task, true );
                         Task.PerformSegue( this, viewController );
                     }
                 }

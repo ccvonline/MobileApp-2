@@ -72,7 +72,14 @@ namespace iOS
 
         public bool IsReading( )
         {
-            return ActiveViewController as NotesViewController != null ? true : false;
+            // if we're in notes or the web view, we are rading notes.
+            if( ActiveViewController as NotesViewController != null || 
+                ActiveViewController as TaskWebViewController != null )
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public override void WillShowViewController(TaskUIViewController viewController)

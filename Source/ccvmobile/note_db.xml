@@ -6,6 +6,12 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>WHAT HAPPENS WHEN WE DIE?</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>5/31/2015</Date>
+				<NoteUrl>xml/message_5_30_2015.xml</NoteUrl>
+			</Message>
+			<Message>
 				<Name>WHAT IS THE TRINITY?</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>5/24/2015</Date>

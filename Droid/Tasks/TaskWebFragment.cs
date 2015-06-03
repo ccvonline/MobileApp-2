@@ -25,6 +25,17 @@ namespace Droid
     {
         public class TaskWebFragment : TaskFragment
         {
+            /// <summary>
+            /// Our wake lock that will keep the device from sleeping while notes are up.
+            /// </summary>
+            /// <value>The wake lock.</value>
+            PowerManager.WakeLock WakeLock { get; set; }
+
+            /// <summary>
+            /// Can be set to true or false depending on a desire to prevent the phone from sleeping
+            /// </summary>
+            public bool DisableIdleTimer { get; set; }
+
             WebLayout WebLayout { get; set; }
             String Url { get; set; }
 
@@ -64,6 +75,10 @@ namespace Droid
                             WebLayout.LoadUrl( Url, PageLoaded );
                         }
                     } );
+
+                // get our power management control
+                PowerManager pm = PowerManager.FromContext( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                WakeLock = pm.NewWakeLock(WakeLockFlags.Full, "TaskWeb");
 
                 return view;
             }
@@ -115,6 +130,11 @@ namespace Droid
 
                 IsActive = true;
 
+                if ( DisableIdleTimer == true )
+                {
+                    WakeLock.Acquire( );
+                }
+
                 if ( string.IsNullOrEmpty( Url ) == false )
                 {
                     WebLayout.LoadUrl( Url, PageLoaded );
@@ -124,6 +144,11 @@ namespace Droid
             public override void OnPause()
             {
                 base.OnPause();
+
+                if ( WakeLock.IsHeld == true )
+                {
+                    WakeLock.Release( );
+                }
 
                 IsActive = false;
             }
