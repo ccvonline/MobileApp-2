@@ -6,6 +6,33 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>RUNNING TO GOD</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>6/14/2015</Date>
+				<NoteUrl>xml/message_6_13_2015.xml</NoteUrl>
+			</Message>
+			
+			<Message>
+				<Name>A MAN WHO RAN</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>5/10/2015</Date>
+				<NoteUrl>xml/message_6_6_2015.xml</NoteUrl>
+			</Message>
+
+			<Name>JONAH</Name>
+			<Description>
+				Jonah got eaten by a whale Pinocchio style.
+			</Description>
+			<DateRanges>6/7/2015 - 7/1/2015</DateRanges>
+			<BillboardUrl>images/jonah.png</BillboardUrl>
+			<ThumbnailUrl>images/jonah_thumb.png</ThumbnailUrl>
+
+		</Series>
+		<!--End Series-->
+		
+		<!--Start Series-->
+		<Series>
+			<Message>
 				<Name>WHAT HAPPENS WHEN WE DIE?</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>5/31/2015</Date>
