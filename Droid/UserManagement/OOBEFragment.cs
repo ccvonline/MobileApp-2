@@ -48,12 +48,12 @@ namespace Droid
 
             view.SetOnTouchListener( this );
 
-            string imageName = "oobe_splash_logo.png";
+            string imageName = "splash_logo_android.png";
 
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
 
-            OOBEView.Create( view, "oobe_splash_bg.png", imageName, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+            OOBEView.Create( view, "oobe_splash_bg.png", imageName, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
 
                 delegate(int index) 
                 {
@@ -87,9 +87,9 @@ namespace Droid
 
             SpringboardParent.ModalFragmentOpened( this );
 
-            Point displaySize = new Point( );
-            Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
-            OOBEView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+            //Point displaySize = new Point( );
+            //Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
+            OOBEView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)

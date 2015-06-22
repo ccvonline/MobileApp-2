@@ -6,6 +6,12 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>RUNNING WITH GOD</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>6/21/2015</Date>
+				<NoteUrl>xml/message_6_20_2015.xml</NoteUrl>
+			</Message>
+			<Message>
 				<Name>RUNNING TO GOD</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>6/14/2015</Date>

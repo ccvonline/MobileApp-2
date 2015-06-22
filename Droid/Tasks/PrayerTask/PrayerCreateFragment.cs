@@ -257,11 +257,11 @@ namespace Droid
                             FileCache.Instance.CleanUp( true );
                             Springboard.DisplayError( "Cache Cleared", "All cached items have been deleted" );
                         }
-                        else if ( RequestText.Text.ToLower( ) == "note refresh" )
+                        else if ( RequestText.Text.ToLower( ) == "developer" )
                         {
-                            App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled;
-                            Springboard.DisplayError( "Note Refresh Button", 
-                                string.Format( "Note refresh button has been toggled {0}", App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == true ? "ON" : "OFF" ) );
+                            App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                            Springboard.DisplayError( "Developer Mode", 
+                                string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
                         }
                         else if ( RequestText.Text.ToLower( ) == "version" )
                         {

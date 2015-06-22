@@ -1,8 +1,16 @@
 Both
-Fixed an issue causing the "Take Notes" banner to show up reading bible verses.
-Fixed an issue causing the phone to go to sleep when reading bible verses.
+Added final images for the "Connect" section.
+Improved the quality of the top CCV Logo
+Increased the max number of user notes, and changed the warning verbage when hitting the limit.
+
 
 iOS
-Fixed an issue causing a pixel to still be visible when Reveal Boxes are hidden
+Added final iPad splash screens
+Fixed an issue causing your place in Notes to be lost when changing device orientation. (Thanks Emily!)
 
 Android
+Fixed some splash images.
+Fixed an issue causing the "Double tap to create notes" tutorial to display multiple times in the same session.
+The app will now respect the user's orientation lock preference.
+Fixed an issue causing certain prayer requests to not display the person's name.
+Fixed an issue causing the OOBE to be messed up displaying on a device in landscape mode.

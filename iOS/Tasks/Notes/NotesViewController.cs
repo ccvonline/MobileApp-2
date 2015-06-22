@@ -151,6 +151,12 @@ namespace iOS
         bool AnimatingTutorial { get; set; }
 
         /// <summary>
+        /// True if we've shown the tutorial this session
+        /// </summary>
+        /// <value><c>true</c> if tutorial displayed; otherwise, <c>false</c>.</value>
+        bool TutorialDisplayed { get; set; }
+
+        /// <summary>
         /// The manager that ensures views being edited are visible when the keyboard comes up.
         /// </summary>
         /// <value>The keyboard adjust manager.</value>
@@ -192,14 +198,14 @@ namespace iOS
             // Release any cached data, images, etc that aren't in use.
         }
 
-        protected void SaveNoteState( )
+        protected void SaveNoteState( nfloat scrollOffsetPercent )
         {
             // request quick backgrounding so we can save our user notes
             nint taskID = UIApplication.SharedApplication.BeginBackgroundTask( () => {});
 
             if( Note != null )
             {
-                Note.SaveState( (float) (UIScrollView.ContentOffset.Y / UIScrollView.ContentSize.Height) );
+                Note.SaveState( (float)scrollOffsetPercent );
             }
 
             UIApplication.SharedApplication.EndBackgroundTask(taskID);
@@ -225,9 +231,12 @@ namespace iOS
             {
                 OrientationState = orientationState;
 
+                // get the offset scrolled before changing our frame (which will cause us to lose it)
+                nfloat scrollOffsetPercent = UIScrollView.ContentOffset.Y / UIScrollView.ContentSize.Height;
+
                 //note: the frame height of the nav bar is what it CURRENTLY is, not what it WILL be after we rotate. So, when we go from Portrait to Landscape,
                 // it says 40, but it's gonna be 32. Conversely, going back, we use 32 and it's actually 40, which causes us to start this view 8px too high.
-                if ( App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == true )
+                if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                 {
                     // add the refresh button if necessary
                     if ( RefreshButton.Superview == null )
@@ -255,7 +264,7 @@ namespace iOS
                 Indicator.Layer.Position = new CGPoint (View.Bounds.Width / 2, View.Bounds.Height / 2);
 
                 // re-create our notes with the new dimensions
-                PrepareCreateNotes( );
+                PrepareCreateNotes( scrollOffsetPercent );
 
                 // since we're changing orientations, hide the tutorial screen
                 AnimateTutorialScreen( false );
@@ -299,7 +308,7 @@ namespace iOS
             {
                 DeleteNote( );
 
-                PrepareCreateNotes( );
+                PrepareCreateNotes( 0 );
             };
             
             ResultView = new UIResultView( UIScrollView, View.Frame.ToRectF( ), OnResultViewDone );
@@ -321,7 +330,7 @@ namespace iOS
             // if they tap "Retry", well, retry!
             DeleteNote( );
 
-            PrepareCreateNotes( );
+            PrepareCreateNotes( 0 );
         }
 
         public override void ViewWillAppear(bool animated)
@@ -331,6 +340,8 @@ namespace iOS
             // since we're reappearing, we know we're safe to reset our download count
             NoteDownloadRetries = MaxDownloadAttempts;
             Rock.Mobile.Util.Debug.WriteLine( "Resetting Download Attempts" );
+
+            LayoutChanged( );
         }
 
         public override void ViewDidAppear(bool animated)
@@ -360,7 +371,10 @@ namespace iOS
         {
             base.ViewDidDisappear(animated);
 
-            KeyboardAdjustManager.FreeObservers( );
+            if ( KeyboardAdjustManager != null )
+            {
+                KeyboardAdjustManager.FreeObservers( );
+            }
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -377,6 +391,8 @@ namespace iOS
             // yet another place to drop in an idle timer disable
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
+
+            LayoutChanged( );
         }
 
         public override void WillEnterForeground( )
@@ -410,7 +426,7 @@ namespace iOS
         /// </summary>
         public void ViewResigning()
         {
-            SaveNoteState( );
+            SaveNoteState( UIScrollView.ContentOffset.Y / UIScrollView.ContentSize.Height );
 
             DestroyNotes( );
 
@@ -541,7 +557,7 @@ namespace iOS
                     string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ) );
                     if ( string.IsNullOrEmpty( activeUrl ) == false )
                     {
-                        SaveNoteState( );
+                        SaveNoteState( UIScrollView.ContentOffset.Y / UIScrollView.ContentSize.Height );
 
                         DestroyNotes( );
 
@@ -584,7 +600,7 @@ namespace iOS
             }
         }
 
-        public void PrepareCreateNotes( )
+        public void PrepareCreateNotes( nfloat scrollOffsetPercent )
         {
             if( RefreshingNotes == false )
             {
@@ -595,7 +611,7 @@ namespace iOS
 
                 RefreshingNotes = true;
 
-                SaveNoteState( );
+                SaveNoteState( scrollOffsetPercent );
 
                 DestroyNotes( );
 
@@ -676,8 +692,10 @@ namespace iOS
                 MessageAnalytic.Instance.Trigger( MessageAnalytic.Read, NoteName );
 
                 // if the user has never seen it, show them the tutorial screen
-                if( App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
+                if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
                 {
+                    TutorialDisplayed = true;
+
                     App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount = App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount + 1;
 
                     // wait a second before revealing the tutorial overlay
@@ -806,7 +824,7 @@ namespace iOS
                         Rock.Mobile.Util.Debug.WriteLine( "Download error. Trying again" );
 
                         NoteDownloadRetries--;
-                        PrepareCreateNotes( );
+                        PrepareCreateNotes( 0 );
                     }
                     else 
                     {
@@ -816,7 +834,7 @@ namespace iOS
                             errorMsg += "\n" + e.Message;
                         }
 
-                        if ( App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == true )
+                        if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                         {
                             // explain that we couldn't generate notes
                             UIAlertView alert = new UIAlertView( );

@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Beta (Build 21)";
+                    return "Beta (Build 23)";
                 }
             }
         }
@@ -252,7 +252,7 @@ namespace App.Shared
 
             public const string Read_Share_Notes = "Message - {0}";
 
-            public const string TooManyNotes = "Are you really taking notes, or are you just goofing off?\nPay attention to the service!";
+            public const string TooManyNotes = "Looks like you're taking a lot of notes. Creating any more will cause this app to really slow down.\nTry consolidating some of them so there aren't quite so many.";
 
             public const string UserNote_DeleteTitle = "Delete Note";
             public const string UserNote_DeleteMessage = "Are you sure you want to delete this note?";

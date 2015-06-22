@@ -55,9 +55,9 @@ namespace App
                         PrayerCategories.Add( new Rock.Client.Category( ) { Name = "Depression/Anxiety", Id = 112 } );
                         PrayerCategories.Add( new Rock.Client.Category( ) { Name = "Family Issues", Id = 113 } );
 
-                        // in debug builds, let the refresh button be enabled by default
+                        // in debug builds, turn developer mode on by default
                         #if DEBUG
-                        RefreshButtonEnabled = true;
+                        DeveloperModeEnabled = true;
                         #endif
                     }
 
@@ -146,11 +146,9 @@ namespace App
                     public List<Rock.Client.Category> PrayerCategories { get; set; }
 
                     /// <summary>
-                    /// Debug feature, when true there's a refresh button in the Notes section
-                    /// letting you update the note as you write it.
+                    /// Enables debug features like note refreshing.
                     /// </summary>
-                    /// <value><c>true</c> if refresh button enabled; otherwise, <c>false</c>.</value>
-                    public bool RefreshButtonEnabled { get; set; }
+                    public bool DeveloperModeEnabled { get; set; }
                 }
                 public GeneralData Data { get; set; }
 

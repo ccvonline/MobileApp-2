@@ -272,6 +272,12 @@ namespace Droid
                 ImageView TutorialOverlay { get; set; }
 
                 /// <summary>
+                /// True if we've already displayed the tutorial this run.
+                /// </summary>
+                /// <value><c>true</c> if tutorial displayed; otherwise, <c>false</c>.</value>
+                bool TutorialDisplayed { get; set; }
+
+                /// <summary>
                 /// True if the tutorial is fading in or out
                 /// </summary>
                 /// <value><c>true</c> if animating tutorial; otherwise, <c>false</c>.</value>
@@ -331,7 +337,7 @@ namespace Droid
                     };
 
                     // if the refresh button isn't enabled, hide it
-                    if ( App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == false )
+                    if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == false )
                     {
                         RefreshButton.Visibility = ViewStates.Gone;
                     }
@@ -381,7 +387,11 @@ namespace Droid
                     // when we're resuming, take a lock on the device sleeping to prevent it
                     base.OnResume( );
 
-                    Activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
+                    // make sure they're ok with rotation and didn't lock their phone's orientation
+                    if( Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked( ) )
+                    {
+                        Activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
+                    }
 
                     WakeLock.Acquire( );
 
@@ -722,8 +732,11 @@ namespace Droid
 
                         // display the tutorial
                         // if the user has never seen it, show them the tutorial screen
-                        if( App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
+                        if( TutorialDisplayed == false && 
+                            App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
                         {
+                            TutorialDisplayed = true;
+
                             App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount = App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount + 1;
 
                             System.IO.Stream tutorialStream = null;
@@ -846,7 +859,7 @@ namespace Droid
                                     errorMsg += e.Message;
                                 }
 
-                                if ( App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == true )
+                                if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                                 {
                                     Springboard.DisplayError( "Note Error", errorMsg );
                                 }

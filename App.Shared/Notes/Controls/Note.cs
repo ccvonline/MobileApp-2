@@ -628,7 +628,7 @@ namespace App
                     bool allowNoteCreation = true;
 
                     // don't let them get ridiculous with their notes
-                    if ( UserNoteControls.Count < 10 )
+                    if ( UserNoteControls.Count < 20 )
                     {
                         foreach ( UserNote userNote in UserNoteControls )
                         {

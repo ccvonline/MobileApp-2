@@ -98,12 +98,12 @@ namespace iOS
                     Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
-                    Title.BackgroundColor = UIColor.Clear;
                     Title.LineBreakMode = UILineBreakMode.TailTruncation;
                     AddSubview( Title );
 
                     Chevron = new UILabel( );
                     AddSubview( Chevron );
+                    Chevron.Layer.AnchorPoint = CGPoint.Empty;
                     Chevron.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary, PrivateConnectConfig.MainPage_Table_IconSize );
                     Chevron.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
                     Chevron.Text = PrivateConnectConfig.MainPage_Table_Navigate_Icon;
@@ -231,16 +231,19 @@ namespace iOS
                 cell.Image.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + Parent.LinkEntries[ row ].ImageName );
                 cell.Image.SizeToFit( );
 
+                nfloat topPadding = 10;
+
                 // force the image to be sized according to the height of the cell
                 cell.Image.Frame = new CGRect( 0, 
-                    10, 
+                    topPadding, 
                     PrivateConnectConfig.MainPage_ThumbnailDimension, 
                     PrivateConnectConfig.MainPage_ThumbnailDimension );
 
                 nfloat availableTextWidth = cell.Bounds.Width - cell.Chevron.Bounds.Width - cell.Image.Bounds.Width - 10;
 
                 // Chevron
-                cell.Chevron.Layer.Position = new CGPoint( cell.Bounds.Width - (cell.Chevron.Bounds.Width / 2) - 5, (PrivateConnectConfig.MainPage_ThumbnailDimension + 10) / 2 );
+                nfloat chevronYPos = cell.Image.Frame.Top + ((PrivateConnectConfig.MainPage_ThumbnailDimension - cell.Chevron.Bounds.Height) / 2);
+                cell.Chevron.Layer.Position = new CGPoint( cell.Bounds.Width - cell.Chevron.Bounds.Width - 5, chevronYPos );
 
                 // Create the title
                 cell.Title.Text = Parent.LinkEntries[ row ].Title;
@@ -248,7 +251,7 @@ namespace iOS
 
                 // Position the Title & Date in the center to the right of the image
                 nfloat totalTextHeight = cell.Title.Bounds.Height - 1;
-                cell.Title.Frame = new CGRect( cell.Image.Frame.Right + 10, ((PrivateConnectConfig.MainPage_ThumbnailDimension + 10) - totalTextHeight) / 2, availableTextWidth - 5, cell.Title.Frame.Height );
+                cell.Title.Frame = new CGRect( cell.Image.Frame.Right + 10, ((PrivateConnectConfig.MainPage_ThumbnailDimension - totalTextHeight) / 2) + topPadding, availableTextWidth - 5, cell.Title.Frame.Height );
 
                 // add the seperator to the bottom
                 cell.Seperator.Frame = new CGRect( 0, cell.Image.Frame.Bottom + 10, cell.Bounds.Width, 1 );

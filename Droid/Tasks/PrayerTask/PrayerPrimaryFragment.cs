@@ -54,7 +54,7 @@ namespace Droid
 
                         public PrayerLayoutRender( RectangleF bounds, float prayerActionHeight, Rock.Client.PrayerRequest prayer )
                         {
-                            MaxPrayerLayoutHeight = bounds.Height;
+                            MaxPrayerLayoutHeight = bounds.Height - prayerActionHeight;
 
                             // Create the core layout that stores the prayer
                             LinearLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -152,7 +152,7 @@ namespace Droid
 
                             // actual prayer
                             Prayer = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
                             ((LinearLayout.LayoutParams)Prayer.LayoutParameters).TopMargin = 30;
                             ((LinearLayout.LayoutParams)Prayer.LayoutParameters).LeftMargin = 20;
                             ((LinearLayout.LayoutParams)Prayer.LayoutParameters).RightMargin = 20;

@@ -21,7 +21,7 @@ namespace Droid
             base.OnCreate( bundle );
 
             // see if this device will support wide landscape (like, if it's a tablet)
-            if ( MainActivity.SupportsLandscapeWide( this ) )
+            if ( MainActivity.SupportsLandscapeWide( this ) && Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked( this ) )
             {
                 RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
             }
@@ -76,7 +76,7 @@ namespace Droid
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
 
             // default our app to protrait mode, and let the notes change it.
-            if ( SupportsLandscapeWide( ) )
+            if ( SupportsLandscapeWide( ) && Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked( ) )
             {
                 RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
             }

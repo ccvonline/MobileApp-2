@@ -148,7 +148,7 @@ namespace Droid
 
                     // this is contrary to the other Note fragments, but here, if we can't do
                     // landscape, we want to ALLOW full sensor so the user can view the video in fullscreen
-                    if ( MainActivity.SupportsLandscapeWide( ) == false )
+                    if ( MainActivity.SupportsLandscapeWide( ) == false && Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked( ) )
                     {
                         Activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
                     }

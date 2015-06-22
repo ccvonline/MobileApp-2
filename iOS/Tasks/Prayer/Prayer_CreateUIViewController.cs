@@ -327,11 +327,11 @@ namespace iOS
                     FileCache.Instance.CleanUp( true );
                     SpringboardViewController.DisplayError( "Cache Cleared", "All cached items have been deleted" );
                 }
-                else if ( PrayerRequest.Text.ToLower( ) == "note refresh" )
+                else if ( PrayerRequest.Text.ToLower( ) == "developer" )
                 {
-                    App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled;
-                    SpringboardViewController.DisplayError( "Note Refresh Button", 
-                                                            string.Format( "Note refresh button has been toggled {0}", App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled == true ? "ON" : "OFF" ) );
+                    App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                    SpringboardViewController.DisplayError( "Developer Mode", 
+                        string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
                 }
                 else if ( PrayerRequest.Text.ToLower( ) == "version" )
                 {

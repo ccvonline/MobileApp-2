@@ -306,7 +306,7 @@ namespace App
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Got NoteDB info." );
                                 Data.NoteDB = noteModel;
-                                Data.NoteDB.ProcessPrivateNotes( App.Shared.Network.RockGeneralData.Instance.Data.RefreshButtonEnabled );
+                                Data.NoteDB.ProcessPrivateNotes( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled );
                                 Data.NoteDB.MakeURLsAbsolute( );
                                 Data.NoteDBTimeStamp = DateTime.Now;
 
