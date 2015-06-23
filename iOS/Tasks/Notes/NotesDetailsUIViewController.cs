@@ -499,7 +499,7 @@ namespace iOS
             if( TryLoadImage( NotesTask.FormatBillboardImageName( Series.Name ) ) == false )
             {
                 // no, so use a placeholder and request the actual image
-                SeriesBillboard = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateGeneralConfig.NewsDetailsPlaceholder );
+                SeriesBillboard = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.NotesMainPlaceholder );
 
                 // request!
                 FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), 

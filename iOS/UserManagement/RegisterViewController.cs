@@ -184,6 +184,8 @@ namespace iOS
             DoneButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
                     RegisterUser( );
+
+                    HideKeyboard( );
                 };
 
             // On logout, make sure the user really wants to log out.
@@ -259,6 +261,7 @@ namespace iOS
             NickNameText.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
             LastNameText.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
             EmailText.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
+            CellPhoneText.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
 
             ScrollView.ContentOffset = CGPoint.Empty;
 
@@ -463,6 +466,11 @@ namespace iOS
 
             // if they tap somewhere outside of the text fields, 
             // hide the keyboard
+            HideKeyboard( );
+        }
+
+        void HideKeyboard( )
+        {
             TextFieldShouldReturn( UserNameText.Field );
             TextFieldShouldReturn( PasswordText.Field );
             TextFieldShouldReturn( ConfirmPasswordText.Field );

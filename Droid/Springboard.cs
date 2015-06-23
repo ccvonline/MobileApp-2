@@ -270,7 +270,6 @@ namespace Droid
                         // Allow the news to update, and begin downloading all
                         // news and note images we need.
                         PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
-                        PerformTaskAction( PrivateGeneralConfig.TaskAction_NotesDownloadImages );
                     }
                 });
         }
@@ -928,7 +927,6 @@ namespace Droid
 
                             // NOW go ahead and start downloads.
                             PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
-                            PerformTaskAction( PrivateGeneralConfig.TaskAction_NotesDownloadImages );
                         } );
                 };
             timer.Start( );

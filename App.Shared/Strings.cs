@@ -281,6 +281,7 @@ namespace App.Shared
             public const string CreatePrayer_AnonymousSwitchLabel = "";
             public const string CreatePrayer_SelectCategoryLabel = "Select a Category";
             public const string CreatePrayer_PostAnonymously = "Post Anonymously";
+            public const string CreatePrayer_Anonymous = "Anonymous";
             public const string CreatePrayer_MakePublic = "Make Public";
             public const string CreatePrayer_PrayerRequest = "Prayer Request";
 

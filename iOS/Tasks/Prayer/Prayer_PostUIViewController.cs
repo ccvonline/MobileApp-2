@@ -40,6 +40,7 @@ namespace iOS
                     }
                     else
                     {
+                        Task.NavToolbar.Reveal( false );
                         SubmitPrayerRequest( );
                     }
                 } );
@@ -104,6 +105,12 @@ namespace iOS
             Success = false;
             Posting = true;
 
+            // hide the toolbar while submitting
+            if ( Task != null )
+            {
+                Task.NavToolbar.Reveal( false );
+            }
+
             // fade in our blocker, and when it's complete, send our request off
             BlockerView.Show( delegate
                 {
@@ -119,6 +126,9 @@ namespace iOS
                             if ( IsActive == true )
                             {
                                 BlockerView.Hide( null );
+
+                                // show the toolbar for them.
+                                Task.NavToolbar.Reveal( true );
 
                                 if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
                                 {

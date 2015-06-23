@@ -302,7 +302,7 @@ namespace App
                     request.ExecuteAsync<NoteDB>( GeneralConfig.NoteBaseURL + "note_db.xml", restRequest, 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, NoteDB noteModel )
                         {
-                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && noteModel != null )
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && noteModel != null && noteModel.SeriesList.Count > 0 )
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Got NoteDB info." );
                                 Data.NoteDB = noteModel;

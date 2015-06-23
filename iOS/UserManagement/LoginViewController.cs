@@ -86,6 +86,7 @@ namespace iOS
             UserNameField = new StyledTextField();
             View.AddSubview( UserNameField.Background );
 
+            UserNameField.Field.AutocapitalizationType = UITextAutocapitalizationType.None;
             UserNameField.Field.AutocorrectionType = UITextAutocorrectionType.No;
             ControlStyling.StyleTextField( UserNameField.Field, LoginStrings.UsernamePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             ControlStyling.StyleBGLayer( UserNameField.Background );
@@ -239,6 +240,9 @@ namespace iOS
             // up their password, it won't force them to retype it all in.
             UserNameField.Field.Text = string.Empty;
             PasswordField.Field.Text = string.Empty;
+
+            UserNameField.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
+            PasswordField.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
         }
 
         public override void ViewDidAppear(bool animated)
@@ -296,8 +300,6 @@ namespace iOS
             if( ValidateInput( ) )
             {
                 SetUIState( LoginState.Trying );
-
-                BlockerView.BringToFront( );
 
                 RockMobileUser.Instance.BindRockAccount( UserNameField.Field.Text, PasswordField.Field.Text, BindComplete );
 
@@ -359,6 +361,8 @@ namespace iOS
 
                             WebLayout.LoadUrl( fromUri, delegate(WebLayout.Result result, string url) 
                                 {
+                                    BlockerView.Hide( );
+
                                     // if fail/success comes in
                                     if( result != WebLayout.Result.Cancel )
                                     {
@@ -431,6 +435,7 @@ namespace iOS
                 {
                     FadeLoginResult( false );
                     BlockerView.Show( null );
+                    BlockerView.BringToFront( );
 
                     UserNameField.Field.Enabled = false;
                     PasswordField.Field.Enabled = false;

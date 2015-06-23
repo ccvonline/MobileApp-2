@@ -1,12 +1,26 @@
 Both
-Added final images for the "Connect" section.
-Improved the quality of the top CCV Logo
+Added final images for the "Connect" section. (Thanks Kyle!)
+Improved the quality of the top CCV Logo (Thanks Kyle!)
 Increased the max number of user notes, and changed the warning verbage when hitting the limit.
-
+Fixed a crash when running the app if the Note Database had a syntax error.
+Fixed an issue preventing users that were not logged in from submitting prayer requests.
 
 iOS
-Added final iPad splash screens
+Added final iPad splash screens (Thanks Kyle!)
 Fixed an issue causing your place in Notes to be lost when changing device orientation. (Thanks Emily!)
+Fixed an issue causing a "pop" in the Series Details page when the Series Image finished downloading while on the page.
+Fixed an issue allowing prayer requests with no category to be submitted.
+Fixed an issue preventing the user from going back to fix invalid prayer requests.
+Improved the UI when toggling an anonymous prayer request  
+Fixed an issue causing the Facebook login page to appear to load endlessly.
+Fixed an issue causing the keyboard to remain up after tapping "Register" in the registration page.
+Fixed an issue where a user logging in with no profile picture will use the last logged in user's profile picture.
+Fixed an issue causing the Cell Phone field in Registration to appear red when it shouldn't.
+On the Login page, the User Name field will no longer automatically capitalize input.
+Fixed an issue causing long Prayer Names or Categories to truncate.
+The "Loading..." image is no longer shown for non-existent news items on iPad.
+Changing your campus will once again update the News immediately
+Fixed an issue causing the Login username & password to remain red when leaving and returning to the Login page.
 
 Android
 Fixed some splash images.

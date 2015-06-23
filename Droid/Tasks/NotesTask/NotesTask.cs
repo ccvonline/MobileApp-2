@@ -59,12 +59,6 @@ namespace Droid
                             }
                             break;
                         }
-
-                        case PrivateGeneralConfig.TaskAction_NotesDownloadImages:
-                        {
-                            //MainPage.DownloadImages( );
-                            break;
-                        }
                     }
                 }
 

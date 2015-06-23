@@ -95,6 +95,18 @@ namespace iOS
                     ReloadNews( );
                     break;
                 }
+
+                case PrivateGeneralConfig.TaskAction_CampusChanged:
+                {
+                    // since we changed campuses, go ahead and update the displayed news.
+                    ReloadNews( );
+
+
+                    MainPageVC.UpdateNews( News );
+                    MainPageVC.LoadAndDownloadImages( );
+                    MainPageVC.LayoutChanged( );
+                    break;
+                }
             }
         }
 

@@ -431,6 +431,9 @@ namespace App
                     // clear the person and take a blank copy
                     SetDefaultPersonValues( );
 
+                    // remove their profile picture
+                    FileCache.Instance.RemoveFile( PrivateSpringboardConfig.ProfilePic );
+
                     LoggedIn = false;
                     AccountType = BoundAccountType.None;
 

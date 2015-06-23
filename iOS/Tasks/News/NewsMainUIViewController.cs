@@ -247,7 +247,7 @@ namespace iOS
                 }
                 else
                 {
-                    cell.LeftImage.Image = ImagePlaceholder;
+                    cell.LeftImage.Image = null;
                 }
 
                 // now if there's a right item, set it
@@ -265,7 +265,7 @@ namespace iOS
                 }
                 else
                 {
-                    cell.RightImage.Image = ImagePlaceholder;
+                    cell.RightImage.Image = null;
                 }
 
                 // scale down the image to the width of the device
@@ -380,7 +380,7 @@ namespace iOS
             NewsTableView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             NewsTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
-            LoadImages( );
+            LoadAndDownloadImages( );
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -405,7 +405,7 @@ namespace iOS
             }
         }
 
-        void LoadImages( )
+        public void LoadAndDownloadImages( )
         {
             // go through the news
             foreach ( NewsEntry news in News )

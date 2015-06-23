@@ -716,7 +716,6 @@ namespace iOS
 
                             // NOW go ahead and start downloads.
                             PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
-                            PerformTaskAction( PrivateGeneralConfig.TaskAction_NotesDownloadImages );
                         } );
                 };
             timer.Start( );
@@ -745,7 +744,6 @@ namespace iOS
                         // Allow the news to update, and begin downloading all
                         // news and note images we need.
                         PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
-                        PerformTaskAction( PrivateGeneralConfig.TaskAction_NotesDownloadImages );
                     }
                 });
         }
@@ -979,8 +977,8 @@ namespace iOS
 
                 UpdateCampusViews( );
 
-                // let the news know it should reload
-                PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                // notify the system the campus changed
+                PerformTaskAction( PrivateGeneralConfig.TaskAction_CampusChanged );
             }
         }
 

@@ -132,6 +132,7 @@ namespace iOS
             Name.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
             Name.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
             Name.BackgroundColor = UIColor.Clear;
+            Name.LineBreakMode = UILineBreakMode.TailTruncation;
 
             // setup the date field
             DateLayer = new UIView( );
@@ -158,6 +159,8 @@ namespace iOS
             Category.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
             Category.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
             Category.BackgroundColor = UIColor.Clear;
+            Category.LineBreakMode = UILineBreakMode.TailTruncation;
+            Category.AdjustsFontSizeToFitWidth = false;
 
 
             // add the controls
@@ -258,17 +261,19 @@ namespace iOS
             float metaDataSpacing = 30;
             NameLayer.Frame = new CGRect( 0, 0, View.Bounds.Width, metaDataSpacing );
 
-            Name.Frame = new CGRect( 0, 0, View.Bounds.Width - (ViewPadding * 2), metaDataSpacing );
+            nfloat allowedNameWidth = View.Bounds.Width - ( ViewPadding * 2 );
+            Name.Frame = new CGRect( 0, 0, allowedNameWidth, metaDataSpacing );
             Name.SizeToFit( );
-            Name.Frame = new CGRect( ViewPadding, (metaDataSpacing - Name.Bounds.Height) / 2, Name.Frame.Width, Name.Bounds.Height );
+            Name.Frame = new CGRect( ViewPadding, (metaDataSpacing - Name.Bounds.Height) / 2, allowedNameWidth, Name.Bounds.Height );
 
 
             // setup the category layer and category
             CategoryLayer.Frame = new CGRect( -5, NameLayer.Frame.Bottom, View.Bounds.Width / 2 + 6, metaDataSpacing );
                 
-            Category.Frame = new CGRect( 0, 0, (View.Bounds.Width / 2) - ViewPadding, metaDataSpacing );
+            nfloat allowedCategoryWidth = CategoryLayer.Bounds.Width - (ViewPadding * 2);
+            Category.Frame = new CGRect( 0, 0, allowedCategoryWidth, metaDataSpacing );
             Category.SizeToFit( );
-            Category.Frame = new CGRect( ViewPadding, CategoryLayer.Frame.Top + (metaDataSpacing - Category.Bounds.Height) / 2, Category.Frame.Width, Category.Frame.Height );
+            Category.Frame = new CGRect( ViewPadding, CategoryLayer.Frame.Top + (metaDataSpacing - Category.Bounds.Height) / 2, allowedCategoryWidth, Category.Frame.Height );
 
 
             // setup the date layer and category

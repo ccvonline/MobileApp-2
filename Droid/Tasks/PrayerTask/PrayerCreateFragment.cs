@@ -203,7 +203,11 @@ namespace Droid
                             prayerRequest.LastName = LastNameText.Text;
                         }
 
-                        int personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue ? App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.Value : 0;
+                        int? personAliasId = null;
+                        if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                        {
+                            personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                        }
 
                         prayerRequest.Text = RequestText.Text;
                         prayerRequest.EnteredDateTime = DateTime.Now;
@@ -213,7 +217,7 @@ namespace Droid
                         prayerRequest.Guid = Guid.NewGuid( );
                         prayerRequest.IsPublic = PublicSwitch.Checked;
                         prayerRequest.IsApproved = false;
-                        prayerRequest.CreatedByPersonAliasId = AnonymousSwitch.Checked == true ? -1 : personAliasId;
+                        prayerRequest.CreatedByPersonAliasId = AnonymousSwitch.Checked == true ? null : personAliasId;
 
                         ParentTask.OnClick( this, 0, prayerRequest );
                     }

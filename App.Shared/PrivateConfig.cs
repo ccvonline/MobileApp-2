@@ -55,7 +55,7 @@ namespace App.Shared
             /// Actions sent via our super basic "event" system.
             /// </summary>
             public const string TaskAction_NewsReload = "News.Reload";
-            public const string TaskAction_NotesDownloadImages = "Notes.DownloadImages";
+            public const string TaskAction_CampusChanged = "CampusChanged";
             public const string TaskAction_NotesRead = "Page.Read";
         }
 

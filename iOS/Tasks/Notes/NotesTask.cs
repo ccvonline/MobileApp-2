@@ -56,12 +56,6 @@ namespace iOS
                     }
                     break;
                 }
-
-                case PrivateGeneralConfig.TaskAction_NotesDownloadImages:
-                {
-                    //MainViewController.DownloadImages( );
-                    break;
-                }
             }
         }
 
