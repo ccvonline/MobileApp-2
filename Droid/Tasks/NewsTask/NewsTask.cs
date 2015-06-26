@@ -91,6 +91,15 @@ namespace Droid
 
                             break;
                         }
+
+                        case PrivateGeneralConfig.TaskAction_CampusChanged:
+                        {
+                            ReloadNews( );
+
+                            // let the page have the latest news
+                            MainPage.UpdateNews( News );
+                            break;
+                        }
                     }
                 }
 

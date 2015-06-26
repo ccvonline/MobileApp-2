@@ -119,6 +119,7 @@ namespace Droid
             StreetField = backgroundView.FindViewById<EditText>( Resource.Id.streetAddressText );
             ControlStyling.StyleTextField( StreetField, ProfileStrings.StreetPlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             StreetField.AfterTextChanged += (sender, e) => { Dirty = true; };
+            StreetField.InputType |= InputTypes.TextFlagCapWords;
 
             borderView = backgroundView.FindViewById<View>( Resource.Id.street_border );
             borderView.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
@@ -126,6 +127,7 @@ namespace Droid
             CityField = backgroundView.FindViewById<EditText>( Resource.Id.cityAddressText );
             ControlStyling.StyleTextField( CityField, ProfileStrings.CityPlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             CityField.AfterTextChanged += (sender, e) => { Dirty = true; };
+            CityField.InputType |= InputTypes.TextFlagCapWords;
 
             borderView = backgroundView.FindViewById<View>( Resource.Id.city_border );
             borderView.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
@@ -133,6 +135,7 @@ namespace Droid
             StateField = backgroundView.FindViewById<EditText>( Resource.Id.stateAddressText );
             ControlStyling.StyleTextField( StateField, ProfileStrings.StatePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             StateField.AfterTextChanged += (sender, e) => { Dirty = true; };
+            StateField.InputType |= InputTypes.TextFlagCapWords;
 
             borderView = backgroundView.FindViewById<View>( Resource.Id.state_border );
             borderView.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );

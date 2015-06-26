@@ -399,7 +399,6 @@ namespace Droid
                     ((EditText)SearchPage.City.PlatformNativeObject).SetOnEditorActionListener( this );
                     ((EditText)SearchPage.State.PlatformNativeObject).SetOnEditorActionListener( this );
                     ((EditText)SearchPage.ZipCode.PlatformNativeObject).SetOnEditorActionListener( this );
-
                     return view;
                 }
 

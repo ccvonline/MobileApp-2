@@ -81,6 +81,8 @@ namespace Droid
             // Create your fragment here
         }
 
+        ScrollView ScrollView { get; set; }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -92,6 +94,8 @@ namespace Droid
             View view = inflater.Inflate(Resource.Layout.Register, container, false);
             view.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
             view.SetOnTouchListener( this );
+
+            ScrollView = view.FindViewById<ScrollView>( Resource.Id.scroll_background );
 
             RelativeLayout layoutView = view.FindViewById<RelativeLayout>( Resource.Id.scroll_linear_background );
 
@@ -317,7 +321,12 @@ namespace Droid
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             ProgressBarBlocker.Visibility = ViewStates.Gone;
-                             ToggleControls( true );
+
+                            // scroll to the top so the Result is visible
+                            ScrollView.Post( new Action( delegate
+                                {
+                                    ScrollView.ScrollTo( 0, 0 );
+                                }));
 
                             if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
@@ -420,6 +429,9 @@ namespace Droid
 
         void OnResultViewDone( )
         {
+            // now allow controls to receive input
+            ToggleControls( true );
+
             switch ( State )
             {
                 case RegisterState.Success:

@@ -58,8 +58,7 @@ namespace Droid
 
                             // Create the core layout that stores the prayer
                             LinearLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                            //LinearLayout.SetBackgroundColor( Android.Graphics.Color.Green );
-                            LinearLayout.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                            LinearLayout.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
                             LinearLayout.Orientation = Orientation.Vertical;
 
 
@@ -79,10 +78,15 @@ namespace Droid
                             Name.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
                             ((RelativeLayout.LayoutParams)Name.LayoutParameters).TopMargin = 20;
                             ((RelativeLayout.LayoutParams)Name.LayoutParameters).LeftMargin = 20;
+                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).RightMargin = 20;
                             ((RelativeLayout.LayoutParams)Name.LayoutParameters).BottomMargin = 20;
                             Name.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                             Name.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                             Name.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+                            Name.SetMaxLines( 1 );
+                            Name.SetSingleLine( );
+                            Name.SetHorizontallyScrolling( true );
+                            Name.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                             Name.Text = prayer.FirstName.ToUpper( );
                             NameLayout.AddView( Name );
 
@@ -112,10 +116,15 @@ namespace Droid
                             Category.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
                             ((RelativeLayout.LayoutParams)Category.LayoutParameters).TopMargin = 10;
                             ((RelativeLayout.LayoutParams)Category.LayoutParameters).LeftMargin = 20;
+                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).RightMargin = 20;
                             ((RelativeLayout.LayoutParams)Category.LayoutParameters).BottomMargin = 10;
                             Category.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                             Category.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
                             Category.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+                            Category.SetMaxLines( 1 );
+                            Category.SetSingleLine( );
+                            Category.SetHorizontallyScrolling( true );
+                            Category.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                             Category.Text = prayer.CategoryId.HasValue ? RockGeneralData.Instance.Data.PrayerIdToCategory( prayer.CategoryId.Value ) : RockGeneralData.Instance.Data.PrayerCategories[ 0 ].Name;
                             CategoryLayout.AddView( Category );
 
@@ -191,6 +200,7 @@ namespace Droid
                             Prayer.SetMaxWidth( (int)bounds.Width - 40 );
 
                             MaxPrayerLayoutHeight = bounds.Height;
+                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
                         }
                     }
 

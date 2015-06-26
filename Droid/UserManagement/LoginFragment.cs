@@ -466,6 +466,7 @@ namespace Droid
                     CancelButton.Enabled = true;
                     RegisterButton.Visibility = ViewStates.Visible;
                     RegisterButton.Enabled = true;
+                    FacebookButton.Enabled = true;
 
                     break;
                 }
@@ -483,6 +484,7 @@ namespace Droid
                     LoginButton.Enabled = false;
                     CancelButton.Enabled = false;
                     RegisterButton.Enabled = false;
+                    FacebookButton.Enabled = false;
 
                     break;
                 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0" package="com.ccvonline.CCVMobileApp" android:versionCode="23">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0" package="com.ccvonline.CCVMobileApp" android:versionCode="24">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<application android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCzDzkK-zhL-T6MYT_7FQposbp73u0TVMY" />

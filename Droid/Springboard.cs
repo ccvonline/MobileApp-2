@@ -500,7 +500,7 @@ namespace Droid
                 CampusText.Text = newCampusText;
 
                 // let the news know it should reload
-                PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                PerformTaskAction( PrivateGeneralConfig.TaskAction_CampusChanged );
             }
         }
 

@@ -134,17 +134,21 @@ namespace Droid
                                 FirstNameText.Enabled = true;
                                 LastNameText.Enabled = true;
 
-                                FirstNameText.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
-                                LastNameText.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
+                                FirstNameText.Text = string.Empty;
+                                LastNameText.Text = string.Empty;
                             }
                             else
                             {
                                 FirstNameText.Enabled = false;
                                 LastNameText.Enabled = false;
 
-                                FirstNameText.SetTextColor( Android.Graphics.Color.DimGray );
-                                LastNameText.SetTextColor( Android.Graphics.Color.DimGray );
+                                FirstNameText.Text = PrayerStrings.CreatePrayer_Anonymous;
+                                LastNameText.Text = PrayerStrings.CreatePrayer_Anonymous;
                             }
+
+                            // set the colors back to neutral
+                            Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( FirstNameBGColor, ControlStylingConfig.BG_Layer_Color, FirstNameBGLayer, delegate { FirstNameBGColor = ControlStylingConfig.BG_Layer_Color; } );
+                            Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, ControlStylingConfig.BG_Layer_Color, LastNameBGLayer, delegate { LastNameBGColor = ControlStylingConfig.BG_Layer_Color; } );
                     };
 
                     PublicSwitch = (Switch)view.FindViewById<Switch>( Resource.Id.makePublicSwitch );
@@ -182,8 +186,7 @@ namespace Droid
                 {
                     // if first and last name are valid, OR anonymous is on
                     // and if there's text in the request field.
-                    if ( ( ( string.IsNullOrEmpty( FirstNameText.Text ) == false && string.IsNullOrEmpty( LastNameText.Text ) == false ) || AnonymousSwitch.Checked == true ) &&
-                             string.IsNullOrEmpty( RequestText.Text ) == false )
+                    if ( ValidateInput( ) )
                     {
                         Rock.Client.PrayerRequest prayerRequest = new Rock.Client.PrayerRequest();
 
@@ -191,17 +194,9 @@ namespace Droid
                         LastNameText.Enabled = false;
                         RequestText.Enabled = false;
 
-                        // respect their privacy settings
-                        if ( AnonymousSwitch.Checked == true )
-                        {
-                            prayerRequest.FirstName = "Anonymous";
-                            prayerRequest.LastName = "Anonymous";
-                        }
-                        else
-                        {
-                            prayerRequest.FirstName = FirstNameText.Text;
-                            prayerRequest.LastName = LastNameText.Text;
-                        }
+                        // setup the request
+                        prayerRequest.FirstName = FirstNameText.Text;
+                        prayerRequest.LastName = LastNameText.Text;
 
                         int? personAliasId = null;
                         if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
@@ -223,33 +218,44 @@ namespace Droid
                     }
                     else
                     {
-                        // they forgot to fill something in, so show them what it was.
-
-                        // Update the name background color
-                        uint targetNameColor = ControlStylingConfig.BG_Layer_Color; 
-                        if( string.IsNullOrEmpty( FirstNameText.Text ) && AnonymousSwitch.Checked == false )
-                        {
-                            targetNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
-                        }
-                        Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( FirstNameBGColor, targetNameColor, FirstNameBGLayer, delegate { FirstNameBGColor = targetNameColor; } );
-
-
-                        // if they left the name field blank and didn't turn on Anonymous, flag the field.
-                        uint targetLastNameColor = ControlStylingConfig.BG_Layer_Color; 
-                        if( string.IsNullOrEmpty( LastNameText.Text ) && AnonymousSwitch.Checked == false )
-                        {
-                            targetLastNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
-                        }
-                        Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, targetLastNameColor, LastNameBGLayer, delegate { LastNameBGColor = targetLastNameColor; } );
-
-
-                        // Update the prayer background color
-                        uint currPrayerColor = RequestBGColor;
-                        uint targetPrayerColor = string.IsNullOrEmpty( RequestText.Text ) ? ControlStylingConfig.BadInput_BG_Layer_Color : ControlStylingConfig.BG_Layer_Color;
-                        Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( RequestBGColor, targetPrayerColor, RequestBGLayer, delegate { RequestBGColor = targetPrayerColor; } );
-
                         CheckDebug( );
                     }
+                }
+
+                bool ValidateInput( )
+                {
+                    bool result = true;
+
+                    // Update the name background color
+                    uint targetNameColor = ControlStylingConfig.BG_Layer_Color;
+                    if( string.IsNullOrEmpty( FirstNameText.Text ) && AnonymousSwitch.Checked == false )
+                    {
+                        targetNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+                        result = false;
+                    }
+                    Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( FirstNameBGColor, targetNameColor, FirstNameBGLayer, delegate { FirstNameBGColor = targetNameColor; } );
+
+
+                    // if they left the name field blank and didn't turn on Anonymous, flag the field.
+                    uint targetLastNameColor = ControlStylingConfig.BG_Layer_Color; 
+                    if( string.IsNullOrEmpty( LastNameText.Text ) && AnonymousSwitch.Checked == false )
+                    {
+                        targetLastNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+                        result = false;
+                    }
+                    Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, targetLastNameColor, LastNameBGLayer, delegate { LastNameBGColor = targetLastNameColor; } );
+
+
+                    // Update the prayer background color
+                    uint targetPrayerColor = ControlStylingConfig.BG_Layer_Color;
+                    if( string.IsNullOrEmpty( RequestText.Text ) == true )
+                    {
+                        targetPrayerColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+                        result = false;
+                    }
+                    Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( RequestBGColor, targetPrayerColor, RequestBGLayer, delegate { RequestBGColor = targetPrayerColor; } );
+
+                    return result;
                 }
 
                 void CheckDebug( )

@@ -6,16 +6,28 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>RUNNING AGAINST GOD</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>6/28/2015</Date>
+				<NoteUrl>xml/message_6_27_2015.xml</NoteUrl>
+			</Message>
+			<Message>
 				<Name>RUNNING WITH GOD</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>6/21/2015</Date>
 				<NoteUrl>xml/message_6_20_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Jonah2015/Jonah_Wk3_RunningWithGod.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/131353298.m3u8?p=high,standard,mobile&amp;s=a596312062f1723bb8241942ca147e89</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17609&amp;item=513</ShareUrl>
 			</Message>
 			<Message>
 				<Name>RUNNING TO GOD</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>6/14/2015</Date>
 				<NoteUrl>xml/message_6_13_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Jonah2015/Jonah_Wk2_RunningToGod.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/131353292.m3u8?p=high,standard,mobile&amp;s=a24f5338e7d3325cefe38f5cb0112521</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17609&amp;item=512</ShareUrl>
 			</Message>
 			
 			<Message>
@@ -23,6 +35,9 @@
 				<Speaker>Todd Clark</Speaker>
 				<Date>5/10/2015</Date>
 				<NoteUrl>xml/message_6_6_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Jonah2015/Jonah_Wk1_AManWhoRan.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/130114369.m3u8?p=high,standard,mobile&amp;s=ad30a92de1cadd45dc193a709fa0126f</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17609&amp;item=511</ShareUrl>
 			</Message>
 
 			<Name>JONAH</Name>
@@ -43,12 +58,18 @@
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>5/31/2015</Date>
 				<NoteUrl>xml/message_5_30_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/YouAskedForIt/YouAskedForIt_Wk4_WhatHappensAfterWeDie.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/129363664.m3u8?p=high,standard,mobile&amp;s=b62d911a7a9523d81e0dcf9e938e8ad2</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17609&amp;item=510</ShareUrl>
 			</Message>
 			<Message>
 				<Name>WHAT IS THE TRINITY?</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>5/24/2015</Date>
 				<NoteUrl>xml/message_5_23_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/YouAskedForIt/YouAskedForIt_Wk3_HowCanIUnderstandTheTrinity.mp3</AudioUrl>
+				<WatchUrl>http://player.vimeo.com/external/128730540.m3u8?p=high,standard,mobile&amp;s=6a1eff8afd4d5f7a664e8aee83f379f6</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17609&amp;item=509</ShareUrl>
 			</Message>
 			<Message>
 				<Name>WHY DOES GOD ALLOW SUFFERING?</Name>

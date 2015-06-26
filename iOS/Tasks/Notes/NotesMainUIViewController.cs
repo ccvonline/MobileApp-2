@@ -732,7 +732,7 @@ namespace iOS
         /// </summary>
         public void WatchButtonClicked( )
         {
-            NotesWatchUIViewController viewController = Storyboard.InstantiateViewController( "NotesWatchUIViewController" ) as NotesWatchUIViewController;
+            NotesWatchUIViewController viewController = new NotesWatchUIViewController( );
             viewController.MediaUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].WatchUrl;
             viewController.ShareUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].ShareUrl;
 
