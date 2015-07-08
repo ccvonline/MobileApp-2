@@ -585,7 +585,7 @@ namespace iOS
 
             // load our objects from disk
             Rock.Mobile.Util.Debug.WriteLine( "Loading objects from device." );
-            RockApi.Instance.LoadObjectsFromDevice( );
+            App.Shared.Network.RockApi.Instance.LoadObjectsFromDevice( );
             Rock.Mobile.Util.Debug.WriteLine( "Loading objects done." );
 
             // set the viewing campus now that their profile has loaded
@@ -1297,7 +1297,7 @@ namespace iOS
             // request quick backgrounding so we can save objects
             nint taskID = UIApplication.SharedApplication.BeginBackgroundTask( () => {});
 
-            RockApi.Instance.SaveObjectsToDevice( );
+            App.Shared.Network.RockApi.Instance.SaveObjectsToDevice( );
 
             FileCache.Instance.SaveCacheMap( );
 
@@ -1311,7 +1311,7 @@ namespace iOS
             // request quick backgrounding so we can save objects
             nint taskID = UIApplication.SharedApplication.BeginBackgroundTask( () => {});
 
-            RockApi.Instance.SaveObjectsToDevice( );
+            App.Shared.Network.RockApi.Instance.SaveObjectsToDevice( );
 
             FileCache.Instance.SaveCacheMap( );
 

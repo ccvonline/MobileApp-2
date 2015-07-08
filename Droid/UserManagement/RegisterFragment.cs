@@ -301,7 +301,10 @@ namespace Droid
                     // copy all the edited fields into the person object
                     newPerson.Email = EmailText.Text;
 
+                    // set the nickName AND firstName to NickName
                     newPerson.NickName = NickNameText.Text;
+                    newPerson.FirstName = NickNameText.Text;
+
                     newPerson.LastName = LastNameText.Text;
                     newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
                     newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;

@@ -123,10 +123,6 @@ namespace App
                                                                           //GroupId/GroupLocationTypeValueId/Street1/City/State/Zip/CountryCode
                 const string PutAddressEndPoint = "api/Groups/SaveAddress/{0}/{1}/{2}/{3}/{4}/{5}/{6}";
 
-
-                const string ResolveDefinedValueEndPoint = "api/DefinedValues?$filter=";
-                const string ResolveDefinedValueSuffix = "Guid eq guid'{0}'";
-
                 /// <summary>
                 /// End point for updating a phone number
                 /// </summary>
@@ -496,30 +492,6 @@ namespace App
                                                                                      address.Location.Country );
 
                     Request.ExecuteAsync( requestUrl, request, resultHandler );
-                }
-
-                public void GetDefinedValues( List<System.Guid> definedValueGuidList, HttpRequest.RequestResult<List<Rock.Client.DefinedValue>> resultHandler )
-                {
-                    RestRequest request = GetRockRestRequest( Method.GET );
-
-                    string requestUrl = BaseUrl + ResolveDefinedValueEndPoint;
-
-                    // append the first guid to the request URL
-                    requestUrl += string.Format( ResolveDefinedValueSuffix, definedValueGuidList[ 0 ] );
-
-                    // are there more?
-                    if ( definedValueGuidList.Count > 1 )
-                    {
-                        // go through the list, adding them in proper odata format.
-                        for ( int i = 1; i < definedValueGuidList.Count; i++ )
-                        {
-                            requestUrl += " or ";
-                            requestUrl += string.Format( ResolveDefinedValueSuffix, definedValueGuidList[ i ] );
-                        }
-
-                    }
-
-                    Request.ExecuteAsync<List<Rock.Client.DefinedValue>>( requestUrl, request, resultHandler );
                 }
 
                 public void UpdatePhoneNumber( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, bool isNew, HttpRequest.RequestResult resultHandler )

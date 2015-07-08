@@ -36,7 +36,7 @@ namespace App.Shared
             public const int NeighborhoodGroupGeoFenceValueId = 48;
             public const int NeighborhoodGroupValueId = 49;
             public const int GroupLocationTypeHomeValueId = 19;
-            public const int GroupMemberStatus_Pending_ValueId = 2;
+            public const Rock.Client.Enums.GroupMemberStatus GroupMemberStatus_Pending_ValueId = Rock.Client.Enums.GroupMemberStatus.Pending;
             public const int ApplicationGroup_PhotoRequest_ValueId = 1207885;
             public const int GroupMemberRole_Member_ValueId = 59;
             public const int GeneralDataTimeValueId = 2623;

@@ -366,7 +366,7 @@ namespace Droid
             // gender
             if ( RockMobileUser.Instance.Person.Gender > 0 )
             {
-                GenderField.Text = RockGeneralData.Instance.Data.Genders[ RockMobileUser.Instance.Person.Gender ];
+                GenderField.Text = RockGeneralData.Instance.Data.Genders[ (int)RockMobileUser.Instance.Person.Gender ];
             }
             else
             {
@@ -412,7 +412,10 @@ namespace Droid
             // copy all the edited fields into the person object
             RockMobileUser.Instance.Person.Email = EmailField.Text;
 
+            // Set the nickname AND first name to NickName
             RockMobileUser.Instance.Person.NickName = NickNameField.Text;
+            RockMobileUser.Instance.Person.FirstName = NickNameField.Text;
+
             RockMobileUser.Instance.Person.LastName = LastNameField.Text;
 
             // Update their cell phone. 
@@ -425,7 +428,7 @@ namespace Droid
             // Gender
             if ( string.IsNullOrEmpty( GenderField.Text ) == false )
             {
-                RockMobileUser.Instance.Person.Gender = RockGeneralData.Instance.Data.Genders.IndexOf( GenderField.Text );
+                RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockGeneralData.Instance.Data.Genders.IndexOf( GenderField.Text );
             }
 
             // Birthdate

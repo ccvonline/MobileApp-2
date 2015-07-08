@@ -387,7 +387,10 @@ namespace iOS
                             // copy all the edited fields into the person object
                             newPerson.Email = EmailText.Field.Text;
 
+                            // set both the nick name and first name to NickName
                             newPerson.NickName = NickNameText.Field.Text;
+                            newPerson.FirstName = NickNameText.Field.Text;
+
                             newPerson.LastName = LastNameText.Field.Text;
                             newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
                             newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
@@ -402,7 +405,7 @@ namespace iOS
                                 newPhoneNumber.NumberFormatted = digits.AsPhoneNumber( );
                             }
 
-                            RockApi.Instance.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Field.Text, PasswordText.Field.Text,
+                            App.Shared.Network.RockApi.Instance.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Field.Text, PasswordText.Field.Text,
                                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                                 {
                                     if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
