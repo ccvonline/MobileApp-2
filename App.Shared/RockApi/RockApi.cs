@@ -397,6 +397,7 @@ namespace App
                     }
                 }
 
+                const int PersonRecordTypeValueId = 1;
                 void CreateProfile( Rock.Client.Person person, HttpRequest.RequestResult resultHandler )
                 {
                     // create a person object that can go up to rock, and copy the relavant data from the passed in arg
@@ -410,6 +411,7 @@ namespace App
                     newPerson.FirstName = person.FirstName;
                     newPerson.LastName = person.LastName;
                     newPerson.Gender = person.Gender;
+                    newPerson.RecordTypeValueId = PersonRecordTypeValueId;
 
                     RestRequest request = GetRockRestRequest( Method.POST );
                     request.AddBody( person );
