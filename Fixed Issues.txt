@@ -1,7 +1,6 @@
 Both
-	Update a person’s NickName and FirstName when changing their name.
 
 iOS
-	Fixed a crash when tapping the “Watch” icon on the main Notes page.
 
 Android
+	

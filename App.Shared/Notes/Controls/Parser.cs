@@ -119,31 +119,50 @@ namespace App
                     }
 
                     // Convert percentages to whole values
-                    if( bounds.X < 1 )
+                    if ( bounds.X < 1 )
                     {
                         bounds.X = parentSize.Width * bounds.X;
                     }
-                    if( bounds.Y < 1 )
+                    else
+                    {
+                        bounds.X = Rock.Mobile.Graphics.Util.UnitToPx( bounds.X );
+                    }
+
+                    if ( bounds.Y < 1 )
                     {
                         bounds.Y = parentSize.Height * bounds.Y;
                     }
-                    if( bounds.Width < 1 )
+                    else
+                    {
+                        bounds.Y = Rock.Mobile.Graphics.Util.UnitToPx( bounds.Y );
+                    }
+
+                    if ( bounds.Width < 1 )
                     {
                         bounds.Width = Math.Max( 1, parentSize.Width - bounds.X ) * bounds.Width;
-                        if( bounds.Width == 0 )
+                        if ( bounds.Width == 0 )
                         {
                             // if 0, just take the our parents width
                             bounds.Width = Math.Max( 1, parentSize.Width - bounds.X );
                         }
                     }
-                    if( bounds.Height < 1 )
+                    else
+                    {
+                        bounds.Width = Rock.Mobile.Graphics.Util.UnitToPx( bounds.Width );
+                    }
+
+                    if ( bounds.Height < 1 )
                     {
                         bounds.Height = Math.Max( 1, parentSize.Height - bounds.Y ) * bounds.Height;
-                        if( bounds.Height == 0 )
+                        if ( bounds.Height == 0 )
                         {
                             // if 0, just take the our parents width
                             bounds.Height = Math.Max( 1, parentSize.Height - bounds.Y );
                         }
+                    }
+                    else
+                    {
+                        bounds.Height = Rock.Mobile.Graphics.Util.UnitToPx( bounds.Height );
                     }
                 }
 

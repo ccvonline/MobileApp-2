@@ -6,10 +6,41 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>PAIN</Name>
+				<Speaker>Dr. Mark Moore</Speaker>
+				<Date>7/12/2015</Date>
+				<NoteUrl>xml/message_7_11_2015.xml</NoteUrl>
+			</Message>
+			<Message>
+				<Name>PRIORITIES</Name>
+				<Speaker>Dr. Mark Moore</Speaker>
+				<Date>7/5/2015</Date>
+				<NoteUrl>xml/message_7_4_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/132650794.m3u8?p=high,standard,mobile&amp;s=c16d4ba88870c42eb90e4bc67112b039</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=515</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Revealed/Revealed_WK1_WhatAreMyPriorities.mp3</AudioUrl>
+			</Message>
+
+			<Name>REVEALED</Name>
+			<Description>
+				How can we thrive in the trying times we face? The book of Revelation offers a crystal clear answer to this question.
+			</Description>
+			<DateRanges>7/5/2015 - 7/31/2015</DateRanges>
+			<BillboardUrl>images/revealed_2015.png</BillboardUrl>
+			<ThumbnailUrl>images/revealed_2015_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+		
+		<!--Start Series-->
+		<Series>
+			<Message>
 				<Name>RUNNING AGAINST GOD</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>6/28/2015</Date>
 				<NoteUrl>xml/message_6_27_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/132109518.m3u8?p=high,standard,mobile&amp;s=1a479ff85c3f4afebf0c5e6f65cb5cc3</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=514</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Jonah2015/Jonah_Wk4_Running_Against_God.mp3</AudioUrl>
 			</Message>
 			<Message>
 				<Name>RUNNING WITH GOD</Name>
@@ -42,12 +73,11 @@
 
 			<Name>JONAH</Name>
 			<Description>
-				Jonah got eaten by a whale Pinocchio style.
+				The story of Jonah is really all of our stories. Each of us can look back at some point in our lives where we have attempted to run from God.
 			</Description>
-			<DateRanges>6/7/2015 - 7/1/2015</DateRanges>
+			<DateRanges>6/7/2015 - 6/28/2015</DateRanges>
 			<BillboardUrl>images/jonah.png</BillboardUrl>
 			<ThumbnailUrl>images/jonah_thumb.png</ThumbnailUrl>
-
 		</Series>
 		<!--End Series-->
 		

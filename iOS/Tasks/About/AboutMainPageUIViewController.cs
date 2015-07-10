@@ -20,11 +20,11 @@ namespace iOS
         {
             base.ViewDidLoad();
 
-            AboutVersionText.Text = string.Format( "Version: {0}", BuildStrings.Version );
-
             WebView = new UIWebView( );
             View.AddSubview( WebView );
-            WebView.LoadRequest( new NSUrlRequest( new NSUrl( AboutConfig.Url ) ) );
+
+            string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
+            WebView.LoadRequest( new NSUrlRequest( new NSUrl( aboutUrl ) ) );
         }
 
         public override void LayoutChanged()

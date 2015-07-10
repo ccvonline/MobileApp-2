@@ -1,43 +1,10 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/RockApi/MobileAppApi.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/RockApi/RockApi.cs">
     <Files>
-      <File FileName="iOS/Tasks/Notes/NotesMainUIViewController.cs" Line="1" Column="1" />
-      <File FileName="App.Shared/RockApi/RockMobileUser.cs" Line="1" Column="1" />
-      <File FileName="App.Shared/RockApi/RockApi.cs" Line="608" Column="106" />
-      <File FileName="iOS/UserManagement/ProfileViewController.cs" Line="557" Column="83" />
-      <File FileName="App.Shared/PrivateConfig.cs" Line="39" Column="141" />
-      <File FileName="App.Shared/Config.cs" Line="12" Column="25" />
-      <File FileName="iOS/SpringboardViewController.cs" Line="1314" Column="32" />
-      <File FileName="iOS/UserManagement/RegisterViewController.cs" Line="408" Column="48" />
-      <File FileName="../../Rock/Rock.Client/CodeGenerated/Enums/RockEnums.cs" Line="238" Column="5" />
-      <File FileName="App.Shared/RockApi/MobileAppApi.cs" Line="112" Column="74" />
-      <File FileName="Droid/UserManagement/ProfileFragment.cs" Line="421" Column="30" />
+      <File FileName="App.Shared/RockApi/RockApi.cs" Line="271" Column="70" />
+      <File FileName="App.Shared/RockApi/MobileAppApi.cs" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="CCVApp" expanded="True">
-            <Node name="App.Shared" expanded="True">
-              <Node name="RockApi" expanded="True">
-                <Node name="MobileAppApi.cs" selected="True" />
-              </Node>
-            </Node>
-            <Node name="Droid" expanded="True">
-              <Node name="UserManagement" expanded="True" />
-            </Node>
-            <Node name="iOS" expanded="True">
-              <Node name="UserManagement" expanded="True" />
-            </Node>
-            <Node name="Rock.Client.Models" expanded="True">
-              <Node name="CodeGenerated" expanded="True">
-                <Node name="Enums" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

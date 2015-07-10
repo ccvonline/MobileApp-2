@@ -196,13 +196,9 @@ namespace App
                 /// </summary>
                 public static string[] WebViews = 
                     {
-                        //"Starting Point", "http://www.ccvonline.com/Arena/default.aspx?page=17400&campus=1", "starting_point_thumb.png",
-                        //"Baptisms", "http://www.ccvonline.com/Arena/default.aspx?page=17655&campus=1", "baptism_thumb.png",
-                        //"Serve", "http://www.ccvonline.com/Arena/default.aspx?page=17659&campus=1", "serve_thumb.png"
-                        "Starting Point", "http://www.jeredmcferron.com/ccv/placeholder.html", "starting_point_thumb.png",
-                        "Baptisms", "http://www.jeredmcferron.com/ccv/placeholder.html", "baptism_thumb.png",
-                        "Serve", "http://www.jeredmcferron.com/ccv/placeholder.html", "serve_thumb.png"
-
+                        "Starting Point", "http://rock.ccv.church/ma-startingpoint?SetContext=Rock.Model.Campus|{0}", "starting_point_thumb.png",
+                        "Baptisms", "http://rock.ccv.church/ma-baptism?SetContext=Rock.Model.Campus|{0}", "baptism_thumb.png",
+                        "Serve", "http://rock.ccv.church/ma-serve?SetContext=Rock.Model.Campus|{0}", "serve_thumb.png"
                     };
                 
                 /// <summary>
@@ -231,8 +227,7 @@ namespace App
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
-                //public const string GiveUrl = "https://www.ccvonline.com/Arena/default.aspx?page=18485&campus=1";
-                public const string GiveUrl = "http://www.jeredmcferron.com/ccv/placeholder.html";
+                public const string GiveUrl = "http://rock.ccv.church/ma-give?ma-platform=ios";
             }
 
             public class ControlStylingConfig
@@ -380,8 +375,7 @@ namespace App
                 /// <summary>
                 /// The page to navigate to in the About's embedded webview.
                 /// </summary>
-                //public const string Url = "http://www.ccvonline.com/Arena/default.aspx?page=17623&campus=1";
-                public const string Url = "http://www.jeredmcferron.com/ccv/placeholder.html";
+                public const string Url = "http://rock.ccv.church/ma-more?SetContext=Rock.Model.Campus|{0}";
             }
         }
     }

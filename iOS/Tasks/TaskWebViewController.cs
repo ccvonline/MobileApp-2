@@ -188,7 +188,13 @@ namespace iOS
 
             // kick off our initial request
             ActivityIndicator.Hidden = false;
-            WebView.LoadRequest( new NSUrlRequest( new NSUrl( DisplayUrl ) ) );
+
+            // URL encode the DisplayUrl
+            NSString displayUrl = new NSString( DisplayUrl );
+            NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
+            NSUrl encodedUrl = new NSUrl( encodedString );
+
+            WebView.LoadRequest( new NSUrlRequest( encodedUrl ) );
 
             // if it fails, display the result view
             WebView.LoadError += (object sender, UIWebErrorArgs e ) =>

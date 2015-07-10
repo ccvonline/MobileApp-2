@@ -14,7 +14,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)UI\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockMobileUser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\BaseControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Canvas.cs" />
@@ -53,5 +52,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupFinderSearch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrivateConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\MobileAppApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockApi.cs" />
   </ItemGroup>
 </Project>
