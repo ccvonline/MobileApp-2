@@ -455,7 +455,7 @@ namespace iOS
                     RequestingPrayers = true;
 
                     // request the prayers each time this appears
-                    RockApi.Get_PrayerRequests_Public( DateTime.Now, delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests ) 
+                    RockApi.Get_PrayerRequests_Public( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests ) 
                         {
                             // force this onto the main thread so that if there's a race condition in requesting prayers we won't hit it.
                             InvokeOnMainThread( delegate

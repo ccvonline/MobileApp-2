@@ -608,7 +608,7 @@ namespace Droid
                     SetUIRequestingPrayers( );
 
                     // request the prayers each time this appears
-                    RockApi.Get_PrayerRequests_Public( DateTime.Now, 
+                    RockApi.Get_PrayerRequests_Public( 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests )
                         {
                             IsRequesting = false;
