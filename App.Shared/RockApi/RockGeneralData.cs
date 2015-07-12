@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using Rock.Mobile.Network;
+using MobileApp;
 
 namespace App
 {
@@ -165,7 +166,8 @@ namespace App
                     bool generalDataReceived = true;
 
                     // now get our campuses.
-                    RockApi.Instance.GetCampuses( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Campus> campusList )
+                    RockApi.Get_Campuses( 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Campus> campusList )
                         {
                             // check for failure, and although we'll keep going (for code simplicity),
                             // we will not be storing any of this data.
@@ -175,7 +177,7 @@ namespace App
                             }
 
                             // Chain other things here as needed
-                            RockApi.Instance.GetPrayerCategories( 
+                            MobileAppApi.GetPrayerCategories( 
                                 delegate( System.Net.HttpStatusCode prayerStatusCode, string prayerStatusDescription, List<Rock.Client.Category> categoryList )
                                 {
                                     if ( Rock.Mobile.Network.Util.StatusInSuccessRange( prayerStatusCode ) == false )

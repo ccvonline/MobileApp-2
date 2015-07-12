@@ -5,6 +5,8 @@ using App.Shared.Network;
 using System.Collections;
 using App.Shared.Strings;
 using App.Shared.PrivateConfig;
+using Rock.Mobile.Network;
+using MobileApp;
 
 namespace App.Shared
 {
@@ -40,7 +42,7 @@ namespace App.Shared
             GroupEntry sourceLocation = new GroupEntry( );
 
             // first convert the address into a location object
-            RockApi.Instance.GetLocationFromAddress( street, city, state, zip, 
+            RockApi.Get_Locations_FromAddress( street, city, state, zip, 
                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Rock.Client.Location model )
                 {
                     // verify the call was successful AND it resulted in a valid location
@@ -54,9 +56,7 @@ namespace App.Shared
                         sourceLocation.Longitude = model.Longitude.Value;
 
                         // now get the groups
-                        RockApi.Instance.GetGroupsByLocation( PrivateGeneralConfig.NeighborhoodGroupGeoFenceValueId, 
-                                                              PrivateGeneralConfig.NeighborhoodGroupValueId,
-                            model.Id,
+                        RockApi.Get_Groups_ByLocation( PrivateGeneralConfig.NeighborhoodGroupGeoFenceValueId, PrivateGeneralConfig.NeighborhoodGroupValueId, model.Id,
                             delegate(System.Net.HttpStatusCode groupStatusCode, string groupStatusDescription, List<Rock.Client.Group> rockGroupList )
                             {
                                 bool result = false;

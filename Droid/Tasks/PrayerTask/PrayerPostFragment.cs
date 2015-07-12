@@ -21,6 +21,7 @@ using App.Shared.Analytics;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using App.Shared.UI;
 using App.Shared.PrivateConfig;
+using Rock.Mobile.Network;
 
 namespace Droid
 {
@@ -120,7 +121,7 @@ namespace Droid
                     BlockerView.Show( delegate
                         {
                             // submit the request
-                            App.Shared.Network.RockApi.Instance.PutPrayer( PrayerRequest, 
+                            RockApi.Post_PrayerRequests( PrayerRequest, 
                                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                                 {
                                     Posting = false;

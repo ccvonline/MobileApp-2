@@ -239,7 +239,7 @@ namespace Droid
 
             // load our objects from disk
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Loading objects from device." ) );
-            RockApi.Instance.LoadObjectsFromDevice( );
+            RockNetworkManager.Instance.LoadObjectsFromDevice( );
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Loading objects done." ) );
 
             // seed the last sync time with now, so that when OnResume gets called we don't do it again.
@@ -1154,7 +1154,7 @@ namespace Droid
 
             // save any final changes that may have been performed by the OnPause of other Fragments
             FileCache.Instance.SaveCacheMap( );
-            RockApi.Instance.SaveObjectsToDevice( );
+            RockNetworkManager.Instance.SaveObjectsToDevice( );
 
             Rock.Mobile.Util.Debug.WriteLine( "Springboard OnStop()" );
         }

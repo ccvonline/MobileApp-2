@@ -17,6 +17,7 @@ using Rock.Mobile.Animation;
 using App.Shared.UI;
 using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace iOS
 {
@@ -405,7 +406,7 @@ namespace iOS
                                 newPhoneNumber.NumberFormatted = digits.AsPhoneNumber( );
                             }
 
-                            App.Shared.Network.RockApi.Instance.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Field.Text, PasswordText.Field.Text,
+                            MobileAppApi.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Field.Text, PasswordText.Field.Text,
                                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                                 {
                                     if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )

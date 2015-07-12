@@ -7,6 +7,7 @@ using App.Shared.Notes.Model;
 using RestSharp;
 using App.Shared.Config;
 using Rock.Mobile.IO;
+using MobileApp;
 
 namespace App
 {
@@ -205,7 +206,8 @@ namespace App
 
                     // first get the general data server time, so that we know whether we should update the
                     // general data or not.
-                    RockApi.Instance.GetGeneralDataTime( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, DateTime generalDataTime )
+                    MobileAppApi.GetGeneralDataTime( 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, DateTime generalDataTime )
                             {
                                 if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
                                 {
@@ -237,7 +239,8 @@ namespace App
 
                 void GetNews( HttpRequest.RequestResult resultCallback )
                 {
-                    RockApi.Instance.GetNews( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.ContentChannelItem> model )
+                    MobileAppApi.GetNews( 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.ContentChannelItem> model )
                         {
                             if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {

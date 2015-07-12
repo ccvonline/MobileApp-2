@@ -52,7 +52,6 @@
                 android:id="@+id/usernameText"
                 android:inputType="textPersonName"
                 android:layout_marginLeft="10dp"
-                android:maxLength="16"
                 android:maxLines="1" />
             <View
                 android:id="@+id/middle_border"
@@ -76,7 +75,6 @@
                 android:layout_marginLeft="10dp"
                 android:id="@+id/passwordText"
                 android:inputType="textPersonName"
-                android:maxLength="12"
                 android:maxLines="1"
                 android:password="true" />
         </RelativeLayout>

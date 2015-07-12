@@ -23,6 +23,7 @@ using Java.Lang.Reflect;
 using App.Shared.UI;
 using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace Droid
 {
@@ -320,7 +321,7 @@ namespace Droid
                         newPhoneNumber.NumberTypeValueId = PrivateGeneralConfig.CellPhoneValueId;
                     }
 
-                    RockApi.Instance.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Text, PasswordText.Text,
+                    MobileAppApi.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Text, PasswordText.Text,
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             ProgressBarBlocker.Visibility = ViewStates.Gone;

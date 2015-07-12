@@ -23,6 +23,7 @@ using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Rock.Mobile.Animation;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.UI.DroidNative;
+using Rock.Mobile.Network;
 
 namespace Droid
 {
@@ -308,7 +309,7 @@ namespace Droid
                             if ( prayed == true )
                             {
                                 // send an analytic 
-                                App.Shared.Network.RockApi.Instance.IncrementPrayerCount( PrayerRequest.Id, null );
+                                RockApi.Put_PrayerRequests_Prayed( PrayerRequest.Id, null );
 
                                 // and fill in the circle
                                 PrayerActionLabel.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
@@ -607,7 +608,8 @@ namespace Droid
                     SetUIRequestingPrayers( );
 
                     // request the prayers each time this appears
-                    App.Shared.Network.RockApi.Instance.GetPrayers( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests )
+                    RockApi.Get_PrayerRequests_Public( DateTime.Now, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests )
                         {
                             IsRequesting = false;
 

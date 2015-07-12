@@ -10,6 +10,7 @@ using App.Shared.Analytics;
 using App.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
 using App.Shared.PrivateConfig;
+using Rock.Mobile.Network;
 
 namespace iOS
 {
@@ -118,7 +119,7 @@ namespace iOS
                     System.Threading.Thread.Sleep( 1000 );
 
                     // submit the request
-                    App.Shared.Network.RockApi.Instance.PutPrayer( PrayerRequest, delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
+                    RockApi.Post_PrayerRequests( PrayerRequest, delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             Posting = false;
 

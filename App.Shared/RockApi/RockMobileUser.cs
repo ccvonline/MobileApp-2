@@ -11,6 +11,7 @@ using Rock.Mobile.Util.Strings;
 using System.Runtime.Serialization.Formatters.Binary;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
+using MobileApp;
 
 namespace App
 {
@@ -325,7 +326,7 @@ namespace App
 
                 public void BindRockAccount( string username, string password, BindResult bindResult )
                 {
-                    RockApi.Instance.Login( username, password, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                    RockApi.Post_Auth_Login( username, password, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
                         {
                             // if we received Ok (nocontent), we're logged in.
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -385,7 +386,7 @@ namespace App
                                     if ( t.IsFaulted == false || t.Exception == null )
                                     {
                                         // now login via rock with the facebook credentials to verify we're good
-                                        RockApi.Instance.LoginFacebook( t.Result, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                                        RockApi.Post_Auth_FacebookLogin( t.Result, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
                                             {
                                                 if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                                                 {
@@ -441,8 +442,6 @@ namespace App
                     RockPassword = "";
                     AccessToken = "";
 
-                    RockApi.Instance.Logout( );
-
                     // save!
                     SaveToDevice( );
                 }
@@ -457,7 +456,8 @@ namespace App
 
                 public void GetProfileAndCellPhone( HttpRequest.RequestResult<Rock.Client.Person> profileResult )
                 {
-                    RockApi.Instance.GetProfile( UserID, delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Rock.Client.Person model)
+                    RockApi.Get_People_ByUserName( UserID, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Rock.Client.Person model)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
@@ -486,7 +486,7 @@ namespace App
 
                 public void UpdateProfile( HttpRequest.RequestResult profileResult )
                 {
-                    RockApi.Instance.UpdateProfile( Person, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                    ApplicationApi.UpdatePerson( Person, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
@@ -544,8 +544,7 @@ namespace App
                     bool addNewPhoneNumber = string.IsNullOrEmpty( LastSyncdCellPhoneNumberJson ) ? true : false;
 
                     // send it to the server
-                    RockApi.Instance.UpdatePhoneNumber( Person, _CellPhoneNumber, addNewPhoneNumber, 
-
+                    ApplicationApi.AddOrUpdateCellPhoneNumber( Person, _CellPhoneNumber, addNewPhoneNumber,
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -568,8 +567,7 @@ namespace App
                 public void GetFamilyAndAddress( HttpRequest.RequestResult< List<Rock.Client.Group> > addressResult )
                 {
                     // for the address (which implicitly is their primary residence address), first get all group locations associated with them
-                    RockApi.Instance.GetFamiliesOfPerson( Person, 
-
+                    ApplicationApi.GetFamiliesOfPerson( Person, 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Group> model)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -618,8 +616,7 @@ namespace App
                 {
                     // unlike Profile and Address, it's possible they haven't selected a campus, in which
                     // case we don't want to update it.
-                    RockApi.Instance.UpdateHomeCampus( PrimaryFamily, 
-
+                    ApplicationApi.UpdateHomeCampus( PrimaryFamily, 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -641,7 +638,8 @@ namespace App
                 public void UpdateAddress( HttpRequest.RequestResult addressResult )
                 {
                     // fire it off
-                    RockApi.Instance.UpdateAddress( PrimaryFamily, PrimaryAddress, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                    ApplicationApi.UpdateFamilyAddress( PrimaryFamily, PrimaryAddress,
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
@@ -667,67 +665,23 @@ namespace App
                     // verify it's valid and not corrupt, or otherwise unable to load. If it is, we'll stop here.
                     if ( imageStream != null )
                     {
-                        // this is a big process. The profile picture being updated also requires the user's
-                        // profile be updated AND they need to be placed into a special group.
-                        // So, until ALL THOSE succeed in order, we will not consider the profile image "clean"
-
-
                         // if upload is called, the profile image implicitely becomes dirty.
                         // that way if it fails, we can know to sync it on next run.
                         ProfileImageDirty = true;
 
-                        // attempt to upload it
-                        RockApi.Instance.UpdateProfilePicture( imageStream, 
-
-                            delegate( System.Net.HttpStatusCode statusCode, string statusDesc, int photoId )
+                        ApplicationApi.UploadSavedProfilePicture( Person, imageStream, 
+                            delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                             {
-                                // free the stream
-                                imageStream.Dispose( );
-
-                                // if the upload went ok
+                                // now we know that the profile image group was updated correctly, and that's the last step
                                 if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                                 {
-                                    // now update the profile
-                                    Person.PhotoId = photoId;
-
-                                    // attempt to sync the profile
-                                    UpdateProfile( 
-                                        delegate ( System.Net.HttpStatusCode profileStatusCode, string profileStatusDesc )
-                                        {
-                                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( profileStatusCode ) == true )
-                                            {
-                                                // now (and only now) that we know the profile was updated correctly,
-                                                // we can update the image group.
-                                                RockApi.Instance.UpdateProfileImageGroup( Person, delegate ( System.Net.HttpStatusCode resultCode, string resultDesc )
-                                                    {
-                                                        // now we know that the profile image group was updated correctly, and that's the last step
-                                                        if ( Rock.Mobile.Network.Util.StatusInSuccessRange( resultCode ) == true )
-                                                        {
-                                                            // so now we can finally flag everything as good
-                                                            ProfileImageDirty = false;
-                                                        }
-
-                                                        if ( result != null )
-                                                        {
-                                                            result( statusCode, statusDesc );
-                                                        }
-                                                    } );
-                                            }
-                                            else
-                                            {
-                                                if ( result != null )
-                                                {
-                                                    result( statusCode, statusDesc );
-                                                }
-                                            }
-                                        } );
+                                    // so now we can finally flag everything as good
+                                    ProfileImageDirty = false;
                                 }
-                                else
+
+                                if ( result != null )
                                 {
-                                    if ( result != null )
-                                    {
-                                        result( statusCode, statusDesc );
-                                    }
+                                    result( statusCode, statusDescription );
                                 }
                             } );
                     }
@@ -787,7 +741,8 @@ namespace App
                         {
                             if ( Person.PhotoId != null )
                             {
-                                RockApi.Instance.GetProfilePicture( Person.PhotoId.ToString( ), dimensionSize, delegate(System.Net.HttpStatusCode statusCode, string statusDescription, MemoryStream imageStream )
+                                RockApi.Get_GetImage( Person.PhotoId.ToString( ), dimensionSize, 
+                                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription, MemoryStream imageStream )
                                     {
                                         if ( Util.StatusInSuccessRange( statusCode ) == true )
                                         {

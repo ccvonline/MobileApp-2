@@ -24,6 +24,8 @@ namespace App
 
                 public RockNetworkManager( )
                 {
+                    RockApi.SetRockURL( Config.GeneralConfig.RockBaseUrl );
+                    RockApi.SetAuthorizationKey( PrivateConfig.PrivateGeneralConfig.RockMobileAppAuthorizationKey );
                 }
 
                 public void SyncRockData( SeriesDownloaded seriesCallback, HttpRequest.RequestResult resultCallback )
@@ -41,7 +43,7 @@ namespace App
                                 Rock.Mobile.Util.Debug.WriteLine( "Logged in. Syncing out-of-sync data." );
 
                                 //( this includes notes, profile changes, etc.)
-                                RockApi.Instance.SyncWithServer( 
+                                RockMobileUser.Instance.SyncDirtyObjects( 
                                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
                                     {
                                         // IF THERE WAS A PROBLEM SYNCING, DO NOT PULL DOWN THE LATEST PROFILE.
@@ -111,6 +113,20 @@ namespace App
                 {
                     // New general data received. Save it, update fields, etc.
                     ResultCallback( statusCode, statusDescription );
+                }
+
+                public void SaveObjectsToDevice( )
+                {
+                    RockGeneralData.Instance.SaveToDevice( );
+                    RockLaunchData.Instance.SaveToDevice( );
+                    RockMobileUser.Instance.SaveToDevice( );
+                }
+
+                public void LoadObjectsFromDevice( )
+                {
+                    RockGeneralData.Instance.LoadFromDevice( );
+                    RockLaunchData.Instance.LoadFromDevice( );
+                    RockMobileUser.Instance.LoadFromDevice( );
                 }
             }
         }

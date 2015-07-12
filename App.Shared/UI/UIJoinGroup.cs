@@ -7,6 +7,7 @@ using Rock.Mobile.Animation;
 using App.Shared.Network;
 using Rock.Mobile.Util.Strings;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace App.Shared.UI
 {
@@ -325,7 +326,7 @@ namespace App.Shared.UI
 
                 BlockerView.Show( );
 
-                RockApi.Instance.JoinGroup( App.Shared.Network.RockMobileUser.Instance.Person, FirstName.Text, LastName.Text, SpouseName.Text, Email.Text, CellPhone.Text.AsNumeric( ), GroupID, GroupTitle.Text,
+                MobileAppApi.JoinGroup( App.Shared.Network.RockMobileUser.Instance.Person, FirstName.Text, LastName.Text, SpouseName.Text, Email.Text, CellPhone.Text.AsNumeric( ), GroupID, GroupTitle.Text,
                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                     {
                         BlockerView.Hide( );

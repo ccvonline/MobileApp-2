@@ -52,6 +52,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupFinderSearch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrivateConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\MobileAppApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockApi.cs" />
   </ItemGroup>
 </Project>

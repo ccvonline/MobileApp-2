@@ -15,6 +15,7 @@ using Rock.Mobile.PlatformSpecific.Util;
 using System.Drawing;
 using Rock.Mobile.Animation;
 using App.Shared.PrivateConfig;
+using Rock.Mobile.Network;
 
 namespace iOS
 {
@@ -194,7 +195,7 @@ namespace iOS
                 if ( prayed == true )
                 {
                     // update the circle color and send an analytic
-                    App.Shared.Network.RockApi.Instance.IncrementPrayerCount( PrayerRequest.Id, null );
+                    RockApi.Put_PrayerRequests_Prayed( PrayerRequest.Id, null );
 
                     currColor = 0;
                     targetColor = PrayerConfig.PrayedForColor;
@@ -454,7 +455,7 @@ namespace iOS
                     RequestingPrayers = true;
 
                     // request the prayers each time this appears
-                    App.Shared.Network.RockApi.Instance.GetPrayers( delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests )
+                    RockApi.Get_PrayerRequests_Public( DateTime.Now, delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.PrayerRequest> prayerRequests ) 
                         {
                             // force this onto the main thread so that if there's a race condition in requesting prayers we won't hit it.
                             InvokeOnMainThread( delegate

@@ -30,11 +30,9 @@ namespace MobileApp
         public static void GetGeneralDataTime( HttpRequest.RequestResult<DateTime> resultHandler )
         {
             string oDataFilter = string.Format( "?$filter=AttributeId eq {0}", GeneralDataTimeValueId );
-            RockApi.Get_AttributeValues( oDataFilter,
-                delegate(HttpStatusCode statusCode, string statusDescription, object model) 
+            RockApi.Get_AttributeValues<List<DateTimeModel>>( oDataFilter,
+                delegate(HttpStatusCode statusCode, string statusDescription, List<DateTimeModel> dateTimeList) 
                 {
-                    List<DateTimeModel> dateTimeList = (List<DateTimeModel>) model;
-
                     DateTime dateTime = DateTime.MinValue;
                     if( dateTimeList != null && dateTimeList.Count > 0 )
                     {
