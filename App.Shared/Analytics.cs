@@ -4,14 +4,6 @@ using System.Collections.Generic;
 using App.Shared.Config;
 
 
-#if __IOS__
-using Foundation;
-using LocalyticsBinding;
-#elif __ANDROID__
-using Java.Util;
-using Com.Localytics.Android;
-#endif
-
 namespace App.Shared
 {
     namespace Analytics
@@ -84,17 +76,13 @@ namespace App.Shared
                     // add it, which will fail if it's alread in the list
                     categoryObj.PerformedActions.Add( action );
 
-                    if ( GeneralConfig.Use_Localytics == true )
+                    if ( GeneralConfig.Use_Analytics == true )
                     {
                         #if !DEBUG
-                        #if __IOS__
-                        NSDictionary attribs = NSDictionary.FromObjectAndKey( new NSString( action ), new NSString( categoryObj.Name ) );
-                        Localytics.TagEvent( Name, attribs );
-                        #elif __ANDROID__
                         System.Collections.Generic.Dictionary<string, string> attribs = new System.Collections.Generic.Dictionary<string, string>();
                         attribs.Add( categoryObj.Name, action );
-                        Localytics.TagEvent( Name, attribs );
-                        #endif
+
+                        Xamarin.Insights.Track( Name, attribs );
                         #endif
                     }
                 }

@@ -62,7 +62,7 @@
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
     <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
@@ -76,6 +76,8 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <IpaPackageName>
     </IpaPackageName>
+    <DebugSymbols>true</DebugSymbols>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>full</DebugType>
@@ -118,8 +120,11 @@
     <Reference Include="Facebook">
       <HintPath>..\Components\facebook-sdk-6.2.2\lib\ios-unified\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="iOSLocalytics">
-      <HintPath>..\Libs\iOSLocalytics.dll</HintPath>
+    <Reference Include="Xamarin.Insights">
+      <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\Xamarin.Insights.dll</HintPath>
+    </Reference>
+    <Reference Include="PLCrashReporterUnifiedBinding">
+      <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\PLCrashReporterUnifiedBinding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -65,8 +65,8 @@
     <Reference Include="GooglePlayServicesLib">
       <HintPath>..\packages\Xamarin.GooglePlayServices.22.0.0.0\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
     </Reference>
-    <Reference Include="AndroidLocalytics">
-      <HintPath>..\Libs\AndroidLocalytics.dll</HintPath>
+    <Reference Include="Xamarin.Insights">
+      <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

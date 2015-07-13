@@ -5,7 +5,6 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using AVFoundation;
-using LocalyticsBinding;
 using App.Shared.Config;
 
 namespace iOS
@@ -31,13 +30,6 @@ namespace iOS
         //
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
-            #if !DEBUG
-            if( string.IsNullOrEmpty( GeneralConfig.Localyitics_iOS_Key ) == false )
-            {
-                Localytics.AutoIntegrate( GeneralConfig.Localyitics_iOS_Key, options );
-            }
-            #endif
-
             // create a new window instance based on the screen size
             window = new UIWindow( UIScreen.MainScreen.Bounds );
 			
@@ -58,26 +50,32 @@ namespace iOS
             return true;
         }
 
+
         public override void OnActivated(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("OnActivated called, App is active.");
+
             Springboard.OnActivated( );
         }
         public override void WillEnterForeground(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("App will enter foreground");
+
             Springboard.WillEnterForeground( );
         }
         public override void OnResignActivation(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("OnResignActivation called, App moving to inactive state.");
+
             Springboard.OnResignActive( );
         }
         public override void DidEnterBackground(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("App entering background state.");
+
             Springboard.DidEnterBackground( );
         }
+
         // not guaranteed that this will run
         public override void WillTerminate(UIApplication application)
         {

@@ -1,6 +1,9 @@
 Both
+Updated to use a new shared Rock REST Api. Fixes many issues with posting data to Rock.
+Switch our analytics to Xamarin.Insights. This also allows me to get crash info should the app crash.
+
 
 iOS
 
 Android
-	
+Fixed an issue preventing long passwords from working when logging in. (Thanks `Stopher!)	

@@ -356,6 +356,11 @@ namespace iOS
                 {
                     SpringboardViewController.DisplayError( "Current Version", BuildStrings.Version );
                 }
+                else if ( PrayerRequest.Text.ToLower( ) == "upload dumps" )
+                {
+                    Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
+                    SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+                }
                 // fun bonus!
                 else if ( PrayerRequest.Text == App.Shared.ConnectLink.CheatException.CheatString )
                 {

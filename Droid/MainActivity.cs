@@ -8,7 +8,6 @@ using Android.Widget;
 using Android.OS;
 using Android.Util;
 using Android.Gms.Maps;
-using Com.Localytics.Android;
 using App.Shared.Config;
 
 namespace Droid
@@ -54,9 +53,6 @@ namespace Droid
         }
     }
 
-    //JHM 4-28 - In case we need to change the Localytics key on a per-config basis.
-    //[Application]
-    //[MetaData ("LOCALYTICS_APP_KEY", Value="b5da9a8d5e23b54319b5903-4d60e47a-edc4-11e4-adb1-005cf8cbabd8")]
     [Activity( Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
     public class MainActivity : Activity
     {
@@ -67,8 +63,7 @@ namespace Droid
             base.OnCreate( bundle );
 
             #if !DEBUG
-            LocalyticsActivityLifecycleCallbacks callback = new LocalyticsActivityLifecycleCallbacks( this );
-            Application.RegisterActivityLifecycleCallbacks( callback );
+            Xamarin.Insights.Initialize( GeneralConfig.Droid_Xamarin_Insights_Key, this );
             #endif
 
             Window.AddFlags(WindowManagerFlags.Fullscreen);

@@ -58,15 +58,15 @@ namespace App
                 public const string NoteBaseURL = "http://ccv.church/ccvmobile/";
 
                 /// <summary>
-                /// Set to true if you wish to use Localytics
+                /// Set to true if you wish to use Analytics
                 /// </summary>
-                public const bool Use_Localytics = true;
+                public const bool Use_Analytics = true;
 
                 /// <summary>
-                /// Localytics requires a seperate key for iOS and Android. Here is where you should define your iOS key.
-                /// (Or leave it 0 if you aren't using Localytics
+                /// Defines the "app" keys for your Xamarin Insights analytics.
                 /// </summary>
-                public const string Localyitics_iOS_Key = "a9722e06e0ab3ca14721105-4aada4e8-edc0-11e4-314a-004a77f8b47f";
+                public const string iOS_Xamarin_Insights_Key = "0ddb3228fc1eb8272392278ae7d73aa64bb535a5";
+                public const string Droid_Xamarin_Insights_Key = "4d2a2e4245f141dad44ee3f8e89fb2370dfab628";
             }
 
             public class SpringboardConfig

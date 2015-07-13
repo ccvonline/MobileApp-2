@@ -277,6 +277,11 @@ namespace Droid
                         {
                             Springboard.DisplayError( "Current Version", BuildStrings.Version );
                         }
+                        else if ( RequestText.Text.ToLower( ) == "upload dumps" )
+                        {
+                            Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
+                            Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+                        }
                         // fun bonus!
                         else if ( RequestText.Text == App.Shared.ConnectLink.CheatException.CheatString )
                         {
