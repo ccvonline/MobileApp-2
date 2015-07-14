@@ -227,7 +227,11 @@ namespace App
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
+                #if __IOS__
                 public const string GiveUrl = "http://rock.ccv.church/ma-give?ma-platform=ios";
+                #elif __ANDROID__
+                public const string GiveUrl = "http://rock.ccv.church/ma-give?ma-platform=android";
+                #endif
             }
 
             public class ControlStylingConfig

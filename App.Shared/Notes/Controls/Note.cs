@@ -643,6 +643,21 @@ namespace App
                         throw new Exception( App.Shared.Strings.MessagesStrings.TooManyNotes );
                     }
 
+                    // don't let them create one on top of a reveal box.
+                    //Reveal Boxes
+                    List<IUIControl> revealBoxes = new List<IUIControl>( );
+                    GetControlOfType<RevealBox>( revealBoxes );
+
+                    foreach ( IUIControl control in revealBoxes )
+                    {
+                        // test for this touch position inside a reveal box
+                        RectangleF frame = ( (RevealBox)control ).GetHitTarget( );
+                        if ( frame.Contains( touch ) )
+                        {
+                            allowNoteCreation = false;
+                        }
+                    }
+
                     if( allowNoteCreation )
                     {
                         UserNote userNote = new UserNote( new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ), DeviceHeight, touch, UserNoteChanged );

@@ -131,14 +131,20 @@ namespace App
                     PlatformLabel.Position = new PointF( bounds.X, bounds.Y );
                 }
 
-                public override IUIControl TouchesEnded( PointF touch )
+                public RectangleF GetHitTarget( )
                 {
                     // create an expanded bounding box and see if the touch fell within that.
                     // we expand the height by 50% in both directions
-                    RectangleF boundingBox = new RectangleF( PlatformLabel.Frame.Left, 
-                                                             PlatformLabel.Frame.Top - (PlatformLabel.Bounds.Height / 2), 
-                                                             PlatformLabel.Bounds.Right, 
-                                                             PlatformLabel.Bounds.Bottom + PlatformLabel.Bounds.Height );
+                    return new RectangleF( PlatformLabel.Frame.Left, 
+                                           PlatformLabel.Frame.Top - (PlatformLabel.Bounds.Height / 2), 
+                                           PlatformLabel.Bounds.Right, 
+                                           PlatformLabel.Bounds.Bottom + PlatformLabel.Bounds.Height );
+                }
+
+                public override IUIControl TouchesEnded( PointF touch )
+                {
+                    RectangleF boundingBox = GetHitTarget( );
+
                     if( boundingBox.Contains( touch ) )
                     {
                         Revealed = !Revealed;

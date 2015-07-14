@@ -52,5 +52,18 @@
 	<string>CCV Mobile</string>
 	<key>CFBundleVersion</key>
 	<string>25</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.ccvonline.CCVMobileAppURL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ccvmobile</string>
+			</array>
+			<key>CFBundleURLIconFile</key>
+			<string>Images.xcassets/AppIcons.appiconset/Icon-Small@2x</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -281,7 +281,7 @@ namespace Droid
 
                     if ( ParentTask.TaskReadyForFragmentDisplay == true )
                     {
-                        SetupDisplay( view );
+                        SetupDisplay( );
                     }
 
                     return view;
@@ -291,10 +291,14 @@ namespace Droid
                 {
                     base.TaskReadyForFragmentDisplay();
 
-                    SetupDisplay( View );
+                    // do not setup display if the task was ready but WE aren't.
+                    if ( View != null )
+                    {
+                        SetupDisplay( );
+                    }
                 }
 
-                void SetupDisplay( View view )
+                void SetupDisplay( )
                 {
                     // load the top banner
                     AsyncLoader.LoadImage( PrivateConnectConfig.MainPageHeaderImage, true, true,
@@ -342,6 +346,11 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.SetShareButtonEnabled( false, null );
                     ParentTask.NavbarFragment.NavToolbar.SetCreateButtonEnabled( false, null );
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
+
+                    if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
+                    {
+                        SetupDisplay( );
+                    }
                 }
 
                 public override void OnPause( )

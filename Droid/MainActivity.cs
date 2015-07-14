@@ -54,6 +54,10 @@ namespace Droid
     }
 
     [Activity( Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
+    //This defines support for a URL scheme in the format "ccvmobile://go" that will re-launch this activity.
+    [IntentFilter (new[]{Intent.ActionView}, 
+        Categories=new[]{Intent.CategoryDefault, Intent.CategoryBrowsable},
+        DataScheme="ccvmobile",DataHost="go")]
     public class MainActivity : Activity
     {
         Springboard Springboard { get; set; }

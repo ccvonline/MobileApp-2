@@ -1,9 +1,44 @@
-﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/SpringboardViewController.cs">
+﻿<Properties StartupItem="Droid/Droid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhoneSimulator" PreferredExecutionTarget="Android.SelectDevice" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Tasks/ConnectTask/ConnectPrimaryFragment.cs">
     <Files>
-      <File FileName="iOS/SpringboardViewController.cs" Line="789" Column="58" />
+      <File FileName="iOS/SpringboardViewController.cs" Line="754" Column="63" />
+      <File FileName="Droid/Tasks/ConnectTask/ConnectPrimaryFragment.cs" Line="317" Column="21" />
+      <File FileName="Droid/Tasks/NotesTask/NotesPrimaryFragment.cs" Line="628" Column="37" />
+      <File FileName="App.Shared/PrivateConfig.cs" Line="429" Column="42" />
+      <File FileName="../../Rock.Mobile/PlatformSpecific/Android/Util.cs" Line="21" Column="165" />
+      <File FileName="Droid/Tasks/Task.cs" Line="112" Column="60" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CCVApp" expanded="True">
+            <Node name="App.Shared" expanded="True" />
+            <Node name="Droid" expanded="True">
+              <Node name="Assets" expanded="True" />
+              <Node name="Resources" expanded="True" />
+              <Node name="Tasks" expanded="True">
+                <Node name="ConnectTask" expanded="True">
+                  <Node name="ConnectPrimaryFragment.cs" selected="True" />
+                </Node>
+                <Node name="NotesTask" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="iOS" expanded="True" />
+            <Node name="Rock.Mobile" expanded="True">
+              <Node name="PlatformSpecific" expanded="True">
+                <Node name="Android" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>View</Value>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

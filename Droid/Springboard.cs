@@ -516,6 +516,7 @@ namespace Droid
             // don't allow multiple modal fragments, or modal fragments when the springboard is closed.
             if (forceShow == true || ( VisibleModalFragment == null && NavbarFragment.ShouldSpringboardAllowInput( ) ) )
             {
+                FullScreenLayout.Alpha = 1.0f;
                 FullScreenLayout.Visibility = ViewStates.Visible;
 
                 // replace the entire screen with a modal fragment
@@ -850,11 +851,14 @@ namespace Droid
             if ( RockMobileUser.Instance.OOBEComplete == false && IsOOBERunning == false )
             //if( oobeRan == false && IsOOBERunning == false )
             {
+                //oobeRan = true;
+
                 // sanity check for testers that didn't listen to me and delete / reinstall.
                 // This will force them to be logged out so they experience the OOBE properly.
                 RockMobileUser.Instance.LogoutAndUnbind( );
 
-                //oobeRan = true;
+                // flag the splash as complete as wel, so we don't launch it the next time OnResume is called
+                IsSplashDone = true;
                 IsOOBERunning = true;
                 StartModalFragment( OOBEFragment, true );
             }
@@ -870,8 +874,6 @@ namespace Droid
         public void SplashComplete( )
         {
             ModalFragmentDone( null );
-
-            FullScreenLayout.Alpha = 1.0f;
         }
 
         public void OOBEUserClick( int index )
@@ -896,8 +898,6 @@ namespace Droid
                        
                     // and launch the appropriate screen
                     ModalFragmentDone( null );
-
-                    FullScreenLayout.Alpha = 1.0f;
 
                     CompleteOOBE( );
                 } );

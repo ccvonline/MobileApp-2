@@ -410,13 +410,21 @@ namespace Droid
                     View view = inflater.Inflate(Resource.Layout.News_Primary, container, false);
                     view.SetOnTouchListener( this );
                     view.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
+
+                    if ( ParentTask.TaskReadyForFragmentDisplay )
+                    {
+                        SetupDisplay( view );
+                    }
                     
                     return view;
                 }
 
                 public override void TaskReadyForFragmentDisplay( )
                 {
-                    SetupDisplay( View );
+                    if ( View != null )
+                    {
+                        SetupDisplay( View );
+                    }
                 }
 
                 void SetupDisplay( View view )
@@ -494,7 +502,7 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.SetShareButtonEnabled( false, null );
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
 
-                    if ( ParentTask.TaskReadyForFragmentDisplay == true )
+                    if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
                     {
                         SetupDisplay( View );
                     }

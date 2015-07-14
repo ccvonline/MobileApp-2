@@ -580,6 +580,11 @@ namespace Droid
 
                     ResultView.Hide( );
 
+                    if ( ParentTask.TaskReadyForFragmentDisplay == true )
+                    {
+                        SetupDisplay( );
+                    }
+
                     return view;
                 }
 
@@ -618,7 +623,7 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.SetCreateButtonEnabled( false, null );
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
 
-                    if ( ParentTask.TaskReadyForFragmentDisplay )
+                    if ( ParentTask.TaskReadyForFragmentDisplay && View != null )
                     {
                         SetupDisplay( );
                     }
@@ -628,7 +633,11 @@ namespace Droid
                 {
                     base.TaskReadyForFragmentDisplay();
 
-                    SetupDisplay( );
+                    // do not setup display if the task was ready but WE aren't.
+                    if ( View != null )
+                    {
+                        SetupDisplay( );
+                    }
                 }
 
                 void SetupDisplay( )
