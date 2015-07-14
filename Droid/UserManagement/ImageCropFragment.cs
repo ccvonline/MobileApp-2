@@ -145,7 +145,20 @@ namespace Droid
 
         public void Begin( string sourceImagePath, float cropAspectRatio )
         {
-            SourceImage = BitmapFactory.DecodeFile( sourceImagePath );
+            // first see how big this image is.
+            BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+            decodeOptions.InJustDecodeBounds = true;
+            BitmapFactory.DecodeFile( sourceImagePath, decodeOptions );
+
+            // now limit its size to 2k x 2k
+            float scaleFactor = (float)decodeOptions.OutWidth / 2048.0f;
+            if ( scaleFactor > 1.00f )
+            {
+                decodeOptions.InSampleSize = (int)System.Math.Ceiling( scaleFactor );
+            }
+
+            decodeOptions.InJustDecodeBounds = false;
+            SourceImage = BitmapFactory.DecodeFile( sourceImagePath, decodeOptions );
             CropAspectRatio = cropAspectRatio;
         }
 
