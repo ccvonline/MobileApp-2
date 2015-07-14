@@ -2,33 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
   <MonoDevelop.Ide.Workbench ActiveDocument="iOS/SpringboardViewController.cs">
     <Files>
-      <File FileName="iOS/SpringboardViewController.cs" Line="810" Column="63" />
+      <File FileName="iOS/SpringboardViewController.cs" Line="789" Column="58" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="CCVApp" expanded="True">
-            <Node name="Droid" expanded="True">
-              <Node name="Tasks" expanded="True">
-                <Node name="ConnectTask" expanded="True" />
-                <Node name="PrayerTask" expanded="True" />
-              </Node>
-              <Node name="UserManagement" expanded="True" />
-            </Node>
-            <Node name="iOS" expanded="True" selected="True">
-              <Node name="Tasks" expanded="True">
-                <Node name="Connect" expanded="True" />
-                <Node name="Prayer" expanded="True" />
-              </Node>
-              <Node name="UserManagement" expanded="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
