@@ -6,10 +6,19 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>POWERS</Name>
+				<Speaker>Dr. Mark Moore</Speaker>
+				<Date>7/19/2015</Date>
+				<NoteUrl>xml/message_7_18_2015.xml</NoteUrl>
+			</Message>
+			<Message>
 				<Name>PAIN</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>7/12/2015</Date>
 				<NoteUrl>xml/message_7_11_2015.xml</NoteUrl>
+				<ShareUrl>https://ccv.church/Arena/default.aspx?page=17529&amp;item=516</ShareUrl>
+				<WatchUrl>http://player.vimeo.com/external/133356736.m3u8?p=high,standard,mobile&amp;s=314f73c2954398f98b048d629ba9ee61</WatchUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Revealed/Revealed_WK2_HowDoIManagePain_New.mp3</AudioUrl>
 			</Message>
 			<Message>
 				<Name>PRIORITIES</Name>

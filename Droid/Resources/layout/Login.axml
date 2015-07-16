@@ -151,11 +151,4 @@
             android:id="@+id/cancelButton"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/login_progressBar"
-        android:indeterminate="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
 </RelativeLayout>

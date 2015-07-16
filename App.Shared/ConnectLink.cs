@@ -29,11 +29,6 @@ namespace App.Shared
 
             return linkEntries;
         }
-
-        public class CheatException : Exception
-        {
-            public static string CheatString = "upupdowndownleftrightleftright";
-        }
     }
 }
 

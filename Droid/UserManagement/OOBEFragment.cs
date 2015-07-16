@@ -53,7 +53,7 @@ namespace Droid
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
 
-            OOBEView.Create( view, "oobe_splash_bg.png", imageName, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+            OOBEView.Create( view, "oobe_splash_bg.png", imageName, false, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
 
                 delegate(int index) 
                 {

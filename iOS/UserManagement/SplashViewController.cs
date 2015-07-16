@@ -29,7 +29,7 @@ namespace iOS
             string logoName = OOBEViewController.GetSplashLogo( UIKit.UIScreen.MainScreen.ApplicationFrame.Size, UIKit.UIScreen.MainScreen.Scale );
 
             SplashView = new UISplash();
-            SplashView.Create( View, backgroundName, logoName, View.Frame.ToRectF( ), delegate
+            SplashView.Create( View, backgroundName, logoName, true, View.Frame.ToRectF( ), delegate
                 {
                     Springboard.SplashComplete( );
                 } );

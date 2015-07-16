@@ -107,8 +107,12 @@ namespace iOS
 
             // set the title image for the bar
             string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
-            this.NavigationItem.TitleView = new UIImageView( new UIImage( imagePath ) );
+            UIImage titleImage = new UIImage( imagePath );
+            this.NavigationItem.TitleView = new UIImageView( titleImage );
+            this.NavigationItem.TitleView.SizeToFit( );
 
+            nfloat delta = (NavigationController.NavigationBar.Bounds.Height - titleImage.Size.Height) / 2;
+            NavigationController.NavigationBar.SetTitleVerticalPositionAdjustment( -delta, UIBarMetrics.Default );
 
             // Now create the sub-navigation, which includes
             // the NavToolbar used to let the user navigate

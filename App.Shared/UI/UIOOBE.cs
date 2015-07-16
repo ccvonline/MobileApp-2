@@ -37,7 +37,7 @@ namespace App.Shared.UI
 
         public delegate void OnButtonClick( int index );
 
-        public void Create( object masterView, string bgLayerImageName, string logoImageName, RectangleF frame, OnButtonClick onClick )
+        public void Create( object masterView, string bgLayerImageName, string logoImageName, bool scaleImageLogo, RectangleF frame, OnButtonClick onClick )
         {
             View = PlatformView.Create( );
             View.BackgroundColor = ControlStylingConfig.OOBE_Splash_BG_Color;
@@ -112,7 +112,7 @@ namespace App.Shared.UI
 
             stream = Rock.Mobile.IO.AssetConvert.AssetToStream( logoImageName );
             stream.Position = 0;
-            ImageLogo = PlatformImageView.Create( true );
+            ImageLogo = PlatformImageView.Create( scaleImageLogo );
             ImageLogo.AddAsSubview( View.PlatformNativeObject );
             ImageLogo.Image = stream;
             ImageLogo.SizeToFit( );

@@ -21,6 +21,7 @@ using App.Shared.Analytics;
 using Rock.Mobile.Animation;
 using App.Shared;
 using Rock.Mobile.IO;
+using App.Shared.UI;
 
 namespace Droid
 {
@@ -283,9 +284,14 @@ namespace Droid
                             Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                         }
                         // fun bonus!
-                        else if ( RequestText.Text == App.Shared.ConnectLink.CheatException.CheatString )
+                        else if ( RequestText.Text.ToLower( ) == "up up down down left right left right b a start" )
                         {
-                            throw new App.Shared.ConnectLink.CheatException();
+                            RelativeLayout relativeLayout = View.FindViewById<RelativeLayout>( Resource.Id.relative_background );
+                            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
+
+                            UISpecial special = new UISpecial();
+                            special.Create( relativeLayout, "me.png", false, bounds, delegate { special.View.RemoveAsSubview( relativeLayout ); });
+                            special.LayoutChanged( bounds );
                         }
                     }
                 }

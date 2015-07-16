@@ -434,6 +434,12 @@
     <BundleResource Include="..\Assets\splash_logo_ipad_portrait_2x.png">
       <Link>Resources\splash_logo_ipad_portrait_2x.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Assets\me.png">
+      <Link>Resources\me.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\navbarLogo%403x.png">
+      <Link>Resources\navbarLogo%403x.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

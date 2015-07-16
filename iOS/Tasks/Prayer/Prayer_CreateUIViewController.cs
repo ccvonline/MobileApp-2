@@ -12,6 +12,8 @@ using Rock.Mobile.PlatformSpecific.iOS.UI;
 using Rock.Mobile.Animation;
 using App.Shared;
 using Rock.Mobile.IO;
+using App.Shared.UI;
+using Rock.Mobile.PlatformSpecific.Util;
 
 namespace iOS
 {
@@ -78,6 +80,8 @@ namespace iOS
             ScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             ScrollView.Parent = this;
             View.AddSubview( ScrollView );
+
+
 
             // create our keyboard adjustment manager, which works to make sure text fields scroll into visible
             // range when a keyboard appears
@@ -362,9 +366,12 @@ namespace iOS
                     SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                 }
                 // fun bonus!
-                else if ( PrayerRequest.Text == App.Shared.ConnectLink.CheatException.CheatString )
+                else if ( PrayerRequest.Text.ToLower( ) == "up up down down left right left right b a start" )
                 {
-                    throw new App.Shared.ConnectLink.CheatException();
+                    UISpecial special = new UISpecial();
+                    special.Create( ScrollView, "me.png", true, View.Frame.ToRectF( ), delegate { special.View.RemoveAsSubview( ScrollView ); });
+                    special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)View.Bounds.Width, (float)ScrollView.ContentSize.Height ) );
+                    ScrollView.ContentOffset = CGPoint.Empty;
                 }
             }
         }

@@ -1,39 +1,10 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="Android.HT2BTW302426" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Springboard.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/Config.cs">
     <Files>
-      <File FileName="Droid/Springboard.cs" Line="607" Column="47" />
-      <File FileName="Droid/Tasks/PrayerTask/PrayerPrimaryFragment.cs" Line="1" Column="1" />
-      <File FileName="iOS/AppDelegate.cs" Line="1" Column="1" />
-      <File FileName="iOS/UserManagement/LoginViewController.cs" Line="1" Column="1" />
-      <File FileName="App.Shared/RockApi/RockMobileUser.cs" Line="366" Column="56" />
-      <File FileName="Droid/UserManagement/ImageCropFragment.cs" Line="160" Column="1" />
-      <File FileName="../../Rock.Mobile/PlatformSpecific/Android/Graphics.cs" Line="141" Column="39" />
-      <File FileName="Droid/NavbarFragment.cs" Line="159" Column="9" />
+      <File FileName="iOS/UserManagement/SplashViewController.cs" Line="10" Column="14" />
+      <File FileName="App.Shared/Config.cs" Line="382" Column="74" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="CCVApp" expanded="True">
-            <Node name="App.Shared" expanded="True">
-              <Node name="RockApi" expanded="True" />
-            </Node>
-            <Node name="Droid" expanded="True">
-              <Node name="UserManagement" expanded="True" />
-              <Node name="Springboard.cs" selected="True" />
-            </Node>
-            <Node name="Rock.Mobile" expanded="True">
-              <Node name="PlatformSpecific" expanded="True">
-                <Node name="Android" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

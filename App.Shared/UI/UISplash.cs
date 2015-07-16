@@ -21,7 +21,7 @@ namespace App.Shared.UI
         public delegate void OnCompletion( );
         OnCompletion OnCompletionCallback;
 
-        public void Create( object masterView, string backgroundImageName, string logoImageName, RectangleF frame, OnCompletion onCompletion )
+        public void Create( object masterView, string backgroundImageName, string logoImageName, bool scaleImage, RectangleF frame, OnCompletion onCompletion )
         {
             View = PlatformView.Create( );
             View.BackgroundColor = 0;
@@ -44,7 +44,7 @@ namespace App.Shared.UI
 
             MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( logoImageName );
             logoStream.Position = 0;
-            ImageLogo = PlatformImageView.Create( true );
+            ImageLogo = PlatformImageView.Create( scaleImage );
             ImageLogo.AddAsSubview( masterView );
             ImageLogo.Image = logoStream;
             ImageLogo.SizeToFit( );

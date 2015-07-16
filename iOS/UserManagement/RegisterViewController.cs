@@ -97,6 +97,8 @@ namespace iOS
 
             string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
             LogoView = new UIImageView( new UIImage( imagePath ) );
+            LogoView.Layer.AnchorPoint = CGPoint.Empty;
+            LogoView.SizeToFit( );
             HeaderView.AddSubview( LogoView );
 
             ScrollView = new UIScrollViewWrapper();
@@ -244,7 +246,7 @@ namespace iOS
             HeaderView.Layer.ShadowOpacity = .23f;
             HeaderView.Layer.ShadowPath = shadowPath.CGPath;
 
-            LogoView.Layer.Position = new CGPoint( HeaderView.Bounds.Width / 2, HeaderView.Bounds.Height / 2 );
+            LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
 
             ResultView.SetBounds( View.Frame.ToRectF( ) );
             BlockerView.SetBounds( View.Frame.ToRectF( ) );

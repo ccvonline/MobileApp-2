@@ -1529,8 +1529,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c0034
 			public const int action_mode_close_button = 2131492916;
 			
-			// aapt resource value: 0x7f0c006c
-			public const int activetask = 2131492972;
+			// aapt resource value: 0x7f0c006b
+			public const int activetask = 2131492971;
 			
 			// aapt resource value: 0x7f0c0035
 			public const int activity_chooser_view_content = 2131492917;
@@ -1652,8 +1652,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c00ab
 			public const int doneButton = 2131493035;
 			
-			// aapt resource value: 0x7f0c006a
-			public const int dropShadowView = 2131492970;
+			// aapt resource value: 0x7f0c0069
+			public const int dropShadowView = 2131492969;
 			
 			// aapt resource value: 0x7f0c0031
 			public const int dropdown = 2131492913;
@@ -1682,8 +1682,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c0065
 			public const int facebookButton = 2131492965;
 			
-			// aapt resource value: 0x7f0c006e
-			public const int fadeOutView = 2131492974;
+			// aapt resource value: 0x7f0c006d
+			public const int fadeOutView = 2131492973;
 			
 			// aapt resource value: 0x7f0c0081
 			public const int first_name_background = 2131492993;
@@ -1691,11 +1691,11 @@ namespace Droid
 			// aapt resource value: 0x7f0c00b5
 			public const int firstname_background = 2131493045;
 			
-			// aapt resource value: 0x7f0c0068
-			public const int fragment_container = 2131492968;
+			// aapt resource value: 0x7f0c0067
+			public const int fragment_container = 2131492967;
 			
-			// aapt resource value: 0x7f0c006f
-			public const int fullscreen = 2131492975;
+			// aapt resource value: 0x7f0c006e
+			public const int fullscreen = 2131492974;
 			
 			// aapt resource value: 0x7f0c00a7
 			public const int genderButton = 2131493031;
@@ -1760,9 +1760,6 @@ namespace Droid
 			// aapt resource value: 0x7f0c005c
 			public const int login_background = 2131492956;
 			
-			// aapt resource value: 0x7f0c0067
-			public const int login_progressBar = 2131492967;
-			
 			// aapt resource value: 0x7f0c00ac
 			public const int logoutButton = 2131493036;
 			
@@ -1775,20 +1772,20 @@ namespace Droid
 			// aapt resource value: 0x7f0c0017
 			public const int match_parent = 2131492887;
 			
-			// aapt resource value: 0x7f0c0073
-			public const int media_route_control_frame = 2131492979;
+			// aapt resource value: 0x7f0c0072
+			public const int media_route_control_frame = 2131492978;
 			
-			// aapt resource value: 0x7f0c0074
-			public const int media_route_disconnect_button = 2131492980;
+			// aapt resource value: 0x7f0c0073
+			public const int media_route_disconnect_button = 2131492979;
+			
+			// aapt resource value: 0x7f0c006f
+			public const int media_route_list = 2131492975;
 			
 			// aapt resource value: 0x7f0c0070
-			public const int media_route_list = 2131492976;
+			public const int media_route_volume_layout = 2131492976;
 			
 			// aapt resource value: 0x7f0c0071
-			public const int media_route_volume_layout = 2131492977;
-			
-			// aapt resource value: 0x7f0c0072
-			public const int media_route_volume_slider = 2131492978;
+			public const int media_route_volume_slider = 2131492977;
 			
 			// aapt resource value: 0x7f0c002a
 			public const int middle = 2131492906;
@@ -1802,35 +1799,35 @@ namespace Droid
 			// aapt resource value: 0x7f0c0094
 			public const int name_background = 2131493012;
 			
-			// aapt resource value: 0x7f0c006b
-			public const int navbar = 2131492971;
+			// aapt resource value: 0x7f0c006a
+			public const int navbar = 2131492970;
 			
 			// aapt resource value: 0x7f0c005b
 			public const int navbar_border = 2131492955;
 			
-			// aapt resource value: 0x7f0c0076
-			public const int navbar_logo = 2131492982;
-			
 			// aapt resource value: 0x7f0c0075
-			public const int navbar_relative_layout = 2131492981;
+			public const int navbar_logo = 2131492981;
 			
-			// aapt resource value: 0x7f0c006d
-			public const int navtoolbar = 2131492973;
+			// aapt resource value: 0x7f0c0074
+			public const int navbar_relative_layout = 2131492980;
+			
+			// aapt resource value: 0x7f0c006c
+			public const int navtoolbar = 2131492972;
 			
 			// aapt resource value: 0x7f0c002e
 			public const int never = 2131492910;
 			
+			// aapt resource value: 0x7f0c0077
+			public const int news_details_details = 2131492983;
+			
 			// aapt resource value: 0x7f0c0078
-			public const int news_details_details = 2131492984;
+			public const int news_details_launch_url = 2131492984;
+			
+			// aapt resource value: 0x7f0c0076
+			public const int news_details_title = 2131492982;
 			
 			// aapt resource value: 0x7f0c0079
-			public const int news_details_launch_url = 2131492985;
-			
-			// aapt resource value: 0x7f0c0077
-			public const int news_details_title = 2131492983;
-			
-			// aapt resource value: 0x7f0c007a
-			public const int news_primary_list = 2131492986;
+			public const int news_primary_list = 2131492985;
 			
 			// aapt resource value: 0x7f0c0095
 			public const int nickNameText = 2131493013;
@@ -1841,17 +1838,17 @@ namespace Droid
 			// aapt resource value: 0x7f0c000d
 			public const int normal = 2131492877;
 			
+			// aapt resource value: 0x7f0c007d
+			public const int notes_details_list = 2131492989;
+			
 			// aapt resource value: 0x7f0c007e
-			public const int notes_details_list = 2131492990;
+			public const int notes_primary_activityIndicator = 2131492990;
 			
 			// aapt resource value: 0x7f0c007f
-			public const int notes_primary_activityIndicator = 2131492991;
+			public const int notes_primary_list = 2131492991;
 			
-			// aapt resource value: 0x7f0c0080
-			public const int notes_primary_list = 2131492992;
-			
-			// aapt resource value: 0x7f0c007b
-			public const int notes_relative_layout = 2131492987;
+			// aapt resource value: 0x7f0c007a
+			public const int notes_relative_layout = 2131492986;
 			
 			// aapt resource value: 0x7f0c005d
 			public const int passwordText = 2131492957;
@@ -1901,8 +1898,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c00bf
 			public const int profile_prefix = 2131493055;
 			
-			// aapt resource value: 0x7f0c007d
-			public const int progressBar = 2131492989;
+			// aapt resource value: 0x7f0c007c
+			public const int progressBar = 2131492988;
 			
 			// aapt resource value: 0x7f0c00b7
 			public const int progressBarBlocker = 2131493047;
@@ -1916,11 +1913,14 @@ namespace Droid
 			// aapt resource value: 0x7f0c003f
 			public const int radio = 2131492927;
 			
-			// aapt resource value: 0x7f0c007c
-			public const int refreshButton = 2131492988;
+			// aapt resource value: 0x7f0c007b
+			public const int refreshButton = 2131492987;
 			
 			// aapt resource value: 0x7f0c0062
 			public const int registerButton = 2131492962;
+			
+			// aapt resource value: 0x7f0c0080
+			public const int relative_background = 2131492992;
 			
 			// aapt resource value: 0x7f0c0091
 			public const int resultSymbol = 2131493009;
@@ -2000,8 +2000,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c0007
 			public const int split_action_bar = 2131492871;
 			
-			// aapt resource value: 0x7f0c0069
-			public const int springboard = 2131492969;
+			// aapt resource value: 0x7f0c0068
+			public const int springboard = 2131492968;
 			
 			// aapt resource value: 0x7f0c00c9
 			public const int springboard_about_frame = 2131493065;

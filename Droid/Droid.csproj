@@ -385,6 +385,9 @@
     <AndroidAsset Include="..\Assets\splash_logo_android.png">
       <Link>Assets\splash_logo_android.png</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\me.png">
+      <Link>Assets\me.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

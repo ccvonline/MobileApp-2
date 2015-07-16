@@ -22,6 +22,8 @@ using Rock.Mobile.PlatformSpecific.Android.UI;
 using Rock.Mobile.Animation;
 using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
+using App.Shared.UI;
+using System.Drawing;
 
 namespace Droid
 {
@@ -42,7 +44,6 @@ namespace Droid
 
         public Springboard SpringboardParent { get; set; }
 
-        ProgressBar LoginActivityIndicator { get; set; }
         Button LoginButton { get; set; }
         Button CancelButton { get; set; }
         Button RegisterButton { get; set; }
@@ -60,6 +61,8 @@ namespace Droid
 
         View LoginResultLayer { get; set; }
         TextView LoginResultLabel { get; set; }
+
+        UIBlockerView BlockerView { get; set; }
 
         WebLayout WebLayout { get; set; }
 
@@ -92,8 +95,8 @@ namespace Droid
             RelativeLayout navBar = view.FindViewById<RelativeLayout>( Resource.Id.navbar_relative_layout );
             navBar.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
-            LoginActivityIndicator = view.FindViewById<ProgressBar>( Resource.Id.login_progressBar );
-            LoginActivityIndicator.Visibility = ViewStates.Gone;
+            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
+            BlockerView = new UIBlockerView( view, bounds );
 
             LoginResultLayer = view.FindViewById<View>( Resource.Id.result_background );
             ControlStyling.StyleBGLayer( LoginResultLayer );
@@ -281,35 +284,43 @@ namespace Droid
 
                 case System.Net.HttpStatusCode.Unauthorized:
                 {
-                    // allow them to attempt logging in again
-                    SetUIState( LoginState.Out );
+                    BlockerView.Hide( delegate
+                        {
+                            // allow them to attempt logging in again
+                            SetUIState( LoginState.Out );
 
-                    // wrong user name / password
-                    FadeLoginResult( true );
-                    LoginResultLabel.Text = LoginStrings.Error_Credentials;
+                            // wrong user name / password
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = LoginStrings.Error_Credentials;
+                        } );
                     break;
                 }
 
                 case System.Net.HttpStatusCode.ResetContent:
                 {
                     // consider this a cancellation
+                    BlockerView.Hide( delegate
+                        {
+                            // allow them to attempt logging in again
+                            SetUIState( LoginState.Out );
 
-                    // allow them to attempt logging in again
-                    SetUIState( LoginState.Out );
 
-
-                    LoginResultLabel.Text = "";
+                            LoginResultLabel.Text = "";
+                        } );
                     break;
                 }
 
                 default:
                 {
-                    // allow them to attempt logging in again
-                    SetUIState( LoginState.Out );
+                    BlockerView.Hide( delegate
+                        {
+                            // allow them to attempt logging in again
+                            SetUIState( LoginState.Out );
 
-                    // failed to login for some reason
-                    FadeLoginResult( true );
-                    LoginResultLabel.Text = LoginStrings.Error_Unknown;
+                            // failed to login for some reason
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
+                        } );
                     break;
                 }
             }
@@ -330,6 +341,13 @@ namespace Droid
 
             // we can safely flag facebook binding as false, because the callback will be ignored.
             BindingFacebook = false;
+        }
+
+        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
         }
 
         public void ProfileComplete(System.Net.HttpStatusCode code, string desc, Rock.Client.Person model)
@@ -353,13 +371,16 @@ namespace Droid
 
                 default:
                 {
-                    SetUIState( LoginState.Out );
+                    BlockerView.Hide( delegate
+                        {
+                            SetUIState( LoginState.Out );
 
-                    // if we couldn't get their profile, that should still count as a failed login.
-                    FadeLoginResult( true );
-                    LoginResultLabel.Text = LoginStrings.Error_Unknown;
+                            // if we couldn't get their profile, that should still count as a failed login.
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
 
-                    RockMobileUser.Instance.LogoutAndUnbind( );
+                            RockMobileUser.Instance.LogoutAndUnbind( );
+                        } );
                     break;
                 }
             }
@@ -369,63 +390,67 @@ namespace Droid
         {
             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                 {
-                    UIThread_AddressComplete( code, desc, model );
+                        UIThread_AddressComplete( code, desc, model );
                 } );
         }
 
         void UIThread_AddressComplete( System.Net.HttpStatusCode code, string desc, List<Rock.Client.Group> model ) 
         {
-            switch ( code )
-            {
-                case System.Net.HttpStatusCode.OK:
+            BlockerView.Hide( delegate
                 {
-                    // see if we should set their viewing campus
-                    if( RockMobileUser.Instance.PrimaryFamily.CampusId.HasValue == true )
+                    switch ( code )
                     {
-                        RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
-                    }
-
-                    // if they have a profile picture, grab it.
-                    RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, ProfileImageComplete );
-
-                    // hide the activity indicator, because we are now logged in,
-                    // but leave the buttons all disabled.
-                    LoginActivityIndicator.Visibility = ViewStates.Gone;
-
-                    // update the UI
-                    FadeLoginResult( true );
-                    LoginResultLabel.Text = string.Format( LoginStrings.Success, RockMobileUser.Instance.PreferredName( ) );
-
-                    // start the timer, which will notify the springboard we're logged in when it ticks.
-                    LoginSuccessfulTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
-                    {
-                        // when the timer fires, notify the springboard we're done.
-                        Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                        case System.Net.HttpStatusCode.OK:
+                        {
+                            // see if we should set their viewing campus
+                            if ( RockMobileUser.Instance.PrimaryFamily.CampusId.HasValue == true )
                             {
-                                // now ok to go back again. (if this failed at any point, moving to the LogOut state
-                                // will also re-enable the back button.
-                                SpringboardParent.EnableBack = true;
+                                RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
+                            }
 
-                                    SpringboardParent.ModalFragmentDone( null );
-                            } );
-                    };
+                            // if they have a profile picture, grab it.
+                            RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, ProfileImageComplete );
 
-                    LoginSuccessfulTimer.Start( );
-                    break;
-                }
+                            // hide the activity indicator, because we are now logged in,
+                            // but leave the buttons all disabled.
+                            //LoginActivityIndicator.Visibility = ViewStates.Gone;
+                            BlockerView.Hide( );
 
-                default:
-                {
-                    // if we couldn't get their profile, that should still count as a failed login.
-                    SetUIState( LoginState.Out );
+                            // update the UI
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = string.Format( LoginStrings.Success, RockMobileUser.Instance.PreferredName( ) );
 
-                    FadeLoginResult( true );
-                    LoginResultLabel.Text = LoginStrings.Error_Unknown;
+                            // start the timer, which will notify the springboard we're logged in when it ticks.
+                            LoginSuccessfulTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+                            {
+                                // when the timer fires, notify the springboard we're done.
+                                Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                    {
+                                        // now ok to go back again. (if this failed at any point, moving to the LogOut state
+                                        // will also re-enable the back button.
+                                        SpringboardParent.EnableBack = true;
 
-                    RockMobileUser.Instance.LogoutAndUnbind( );
-                    break;
-                }
-            }
+                                        SpringboardParent.ModalFragmentDone( null );
+                                    } );
+                            };
+
+                            LoginSuccessfulTimer.Start( );
+                            break;
+                        }
+
+                        default:
+                        {
+                            // if we couldn't get their profile, that should still count as a failed login.
+                            SetUIState( LoginState.Out );
+
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
+
+                            RockMobileUser.Instance.LogoutAndUnbind( );
+                            break;
+                        }
+                    }
+                } );
         }
 
         public void ProfileImageComplete( System.Net.HttpStatusCode code, string desc )
@@ -459,7 +484,7 @@ namespace Droid
                     // allow back when logged out
                     SpringboardParent.EnableBack = true;
 
-                    LoginActivityIndicator.Visibility = ViewStates.Gone;
+                    //LoginActivityIndicator.Visibility = ViewStates.Gone;
                     UsernameField.Enabled = true;
                     PasswordField.Enabled = true;
                     LoginButton.Enabled = true;
@@ -478,7 +503,8 @@ namespace Droid
 
                     FadeLoginResult( false );
 
-                    LoginActivityIndicator.Visibility = ViewStates.Visible;
+                    BlockerView.Show( );
+
                     UsernameField.Enabled = false;
                     PasswordField.Enabled = false;
                     LoginButton.Enabled = false;

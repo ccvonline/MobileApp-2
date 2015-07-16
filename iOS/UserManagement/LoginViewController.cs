@@ -188,6 +188,9 @@ namespace iOS
 
             imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
             LogoView = new UIImageView( new UIImage( imagePath ) );
+            LogoView.SizeToFit( );
+            LogoView.Layer.AnchorPoint = CGPoint.Empty;
+
             HeaderView.AddSubview( LogoView );
         }
 
@@ -218,7 +221,7 @@ namespace iOS
             HeaderView.Layer.ShadowOpacity = .23f;
             HeaderView.Layer.ShadowPath = shadowPath.CGPath;
 
-            LogoView.Layer.Position = new CoreGraphics.CGPoint( HeaderView.Bounds.Width / 2, HeaderView.Bounds.Height / 2 );
+            LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
             FBImageView.Layer.Position = new CoreGraphics.CGPoint( FacebookLogin.Bounds.Width / 2, FacebookLogin.Bounds.Height / 2 );
 
             if ( WebLayout != null )
@@ -532,32 +535,32 @@ namespace iOS
 
         void UIThread_ProfileComplete( System.Net.HttpStatusCode code, string desc, Rock.Client.Person model ) 
         {
-            BlockerView.Hide( delegate
+            switch ( code )
                 {
-                    switch ( code )
+                    case System.Net.HttpStatusCode.OK:
                     {
-                        case System.Net.HttpStatusCode.OK:
-                        {
-                            // get their address
-                            RockMobileUser.Instance.GetFamilyAndAddress( AddressComplete );
+                        // get their address
+                        RockMobileUser.Instance.GetFamilyAndAddress( AddressComplete );
 
-                            break;
-                        }
-
-                        default:
-                        {
-                            // if we couldn't get their profile, that should still count as a failed login.
-                            SetUIState( LoginState.Out );
-
-                            // failed to login for some reason
-                            FadeLoginResult( true );
-                            LoginResult.Field.Text = LoginStrings.Error_Unknown;
-
-                            RockMobileUser.Instance.LogoutAndUnbind( );
-                            break;
-                        }
+                        break;
                     }
-                } );
+
+                    default:
+                    {
+                        BlockerView.Hide( delegate
+                            {
+                                // if we couldn't get their profile, that should still count as a failed login.
+                                SetUIState( LoginState.Out );
+
+                                // failed to login for some reason
+                                FadeLoginResult( true );
+                                LoginResult.Field.Text = LoginStrings.Error_Unknown;
+
+                                RockMobileUser.Instance.LogoutAndUnbind( );
+                            } );
+                        break;
+                    }
+                }
         }
 
         public void AddressComplete( System.Net.HttpStatusCode code, string desc, List<Rock.Client.Group> model )

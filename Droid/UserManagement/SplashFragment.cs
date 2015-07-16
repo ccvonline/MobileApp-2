@@ -53,7 +53,7 @@ namespace Droid
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
 
-            SplashView.Create( view, "", "splash_logo_android.png", new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ), 
+            SplashView.Create( view, "", "splash_logo_android.png", false, new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ), 
                 delegate
                 {
                     SpringboardParent.SplashComplete( );

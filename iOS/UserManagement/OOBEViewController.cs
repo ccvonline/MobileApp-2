@@ -28,7 +28,7 @@ namespace iOS
             string imageName = GetSplashLogo( UIKit.UIScreen.MainScreen.ApplicationFrame.Size, UIKit.UIScreen.MainScreen.Scale );
 
             OOBEView = new UIOOBE();
-            OOBEView.Create( View, "oobe_splash_bg.png", imageName, View.Frame.ToRectF( ), delegate(int index) 
+            OOBEView.Create( View, "oobe_splash_bg.png", imageName, true, View.Frame.ToRectF( ), delegate(int index) 
                 {
                     Springboard.OOBEOnClick( index );
                 } );

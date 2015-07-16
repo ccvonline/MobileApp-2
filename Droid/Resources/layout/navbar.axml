@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:id="@+id/navbar_logo" />
 </RelativeLayout>
