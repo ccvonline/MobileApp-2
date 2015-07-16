@@ -411,11 +411,6 @@ namespace Droid
                     view.SetOnTouchListener( this );
                     view.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
-                    if ( ParentTask.TaskReadyForFragmentDisplay )
-                    {
-                        SetupDisplay( view );
-                    }
-                    
                     return view;
                 }
 

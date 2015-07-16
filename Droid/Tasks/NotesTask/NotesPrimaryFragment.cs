@@ -580,11 +580,6 @@ namespace Droid
 
                     ResultView.Hide( );
 
-                    if ( ParentTask.TaskReadyForFragmentDisplay == true )
-                    {
-                        SetupDisplay( );
-                    }
-
                     return view;
                 }
 

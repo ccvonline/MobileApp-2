@@ -3,11 +3,14 @@ Updated to use a new shared Rock REST Api. Fixes many issues with posting data t
 Switch our analytics to Xamarin.Insights. This also allows me to get crash info should the app crash.
 Added support for returning to the app from an external giving page! (Or really, anywhere)
 Fixed an issue causing user notes to create when interacting with Reveal Boxes.
+Added a limit to the number of News Items shown.
 
 iOS
 
 Android
+Fixed an issue preventing the Image Cropper from appearing when taking a landscape photo on phones.
 Fixed an issue where animations would not always complete, leaving things in a visually weird state.
 Fixed an issue causing the Image Cropper to randomly quit right after it appeared.
 Fixed a crash on certain devices when accessing News, Connect or Messages. 
 Fixed an issue preventing long passwords from working when logging in. (Thanks `Stopher!)	
+Fixed a crash when loading extremely large images into the Image Cropper.

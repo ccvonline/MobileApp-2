@@ -58,7 +58,12 @@ namespace iOS
                         // only add news for "all campuses" and their selected campus.
                         if ( newsItem.CampusGuid == Guid.Empty || newsItem.CampusGuid == viewingCampusGuid )
                         {
-                            News.Add( new RockNews( newsItem ) );
+                            // Limit the amount of news to display to MaxNews so we don't show so many we
+                            // run out of memory
+                            if( News.Count < PrivateNewsConfig.MaxNews )
+                            {
+                                News.Add( new RockNews( newsItem ) );
+                            }
                         }
                     }
                 } );

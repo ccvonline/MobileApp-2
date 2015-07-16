@@ -257,6 +257,11 @@ namespace App.Shared
         public class PrivateNewsConfig
         {
             /// <summary>
+            /// Limit the amount of news items we display (which helps memory big time)
+            /// </summary>
+            public const int MaxNews = 6;
+
+            /// <summary>
             /// The height of news image banners
             /// </summary>
             public const float NewsBannerWidth = 1242;

@@ -12,7 +12,7 @@ using App.Shared.Config;
 
 namespace Droid
 {
-    [Activity( Label = GeneralConfig.AndroidAppName, NoHistory = true, MainLauncher = true, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
+    [Activity( Label = GeneralConfig.AndroidAppName, NoHistory = true, LaunchMode = Android.Content.PM.LaunchMode.SingleTask, MainLauncher = true, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
     public class Splash : Activity
     {
         protected override void OnCreate( Bundle bundle )
@@ -53,7 +53,7 @@ namespace Droid
         }
     }
 
-    [Activity( Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
+    [Activity( Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", LaunchMode = Android.Content.PM.LaunchMode.SingleTask, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
     //This defines support for a URL scheme in the format "ccvmobile://go" that will re-launch this activity.
     [IntentFilter (new[]{Intent.ActionView}, 
         Categories=new[]{Intent.CategoryDefault, Intent.CategoryBrowsable},

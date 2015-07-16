@@ -789,7 +789,7 @@ namespace Droid
             // create the crop fragment
             ImageCropFragment.Begin( filePath, 1.00f );
 
-            StartModalFragment( ImageCropFragment );
+            StartModalFragment( ImageCropFragment, true );
         }
 
         public override void OnPause()

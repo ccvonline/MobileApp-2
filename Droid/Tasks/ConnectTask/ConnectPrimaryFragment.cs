@@ -279,11 +279,6 @@ namespace Droid
                     ListView.SetOnTouchListener( this );
                     ListView.Adapter = new ArrayAdapter( this );
 
-                    if ( ParentTask.TaskReadyForFragmentDisplay == true )
-                    {
-                        SetupDisplay( );
-                    }
-
                     return view;
                 }
 
