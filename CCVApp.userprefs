@@ -1,9 +1,11 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/Config.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesViewController.cs">
     <Files>
-      <File FileName="iOS/UserManagement/SplashViewController.cs" Line="10" Column="14" />
-      <File FileName="App.Shared/Config.cs" Line="382" Column="74" />
+      <File FileName="iOS/UserManagement/SplashViewController.cs" Line="1" Column="1" />
+      <File FileName="App.Shared/Config.cs" Line="360" Column="17" />
+      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="344" Column="57" />
+      <File FileName="iOS/Tasks/Prayer/Prayer_CreateUIViewController.cs" Line="510" Column="47" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

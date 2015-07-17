@@ -480,7 +480,7 @@ namespace iOS
 
             ObserverHandles.Clear( );
 
-            KeyboardAdjustManager.FreeObservers( );
+            KeyboardAdjustManager.Deactivate( );
         }
 
         public override void ViewWillAppear(bool animated)
@@ -506,6 +506,8 @@ namespace iOS
             // monitor for text field being edited, and keyboard show/hide notitications
             NSObject handle = NSNotificationCenter.DefaultCenter.AddObserver( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextControlChangedNotification, OnTextChanged);
             ObserverHandles.Add( handle );
+
+            KeyboardAdjustManager.Activate( );
         }
 
         public override void LayoutChanged( )

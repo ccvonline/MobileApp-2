@@ -323,6 +323,8 @@ namespace iOS
             TutorialOverlay.ContentMode = UIViewContentMode.ScaleAspectFit;
             TutorialOverlay.Alpha = 0.00f;
             View.AddSubview( TutorialOverlay );
+
+            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View );
         }
 
         void OnResultViewDone( )
@@ -348,7 +350,7 @@ namespace iOS
         {
             base.ViewDidAppear(animated);
 
-            KeyboardAdjustManager = new Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager( View );
+            KeyboardAdjustManager.Activate( );
 
             UIApplication.SharedApplication.IdleTimerDisabled = true;
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
@@ -373,7 +375,7 @@ namespace iOS
 
             if ( KeyboardAdjustManager != null )
             {
-                KeyboardAdjustManager.FreeObservers( );
+                KeyboardAdjustManager.Deactivate( );
             }
         }
 
