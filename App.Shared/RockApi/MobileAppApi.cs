@@ -73,6 +73,48 @@ namespace MobileApp
             }
         }
 
+        public static void UpdateOrAddPhoneNumber( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, bool isNew, HttpRequest.RequestResult<Rock.Client.PhoneNumber> resultHandler )
+        {
+            // if it isn't new and it IS blank, we should delete.
+            if ( isNew == false && string.IsNullOrEmpty( phoneNumber.Number ) == true )
+            {
+                ApplicationApi.DeleteCellPhoneNumber( phoneNumber, 
+                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
+                    {
+                        if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                        {
+                            resultHandler( statusCode, statusDescription, null );
+                        }
+                    } );
+            }
+            else
+            {
+                // send it to the server
+                ApplicationApi.AddOrUpdateCellPhoneNumber( person, phoneNumber, isNew,
+                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
+                    {
+                        if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                        {
+                            // if it was new, get it so we have its ID
+                            if( isNew == true )
+                            {
+                                ApplicationApi.GetPhoneNumberByGuid( phoneNumber.Guid, resultHandler );
+                            }
+                            else
+                            {
+                                // it's updated, so now just return what we updated.
+                                resultHandler( statusCode, statusDescription, phoneNumber );
+                            }
+                        }
+                        // something went wrong, so return.
+                        else
+                        {
+                            resultHandler( statusCode, statusDescription, null );
+                        }
+                    } );
+            }
+        }
+
         const string RegisterResult_BadLogin = "CreateLoginError";
         const int UserLoginEntityTypeId = 27;
         public static void RegisterNewUser( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, string username, string password, HttpRequest.RequestResult resultHandler )

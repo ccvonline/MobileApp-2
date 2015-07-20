@@ -546,12 +546,8 @@ namespace iOS
 
             RockMobileUser.Instance.Person.LastName = LastName.Field.Text;
 
-            // Update their cell phone. 
-            if ( string.IsNullOrEmpty( CellPhone.Field.Text ) == false )
-            {
-                // update the phone number
-                RockMobileUser.Instance.SetPhoneNumberDigits( CellPhone.Field.Text.AsNumeric( ) );
-            }
+            // Update their cell phone
+            RockMobileUser.Instance.SetPhoneNumberDigits( CellPhone.Field.Text.AsNumeric( ) );
 
             // Gender
             if ( string.IsNullOrEmpty( Gender.Field.Text ) == false )

@@ -1,4 +1,5 @@
 Both
+Fixed an issue preventing you from removing your phone number.
 
 iOS
 

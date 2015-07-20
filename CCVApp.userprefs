@@ -1,12 +1,40 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesViewController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/RockApi/RockMobileUser.cs">
     <Files>
-      <File FileName="iOS/UserManagement/SplashViewController.cs" Line="1" Column="1" />
-      <File FileName="App.Shared/Config.cs" Line="360" Column="17" />
-      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="344" Column="57" />
-      <File FileName="iOS/Tasks/Prayer/Prayer_CreateUIViewController.cs" Line="510" Column="47" />
+      <File FileName="App.Shared/Config.cs" Line="1" Column="1" />
+      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="1" Column="1" />
+      <File FileName="iOS/Tasks/Prayer/Prayer_CreateUIViewController.cs" Line="1" Column="1" />
+      <File FileName="Droid/Tasks/ConnectTask/ConnectPrimaryFragment.cs" Line="1" Column="1" />
+      <File FileName="iOS/UserManagement/ProfileViewController.cs" Line="553" Column="47" />
+      <File FileName="App.Shared/RockApi/RockMobileUser.cs" Line="533" Column="30" />
+      <File FileName="App.Shared/RockApi/MobileAppApi.cs" Line="76" Column="9" />
+      <File FileName="../../Rock.Mobile/Network/ApplicationApi.cs" Line="291" Column="66" />
+      <File FileName="../../Rock.Mobile/Network/RockApi.cs" Line="499" Column="134" />
+      <File FileName="../../Rock.Mobile/Network/HttpWebRequest.cs" Line="87" Column="22" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CCVApp" expanded="True">
+            <Node name="App.Shared" expanded="True">
+              <Node name="RockApi" expanded="True">
+                <Node name="RockMobileUser.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="iOS" expanded="True">
+              <Node name="UserManagement" expanded="True" />
+            </Node>
+            <Node name="Rock.Mobile" expanded="True">
+              <Node name="Network" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

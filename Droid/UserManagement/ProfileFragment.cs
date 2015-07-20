@@ -418,12 +418,8 @@ namespace Droid
 
             RockMobileUser.Instance.Person.LastName = LastNameField.Text;
 
-            // Update their cell phone. 
-            if ( string.IsNullOrEmpty( CellPhoneField.Text ) == false )
-            {
-                // update the phone number
-                RockMobileUser.Instance.SetPhoneNumberDigits( CellPhoneField.Text );
-            }
+            // Update their cell phone.
+            RockMobileUser.Instance.SetPhoneNumberDigits( CellPhoneField.Text );
 
             // Gender
             if ( string.IsNullOrEmpty( GenderField.Text ) == false )

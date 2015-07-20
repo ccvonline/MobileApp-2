@@ -539,28 +539,26 @@ namespace App
                 }
 
                 public void UpdateOrAddPhoneNumber( HttpRequest.RequestResult phoneResult )
-                {
+                {   
                     // we know if it's a new phone number based on whether our sync'd cell number is blank or not.
                     bool addNewPhoneNumber = string.IsNullOrEmpty( LastSyncdCellPhoneNumberJson ) ? true : false;
 
-                    // send it to the server
-                    ApplicationApi.AddOrUpdateCellPhoneNumber( Person, _CellPhoneNumber, addNewPhoneNumber,
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                    MobileAppApi.UpdateOrAddPhoneNumber( Person, _CellPhoneNumber, addNewPhoneNumber, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, PhoneNumber model )
                         {
-                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
-                                // since the phone number is tied to the person, if this was successful, consider our 
-                                LastSyncdCellPhoneNumberJson = JsonConvert.SerializeObject( _CellPhoneNumber );
+                                _CellPhoneNumber = model;
+                                LastSyncdCellPhoneNumberJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
                             }
 
                             // save either way!
                             SaveToDevice( );
 
-                            if( phoneResult != null )
+                            if ( phoneResult != null )
                             {
                                 phoneResult( statusCode, statusDescription );
-                            }
-
+                            }   
                         } );
                 }
 
