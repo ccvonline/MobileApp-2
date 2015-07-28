@@ -1101,7 +1101,6 @@ namespace Droid
                             if ( e.GetX( ) < visibleButtonWidth )
                             {
                                 // we did, so activate the element associated with that button
-                                ActiveElementIndex = Elements.IndexOf( element ); 
                                 ActivateElement( element );
                             }
                         }
@@ -1135,6 +1134,8 @@ namespace Droid
             }
             else
             {
+                ActiveElementIndex = Elements.IndexOf( activeElement); 
+
                 foreach ( SpringboardElement element in Elements )
                 {
                     if ( activeElement != element )

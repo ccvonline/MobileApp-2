@@ -831,7 +831,8 @@ namespace App
                     bool result = false;
 
                     // now use a reader to get each element
-                    XmlTextReader reader = XmlReader.Create( new StringReader( styleSheetXml ) ) as XmlTextReader;
+                    //XmlTextReader reader = XmlReader.Create( new StringReader( styleSheetXml ) ) as XmlTextReader;
+                    XmlTextReader reader = new XmlTextReader( new StringReader( styleSheetXml ) );
                     try
                     {
                         bool finishedParsing = false;

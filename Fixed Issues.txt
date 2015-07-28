@@ -1,6 +1,7 @@
 Both
-Fixed an issue preventing you from removing your phone number.
 
 iOS
+Fixed an occasional crash when tapping on the "Take Notes" banner.
 
 Android
+Fixed an issue causing the "Take Notes" banner to appear at incorrect times. (Thanks Christopher!)

@@ -161,7 +161,8 @@ namespace App
                 public static string GetStyleSheetUrl( string noteXml, string styleSheetDefaultHostDomain )
                 {
                     // now use a reader to get each element
-                    XmlReader reader = XmlReader.Create( new StringReader( noteXml ) );
+                    //XmlReader reader = XmlReader.Create( new StringReader( noteXml ) );
+                    XmlTextReader reader = new XmlTextReader( new StringReader( noteXml ) );
 
                     string styleSheetUrl = "";
 
@@ -248,7 +249,8 @@ namespace App
                     UserNoteControls = new List<UserNote>( ); //store these seperately so we can back them up and test touch input.
 
                     // now use a reader to get each element
-                    XmlTextReader reader = XmlReader.Create( new StringReader( NoteXml ) ) as XmlTextReader;
+                    //XmlTextReader reader = XmlReader.Create( new StringReader( NoteXml ) ) as XmlTextReader;
+                    XmlTextReader reader = new XmlTextReader( new StringReader( NoteXml ) );
 
                     try
                     {
@@ -589,6 +591,8 @@ namespace App
 
 
                         // Now notify all remaining controls until we find out one consumed it.
+
+                        // 1. Start with User Notes. They should get first priority
                         bool consumed = false;
                         foreach( IUIControl control in UserNoteControls )
                         {
@@ -601,19 +605,39 @@ namespace App
                             }
                         }
 
+
                         // if no user note consumed it, notify all regular controls
                         if( consumed == false )
                         {
-                            // notify all controls
-                            foreach( IUIControl control in ChildControls )
+                            // 2. check all NON-revealed reveal boxees. 
+                            // This allows them to get priority over taps on URLs and already-revealed boxes.
+
+                            List<IUIControl> revealBoxes = new List<IUIControl>( );
+                            GetControlOfType<RevealBox>( revealBoxes );
+                            foreach ( IUIControl control in revealBoxes )
                             {
-                                // was it consumed?
-                                IUIControl consumingControl = control.TouchesEnded( touch );
-                                if( consumingControl != null )
+                                // if not revealed and consuming input, we're good.
+                                if ( ( control as RevealBox ).Revealed == false && control.TouchesEnded( touch ) != null )
                                 {
-                                    // then see if it has an active URL we should hit
-                                    activeUrl = consumingControl.GetActiveUrl( );
+                                    consumed = true;
                                     break;
+                                }
+                            }
+
+
+                            // 3. notify all remaining controls
+                            if ( consumed == false )
+                            {
+                                foreach ( IUIControl control in ChildControls )
+                                {
+                                    // was it consumed?
+                                    IUIControl consumingControl = control.TouchesEnded( touch );
+                                    if ( consumingControl != null )
+                                    {
+                                        // then see if it has an active URL we should hit
+                                        activeUrl = consumingControl.GetActiveUrl( );
+                                        break;
+                                    }
                                 }
                             }
                         }

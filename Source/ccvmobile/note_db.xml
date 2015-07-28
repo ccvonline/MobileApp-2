@@ -6,10 +6,19 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>PROMISES</Name>
+				<Speaker>Dr. Mark Moore</Speaker>
+				<Date>7/25/2015</Date>
+				<NoteUrl>xml/message_7_25_2015.xml</NoteUrl>
+			</Message>
+			<Message>
 				<Name>POWERS</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>7/19/2015</Date>
 				<NoteUrl>xml/message_7_18_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/133904574.m3u8?p=high,standard,mobile&amp;s=18ff2125db500d13d2b66be75e32df07</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=517</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Revealed/Revealed_WK3_Who_Holds_The_Power.mp3</AudioUrl>
 			</Message>
 			<Message>
 				<Name>PAIN</Name>
