@@ -269,6 +269,7 @@ namespace Droid
                 /// <summary>
                 /// The overlay displayed the first time the user enters Notes
                 /// </summary>
+                View TutorialBacker { get; set; }
                 ImageView TutorialOverlay { get; set; }
 
                 /// <summary>
@@ -351,11 +352,18 @@ namespace Droid
                     ResultView.Hide( );
 
                     // setup the tutorial overlay
+                    TutorialBacker = new View( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                    TutorialBacker.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
+                    TutorialBacker.Alpha = 0;
+                    TutorialBacker.SetBackgroundColor( Android.Graphics.Color.Black );
+                    layout.AddView( TutorialBacker );
+
                     AnimatingTutorial = false;
                     TutorialOverlay = new ImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    TutorialOverlay.LayoutParameters = new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
+                    TutorialOverlay.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    ((RelativeLayout.LayoutParams)TutorialOverlay.LayoutParameters ).AddRule( LayoutRules.CenterInParent );
                     TutorialOverlay.Alpha = 0;
-                    TutorialOverlay.SetBackgroundColor( Android.Graphics.Color.Black );
+                    TutorialOverlay.SetBackgroundColor( Android.Graphics.Color.Transparent );
                     layout.AddView( TutorialOverlay );
 
                     NavBarRevealTracker = new NavBarReveal( ParentTask.NavbarFragment.NavToolbar );
@@ -739,15 +747,7 @@ namespace Droid
 
                             App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount = App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount + 1;
 
-                            System.IO.Stream tutorialStream = null;
-                            if( MainActivity.IsLandscapeWide( ) )
-                            {
-                                tutorialStream = Activity.BaseContext.Assets.Open( PrivateNoteConfig.TutorialOverlayImageIPadLS );
-                            }
-                            else
-                            {
-                                tutorialStream = Activity.BaseContext.Assets.Open( PrivateNoteConfig.TutorialOverlayImage );
-                            }
+                            System.IO.Stream tutorialStream = Activity.BaseContext.Assets.Open( PrivateNoteConfig.TutorialOverlayImage );
 
                             TutorialImage = Android.Graphics.BitmapFactory.DecodeStream( tutorialStream );
                             TutorialOverlay.SetImageBitmap( TutorialImage );
@@ -760,6 +760,7 @@ namespace Droid
                                 {
                                     Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                         {
+                                            TutorialBacker.Visibility = ViewStates.Visible;
                                             AnimateTutorialScreen( true );
                                             ScrollView.ScrollEnabled = false;
                                         });
@@ -806,6 +807,21 @@ namespace Droid
                         {
                             AnimatingTutorial = true;
 
+                            // animate the backer
+                            SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( .80f, endVal ), .33f, delegate(float percent, object value )
+                                {
+                                    TutorialBacker.Alpha = (float)value;
+                                }, 
+                                delegate
+                                {
+                                    if( fadeIn == false )
+                                    {
+                                        TutorialBacker.Visibility = ViewStates.Gone;
+                                    }
+                                } );
+                            backerAnim.Start( );
+
+                            // animate the tutorial
                             SimpleAnimator_Float tutorialAnim = new SimpleAnimator_Float( startVal, endVal, .33f, delegate(float percent, object value )
                                 {
                                     TutorialOverlay.Alpha = (float)value;

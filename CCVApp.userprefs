@@ -1,14 +1,10 @@
-﻿<Properties StartupItem="Droid/Droid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="Android.192.168.57.101:5555" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Springboard.cs">
+﻿<Properties StartupItem="iOS/iOS.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesViewController.cs">
     <Files>
-      <File FileName="../../Rock.Mobile/PlatformSpecific/iOS/UI.cs" Line="1" Column="1" />
-      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="572" Column="58" />
-      <File FileName="iOS/Tasks/Notes/NotesTask.cs" Line="52" Column="77" />
-      <File FileName="iOS/Tasks/TaskUINavigationController.cs" Line="1" Column="1" />
-      <File FileName="Droid/Tasks/NotesTask/NotesFragment.cs" Line="1" Column="1" />
-      <File FileName="Droid/Tasks/NotesTask/NotesTask.cs" Line="69" Column="45" />
-      <File FileName="Droid/Springboard.cs" Line="945" Column="28" />
+      <File FileName="Droid/Springboard.cs" Line="1024" Column="47" />
+      <File FileName="App.Shared/PrivateConfig.cs" Line="1" Column="1" />
+      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="765" Column="24" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,14 +12,19 @@
           <Node name="CCVApp" expanded="True">
             <Node name="App.Shared" expanded="True" />
             <Node name="Droid" expanded="True">
+              <Node name="Assets" expanded="True" />
               <Node name="Tasks" expanded="True">
+                <Node name="ConnectTask" expanded="True" />
                 <Node name="NotesTask" expanded="True" />
+                <Node name="PrayerTask" expanded="True" />
               </Node>
-              <Node name="Springboard.cs" selected="True" />
             </Node>
             <Node name="iOS" expanded="True">
+              <Node name="Resources" expanded="True" />
               <Node name="Tasks" expanded="True">
-                <Node name="Notes" expanded="True" />
+                <Node name="Notes" expanded="True">
+                  <Node name="NotesViewController.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
             <Node name="Rock.Mobile" expanded="True">
@@ -34,15 +35,10 @@
           </Node>
         </State>
       </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/jered/Projects/Professional/CCV/MobileApp/Droid/Tasks/NotesTask/NotesTask.cs" line="85" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="App.Shared/Notes/Controls/Note.cs" line="533" offsetX="1058" offsetY="7980" expression="state" liveUpdate="False" />

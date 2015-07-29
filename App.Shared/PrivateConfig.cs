@@ -284,8 +284,7 @@ namespace App.Shared
             /// <summary>
             /// The image to display for the tutorial screen.
             /// </summary>
-            public const string TutorialOverlayImage = "note_tutorial_portrait.png";
-            public const string TutorialOverlayImageIPadLS = "note_tutorial_ipad_ls.png";
+            public const string TutorialOverlayImage = "note_tutorial.png";
 
             public const float NotesMainPlaceholderWidth = 750;
             public const float NotesMainPlaceholderHeight = 422;

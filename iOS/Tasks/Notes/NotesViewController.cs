@@ -142,6 +142,7 @@ namespace iOS
         /// <summary>
         /// The overlay displayed the first time the user enters Notes
         /// </summary>
+        UIView TutorialBacker { get; set; }
         UIImageView TutorialOverlay { get; set; }
 
         /// <summary>
@@ -316,11 +317,16 @@ namespace iOS
             ResultView.Hide( );
 
             // setup the tutorial overlay
+            TutorialBacker = new UIView( View.Frame );
+            TutorialBacker.Alpha = 0.00f;
+            TutorialBacker.BackgroundColor = UIColor.Black;
+            TutorialBacker.Hidden = true;
+            View.AddSubview( TutorialBacker );
+
             AnimatingTutorial = false;
             TutorialOverlay = new UIImageView( );
             TutorialOverlay.Layer.AnchorPoint = CGPoint.Empty;
             TutorialOverlay.Frame = View.Frame;
-            TutorialOverlay.ContentMode = UIViewContentMode.ScaleAspectFit;
             TutorialOverlay.Alpha = 0.00f;
             View.AddSubview( TutorialOverlay );
 
@@ -708,17 +714,11 @@ namespace iOS
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
-                                    if( SpringboardViewController.IsLandscapeWide( ) )
-                                    {
-                                        TutorialOverlay.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.TutorialOverlayImageIPadLS );
-                                    }
-                                    else
-                                    {
-                                        TutorialOverlay.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.TutorialOverlayImage );
-                                    }
+                                    TutorialOverlay.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.TutorialOverlayImage );
 
-                                    TutorialOverlay.ContentMode = UIViewContentMode.ScaleAspectFill;
+                                    TutorialOverlay.ContentMode = UIViewContentMode.Center;
                                     TutorialOverlay.Frame = View.Frame;
+                                    TutorialBacker.Hidden = false;
 
                                     AnimateTutorialScreen( true );
                                     UIScrollView.ScrollEnabled = false;
@@ -780,6 +780,20 @@ namespace iOS
                 if ( AnimatingTutorial == false )
                 {
                     AnimatingTutorial = true;
+
+                    // animate the backer (and don't let it get darker than 80%)
+                    SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( .80f, endVal ), .15f, delegate(float percent, object value )
+                        {
+                            TutorialBacker.Alpha = (float)value;
+                        }, 
+                        delegate
+                        {
+                            if( fadeIn == false )
+                            {
+                                TutorialBacker.Hidden = true;
+                            }
+                        } );
+                    backerAnim.Start( );
 
                     SimpleAnimator_Float tutorialAnim = new SimpleAnimator_Float( startVal, endVal, .15f, delegate(float percent, object value )
                         {

@@ -1,4 +1,6 @@
 Both
+Updated the background image used during the initial Welcome. (Thanks Kyle!)
+Updated the "Double Tap to create Notes" image. (Thanks Nick!)
 
 iOS
 Fixed an occasional crash when tapping on the "Take Notes" banner.

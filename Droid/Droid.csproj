@@ -352,12 +352,6 @@
     <AndroidAsset Include="..\Assets\connect_banner%403x.png">
       <Link>Assets\connect_banner.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\note_tutorial_portrait%403x.png">
-      <Link>Assets\note_tutorial_portrait.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\note_tutorial_ipad_ls.png">
-      <Link>Assets\note_tutorial_ipad_ls.png</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Assets\serve_thumb.png">
       <Link>Assets\serve_thumb.png</Link>
     </AndroidAsset>
@@ -387,6 +381,9 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\me.png">
       <Link>Assets\me.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\note_tutorial%403x.png">
+      <Link>Assets\note_tutorial.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

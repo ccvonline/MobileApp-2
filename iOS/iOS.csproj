@@ -296,9 +296,6 @@
     <BundleResource Include="..\Assets\oobe_splash_bg.png">
       <Link>Resources\oobe_splash_bg.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Assets\note_tutorial_ipad_ls.png">
-      <Link>Resources\note_tutorial_ipad_ls.png</Link>
-    </BundleResource>
     <BundleResource Include="..\Assets\groupfinder_thumb.png">
       <Link>Resources\groupfinder_thumb.png</Link>
     </BundleResource>
@@ -310,15 +307,6 @@
     </BundleResource>
     <BundleResource Include="..\Assets\connect_banner%403x.png">
       <Link>Resources\connect_banner%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\note_tutorial_portrait.png">
-      <Link>Resources\note_tutorial_portrait.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\note_tutorial_portrait%402x.png">
-      <Link>Resources\note_tutorial_portrait%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\note_tutorial_portrait%403x.png">
-      <Link>Resources\note_tutorial_portrait%403x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Assets\serve_thumb.png">
       <Link>Resources\serve_thumb.png</Link>
@@ -439,6 +427,9 @@
     </BundleResource>
     <BundleResource Include="..\Assets\navbarLogo%403x.png">
       <Link>Resources\navbarLogo%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\note_tutorial%403x.png">
+      <Link>Resources\note_tutorial%403x.png</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>
