@@ -95,7 +95,7 @@ namespace Droid
             RelativeLayout navBar = view.FindViewById<RelativeLayout>( Resource.Id.navbar_relative_layout );
             navBar.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
-            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
+            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
             BlockerView = new UIBlockerView( view, bounds );
 
             LoginResultLayer = view.FindViewById<View>( Resource.Id.result_background );
@@ -347,7 +347,7 @@ namespace Droid
         {
             base.OnConfigurationChanged(newConfig);
 
-            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
         }
 
         public void ProfileComplete(System.Net.HttpStatusCode code, string desc, Rock.Client.Person model)

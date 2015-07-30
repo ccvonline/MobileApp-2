@@ -149,11 +149,14 @@ namespace iOS
 
         bool DisableIdleTimer { get; set; }
 
-        public TaskWebViewController ( string displayUrl, Task parentTask, bool disableIdleTimer = false ) : base ( )
+        bool NavbarAlwaysVisible { get; set; }
+
+        public TaskWebViewController ( string displayUrl, Task parentTask, bool disableIdleTimer = false, bool navbarAlwaysVisible = false ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
             DisableIdleTimer = disableIdleTimer;
+            NavbarAlwaysVisible = navbarAlwaysVisible;
 		}
 
         public override void ViewDidLoad()
@@ -176,23 +179,23 @@ namespace iOS
             ActivityIndicator.StartAnimating( );
             View.AddSubview( ActivityIndicator );
 
+            // URL encode the DisplayUrl
+            NSString displayUrl = new NSString( DisplayUrl );
+            NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
+            NSUrl encodedUrl = new NSUrl( encodedString );
+
             // setup a result view in the case of failure
             ResultView = new UIResultView( View, View.Bounds.ToRectF( ), 
                 delegate 
                 { 
                     ResultView.Hide( );
                     ActivityIndicator.Hidden = false;
-                    WebView.LoadRequest( new NSUrlRequest( new NSUrl( DisplayUrl ) ) ); 
+                    WebView.LoadRequest( new NSUrlRequest( encodedUrl ) ); 
                 } );
             
 
             // kick off our initial request
             ActivityIndicator.Hidden = false;
-
-            // URL encode the DisplayUrl
-            NSString displayUrl = new NSString( DisplayUrl );
-            NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
-            NSUrl encodedUrl = new NSUrl( encodedString );
 
             WebView.LoadRequest( new NSUrlRequest( encodedUrl ) );
 
@@ -213,7 +216,10 @@ namespace iOS
 
             // not 100% sure that this is safe. If WebView sets the scrollView delegate and doesn't back ours up
             // (which it SHOULD) we won't get our calls
-            WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
+            if ( NavbarAlwaysVisible == false )
+            {
+                WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
+            }
         }
 
         public override void ViewWillAppear(bool animated)

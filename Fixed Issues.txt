@@ -4,6 +4,11 @@ Updated the "Double Tap to create Notes" image. (Thanks Nick!)
 
 iOS
 Fixed an occasional crash when tapping on the "Take Notes" banner.
+Fixed a crash when tapping "Retry" on pages that failed to load.
+A message will now display if the user has restricted Camera access and tries to use the camera.
+The bottom navigation bar will now always remain visible when viewing bible verses.
+Fixed an issue where your last position in a Video or Audio Podcast wasn't saved.
 
 Android
 Fixed an issue causing the "Take Notes" banner to appear at incorrect times. (Thanks Christopher!)
+Fixed an issue where the Loading overlay didn't cover the whole screen when logging in.

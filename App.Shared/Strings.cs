@@ -60,8 +60,8 @@ namespace App.Shared
             public const string ProfilePicture_Error_Title = "Profile Picture";
             public const string ProfilePicture_Error_Message = "There was a problem saving your profile picture. Please try again.";
 
-            public const string Camera_Error_Title = "No Camera";
-            public const string Camera_Error_Message = "This device does not have a camera.";
+            public const string Camera_Error_Title = "Camera Unavailable";
+            public const string Camera_Error_Message = "Could not access the camera. Make sure this device has a camera and the app is allowed to use it.";
 
             public const string LoggedIn_Prefix = "Welcome ";
             public const string LoggedOut_Label = "Log In";

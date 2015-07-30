@@ -133,6 +133,7 @@ namespace iOS
             }
 
             MoviePlayer.ContentUrl = new NSUrl( MediaUrl );
+
             MoviePlayer.PrepareToPlay( );
         }
 
@@ -260,22 +261,29 @@ namespace iOS
         void ContentPreloadDidFinish( NSNotification obj )
         {
             // once the movie is ready, hide the spinner
-            ActivityIndicator.Hidden = true;
-
-            MoviePlayer.Play( );
-
-            // now that the content is preloaded, update our layout so that
-            // we size the window according to the video dimensions.
-            LayoutChanged( );
-
-            if ( AudioOnly )
+            if ( MoviePlayer.PlaybackState != MPMoviePlaybackState.Playing )
             {
-                MessageAnalytic.Instance.Trigger( MessageAnalytic.Listen, Name );
+                ActivityIndicator.Hidden = true;
+
+                // jump to the spot that was preloaded.
+                MoviePlayer.CurrentPlaybackTime = MoviePlayer.InitialPlaybackTime;
+
+                MoviePlayer.Play( );
+
+                // now that the content is preloaded, update our layout so that
+                // we size the window according to the video dimensions.
+                LayoutChanged( );
+
+                if ( AudioOnly )
+                {
+                    MessageAnalytic.Instance.Trigger( MessageAnalytic.Listen, Name );
+                }
+                else
+                {
+                    MessageAnalytic.Instance.Trigger( MessageAnalytic.Watch, Name );
+                }
             }
-            else
-            {
-                MessageAnalytic.Instance.Trigger( MessageAnalytic.Watch, Name );
-            }
+
         }
 
         void WillEnterFullscreen( NSNotification obj )
@@ -302,6 +310,7 @@ namespace iOS
         {
             DidDisplayError = false;
 
+            // if we're changing TO the play state, there's no need to save.
             if ( MoviePlayer.PlaybackState != MPMoviePlaybackState.Playing )
             {
                 SavePlaybackPos( );
@@ -313,18 +322,10 @@ namespace iOS
             // store the last video we watched.
             App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl = MediaUrl;
 
-            // see where we are in playback. If it's > 1 and < 98, we'll save the time.
-            if ( MoviePlayer.Duration > 0.00f )
+            // see where we are in playback and save it.
+            if ( MoviePlayer.Duration > 0.00f && MoviePlayer.CurrentPlaybackTime > 0.00f && MoviePlayer.CurrentPlaybackTime < MoviePlayer.Duration )
             {
-                double playbackPerc = MoviePlayer.CurrentPlaybackTime / MoviePlayer.Duration;
-                if ( playbackPerc > .01f && playbackPerc < .98f )
-                {
-                    App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = MoviePlayer.CurrentPlaybackTime;
-                }
-                else
-                {
-                    App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = 0;
-                }
+                App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = MoviePlayer.CurrentPlaybackTime;
             }
         }
 
