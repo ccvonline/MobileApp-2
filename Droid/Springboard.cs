@@ -28,6 +28,7 @@ using Droid.Tasks.Give;
 using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
+using Rock.Mobile.Network;
 
 
 namespace Droid
@@ -1126,11 +1127,36 @@ namespace Droid
             // in this state.
             if ( activeElement.Task as GiveTask != null )
             {
+
+
+                // trigger the Give analytic
                 GiveAnalytic.Instance.Trigger( GiveAnalytic.Give );
 
-                var uri = Android.Net.Uri.Parse( GiveConfig.GiveUrl );
-                var intent = new Intent( Intent.ActionView, uri ); 
-                ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                // if they're logged in and have a primary alias ID (if they're logged in they certainly SHOULD), get their impersonation token before continuing.
+                // this will let the page pre-fill their data.
+                if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
+                {
+                    ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.Value, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, string impersonationToken )
+                        {
+                            // did we get a successful response with a giving token?
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) && string.IsNullOrEmpty( impersonationToken ) == false )
+                            {
+                                // URL encode the givingUrl
+                                var uri = Android.Net.Uri.Parse( GiveConfig.GiveUrl + "&" + impersonationToken );
+                                var intent = new Intent( Intent.ActionView, uri ); 
+                                ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                            }
+                        } );
+                }
+                // we don't have access to a giving token, so just kick them over
+                else
+                {
+                    // URL encode the givingUrl
+                    var uri = Android.Net.Uri.Parse( GiveConfig.GiveUrl );
+                    var intent = new Intent( Intent.ActionView, uri ); 
+                    ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                }
             }
             else
             {

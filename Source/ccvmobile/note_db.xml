@@ -6,10 +6,31 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>THINK BIG</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>8/2/2015</Date>
+				<NoteUrl>xml/message_8_1_2015.xml</NoteUrl>
+			</Message>
+
+			<Name>COURAGEOUS</Name>
+			<Description>
+				Life never has to be boring or mundane. It has its share of challenges, but the life of a Christian is a life of overcoming challenges.
+			</Description>
+			<DateRanges>8/2/2015 - 8/23/2015</DateRanges>
+			<BillboardUrl>images/courageous_2015.png</BillboardUrl>
+			<ThumbnailUrl>images/courageous_2015_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+		<!--Start Series-->
+		<Series>
+			<Message>
 				<Name>PROMISES</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>7/25/2015</Date>
 				<NoteUrl>xml/message_7_25_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/134629380.m3u8?p=high,standard,mobile&amp;s=b6cf3a0a4e8e62d1dc8a6641ae9b0515</WatchUrl>
+				<ShareUrl>http://www.ccvonline.com/Arena/default.aspx?page=17529&amp;item=518</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Revealed/Revealed_WK4_Promises.mp3</AudioUrl>
 			</Message>
 			<Message>
 				<Name>POWERS</Name>
@@ -25,7 +46,7 @@
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>7/12/2015</Date>
 				<NoteUrl>xml/message_7_11_2015.xml</NoteUrl>
-				<ShareUrl>https://ccv.church/Arena/default.aspx?page=17529&amp;item=516</ShareUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=516</ShareUrl>
 				<WatchUrl>http://player.vimeo.com/external/133356736.m3u8?p=high,standard,mobile&amp;s=314f73c2954398f98b048d629ba9ee61</WatchUrl>
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Revealed/Revealed_WK2_HowDoIManagePain_New.mp3</AudioUrl>
 			</Message>
@@ -43,7 +64,7 @@
 			<Description>
 				How can we thrive in the trying times we face? The book of Revelation offers a crystal clear answer to this question.
 			</Description>
-			<DateRanges>7/5/2015 - 7/31/2015</DateRanges>
+			<DateRanges>7/5/2015 - 7/25/2015</DateRanges>
 			<BillboardUrl>images/revealed_2015.png</BillboardUrl>
 			<ThumbnailUrl>images/revealed_2015_thumb.png</ThumbnailUrl>
 		</Series>

@@ -1,12 +1,7 @@
-﻿<Properties StartupItem="Droid/Droid.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="Android.192.168.57.101:5555" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/UserManagement/LoginFragment.cs">
+﻿<Properties StartupItem="iOS/iOS.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/NavbarFragment.cs">
     <Files>
-      <File FileName="Droid/Springboard.cs" Line="1024" Column="47" />
-      <File FileName="App.Shared/PrivateConfig.cs" Line="1" Column="1" />
-      <File FileName="iOS/Tasks/Notes/NotesViewController.cs" Line="572" Column="118" />
-      <File FileName="iOS/SpringboardViewController.cs" Line="1300" Column="49" />
-      <File FileName="Droid/UserManagement/LoginFragment.cs" Line="81" Column="10" />
       <File FileName="Droid/NavbarFragment.cs" Line="537" Column="46" />
     </Files>
     <Pads>
@@ -14,16 +9,17 @@
         <State name="__root__">
           <Node name="CCVApp" expanded="True">
             <Node name="App.Shared" expanded="True">
+              <Node name="Notes" expanded="True">
+                <Node name="Controls" expanded="True" />
+              </Node>
               <Node name="RockApi" expanded="True" />
-              <Node name="UI" expanded="True" />
             </Node>
             <Node name="Droid" expanded="True">
               <Node name="Tasks" expanded="True">
                 <Node name="NotesTask" expanded="True" />
               </Node>
-              <Node name="UserManagement" expanded="True">
-                <Node name="LoginFragment.cs" selected="True" />
-              </Node>
+              <Node name="UserManagement" expanded="True" />
+              <Node name="NavbarFragment.cs" selected="True" />
             </Node>
             <Node name="iOS" expanded="True">
               <Node name="Tasks" expanded="True">
@@ -32,12 +28,7 @@
             </Node>
             <Node name="Rock.Mobile" expanded="True">
               <Node name="Media" expanded="True" />
-              <Node name="PlatformSpecific" expanded="True">
-                <Node name="iOS" expanded="True" />
-              </Node>
-              <Node name="UI" expanded="True">
-                <Node name="iOS" expanded="True" />
-              </Node>
+              <Node name="Network" expanded="True" />
             </Node>
           </Node>
         </State>
