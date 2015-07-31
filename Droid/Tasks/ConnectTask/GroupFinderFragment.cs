@@ -275,10 +275,10 @@ namespace Droid
                     {
                         MapView = new Android.Gms.Maps.MapView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                         MapView.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
-
                         MapView.LayoutParameters.Height = (int) (displaySize.Y * .50f);
                         MapView.GetMapAsync( this );
                         MapView.SetBackgroundColor( Color.Black );
+
                         MapView.OnCreate( savedInstanceState );
                     }
                     catch
@@ -412,6 +412,9 @@ namespace Droid
                         // because google can actually give me a valid map that isn't actually ready.
                         try
                         {
+                            // For privacy, turn off the map toolbar, which prevents people from getting specific driving directions
+                            // to neighborhood group houses.
+                            Map.UiSettings.MapToolbarEnabled = false;
                             Map.SetOnMarkerClickListener( this );
 
                             // set the map to a default position

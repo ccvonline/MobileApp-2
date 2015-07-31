@@ -1,8 +1,9 @@
-﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/NavbarFragment.cs">
+﻿<Properties StartupItem="Droid/Droid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="Android.HT2BTW302426" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Tasks/ConnectTask/GroupFinderFragment.cs">
     <Files>
-      <File FileName="Droid/NavbarFragment.cs" Line="537" Column="46" />
+      <File FileName="Droid/NavbarFragment.cs" Line="518" Column="9" />
+      <File FileName="Droid/Tasks/ConnectTask/GroupFinderFragment.cs" Line="414" Column="26" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,11 +16,14 @@
               <Node name="RockApi" expanded="True" />
             </Node>
             <Node name="Droid" expanded="True">
+              <Node name="Resources" expanded="True" />
               <Node name="Tasks" expanded="True">
+                <Node name="ConnectTask" expanded="True">
+                  <Node name="GroupFinderFragment.cs" selected="True" />
+                </Node>
                 <Node name="NotesTask" expanded="True" />
               </Node>
               <Node name="UserManagement" expanded="True" />
-              <Node name="NavbarFragment.cs" selected="True" />
             </Node>
             <Node name="iOS" expanded="True">
               <Node name="Tasks" expanded="True">
@@ -29,12 +33,12 @@
             <Node name="Rock.Mobile" expanded="True">
               <Node name="Media" expanded="True" />
               <Node name="Network" expanded="True" />
+              <Node name="PlatformSpecific" expanded="True">
+                <Node name="Android" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
