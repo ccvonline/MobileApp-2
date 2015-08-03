@@ -25,7 +25,7 @@ namespace App
                 public RockNetworkManager( )
                 {
                     RockApi.SetRockURL( Config.GeneralConfig.RockBaseUrl );
-                    RockApi.SetAuthorizationKey( PrivateConfig.PrivateGeneralConfig.RockMobileAppAuthorizationKey );
+                    RockApi.SetAuthorizationKey( Config.GeneralConfig.RockMobileAppAuthorizationKey );
                 }
 
                 public void SyncRockData( SeriesDownloaded seriesCallback, HttpRequest.RequestResult resultCallback )

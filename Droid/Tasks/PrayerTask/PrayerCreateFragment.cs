@@ -284,13 +284,13 @@ namespace Droid
                             Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                         }
                         // fun bonus!
-                        else if ( RequestText.Text.ToLower( ) == "up up down down left right left right b a start" )
+                        else if ( RequestText.Text.ToLower( ) == UISpecial.Trigger )
                         {
                             RelativeLayout relativeLayout = View.FindViewById<RelativeLayout>( Resource.Id.relative_background );
                             RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
 
                             UISpecial special = new UISpecial();
-                            special.Create( relativeLayout, "me.png", false, bounds, delegate { special.View.RemoveAsSubview( relativeLayout ); });
+                            special.Create( relativeLayout, false, bounds, delegate { special.View.RemoveAsSubview( relativeLayout ); });
                             special.LayoutChanged( bounds );
                         }
                     }

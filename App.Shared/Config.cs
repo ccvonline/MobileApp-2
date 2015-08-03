@@ -53,6 +53,12 @@ namespace App
                 public const string RockBaseUrl = "http://rock.ccvonline.com/";
 
                 /// <summary>
+                /// Defined in Rock, this should be generated ONCE at Rock's initial setup and then never changed.
+                /// It is the key the mobile app uses so Rock knows who it's talking to.
+                /// </summary>
+                public const string RockMobileAppAuthorizationKey = "hWTaZ7buziBcJQH31KCm3Pzz";
+
+                /// <summary>
                 /// The base URL to look for Notes.
                 /// </summary>
                 public const string NoteBaseURL = "http://ccv.church/ccvmobile/";

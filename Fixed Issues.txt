@@ -1,17 +1,6 @@
 Both
-Updated the background image used during the initial Welcome. (Thanks Kyle!)
-Updated the "Double Tap to create Notes" image. (Thanks Nick!)
-When Giving, if you are logged in, your information will already be filled out!
+Fixed reading the wrong status code in GroupFinder's GetGroupByLocation response.
 
 iOS
-Fixed an occasional crash when tapping on the "Take Notes" banner.
-Fixed a crash when tapping "Retry" on pages that failed to load.
-A message will now display if the user has restricted Camera access and tries to use the camera.
-The bottom navigation bar will now always remain visible when viewing bible verses.
-Fixed an issue where your last position in a Video or Audio Podcast wasn't saved.
 
 Android
-For privacy, Google Maps will no longer offer driving directions to neighborhood groups.
-Fixed an issue causing the "Take Notes" banner to appear at incorrect times. (Thanks Christopher!)
-Fixed an issue where the Loading overlay didn't cover the whole screen when logging in.
-Fixed various cosmetic issues.

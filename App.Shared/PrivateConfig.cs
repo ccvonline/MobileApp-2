@@ -22,12 +22,6 @@ namespace App.Shared
             public const string FBAppPermissions = "public_profile, user_friends, email";
 
             /// <summary>
-            /// Defined in Rock, this should NEVER change, and is the key the mobile app uses so Rock
-            /// knows who it's talking to.
-            /// </summary>
-            public const string RockMobileAppAuthorizationKey = "hWTaZ7buziBcJQH31KCm3Pzz";
-
-            /// <summary>
             /// These are values that, while generated when the Rock database is created,
             /// are extremely unlikely to ever change. If they do change, simply update them here to match
             /// Rock.

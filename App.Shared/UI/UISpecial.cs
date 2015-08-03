@@ -5,48 +5,73 @@ using App.Shared.Config;
 using App.Shared.Strings;
 using Rock.Mobile.Animation;
 using System.IO;
+using System.Collections.Generic;
 
 namespace App.Shared.UI
 {
     public class UISpecial
     {
         public PlatformView View { get; set; }
-        public PlatformImageView Image { get; set; }
+
         public PlatformButton CloseButton { get; set; }
-        public PlatformLabel Label { get; set; }
+
+        class Credit
+        {
+            public Credit( string message, string image, bool scaleImage, RectangleF frame, PlatformView parent )
+            {
+                MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( image );
+                logoStream.Position = 0;
+                Image = PlatformImageView.Create( scaleImage );
+                Image.AddAsSubview( parent.PlatformNativeObject );
+                Image.Image = logoStream;
+                Image.SizeToFit( );
+                Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+                logoStream.Dispose( );
+
+                Label = PlatformLabel.Create( );
+                Label.Text = message;
+                Label.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
+                Label.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
+                Label.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
+                Label.TextColor = ControlStylingConfig.Label_TextColor;
+                Label.Bounds = new RectangleF( 0, 0, frame.Width * .75f, 0 );
+                Label.SizeToFit( );
+                Label.AddAsSubview( parent.PlatformNativeObject );
+            }
+            
+            public PlatformImageView Image { get; set; }
+            public PlatformLabel Label { get; set; }    
+        }
+        List<Credit> Credits { get; set; }
 
         public UISpecial( )
         {
         }
 
+        public const string Trigger = "there are no easter eggs";
+
         public delegate void OnCompletion( );
         OnCompletion OnCompletionCallback;
 
-        public void Create( object masterView, string logoImageName, bool scaleImage, RectangleF frame, OnCompletion onCompletion )
+        public void Create( object masterView, bool scaleImage, RectangleF frame, OnCompletion onCompletion )
         {
             View = PlatformView.Create( );
             View.BackgroundColor = ControlStylingConfig.BackgroundColor;
             View.Frame = frame;
             View.AddAsSubview( masterView );
 
-            MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( logoImageName );
-            logoStream.Position = 0;
-            Image = PlatformImageView.Create( scaleImage );
-            Image.AddAsSubview( View.PlatformNativeObject );
-            Image.Image = logoStream;
-            Image.SizeToFit( );
-            Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
-            logoStream.Dispose( );
+            Credits = new List<Credit>();
+            Credits.Add( new Credit( "Hey you found me! I'm Jered, the mobile app developer here at CCV. Making this app was a ton of work, and couldn't have happened without the support of a ton of people!\n\nThanks so much to:\n" +
+                "Jenni, my beautiful wife and very patient app tester!\n\n" +
+                "Jon & David, for developing this app's backbone, Rock.\n\n" + 
+                "Mason & Mike for testing, end points, and endless puns! (See what I did there?)\n\n" + 
+                "Nick & Kyle for all the great artwork and design you see in this app.\n\n" +
+                "Dan & Kris Simpson for HUGE feedback, testing, and movie nights!!\n\n" +
+                "The IT boyz: Jim, `Stopher and Chris, for being extremely willing Android guinea pigs.\n\n" +
+                "Matt, Emily, Robin, Jill and Bree, for their testing and feedback.\n\n\n" +
+                "And thanks of course to all of you out there using the app and making CCV the awesome church that it is!", 
+                "me.png", scaleImage, frame, View ) );
 
-            Label = PlatformLabel.Create( );
-            Label.Text = "Hey you found me! I'm Jered, the mobile app developer here at CCV. If you see me around campus, say hi!";
-            Label.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
-            Label.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
-            Label.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
-            Label.TextColor = ControlStylingConfig.Label_TextColor;
-            Label.Bounds = new RectangleF( 0, 0, frame.Width * .75f, 0 );
-            Label.SizeToFit( );
-            Label.AddAsSubview( View.PlatformNativeObject );
 
             CloseButton = PlatformButton.Create( );
             CloseButton.AddAsSubview( View.PlatformNativeObject );
@@ -66,18 +91,29 @@ namespace App.Shared.UI
         public void Destroy( )
         {
             // clean up resources (looking at you, Android)
-            Image.Destroy( );
+            foreach ( Credit credit in Credits )
+            {
+                credit.Image.Destroy( );
+            }
         }
 
         public void LayoutChanged( RectangleF frame )
         {
             View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
 
-            Image.Frame = new RectangleF( (( View.Frame.Width - Image.Frame.Width ) / 2), Rock.Mobile.Graphics.Util.UnitToPx( 40 ), Image.Bounds.Width, Image.Frame.Height );
+            float currentYPos = Rock.Mobile.Graphics.Util.UnitToPx( 40 );
+            foreach( Credit credit in Credits )
+            {
+                credit.Image.Frame = new RectangleF( ( ( View.Frame.Width - credit.Image.Frame.Width ) / 2 ), currentYPos, credit.Image.Bounds.Width, credit.Image.Frame.Height );
 
-            Label.Frame = new RectangleF( ( ( View.Frame.Width - Label.Frame.Width ) / 2 ), Image.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 50 ), Label.Bounds.Width, Label.Bounds.Height );
+                credit.Label.Frame = new RectangleF( ( ( View.Frame.Width - credit.Label.Frame.Width ) / 2 ), credit.Image.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 50 ), credit.Label.Bounds.Width, credit.Label.Bounds.Height );
 
-            CloseButton.Frame = new RectangleF( ( ( View.Frame.Width - CloseButton.Frame.Width ) / 2 ), Label.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 25 ), CloseButton.Bounds.Width, CloseButton.Bounds.Height );
+                currentYPos = credit.Label.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 25 );
+            }
+
+            CloseButton.Frame = new RectangleF( ( ( View.Frame.Width - CloseButton.Frame.Width ) / 2 ), currentYPos, CloseButton.Bounds.Width, CloseButton.Bounds.Height );
+
+            View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, currentYPos + Rock.Mobile.Graphics.Util.UnitToPx( 150 ) );
         }
     }
 }

@@ -366,12 +366,14 @@ namespace iOS
                     SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                 }
                 // fun bonus!
-                else if ( PrayerRequest.Text.ToLower( ) == "up up down down left right left right b a start" )
+                else if ( PrayerRequest.Text.ToLower( ) == UISpecial.Trigger )
                 {
                     UISpecial special = new UISpecial();
-                    special.Create( ScrollView, "me.png", true, View.Frame.ToRectF( ), delegate { special.View.RemoveAsSubview( ScrollView ); });
+                    special.Create( ScrollView, true, View.Frame.ToRectF( ), delegate { special.View.RemoveAsSubview( ScrollView ); LayoutChanged( ); });
                     special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)View.Bounds.Width, (float)ScrollView.ContentSize.Height ) );
+
                     ScrollView.ContentOffset = CGPoint.Empty;
+                    ScrollView.ContentSize = new CGSize( View.Frame.Width, special.View.Frame.Height );
                 }
             }
         }

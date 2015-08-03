@@ -51,7 +51,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>CCV Mobile</string>
 	<key>CFBundleVersion</key>
-	<string>27</string>
+	<string>28</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

@@ -247,13 +247,7 @@ namespace Droid
 
                             sendIntent.PutExtra( Intent.ExtraSubject, MessagesStrings.Watch_Share_Subject );
 
-                            string noteString = MessagesStrings.Watch_Share_Header_Html + string.Format( MessagesStrings.Watch_Share_Body_Html, ShareUrl );
-
-                            // if they set a mobile app url, add that.
-                            if( string.IsNullOrEmpty( MessagesStrings.Watch_Mobile_App_Url ) == false )
-                            {
-                                noteString += string.Format( MessagesStrings.Watch_Share_DownloadApp_Html, MessagesStrings.Watch_Mobile_App_Url );
-                            }
+                            string noteString = MessagesStrings.Watch_Share_Header_Html + string.Format( MessagesStrings.Watch_Share_Body_Html, ShareUrl, Name );
 
                             sendIntent.PutExtra( Intent.ExtraText, Android.Text.Html.FromHtml( noteString ) );
                             sendIntent.SetType( "text/html" );

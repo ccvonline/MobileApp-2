@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Beta (Build 27)";
+                    return "Release Candidate 1 (Build 27)";
                 }
             }
         }
@@ -216,7 +216,7 @@ namespace App.Shared
 
             public const string Error_Watch_Playback = "There was a problem playing this content. Check your network settings and try again.";
 
-            public const string Watch_Share_Subject = "Check out this Video";
+            public const string Watch_Share_Subject = "Invitation: Watch this Video from " + Config.GeneralConfig.OrganizationShortName;
 
             /// <summary>
             /// Defines the share email as an html doc. Please don't change this.
@@ -226,20 +226,9 @@ namespace App.Shared
             /// <summary>
             /// The HTML that should be used in the body of the Share Video email.
             /// </summary>
-            public const string Watch_Share_Body_Html = "<p>Check out this message from CCV.\n<a href={0}>Click here to watch online.</a></p>";
-
-            /// <summary>
-            /// Set this to the URL for downloading the mobile app. It should probably point to YOUR website, where you can
-            /// determine if the user is on Android or iOS.
-            /// If you do not wish to advertise your mobile app in the share video email, leave this as an empty string.
-            /// </summary>
-            public const string Watch_Mobile_App_Url = "appstore://download.com";
-
-            /// <summary>
-            /// The text that will be used in the Share Video email to let users know they can download an app to watch the video.
-            /// Leave the above "Watch_Mobile_App_Url" EMPTY if you do not wish to include this.
-            /// </summary>
-            public const string Watch_Share_DownloadApp_Html = "<p><a href={0}>Watch it in the CCV mobile app instead.</a></p>";
+            public const string Watch_Share_Body_Html = "<p>I thought I'd share this video from " + Config.GeneralConfig.OrganizationShortName + ".</p>" + 
+                                                        "<p>Tap the link below to watch the video '{1}'</p>" + 
+                                                        "<p><a>{0}</a></p>";
 
             public const string Series_TopBanner = "This Week's Message";
 

@@ -61,7 +61,7 @@ namespace App.Shared
                             {
                                 bool result = false;
 
-                                if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                                if ( Rock.Mobile.Network.Util.StatusInSuccessRange( groupStatusCode ) == true )
                                 {
                                     result = true;
 
