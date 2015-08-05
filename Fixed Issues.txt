@@ -2,5 +2,6 @@ Both
 Fixed reading the wrong status code in GroupFinder's GetGroupByLocation response.
 
 iOS
+Fixed major layout issues caused by launching the app on an iPhone 6 Plus while in landscape.
 
 Android

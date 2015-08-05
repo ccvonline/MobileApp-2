@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Release Candidate 1 (Build 27)";
+                    return "Release Candidate 3 (Build 29)";
                 }
             }
         }
