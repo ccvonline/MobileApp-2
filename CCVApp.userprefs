@@ -1,30 +1,9 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone6.8.4" />
   <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesTask.cs">
     <Files>
-      <File FileName="iOS/Tasks/Notes/NotesTask.cs" Line="1" Column="1" />
+      <File FileName="iOS/Tasks/Notes/NotesTask.cs" Line="15" Column="9" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="CCVApp" expanded="True">
-            <Node name="App.Shared" expanded="True">
-              <Node name="UI" expanded="True" />
-            </Node>
-            <Node name="Droid" expanded="True">
-              <Node name="Properties" expanded="True" />
-            </Node>
-            <Node name="iOS" expanded="True">
-              <Node name="Tasks" expanded="True">
-                <Node name="Notes" expanded="True">
-                  <Node name="NotesTask.cs" selected="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
