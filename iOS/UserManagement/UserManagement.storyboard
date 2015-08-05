@@ -1,80 +1,102 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="292">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
-        <scene sceneID="291">
-            <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="292" customClass="LoginViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="289"/>
-                        <viewControllerLayoutGuide type="bottom" id="290"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="293">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                        </subviews>
-                        <color key="backgroundColor" red="0.062745098039215685" green="0.062745098039215685" blue="0.062745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <connections>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="294" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1672" y="-416"/>
-        </scene>
         <!--Profile View Controller-->
-        <scene sceneID="413">
-            <objects>
-                <viewController storyboardIdentifier="ProfileViewController" id="414" customClass="ProfileViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="411"/>
-                        <viewControllerLayoutGuide type="bottom" id="412"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="415">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                        </subviews>
-                        <color key="backgroundColor" red="0.062745098039215685" green="0.062745098039215685" blue="0.062745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <connections>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="416" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1184" y="-414"/>
-        </scene>
         <!--Image Crop View Controller-->
         <!--Register View Controller-->
-        <scene sceneID="510">
-            <objects>
-                <viewController storyboardIdentifier="RegisterViewController" id="511" customClass="RegisterViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="684"/>
-                        <viewControllerLayoutGuide type="bottom" id="685"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="570">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                        </subviews>
-                        <color key="backgroundColor" red="0.062745098039215685" green="0.062745098039215685" blue="0.062745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <connections>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="686" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-359" y="-406"/>
-        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <resources>
+        <image name="Fonts/Bevan.ttf" width="0" height="0"/>
+        <image name="Fonts/ChangaOne-Italic.ttf" width="0" height="0"/>
+        <image name="Fonts/ChangaOne-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/DroidSerif-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/DroidSerif-BoldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/DroidSerif-Italic.ttf" width="0" height="0"/>
+        <image name="Fonts/DroidSerif.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-Black.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-BoldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-HeavyItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-Italic.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-Light.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-LightItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/Merriweather-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/Montserrat-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/Montserrat-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-BoldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-ExtraBold.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-ExtraBoldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-Italic.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-Light.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-LightItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-Semibold.ttf" width="0" height="0"/>
+        <image name="Fonts/OpenSans-SemiboldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/PassionOne-Black.ttf" width="0" height="0"/>
+        <image name="Fonts/PassionOne-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/PassionOne-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/Quicksand-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/Quicksand-Light.ttf" width="0" height="0"/>
+        <image name="Fonts/Quicksand-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-BoldItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-Italic.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-Light.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-LightItalic.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoCondensed-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoSlab-Bold.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoSlab-Light.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoSlab-Regular.ttf" width="0" height="0"/>
+        <image name="Fonts/RobotoSlab-Thin.ttf" width="0" height="0"/>
+        <image name="Fonts/FontAwesome.ttf" width="0" height="0"/>
+        <image name="Fonts/Bh.ttf" width="0" height="0"/>
+        <image name="spot_mask.png" width="128" height="128"/>
+        <image name="facebook_login.png" width="250" height="35"/>
+        <image name="baptism_thumb.png" width="210" height="210"/>
+        <image name="starting_point_thumb.png" width="210" height="210"/>
+        <image name="placeholder_news_details.png" width="1242" height="540"/>
+        <image name="placeholder_news_main.png" width="1242" height="801"/>
+        <image name="placeholder_notes_main.png" width="750" height="422"/>
+        <image name="placeholder_notes_thumb.png" width="210" height="210"/>
+        <image name="oobe_splash_bg.png" width="1242" height="2208"/>
+        <image name="groupfinder_thumb.png" width="210" height="210"/>
+        <image name="connect_banner.png" width="768" height="432"/>
+        <image name="serve_thumb.png" width="210" height="210"/>
+        <image name="Fonts/DINOffc-CondBlack.ttf" width="0" height="0"/>
+        <image name="default_news_a_header.png" width="414" height="180"/>
+        <image name="default_news_a_main.png" width="375" height="242"/>
+        <image name="default_news_b_header.png" width="414" height="180"/>
+        <image name="default_news_b_main.png" width="375" height="242"/>
+        <image name="default_news_c_header.png" width="414" height="180"/>
+        <image name="default_news_c_main.png" width="375" height="242"/>
+        <image name="splash_logo_ipad_landscape.png" width="171" height="65"/>
+        <image name="splash_logo_ipad_portrait.png" width="171" height="65"/>
+        <image name="splash_logo_iphone4s.png" width="203" height="75"/>
+        <image name="splash_logo_iphone5.png" width="173" height="65"/>
+        <image name="splash_logo_iphone6.png" width="203" height="75"/>
+        <image name="splash_logo_iphone6p.png" width="336" height="124"/>
+        <image name="navbarLogo.png" width="57" height="32"/>
+        <image name="splash_bg_ipad_landscape_2x.png" width="2048" height="1536"/>
+        <image name="splash_bg_ipad_landscape.png" width="1024" height="768"/>
+        <image name="splash_bg_ipad_portrait_2x.png" width="1536" height="2048"/>
+        <image name="splash_bg_ipad_portrait.png" width="768" height="1024"/>
+        <image name="splash_bg_iphone4s.png" width="640" height="960"/>
+        <image name="splash_bg_iphone5.png" width="640" height="1136"/>
+        <image name="splash_bg_iphone6.png" width="750" height="1334"/>
+        <image name="splash_bg_iphone6p.png" width="1242" height="2208"/>
+        <image name="splash_logo_ipad_landscape_2x.png" width="336" height="124"/>
+        <image name="splash_logo_ipad_portrait_2x.png" width="338" height="124"/>
+        <image name="me.png" width="320" height="319"/>
+        <image name="note_tutorial.png" width="792" height="814"/>
+    </resources>
 </document>

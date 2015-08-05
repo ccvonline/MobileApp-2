@@ -18,7 +18,7 @@ using App.Shared.PrivateConfig;
 
 namespace iOS
 {
-	partial class ProfileViewController : UIViewController
+	class ProfileViewController : UIViewController
 	{
         /// <summary>
         /// Reference to the parent springboard for returning apon completion
@@ -69,7 +69,7 @@ namespace iOS
 
         UIScrollViewWrapper ScrollView { get; set; }
 
-		public ProfileViewController (IntPtr handle) : base (handle)
+		public ProfileViewController ( ) : base ( )
 		{
 		}
 
@@ -337,16 +337,27 @@ namespace iOS
                             if ( ValidateInput( ) )
                             {
                                 // if there were changes, create an action sheet for them to confirm.
-                                var actionSheet = new UIActionSheet( ProfileStrings.SubmitChangesTitle );
-                                actionSheet.AddButton( GeneralStrings.Yes );
-                                actionSheet.AddButton( GeneralStrings.No );
-                                actionSheet.AddButton( GeneralStrings.Cancel );
+                                UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.SubmitChangesTitle, 
+                                    null, 
+                                    UIAlertControllerStyle.ActionSheet );
 
-                                actionSheet.CancelButtonIndex = 2;
+                                UIAlertAction submitAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Default, delegate
+                                    {
+                                        Dirty = false; SubmitChanges( ); Springboard.ResignModelViewController( this, null );
+                                    });
+                                actionSheet.AddAction( submitAction );
 
-                                actionSheet.Clicked += SubmitActionSheetClicked;
+                                UIAlertAction noSubmitAction = UIAlertAction.Create( GeneralStrings.No, UIAlertActionStyle.Destructive, delegate
+                                    {
+                                        Dirty = false; Springboard.ResignModelViewController( this, null );
+                                    });
+                                actionSheet.AddAction( noSubmitAction );
 
-                                actionSheet.ShowInView( View );
+                                // let them cancel, too
+                                UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+                                actionSheet.AddAction( cancelAction );
+
+                                PresentViewController( actionSheet, true, null );
                             }
                         }
                         else
@@ -368,20 +379,24 @@ namespace iOS
                     if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false)
                     {
                         // if they tap logout, and confirm it
-                        var actionSheet = new UIActionSheet( ProfileStrings.LogoutTitle, null, GeneralStrings.Cancel, GeneralStrings.Yes, null );
-
-                        actionSheet.ShowInView( View );
-
-                        actionSheet.Clicked += (object s, UIButtonEventArgs ev) => 
+                        UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.LogoutTitle, 
+                            null, 
+                            UIAlertControllerStyle.ActionSheet );
+                        
+                        UIAlertAction logoutAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
                             {
-                                if( ev.ButtonIndex == actionSheet.DestructiveButtonIndex )
-                                {
-                                    // then log them out.
-                                    RockMobileUser.Instance.LogoutAndUnbind( );
+                                // then log them out.
+                                RockMobileUser.Instance.LogoutAndUnbind( );
 
-                                    Springboard.ResignModelViewController( this, null );
-                                }
-                            };
+                                Springboard.ResignModelViewController( this, null );
+                            });
+                        actionSheet.AddAction( logoutAction );
+
+                        // let them cancel, too
+                        UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+                        actionSheet.AddAction( cancelAction );
+
+                        PresentViewController( actionSheet, true, null );
                     }
                     else
                     {

@@ -27,7 +27,7 @@ namespace iOS
     /// The springboard acts as the core navigation for the user. From here
     /// they may launch any of the app's activities.
     /// </summary>
-	public partial class SpringboardViewController : UIViewController
+	public class SpringboardViewController : UIViewController
 	{
         /// <summary>
         /// Represents a selectable element on the springboard.
@@ -150,12 +150,6 @@ namespace iOS
         protected MainUINavigationController NavViewController { get; set; }
 
         /// <summary>
-        /// Storyboard for the user management area of the app (Login, Profile, etc)
-        /// </summary>
-        /// <value>The user management storyboard.</value>
-        protected UIStoryboard UserManagementStoryboard { get; set; }
-
-        /// <summary>
         /// Controller managing a user logging in or out
         /// </summary>
         /// <value>The login view controller.</value>
@@ -238,10 +232,8 @@ namespace iOS
         /// <value>The last rock sync.</value>
         DateTime LastRockSync { get; set; }
 
-		public SpringboardViewController (IntPtr handle) : base (handle)
+		public SpringboardViewController ( ) : base()
 		{
-            UserManagementStoryboard = UIStoryboard.FromName( "UserManagement", null );
-
             NavViewController = new MainUINavigationController();
             NavViewController.ParentSpringboard = this;
 
@@ -380,31 +372,46 @@ namespace iOS
         {
             base.ViewDidLoad( );
 
-            // seed the trait size with our current window size
             TraitSize = UIScreen.MainScreen.Bounds.Size;
             CurrentTraitCollection = TraitCollection;
 
+            // if we're on an iphone and they're holding it landscape, force a portrait traitsize
+            if ( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone && IsDeviceLandscape( ) )
+            {
+                UITraitCollection horzTrait = UITraitCollection.FromHorizontalSizeClass( UIUserInterfaceSizeClass.Compact );
+                UITraitCollection vertTrait = UITraitCollection.FromVerticalSizeClass( UIUserInterfaceSizeClass.Regular );
+                CurrentTraitCollection = UITraitCollection.FromTraitsFromCollections( new UITraitCollection[] { horzTrait, vertTrait } );
+
+                TraitSize = new CGSize( TraitSize.Height, TraitSize.Width );
+            }
+
+            View.Layer.AnchorPoint = CGPoint.Empty;
+            View.Bounds = new CGRect( View.Bounds.Left, View.Bounds.Top, TraitSize.Width, TraitSize.Height );
+
             // create the login controller / profile view controllers
-            LoginViewController = UserManagementStoryboard.InstantiateViewController( "LoginViewController" ) as LoginViewController;
+            LoginViewController = new LoginViewController( );
             LoginViewController.Springboard = this;
 
-            ProfileViewController = UserManagementStoryboard.InstantiateViewController( "ProfileViewController" ) as ProfileViewController;
+            ProfileViewController = new ProfileViewController( );
             ProfileViewController.Springboard = this;
 
             ImageCropViewController = new ImageCropViewController( );
             ImageCropViewController.Springboard = this;
 
-            RegisterViewController = UserManagementStoryboard.InstantiateViewController( "RegisterViewController" ) as RegisterViewController;
+            RegisterViewController = new RegisterViewController( );
             RegisterViewController.Springboard = this;
 
             OOBEViewController = new OOBEViewController( );
             OOBEViewController.Springboard = this;
+            OOBEViewController.View.Layer.Position = CGPoint.Empty;
 
             SplashViewController = new SplashViewController( );
             SplashViewController.Springboard = this;
+            SplashViewController.View.Layer.Position = CGPoint.Empty;
+
 
             ScrollView = new UIScrollViewWrapper( );
-            ScrollView.Frame = View.Frame;
+            ScrollView.Layer.AnchorPoint = CGPoint.Empty;
             ScrollView.Parent = this;
             View.AddSubview( ScrollView );
 
@@ -891,7 +898,7 @@ namespace iOS
                             CompleteOOBE( );
                         }
                         ModalControllerVisible = false;
-
+                        View.SetNeedsLayout( );
                     } );
         }
 
@@ -1043,6 +1050,8 @@ namespace iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
+
+            View.Bounds = new CGRect( View.Bounds.Left, View.Bounds.Top, TraitSize.Width, TraitSize.Height );
 
             ScrollView.Frame = View.Frame;
 

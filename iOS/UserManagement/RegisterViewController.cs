@@ -21,7 +21,7 @@ using MobileApp;
 
 namespace iOS
 {
-    partial class RegisterViewController : UIViewController
+    class RegisterViewController : UIViewController
     {
         /// <summary>
         /// Reference to the parent springboard for returning apon completion
@@ -66,7 +66,7 @@ namespace iOS
 
         UIScrollViewWrapper ScrollView { get; set; }
 
-        public RegisterViewController (IntPtr handle) : base (handle)
+        public RegisterViewController ( ) : base ( )
         {
         }
 
@@ -194,18 +194,24 @@ namespace iOS
             // On logout, make sure the user really wants to log out.
             CancelButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    // CONFIRM CANCEL
-                    var actionSheet = new UIActionSheet( RegisterStrings.ConfirmCancelReg, null, GeneralStrings.Cancel, GeneralStrings.Yes, null );
+                    // if there were changes, create an action sheet for them to confirm.
+                    UIAlertController actionSheet = UIAlertController.Create( RegisterStrings.ConfirmCancelReg, 
+                        null, 
+                        UIAlertControllerStyle.ActionSheet );
 
-                    actionSheet.ShowInView( View );
-
-                    actionSheet.Clicked += (object s, UIButtonEventArgs ev) => 
+                    UIAlertAction yesAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
                         {
-                            if( ev.ButtonIndex == actionSheet.DestructiveButtonIndex )
-                            {
-                                Springboard.ResignModelViewController( this, null );
-                            }
-                        };
+                            Springboard.ResignModelViewController( this, null );
+                        });
+                    actionSheet.AddAction( yesAction );
+
+
+                    // let them cancel, too
+                    UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+                    actionSheet.AddAction( cancelAction );
+
+                    PresentViewController( actionSheet, true, null );
+
                 };
 
             ResultView = new UIResultView( ScrollView, View.Frame.ToRectF( ), OnResultViewDone );

@@ -21,6 +21,7 @@ namespace iOS
         {
             base.ViewDidLoad();
 
+            View.Layer.AnchorPoint = CGPoint.Empty;
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
             // this is totally a hack, but in order to seamlessly transition from the splash screen
@@ -89,6 +90,8 @@ namespace iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
+
+            View.Bounds = Springboard.View.Bounds;
 
             OOBEView.LayoutChanged( View.Bounds.ToRectF( ) );
         }

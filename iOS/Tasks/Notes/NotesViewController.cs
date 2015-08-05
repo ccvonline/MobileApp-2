@@ -317,7 +317,8 @@ namespace iOS
             ResultView.Hide( );
 
             // setup the tutorial overlay
-            TutorialBacker = new UIView( View.Frame );
+            TutorialBacker = new UIView( );
+            TutorialBacker.Layer.AnchorPoint = CGPoint.Empty;
             TutorialBacker.Alpha = 0.00f;
             TutorialBacker.BackgroundColor = UIColor.Black;
             TutorialBacker.Hidden = true;
@@ -718,6 +719,8 @@ namespace iOS
 
                                     TutorialOverlay.ContentMode = UIViewContentMode.Center;
                                     TutorialOverlay.Frame = View.Frame;
+
+                                    TutorialBacker.Frame = View.Frame;
                                     TutorialBacker.Hidden = false;
 
                                     AnimateTutorialScreen( true );

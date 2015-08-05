@@ -21,7 +21,7 @@ using App.Shared.PrivateConfig;
 
 namespace iOS
 {
-	partial class LoginViewController : UIViewController
+	class LoginViewController : UIViewController
 	{
         /// <summary>
         /// Reference to the parent springboard for returning apon completion
@@ -39,7 +39,7 @@ namespace iOS
 
         WebLayout WebLayout { get; set; }
 
-		public LoginViewController (IntPtr handle) : base (handle)
+		public LoginViewController ( ) : base ( )
 		{
             // setup our timer
             LoginSuccessfulTimer = new System.Timers.Timer();

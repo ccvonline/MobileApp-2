@@ -18,10 +18,9 @@ namespace iOS
         // class-level declarations
         UIWindow window;
 
-        protected static UIStoryboard Storyboard = UIStoryboard.FromName ("MainStoryboard", null);
+        //protected static UIStoryboard Storyboard = UIStoryboard.FromName ("MainStoryboard", null);
         private SpringboardViewController Springboard { get; set; }
 
-        //
         // This method is invoked when the application has loaded and is ready to run. In this
         // method you should instantiate the window, load the UI into it and then make the window
         // visible.
@@ -30,13 +29,22 @@ namespace iOS
         //
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
-            // create a new window instance based on the screen size
-            window = new UIWindow( UIScreen.MainScreen.Bounds );
+            // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 
+            // force a portait layout.
+            if ( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone && UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width )
+            {
+                window = new UIWindow( new CoreGraphics.CGRect( 0, 0, UIScreen.MainScreen.Bounds.Height, UIScreen.MainScreen.Bounds.Width ) );
+            }
+            else
+            {
+                // for ipads or portait phones, use the default
+                window = new UIWindow( UIScreen.MainScreen.Bounds );
+            }
 			
             // If you have defined a root view controller, set it here:
-            Springboard = Storyboard.InstantiateInitialViewController() as SpringboardViewController;
+            Springboard = new SpringboardViewController( );
             window.RootViewController = Springboard;
-			
+
             // make the window visible
             window.MakeKeyAndVisible( );
 

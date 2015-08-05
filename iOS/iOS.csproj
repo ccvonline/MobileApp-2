@@ -441,9 +441,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="SpringboardViewController.cs" />
-    <Compile Include="SpringboardViewController.designer.cs">
-      <DependentUpon>SpringboardViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainUINavigationController.cs" />
     <Compile Include="ContainerViewController.cs" />
     <Compile Include="ContainerViewController.designer.cs">
@@ -462,13 +459,7 @@
     <Compile Include="Tasks\Notes\NotesTask.cs" />
     <Compile Include="Tasks\Prayer\PrayerTask.cs" />
     <Compile Include="UserManagement\LoginViewController.cs" />
-    <Compile Include="UserManagement\LoginViewController.designer.cs">
-      <DependentUpon>LoginViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserManagement\ProfileViewController.cs" />
-    <Compile Include="UserManagement\ProfileViewController.designer.cs">
-      <DependentUpon>ProfileViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tasks\News\NewsMainUIViewController.cs" />
     <Compile Include="Tasks\News\NewsMainUIViewController.designer.cs">
       <DependentUpon>NewsMainUIViewController.cs</DependentUpon>
@@ -506,9 +497,6 @@
       <DependentUpon>ConnectMainPageViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="UserManagement\RegisterViewController.cs" />
-    <Compile Include="UserManagement\RegisterViewController.designer.cs">
-      <DependentUpon>RegisterViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tasks\Connect\GroupFinderJoinViewController.cs" />
     <Compile Include="UserManagement\OOBEViewController.cs" />
     <Compile Include="Tasks\TaskUINavigationController.cs" />
@@ -520,10 +508,8 @@
   <Import Project="..\..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\..\Rock.Mobile\Rock.Mobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <InterfaceDefinition Include="MainStoryboard.storyboard" />
     <InterfaceDefinition Include="Tasks\News\NewsStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Give\GiveStoryboard_iPhone.storyboard" />
-    <InterfaceDefinition Include="UserManagement\UserManagement.storyboard" />
     <InterfaceDefinition Include="Tasks\Prayer\PrayerStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Notes\NotesStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Connect\ConnectStoryboard_iPhone.storyboard" />
@@ -575,5 +561,9 @@
     <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_landscape.png" />
     <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_landscape_2x.png" />
     <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork%402x" />
+    <ITunesArtwork Include="iTunesArtwork" />
   </ItemGroup>
 </Project>
