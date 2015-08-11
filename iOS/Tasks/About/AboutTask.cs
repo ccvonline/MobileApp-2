@@ -13,7 +13,7 @@ namespace iOS
         public AboutTask( string storyboardName ) : base( storyboardName )
         {
             string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
-            MainPageVC = new TaskWebViewController( aboutUrl, this );
+            MainPageVC = new TaskWebViewController( aboutUrl, this, true, false, true );
         }
 
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )

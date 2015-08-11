@@ -570,7 +570,7 @@ namespace iOS
 
                         DestroyNotes( );
 
-                        TaskWebViewController viewController = new TaskWebViewController( activeUrl, Task, true, true );
+                        TaskWebViewController viewController = new TaskWebViewController( activeUrl, Task, false, true, true );
                         Task.PerformSegue( this, viewController );
                     }
                 }
@@ -627,7 +627,7 @@ namespace iOS
                 // show a busy indicator
                 Indicator.StartAnimating( );
 
-                Note.TryDownloadNote( NoteUrl, StyleSheetDefaultHostDomain, delegate(bool result )
+                Note.TryDownloadNote( NoteUrl, StyleSheetDefaultHostDomain, false, delegate(bool result )
                     {
                         if( result == true )
                         {

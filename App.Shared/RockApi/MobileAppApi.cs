@@ -14,7 +14,7 @@ namespace MobileApp
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )
         {
             string oDataFilter = string.Format( "?$filter=ContentChannel/Guid eq guid'EAE51F3E-C27B-4E7C-B9A0-16EB68129637' and " +
-                "Status eq '2' and (StartDateTime le DateTime'{0}' or StartDateTime eq null) and " +
+                "(Status eq '2' or Status eq '1') and (StartDateTime le DateTime'{0}' or StartDateTime eq null) and " +
                 "(ExpireDateTime ge DateTime'{1}' or ExpireDateTime eq null)&LoadAttributes=True", 
                 DateTime.Now.ToString( "s" ), DateTime.Now.ToString( "s" ) );
 
@@ -112,6 +112,27 @@ namespace MobileApp
                             resultHandler( statusCode, statusDescription, null );
                         }
                     } );
+            }
+        }
+
+        public delegate void ImpersonationTokenResponse( string impersonationToken );
+        public static void TryGetImpersonationToken( ImpersonationTokenResponse response )
+        {
+            // if the user is logged in and has an alias ID, try to get it
+            if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
+            {
+                // make the request
+                ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.Value, 
+                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription, string impersonationToken )
+                    {
+                        // whether it succeeded or not, hand them the response
+                        response( impersonationToken );
+                    } );
+            }
+            else
+            {
+                // they didn't pass requirements, so hand back an empty string.
+                response( string.Empty );
             }
         }
 

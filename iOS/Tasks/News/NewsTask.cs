@@ -55,8 +55,8 @@ namespace iOS
                     News.Clear( );
                     foreach ( RockNews newsItem in RockLaunchData.Instance.Data.News )
                     {
-                        // only add news for "all campuses" and their selected campus.
-                        if ( newsItem.CampusGuid == Guid.Empty || newsItem.CampusGuid == viewingCampusGuid )
+                        // if the list of campus guids contains the viewing campus, OR there are no guids set, allow it.
+                        if ( newsItem.CampusGuids.Contains( viewingCampusGuid ) || newsItem.CampusGuids.Count == 0 )
                         {
                             // Limit the amount of news to display to MaxNews so we don't show so many we
                             // run out of memory

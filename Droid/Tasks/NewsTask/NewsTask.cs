@@ -6,6 +6,7 @@ using App.Shared.Network;
 using System.Collections.Generic;
 using App.Shared.Config;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace Droid
 {
@@ -65,7 +66,7 @@ namespace Droid
                             foreach ( RockNews newsItem in RockLaunchData.Instance.Data.News )
                             {
                                 // only add news for "all campuses" and their selected campus.
-                                if ( newsItem.CampusGuid == Guid.Empty || newsItem.CampusGuid == viewingCampusGuid )
+                                if ( newsItem.CampusGuids.Contains( viewingCampusGuid ) || newsItem.CampusGuids.Count == 0 )
                                 {
                                     // Limit the amount of news to display to MaxNews so we don't show so many we
                                     // run out of memory
@@ -124,8 +125,47 @@ namespace Droid
                             // otherwise visit the reference URL
                             if ( buttonId == Resource.Id.news_details_launch_url )
                             {
-                                WebFragment.DisplayUrl( DetailsPage.NewsItem.ReferenceURL );
-                                PresentFragment( WebFragment, true );
+                                // are we launching a seperate browser?
+                                if ( DetailsPage.NewsItem.ReferenceUrlLaunchesBrowser == true )
+                                {
+                                    // do they also want the impersonation token?
+                                    if ( DetailsPage.NewsItem.IncludeImpersonationToken )
+                                    {
+                                        // try to get it
+                                        MobileAppApi.TryGetImpersonationToken(
+                                            delegate( string impersonationToken )
+                                            {
+                                                string fullUrl = DetailsPage.NewsItem.ReferenceURL;
+
+                                                // if we got the token, append it
+                                                if( string.IsNullOrEmpty( impersonationToken ) == false )
+                                                {
+                                                    fullUrl += "&" + impersonationToken;
+                                                }
+
+                                                // now fire off an intent.
+                                                Android.Net.Uri uri = Android.Net.Uri.Parse( fullUrl );
+
+                                                var intent = new Intent( Intent.ActionView, uri ); 
+                                                ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                                            } );
+                                        
+                                    }
+                                    else
+                                    {
+                                        // pretty easy, just fire off an intent.
+                                        Android.Net.Uri uri = Android.Net.Uri.Parse( DetailsPage.NewsItem.ReferenceURL );
+
+                                        var intent = new Intent( Intent.ActionView, uri ); 
+                                        ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                                    }
+                                }
+                                else
+                                {
+                                    // otherwise we're not, so its simpler
+                                    WebFragment.DisplayUrl( DetailsPage.NewsItem.ReferenceURL, DetailsPage.NewsItem.IncludeImpersonationToken );
+                                    PresentFragment( WebFragment, true );
+                                }
                             }
                         }
                     }

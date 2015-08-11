@@ -1,12 +1,54 @@
-﻿<Properties StartupItem="iOS/iOS.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone6.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesTask.cs">
-    <Files>
-      <File FileName="iOS/Tasks/Notes/NotesTask.cs" Line="15" Column="9" />
-    </Files>
+﻿<Properties StartupItem="Droid/Droid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="Android.192.168.57.101:5555" />
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CCVApp" expanded="True">
+            <Node name="App.Shared" expanded="True">
+              <Node name="RockApi" expanded="True" />
+              <Node name="Config.cs" selected="True" />
+            </Node>
+            <Node name="Droid" expanded="True">
+              <Node name="Tasks" expanded="True">
+                <Node name="AboutTask" expanded="True" />
+                <Node name="ConnectTask" expanded="True" />
+                <Node name="GiveTask" expanded="True" />
+                <Node name="NewsTask" expanded="True" />
+                <Node name="NotesTask" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="iOS" expanded="True">
+              <Node name="Tasks" expanded="True">
+                <Node name="About" expanded="True" />
+                <Node name="Connect" expanded="True" />
+                <Node name="News" expanded="True" />
+                <Node name="Notes" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="Rock.Mobile" expanded="True">
+              <Node name="Graphics" expanded="True" />
+              <Node name="Network" expanded="True" />
+              <Node name="PlatformSpecific" expanded="True">
+                <Node name="Android" expanded="True" />
+                <Node name="iOS" expanded="True" />
+              </Node>
+              <Node name="Util" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>item.AttributeValues["Campuses"]</Value>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/jered/Projects/Professional/CCV/MobileApp/Droid/Tasks/AboutTask/AboutTask.cs" line="35" column="40" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="App.Shared/Notes/Controls/Note.cs" line="533" offsetX="1058" offsetY="7980" expression="state" liveUpdate="False" />

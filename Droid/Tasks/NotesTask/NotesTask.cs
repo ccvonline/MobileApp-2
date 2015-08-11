@@ -168,7 +168,7 @@ namespace Droid
                         {
                             // the context is the activeURL to visit.
                             WebViewPage.DisableIdleTimer = true;
-                            WebViewPage.DisplayUrl( (string)context );
+                            WebViewPage.DisplayUrl( (string)context, false );
 
                             PresentFragment( WebViewPage, true );
                         }

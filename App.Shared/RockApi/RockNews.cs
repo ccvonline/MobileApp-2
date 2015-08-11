@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace App
 {
@@ -22,14 +23,31 @@ namespace App
                 public string HeaderImageURL { get; set; }
                 public string HeaderImageName { get; set; }
 
-                public Guid CampusGuid { get; set; }
+                public bool ReferenceUrlLaunchesBrowser { get; set; }
+
+                public bool IncludeImpersonationToken { get; set; }
+
+                public List<Guid> CampusGuids { get; set; }
 
                 [JsonConstructor]
-                public RockNews( string title, string description, string referenceUrl, string imageUrl, string imageName, string headerImageUrl, string headerImageName, Guid campusGuid )
+                public RockNews( string title, 
+                                 string description, 
+                                 string referenceUrl, 
+                                 bool referenceUrlLaunchesBrowser, 
+                                 bool includeImpersonationToken, 
+                                 string imageUrl, 
+                                 string imageName, 
+                                 string headerImageUrl, 
+                                 string headerImageName, 
+                                 List<Guid> campusGuids )
                 {
                     Title = title;
                     Description = description;
                     ReferenceURL = referenceUrl;
+
+                    ReferenceUrlLaunchesBrowser = referenceUrlLaunchesBrowser;
+
+                    IncludeImpersonationToken = includeImpersonationToken;
 
                     ImageURL = imageUrl;
                     ImageName = imageName;
@@ -37,7 +55,7 @@ namespace App
                     HeaderImageURL = headerImageUrl;
                     HeaderImageName = headerImageName;
 
-                    CampusGuid = campusGuid;
+                    CampusGuids = campusGuids;
                 }
 
                 // create a copy constructor
@@ -47,13 +65,17 @@ namespace App
                     Description = rhs.Description;
                     ReferenceURL = rhs.ReferenceURL;
 
+                    ReferenceUrlLaunchesBrowser = rhs.ReferenceUrlLaunchesBrowser;
+
+                    IncludeImpersonationToken = rhs.IncludeImpersonationToken;
+
                     ImageURL = rhs.ImageURL;
                     ImageName = rhs.ImageName;
 
                     HeaderImageURL = rhs.HeaderImageURL;
                     HeaderImageName = rhs.HeaderImageName;
 
-                    CampusGuid = rhs.CampusGuid;
+                    CampusGuids = rhs.CampusGuids;
                 }
             }
         }

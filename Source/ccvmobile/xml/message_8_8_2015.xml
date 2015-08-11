@@ -10,7 +10,7 @@
     
     <P MarginTop="5%" FontName="OpenSans-Bold">What happens when fear overcomes faith?</P>
     
-    <L MarginTop="5%">
+    <L Type="Numbered" MarginTop="5%">
         <LI>
             <P>We rely totally on <RB>HUMAN</RB> wisdom.</P>
             <Q Citation="Numbers 13:28" Url="https://www.bible.com/bible/111/num.13.26-33.niv">
@@ -54,7 +54,7 @@
     
     <P MarginTop="5%" FontName="OpenSans-Bold">What happens when faith overcomes fear?</P>
     
-    <L MarginTop="5%">
+    <L Type="Numbered" MarginTop="5%">
         <LI>
             <P>We stand up for what is <RB>RIGHT.</RB></P>
             <Q Citation="Daniel 3:12" Url="https://www.bible.com/bible/111/dan.3.niv">

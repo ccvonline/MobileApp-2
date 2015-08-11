@@ -20,6 +20,7 @@ using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
+using Rock.Mobile.PlatformSpecific.Util;
 
 namespace iOS
 {
@@ -929,35 +930,26 @@ namespace iOS
                 // trigger the Give analytic
                 GiveAnalytic.Instance.Trigger( GiveAnalytic.Give );
 
-                // if they're logged in and have a primary alias ID (if they're logged in they certainly SHOULD), get their impersonation token before continuing.
-                // this will let the page pre-fill their data.
-                if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
-                {
-                    ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.Value, 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, string impersonationToken )
+                MobileAppApi.TryGetImpersonationToken( 
+                    delegate(string impersonationToken )
+                    {
+                        // URL encode the givingUrl
+                        NSString displayUrl = GiveConfig.GiveUrl.UrlEncode( );
+                        NSUrl encodedUrl = null;
+
+                        // if we got a token, append it
+                        if( string.IsNullOrEmpty( impersonationToken ) == false )
                         {
-                            // did we get a successful response with a giving token?
-                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) && string.IsNullOrEmpty( impersonationToken ) == false )
-                            {
-                                // URL encode the givingUrl
-                                NSString displayUrl = new NSString( GiveConfig.GiveUrl );
-                                NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
-                                NSUrl encodedUrl = new NSUrl( encodedString + "&" + impersonationToken );
+                            encodedUrl = new NSUrl( displayUrl + "&" + impersonationToken );
+                        }
+                        else
+                        {
+                            encodedUrl = new NSUrl( displayUrl );
+                        }
 
-                                UIApplication.SharedApplication.OpenUrl( encodedUrl );
-                            }
-                        } );
-                }
-                // we don't have access to a giving token, so just kick them over
-                else
-                {
-                    // URL encode the givingUrl
-                    NSString displayUrl = new NSString( GiveConfig.GiveUrl );
-                    NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
-                    NSUrl encodedUrl = new NSUrl( encodedString );
-
-                    UIApplication.SharedApplication.OpenUrl( encodedUrl );
-                }
+                        // launch them over
+                        UIApplication.SharedApplication.OpenUrl( encodedUrl );
+                    } );
             }
             else
             {

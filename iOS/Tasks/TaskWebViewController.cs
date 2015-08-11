@@ -8,6 +8,7 @@ using App.Shared.Strings;
 using App.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Util;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace iOS
 {
@@ -151,12 +152,15 @@ namespace iOS
 
         bool NavbarAlwaysVisible { get; set; }
 
-        public TaskWebViewController ( string displayUrl, Task parentTask, bool disableIdleTimer = false, bool navbarAlwaysVisible = false ) : base ( )
+        bool IncludeImpersonationToken { get; set; }
+
+        public TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool navbarAlwaysVisible ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
             DisableIdleTimer = disableIdleTimer;
             NavbarAlwaysVisible = navbarAlwaysVisible;
+            IncludeImpersonationToken = includeImpersonationToken;
 		}
 
         public override void ViewDidLoad()
@@ -179,11 +183,42 @@ namespace iOS
             ActivityIndicator.StartAnimating( );
             View.AddSubview( ActivityIndicator );
 
-            // URL encode the DisplayUrl
-            NSString displayUrl = new NSString( DisplayUrl );
-            NSString encodedString = displayUrl.CreateStringByAddingPercentEscapes( NSStringEncoding.ASCIIStringEncoding );
-            NSUrl encodedUrl = new NSUrl( encodedString );
+            ActivityIndicator.Hidden = false;
 
+            // URL encode the DisplayUrl
+            NSString encodedUrlString = DisplayUrl.UrlEncode( );
+
+
+            // do we need an impersonation token?
+            if ( IncludeImpersonationToken )
+            {
+                MobileAppApi.TryGetImpersonationToken( 
+                    delegate( string impersonationToken )
+                    {
+                        NSUrl encodedUrl = null;
+
+                        // append it and launch the view if it came back
+                        if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                        {
+                            encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
+                        }
+                        else
+                        {
+                            encodedUrl = new NSUrl( encodedUrlString );
+                        }
+
+                        LaunchWebview( encodedUrl );
+                    } );
+            }
+            else
+            {
+                NSUrl encodedUrl = new NSUrl( encodedUrlString );
+                LaunchWebview( encodedUrl );
+            }
+        }
+
+        void LaunchWebview( NSUrl encodedUrl )
+        {
             // setup a result view in the case of failure
             ResultView = new UIResultView( View, View.Bounds.ToRectF( ), 
                 delegate 
@@ -192,27 +227,23 @@ namespace iOS
                     ActivityIndicator.Hidden = false;
                     WebView.LoadRequest( new NSUrlRequest( encodedUrl ) ); 
                 } );
-            
-
-            // kick off our initial request
-            ActivityIndicator.Hidden = false;
 
             WebView.LoadRequest( new NSUrlRequest( encodedUrl ) );
 
             // if it fails, display the result view
             WebView.LoadError += (object sender, UIWebErrorArgs e ) =>
-            {
-                ResultView.Show( GeneralStrings.Network_Status_FailedText, PrivateControlStylingConfig.Result_Symbol_Failed, GeneralStrings.Network_Result_FailedText, GeneralStrings.Retry );
-                ActivityIndicator.Hidden = true;
-            };
+                {
+                    ResultView.Show( GeneralStrings.Network_Status_FailedText, PrivateControlStylingConfig.Result_Symbol_Failed, GeneralStrings.Network_Result_FailedText, GeneralStrings.Retry );
+                    ActivityIndicator.Hidden = true;
+                };
 
             // if it succeeds, reveal the webView
             WebView.LoadFinished += (object sender, EventArgs e ) =>
-            {
-                ResultView.Hide( );
-                WebView.Hidden = false;
-                ActivityIndicator.Hidden = true;
-            };
+                {
+                    ResultView.Hide( );
+                    WebView.Hidden = false;
+                    ActivityIndicator.Hidden = true;
+                };
 
             // not 100% sure that this is safe. If WebView sets the scrollView delegate and doesn't back ours up
             // (which it SHOULD) we won't get our calls
@@ -290,7 +321,11 @@ namespace iOS
 
             WebView.Bounds = View.Bounds;
 
-            ResultView.SetBounds( WebView.Bounds.ToRectF( ) );
+            // this could be null if we are waiting for the impersonation token response
+            if ( ResultView != null )
+            {
+                ResultView.SetBounds( WebView.Bounds.ToRectF( ) );
+            }
 
             ActivityIndicator.Frame = new CGRect( ( View.Bounds.Width - ActivityIndicator.Bounds.Width ) / 2, 
                                                   ( View.Bounds.Height - ActivityIndicator.Bounds.Height ) / 2,

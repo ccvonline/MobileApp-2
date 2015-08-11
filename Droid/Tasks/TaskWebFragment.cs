@@ -18,6 +18,7 @@ using App.Shared.Strings;
 using Rock.Mobile.PlatformSpecific.Android.UI;
 using App.Shared.UI;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace Droid
 {
@@ -90,7 +91,7 @@ namespace Droid
                 ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
             }
 
-            public void DisplayUrl( string url )
+            public void DisplayUrl( string url, bool includeImpersonationToken )
             {
                 Url = url;
 
@@ -102,7 +103,30 @@ namespace Droid
                         {
                             if ( string.IsNullOrEmpty( Url ) == false )
                             {
-                                WebLayout.LoadUrl( Url, PageLoaded );
+                                // do they want the impersonation token?
+                                if ( includeImpersonationToken )
+                                {
+                                    // try to get it
+                                    MobileAppApi.TryGetImpersonationToken( 
+                                        delegate( string impersonationToken )
+                                        {
+                                            // if we got it, append it and load
+                                            if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                                            {
+                                                WebLayout.LoadUrl( Url + "&" + impersonationToken, PageLoaded );
+                                            }
+                                            else
+                                            {
+                                                // otherwise just load
+                                                WebLayout.LoadUrl( Url, PageLoaded );
+                                            }
+                                        });
+                                }
+                                else
+                                {
+                                    // no impersonation token requested. just load.
+                                    WebLayout.LoadUrl( Url, PageLoaded );
+                                }
                             }
                         } );
                 }

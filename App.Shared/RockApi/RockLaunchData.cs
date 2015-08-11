@@ -32,7 +32,7 @@ namespace App
                     public LaunchData( )
                     {
                         //ALWAYS INCREMENT THIS IF UPDATING THE MODEL
-                        ClientModelVersion = 0;
+                        ClientModelVersion = 1;
                         //
 
                         GeneralDataServerTime = DateTime.MinValue;
@@ -49,13 +49,16 @@ namespace App
 
                             NewsConfig.DefaultNews_A[ 2 ],
 
+                            false,
+                            false,
+
                             "",
                             NewsConfig.DefaultNews_A[ 3 ],
 
                             "",
                             NewsConfig.DefaultNews_A[ 4 ],
 
-                            System.Guid.Empty ) );
+                            new List<System.Guid>( ) ) );
 
                         DefaultNews.Add( new RockNews( 
                             NewsConfig.DefaultNews_B[ 0 ], 
@@ -64,13 +67,16 @@ namespace App
 
                             NewsConfig.DefaultNews_B[ 2 ],
 
+                            false,
+                            false,
+
                             "",
                             NewsConfig.DefaultNews_B[ 3 ],
 
                             "",
                             NewsConfig.DefaultNews_B[ 4 ],
 
-                            System.Guid.Empty ) );
+                            new List<System.Guid>( ) ) );
 
 
                         DefaultNews.Add( new RockNews( 
@@ -80,13 +86,16 @@ namespace App
 
                             NewsConfig.DefaultNews_C[ 2 ],
 
+                            false,
+                            false,
+
                             "",
                             NewsConfig.DefaultNews_C[ 3 ],
 
                             "",
                             NewsConfig.DefaultNews_C[ 4 ],
 
-                            System.Guid.Empty ) );
+                            new List<System.Guid>( ) ) );
                     }
 
                     /// <summary>
@@ -172,6 +181,7 @@ namespace App
                     /// Private to the client, this should be updated if the model
                     /// changes at all, so that we don't attempt to load an older one when upgrading the app.
                     /// </summary>
+                    [JsonProperty]
                     public int ClientModelVersion { get; protected set; }
                 }
                 public LaunchData Data { get; set; }
@@ -261,23 +271,50 @@ namespace App
                                     // parse and take the new items
                                     foreach( Rock.Client.ContentChannelItem item in model )
                                     {
-                                        // it's possible rock sent us bad data, so guard against any incomplete news items
-                                        if( item.AttributeValues != null )
+                                        // only accept approved items, OR pending IF DEVELOPER MODE IS ON.
+                                        if( item.Status == Rock.Client.Enums.ContentChannelItemStatus.Approved ||
+                                            (item.Status == Rock.Client.Enums.ContentChannelItemStatus.PendingApproval && RockGeneralData.Instance.Data.DeveloperModeEnabled == true ) )
                                         {
-                                            string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
-                                            string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
+                                            // it's possible rock sent us bad data, so guard against any incomplete news items
+                                            if( item.AttributeValues != null )
+                                            {
+                                                string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
+                                                string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
 
-                                            string bannerGuid = item.AttributeValues[ "PromotionImage" ].Value;
-                                            string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
+                                                string bannerGuid = item.AttributeValues[ "PromotionImage" ].Value;
+                                                string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
 
-                                            string detailUrl = item.AttributeValues[ "DetailsURL" ].Value;
+                                                string detailUrl = item.AttributeValues[ "DetailsURL" ].Value;
 
-                                            // take either the campus guid or empty, if there is no campus assigned (meaning the news should be displayed for ALL campuses)
-                                            string guidStr = item.AttributeValues[ "Campus" ].Value;
-                                            Guid campusGuid = string.IsNullOrEmpty( guidStr ) == false ? new Guid( guidStr ) : Guid.Empty;
+                                                bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ "DetailsURLLaunchesBrowser" ].Value );
 
-                                            RockNews newsItem = new RockNews( item.Title, item.Content, detailUrl, imageUrl, item.Title + "_main.png", bannerUrl, item.Title + "_banner.png", campusGuid );
-                                            Data.News.Add( newsItem );
+                                                bool includeImpersonationToken = bool.Parse( item.AttributeValues[ "IncludeImpersonationToken" ].Value );
+
+                                                // take a list of the campuses that this news item should display for
+                                                // (if the list is blank, we'll show it for all campuses)
+                                                List<Guid> campusGuids = new List<Guid>( );
+                                                if( item.AttributeValues[ "Campuses" ] != null && string.IsNullOrEmpty( item.AttributeValues[ "Campuses" ].Value ) == false )
+                                                {
+                                                    // this will be a comma-dilimited list of campuses to use for the news
+                                                    string[] campusGuidList = item.AttributeValues[ "Campuses" ].Value.Split( ',' );
+                                                    foreach( string campusGuid in campusGuidList )
+                                                    {
+                                                        campusGuids.Add( Guid.Parse( campusGuid ) );
+                                                    }
+                                                }
+
+                                                RockNews newsItem = new RockNews( item.Title, 
+                                                                                  item.Content, 
+                                                                                  detailUrl, 
+                                                                                  detailUrlLaunchesBrowser,
+                                                                                  includeImpersonationToken,
+                                                                                  imageUrl, 
+                                                                                  item.Title + "_main.png", 
+                                                                                  bannerUrl, 
+                                                                                  item.Title + "_banner.png", 
+                                                                                  campusGuids );
+                                                Data.News.Add( newsItem );
+                                            }
                                         }
                                     }
                                 }
@@ -318,7 +355,7 @@ namespace App
                                 if( Data.NoteDB.SeriesList[ 0 ].Messages.Count > 0 && 
                                     string.IsNullOrEmpty( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl ) == false )
                                 {
-                                    App.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, Data.NoteDB.HostDomain, delegate
+                                    App.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, Data.NoteDB.HostDomain, true, delegate
                                         {
                                             RequestingNoteDB = false;
 

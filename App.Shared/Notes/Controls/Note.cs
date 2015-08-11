@@ -89,32 +89,17 @@ namespace App
                 protected DisplayMessageBoxDelegate RequestDisplayMessageBox { get; set; }
 
                 /// <summary>
-                /// When true we're waiting for our timer to tick and load notes.
-                /// This prevents the note state from being overwritten by the notes reloading
-                /// while the timer is still pending
-                /// </summary>
-                /// <value><c>true</c> if loading note state; otherwise, <c>false</c>.</value>
-                //protected bool LoadingNoteState { get; set; }
-
-                /// <summary>
-                /// To speed up note generation, we delay note state loading with a timer.
-                /// This allows the notes to draw and then the 500ms file i/o to occur after.
-                /// </summary>
-                /// <value>The load state timer.</value>
-                //protected System.Timers.Timer LoadStateTimer { get; set; }
-
-                /// <summary>
                 /// Attempt to download the note and its style sheet. If they are already downloaded, the completion delegate will be called immediately.
                 /// </summary>
                 public delegate void OnTryDownloadComplete( bool result );
-                public static void TryDownloadNote( string noteUrl, string styleSheetDefaultHostDomain, OnTryDownloadComplete complete )
+                public static void TryDownloadNote( string noteUrl, string styleSheetDefaultHostDomain, bool forceDownload, OnTryDownloadComplete complete )
                 {
                     // see if the note is already downloaded
                     string noteFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( noteUrl );
                     MemoryStream noteData = (MemoryStream)FileCache.Instance.LoadFile( noteFileName );
 
-                    // if not, download it.
-                    if ( noteData == null )
+                    // if not, download it, OR, if we're forcing a download (we do this at launch to ensure it's updated)
+                    if ( noteData == null || forceDownload == true )
                     {
                         try
                         {
