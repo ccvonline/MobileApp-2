@@ -196,6 +196,8 @@ namespace iOS
                     // don't allow multiple pickers
                     if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false )
                     {
+                        HideKeyboard( );   
+                        
                         // if they have a gender selected, default to that.
                         if( string.IsNullOrEmpty( Gender.Field.Text ) == false )
                         {
@@ -221,6 +223,8 @@ namespace iOS
                     // don't allow multiple pickers
                     if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false )
                     {
+                        HideKeyboard( );
+
                         // setup the default date time to display
                         DateTime initialDate = DateTime.Now;
                         if( string.IsNullOrEmpty( Birthdate.Field.Text ) == false )
@@ -341,6 +345,12 @@ namespace iOS
                                     null, 
                                     UIAlertControllerStyle.ActionSheet );
 
+                                if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                                {
+                                    actionSheet.PopoverPresentationController.SourceView = DoneButton;
+                                    actionSheet.PopoverPresentationController.SourceRect = DoneButton.Bounds;
+                                }
+
                                 UIAlertAction submitAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Default, delegate
                                     {
                                         Dirty = false; SubmitChanges( ); Springboard.ResignModelViewController( this, null );
@@ -382,6 +392,12 @@ namespace iOS
                         UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.LogoutTitle, 
                             null, 
                             UIAlertControllerStyle.ActionSheet );
+
+                        if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                        {
+                            actionSheet.PopoverPresentationController.SourceView = LogoutButton;
+                            actionSheet.PopoverPresentationController.SourceRect = LogoutButton.Bounds;
+                        }
                         
                         UIAlertAction logoutAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
                             {
@@ -619,21 +635,26 @@ namespace iOS
             {
                 base.TouchesEnded( touches, evt );
             
-                // if they tap somewhere outside of the text fields, 
-                // hide the keyboard
-                TextFieldShouldReturn( NickName.Field );
-                TextFieldShouldReturn( LastName.Field );
-
-                TextFieldShouldReturn( CellPhone.Field );
-                TextFieldShouldReturn( Email.Field );
-
-                TextFieldShouldReturn( Street.Field );
-                TextFieldShouldReturn( City.Field );
-                TextFieldShouldReturn( State.Field );
-                TextFieldShouldReturn( Zip.Field );
-
-                TextFieldShouldReturn( Birthdate.Field );
+                HideKeyboard( );
             }
+        }
+
+        void HideKeyboard( )
+        {
+            // if they tap somewhere outside of the text fields, 
+            // hide the keyboard
+            TextFieldShouldReturn( NickName.Field );
+            TextFieldShouldReturn( LastName.Field );
+
+            TextFieldShouldReturn( CellPhone.Field );
+            TextFieldShouldReturn( Email.Field );
+
+            TextFieldShouldReturn( Street.Field );
+            TextFieldShouldReturn( City.Field );
+            TextFieldShouldReturn( State.Field );
+            TextFieldShouldReturn( Zip.Field );
+
+            TextFieldShouldReturn( Birthdate.Field );
         }
 
         public override void ViewDidAppear(bool animated)

@@ -199,6 +199,12 @@ namespace iOS
                         null, 
                         UIAlertControllerStyle.ActionSheet );
 
+                    if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                    {
+                        actionSheet.PopoverPresentationController.SourceView = CancelButton;
+                        actionSheet.PopoverPresentationController.SourceRect = CancelButton.Bounds;
+                    }
+
                     UIAlertAction yesAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
                         {
                             Springboard.ResignModelViewController( this, null );

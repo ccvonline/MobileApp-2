@@ -39,6 +39,8 @@ namespace iOS
 
         WebLayout WebLayout { get; set; }
 
+        UIScrollViewWrapper ScrollView { get; set; }
+
 		public LoginViewController ( ) : base ( )
 		{
             // setup our timer
@@ -66,9 +68,12 @@ namespace iOS
         StyledTextField PasswordField { get; set; }
 
         UIButton LoginButton { get; set; }
-        UIButton RegisterButton { get; set; }
 
+        UILabel AdditionalOptions { get; set; }
+        UIButton RegisterButton { get; set; }
+        UILabel OrSpacerLabel { get; set; }
         UIButton FacebookLogin { get; set; }
+
         UIButton CancelButton { get; set; }
 
         StyledTextField LoginResult { get; set; }
@@ -83,8 +88,14 @@ namespace iOS
 
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
+            ScrollView = new UIScrollViewWrapper();
+            ScrollView.Parent = this;
+            ScrollView.Layer.AnchorPoint = CGPoint.Empty;
+            ScrollView.Bounds = View.Bounds;
+            View.AddSubview( ScrollView );
+
             UserNameField = new StyledTextField();
-            View.AddSubview( UserNameField.Background );
+            ScrollView.AddSubview( UserNameField.Background );
 
             UserNameField.Field.AutocapitalizationType = UITextAutocapitalizationType.None;
             UserNameField.Field.AutocorrectionType = UITextAutocorrectionType.No;
@@ -99,7 +110,7 @@ namespace iOS
                 };
 
             PasswordField = new StyledTextField();
-            View.AddSubview( PasswordField.Background );
+            ScrollView.AddSubview( PasswordField.Background );
             PasswordField.Field.AutocorrectionType = UITextAutocorrectionType.No;
             PasswordField.Field.SecureTextEntry = true;
 
@@ -115,7 +126,7 @@ namespace iOS
 
             // obviously attempt a login if login is pressed
             LoginButton = UIButton.FromType( UIButtonType.System );
-            View.AddSubview( LoginButton );
+            ScrollView.AddSubview( LoginButton );
             ControlStyling.StyleButton( LoginButton, LoginStrings.LoginButton, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             LoginButton.SizeToFit( );
             LoginButton.TouchUpInside += (object sender, EventArgs e) => 
@@ -132,9 +143,24 @@ namespace iOS
                     }
                 };
 
+            AdditionalOptions = new UILabel( );
+            ScrollView.AddSubview( AdditionalOptions );
+            ControlStyling.StyleUILabel( AdditionalOptions, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+            AdditionalOptions.Text = LoginStrings.AdditionalOptions;
+            AdditionalOptions.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
+            AdditionalOptions.SizeToFit( );
+
+            OrSpacerLabel = new UILabel( );
+            ScrollView.AddSubview( OrSpacerLabel );
+            ControlStyling.StyleUILabel( OrSpacerLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+            OrSpacerLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
+            OrSpacerLabel.Text = LoginStrings.OrString;
+            OrSpacerLabel.SizeToFit( );
+
             RegisterButton = UIButton.FromType( UIButtonType.System );
-            View.AddSubview( RegisterButton );
+            ScrollView.AddSubview( RegisterButton );
             ControlStyling.StyleButton( RegisterButton, LoginStrings.RegisterButton, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+            //RegisterButton.BackgroundColor = UIColor.Clear;
             RegisterButton.SizeToFit( );
             RegisterButton.TouchUpInside += (object sender, EventArgs e ) =>
                 {
@@ -143,7 +169,7 @@ namespace iOS
 
             // setup the result
             LoginResult = new StyledTextField( );
-            View.AddSubview( LoginResult.Background );
+            ScrollView.AddSubview( LoginResult.Background );
 
             ControlStyling.StyleTextField( LoginResult.Field, "", ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             ControlStyling.StyleBGLayer( LoginResult.Background );
@@ -152,7 +178,7 @@ namespace iOS
 
             // setup the facebook button
             FacebookLogin = new UIButton( );
-            View.AddSubview( FacebookLogin );
+            ScrollView.AddSubview( FacebookLogin );
             string imagePath = NSBundle.MainBundle.BundlePath + "/" + "facebook_login.png";
             FBImageView = new UIImageView( new UIImage( imagePath ) );
 
@@ -168,8 +194,8 @@ namespace iOS
 
             // If cancel is pressed, notify the springboard we're done.
             CancelButton = UIButton.FromType( UIButtonType.System );
-            View.AddSubview( CancelButton );
-            CancelButton.SetTitleColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ), UIControlState.Normal );
+            ScrollView.AddSubview( CancelButton );
+            CancelButton.SetTitleColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor ), UIControlState.Normal );
             CancelButton.SetTitle( GeneralStrings.Cancel, UIControlState.Normal );
             CancelButton.SizeToFit( );
             CancelButton.TouchUpInside += (object sender, EventArgs e) => 
@@ -198,16 +224,29 @@ namespace iOS
         {
             base.ViewDidLayoutSubviews( );
 
-            UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .25f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
+            ScrollView.Layer.Position = new CGPoint( 0, HeaderView.Frame.Bottom );
+            ScrollView.Bounds = View.Bounds;
+
+            UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .10f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
             PasswordField.SetFrame( new CGRect( UserNameField.Background.Frame.Left, UserNameField.Background.Frame.Bottom, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
 
-            LoginButton.Frame = new CGRect( View.Frame.Left + 10, PasswordField.Background.Frame.Bottom + 20, View.Bounds.Width / 2 - 10, ControlStyling.ButtonHeight );
-
-            RegisterButton.Frame = new CGRect( View.Frame.Right - View.Bounds.Width / 2 + 10, PasswordField.Background.Frame.Bottom + 20, View.Bounds.Width / 2 - 20, ControlStyling.ButtonHeight );
-
+            //LoginButton.Frame = new CGRect( View.Frame.Left + 10, PasswordField.Background.Frame.Bottom + 20, View.Bounds.Width / 2 - 10, ControlStyling.ButtonHeight );
+            LoginButton.Frame = new CGRect( ( ScrollView.Bounds.Width - LoginButton.Bounds.Width) / 2, PasswordField.Background.Frame.Bottom + 20, FBImageView.Bounds.Width * 2, ControlStyling.ButtonHeight );
             LoginResult.SetFrame( new CGRect( UserNameField.Background.Frame.Left, LoginButton.Frame.Bottom + 20, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
 
-            FacebookLogin.Frame = new CGRect( -2, LoginResult.Background.Frame.Bottom + 20, View.Frame.Width + 4, ControlStyling.ButtonHeight );
+
+
+            AdditionalOptions.Frame = new CGRect( (View.Bounds.Width - AdditionalOptions.Bounds.Width) / 2, LoginResult.Background.Frame.Bottom + 10, AdditionalOptions.Bounds.Width, ControlStyling.ButtonHeight );
+
+
+            // setup the "Register or Facebook"
+            //nfloat combinedWidth = RegisterButton.Bounds.Width + OrSpacerLabel.Bounds.Width + FacebookLogin.Bounds.Width;
+
+            RegisterButton.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, AdditionalOptions.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
+            OrSpacerLabel.Frame = new CGRect( (View.Bounds.Width - OrSpacerLabel.Bounds.Width) / 2, RegisterButton.Frame.Bottom + 5, OrSpacerLabel.Bounds.Width, FBImageView.Bounds.Height );
+            FacebookLogin.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, OrSpacerLabel.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
+
+            //
 
             CancelButton.Frame = new CGRect( ( View.Frame.Width - CancelButton.Frame.Width ) / 2, FacebookLogin.Frame.Bottom + 20, CancelButton.Frame.Width, CancelButton.Frame.Height );
 
@@ -230,6 +269,8 @@ namespace iOS
             }
 
             BlockerView.SetBounds( View.Frame.ToRectF( ) );
+
+            ScrollView.ContentSize = new CGSize( View.Bounds.Width, Math.Max( View.Bounds.Height * 1.02f, CancelButton.Frame.Bottom + 20 + HeaderView.Bounds.Height ) );
         }
 
         public override void ViewWillAppear(bool animated)

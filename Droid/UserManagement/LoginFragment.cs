@@ -117,6 +117,16 @@ namespace Droid
                     SpringboardParent.ModalFragmentDone( null );
                 };
 
+
+            TextView additionalOptions = view.FindViewById<TextView>( Resource.Id.additionalOptions );
+            ControlStyling.StyleUILabel( additionalOptions, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+            additionalOptions.Text = LoginStrings.AdditionalOptions;
+
+            TextView orTextView = view.FindViewById<TextView>( Resource.Id.orTextView );
+            ControlStyling.StyleUILabel( orTextView, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+            orTextView.Text = LoginStrings.OrString;
+
+
             RegisterButton = view.FindViewById<Button>( Resource.Id.registerButton );
             ControlStyling.StyleButton( RegisterButton, LoginStrings.RegisterButton, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             RegisterButton.Click += (object sender, EventArgs e ) =>

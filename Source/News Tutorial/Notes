@@ -1,0 +1,26 @@
+Tools->Website->Content->Mobile App Ads
+
+Adding / Editing
+Click an existing, or click add in the bottom right corner.
+
+Fields
+Title - This will display as the title on the Details Page
+
+Content - The body. Will scroll if needed.
+
+Active - The date it will begin sending to the app.
+
+Priority - The sorting order.
+
+Details URL - The page to show when tapping the Learn More button.
+
+Details URL Launches Browser - If true, the URL will open in the system browser instead of within the app.
+
+Forward Personal Data - If true, and a user is logged in, their basic profile information will be sent to the URL.
+
+Campuses - Check each campus this News Item should display for.
+
+Feature Image - Imaage that goes on the front news page. Must be 1242x801
+
+Promotion Image - Smaller "banner" image that goes on the details page. Must be 1242x540
+

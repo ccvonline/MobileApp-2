@@ -298,11 +298,11 @@
         android:layout_height="30dp"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="5dp"
         android:layout_alignParentBottom="true">
         <Button
             android:id="@+id/campus_selection_button"
             android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -310,6 +310,7 @@
             android:id="@+id/campus_selection_text"
             android:text=""
             android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -319,6 +320,7 @@
             android:id="@+id/campus_selection_icon"
             android:background="@android:color/transparent"
             android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
             android:text="S"
             android:layout_toRightOf="@+id/campus_selection_text"
             android:gravity="center"

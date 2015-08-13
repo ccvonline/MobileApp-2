@@ -14,7 +14,7 @@ namespace Droid
         {
             // load up the rounded drawable and set the color
             Drawable buttonDrawable = (Drawable)Rock.Mobile.PlatformSpecific.Android.Core.Context.Resources.GetDrawable( Resource.Drawable.RoundButton );
-            buttonDrawable.SetColorFilter( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Button_BGColor ), PorterDuff.Mode.Src );
+            buttonDrawable.SetColorFilter( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Button_BGColor ), PorterDuff.Mode.SrcAtop );
 
             button.Background = buttonDrawable;
             button.Text = text;

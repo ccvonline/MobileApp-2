@@ -8,9 +8,14 @@ News Items can now be for multiple campuses, rather than one or all.
 
 News Items can now be previewed in the app before published to the public.
 
-Added support for optionally passing user information to sites the app loads.
+Added support for optionally passing user information to sites that the app loads.
 
 iOS
 Fixed an issue preventing the camera from working after a clean install of the app.
+Fixed a crash when submitting profile changes on iPad.
+Fixed an issue allowing the keyboard to overlap date / gender pickers in the Profile.
+
 
 Android
+Fixed layout issues on extremely small devices (3.2 inch screens, anyone?)
+Fixed an issue causing buttons to not be rounded on 4.1 and earlier Android devices.

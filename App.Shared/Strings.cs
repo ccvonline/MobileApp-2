@@ -90,7 +90,10 @@ namespace App.Shared
             public const string PasswordPlaceholder = "Password";
 
             public const string LoginButton = "Login";
-            public const string RegisterButton = "Register";
+            //public const string RegisterButton = "Register";
+            public const string RegisterButton = "Create a new Account";
+            public const string AdditionalOptions = "Additional Options";
+            public const string OrString = "or";
 
             public const string LoginWithFacebook = "LoginWithFacebook";
 
