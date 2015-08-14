@@ -6,6 +6,13 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>TAKE RISKS</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>8/16/2015</Date>
+				<NoteUrl>xml/message_8_15_2015.xml</NoteUrl>
+			</Message>
+			
+			<Message>
 				<Name>OVERCOME FEAR</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/9/2015</Date>

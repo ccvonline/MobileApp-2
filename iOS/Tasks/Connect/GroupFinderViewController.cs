@@ -300,6 +300,9 @@ namespace iOS
         string StateValue { get; set; }
         string ZipValue { get; set; }
 
+        UIScrollViewWrapper ScrollView { get; set; }
+        KeyboardAdjustManager KeyboardAdjustManager { get; set; }
+
         class MapViewDelegate : MKMapViewDelegate
         {
             public GroupFinderViewController Parent { get; set; }
@@ -372,6 +375,18 @@ namespace iOS
         {
             public GroupFinderViewController Parent { get; set; }
 
+            public override bool ShouldBeginEditing(UITextField textField)
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextControlDidBeginEditingNotification, NSValue.FromCGRect( textField.Frame ) );
+                return true;
+            }
+
+            public override bool ShouldChangeCharacters(UITextField textField, NSRange range, string replacementString)
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName( Rock.Mobile.PlatformSpecific.iOS.UI.KeyboardAdjustManager.TextControlChangedNotification, NSValue.FromCGRect( textField.Frame ) );
+                return true;
+            }
+
             public override bool ShouldReturn(UITextField textField)
             {
                 Parent.ShouldReturn( );
@@ -387,12 +402,20 @@ namespace iOS
 
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BackgroundColor );
 
+            ScrollView = new UIScrollViewWrapper();
+            ScrollView.Layer.AnchorPoint = CGPoint.Empty;
+            ScrollView.Parent = this;
+            ScrollView.Frame = View.Frame;
+            View.AddSubview( ScrollView );
+
+            ScrollView.ScrollEnabled = false;
+
             // setup everything except positioning, which will happen in LayoutChanged()
             SourceLocation = null;
             GroupEntries = new List<GroupFinder.GroupEntry>();
 
             SearchAddressButton = UIButton.FromType( UIButtonType.System );
-            View.AddSubview( SearchAddressButton );
+            ScrollView.AddSubview( SearchAddressButton );
             SearchAddressButton.Layer.AnchorPoint = CGPoint.Empty;
             ControlStyling.StyleButton( SearchAddressButton, ConnectStrings.GroupFinder_SearchButtonLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             SearchAddressButton.TouchUpInside += (object sender, EventArgs e ) =>
@@ -403,7 +426,7 @@ namespace iOS
 
 
             MapView = new MKMapView( );
-            View.AddSubview( MapView );
+            ScrollView.AddSubview( MapView );
 
             // set the default position for the map to whatever specified area.
             MKCoordinateRegion region = MKCoordinateRegion.FromDistance( new CLLocationCoordinate2D( 
@@ -417,12 +440,12 @@ namespace iOS
             MapView.Delegate = new MapViewDelegate() { Parent = this };
 
             SearchResultsBGLayer = new UIView();
-            View.AddSubview( SearchResultsBGLayer );
+            ScrollView.AddSubview( SearchResultsBGLayer );
             SearchResultsBGLayer.Layer.AnchorPoint = new CGPoint( 0, 0 );
             SearchResultsBGLayer.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
 
             SearchResultsPrefix = new UILabel( );
-            View.AddSubview( SearchResultsPrefix );
+            ScrollView.AddSubview( SearchResultsPrefix );
             SearchResultsPrefix.Layer.AnchorPoint = new CGPoint( 0, 0 );
             SearchResultsPrefix.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             SearchResultsPrefix.Text = ConnectStrings.GroupFinder_NoGroupsFound;
@@ -432,7 +455,7 @@ namespace iOS
             SearchResultsPrefix.TextAlignment = UITextAlignment.Center;
 
             SearchResultsNeighborhood = new UILabel( );
-            View.AddSubview( SearchResultsNeighborhood );
+            ScrollView.AddSubview( SearchResultsNeighborhood );
             SearchResultsNeighborhood.Layer.AnchorPoint = new CGPoint( 0, 0 );
             SearchResultsNeighborhood.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             SearchResultsNeighborhood.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
@@ -441,13 +464,13 @@ namespace iOS
 
 
             Seperator = new UIView( );
-            View.AddSubview( Seperator );
+            ScrollView.AddSubview( Seperator );
             Seperator.Layer.BorderWidth = 1;
             Seperator.Layer.BorderColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ).CGColor;
 
 
             GroupFinderTableView = new UITableView();
-            View.AddSubview( GroupFinderTableView );
+            ScrollView.AddSubview( GroupFinderTableView );
             GroupTableSource = new GroupFinderViewController.TableSource( this );
 
             // add the table view and source
@@ -456,11 +479,10 @@ namespace iOS
             GroupFinderTableView.Source = GroupTableSource;
             GroupFinderTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
-            BlockerView = new UIBlockerView( View, View.Frame.ToRectF( ) );
+            BlockerView = new UIBlockerView( ScrollView, ScrollView.Frame.ToRectF( ) );
 
             SearchPage = new UIGroupFinderSearch();
-
-            SearchPage.Create( View, View.Frame.ToRectF( ), 
+            SearchPage.Create( ScrollView, ScrollView.Frame.ToRectF( ), 
                 delegate
                 {
                     SearchPage.Hide( true );
@@ -469,6 +491,8 @@ namespace iOS
                 } );
             SearchPage.SetTitle( ConnectStrings.GroupFinder_SearchPageHeader, ConnectStrings.GroupFinder_SearchPageDetails );
             SearchPage.Hide( false );
+
+            KeyboardAdjustManager = new KeyboardAdjustManager( View );
 
             // don't allow them to tap the address button until we reveal the search page.
             SearchAddressButton.Enabled = false;
@@ -503,25 +527,25 @@ namespace iOS
         {
             base.LayoutChanged( );
 
-            SearchPage.LayoutChanged( View.Frame.ToRectF( ) );
+            SearchPage.LayoutChanged( ScrollView.Frame.ToRectF( ) );
 
             // Map
-            MapView.Frame = new CGRect( 0, 0, View.Frame.Width, View.Frame.Height * .40f );
+            MapView.Frame = new CGRect( 0, 0, ScrollView.Frame.Width, ScrollView.Frame.Height * .40f );
 
-            SearchAddressButton.Frame = new CGRect( 0, MapView.Frame.Bottom, View.Frame.Width, 33 );
+            SearchAddressButton.Frame = new CGRect( 0, MapView.Frame.Bottom, ScrollView.Frame.Width, 33 );
 
             // Search Results Banner
             UpdateResultsBanner( );
 
             // add the seperator to the bottom
-            Seperator.Frame = new CGRect( 0, SearchResultsPrefix.Frame.Bottom - 1, View.Bounds.Width, 1 );
+            Seperator.Frame = new CGRect( 0, SearchResultsPrefix.Frame.Bottom - 1, ScrollView.Bounds.Width, 1 );
 
             // wait to layout the table view until all subviews have been laid out. Fixes an issue where the table gets more height than it should,
             // and the last row doesn't fit on screen.
-            GroupFinderTableView.Frame = new CGRect( 0, Seperator.Frame.Bottom, View.Bounds.Width, View.Bounds.Height - Seperator.Frame.Bottom );
+            GroupFinderTableView.Frame = new CGRect( 0, Seperator.Frame.Bottom, ScrollView.Bounds.Width, ScrollView.Bounds.Height - Seperator.Frame.Bottom );
             GroupFinderTableView.ReloadData( );
 
-            BlockerView.SetBounds( View.Frame.ToRectF( ) );
+            BlockerView.SetBounds( ScrollView.Frame.ToRectF( ) );
         }
 
         public void UpdateMap( bool result )
@@ -590,9 +614,9 @@ namespace iOS
 
             // now center the search result / neighborhood
             nfloat resultTotalWidth = SearchResultsPrefix.Bounds.Width + SearchResultsNeighborhood.Bounds.Width;
-            nfloat xStartPos = ( View.Bounds.Width - resultTotalWidth ) / 2;
+            nfloat xStartPos = ( ScrollView.Bounds.Width - resultTotalWidth ) / 2;
 
-            SearchResultsBGLayer.Frame = new CGRect( 0, SearchAddressButton.Frame.Bottom, View.Frame.Width, SearchResultsPrefix.Frame.Height );
+            SearchResultsBGLayer.Frame = new CGRect( 0, SearchAddressButton.Frame.Bottom, ScrollView.Frame.Width, SearchResultsPrefix.Frame.Height );
             SearchResultsPrefix.Frame = new CGRect( xStartPos, SearchAddressButton.Frame.Bottom, SearchResultsPrefix.Frame.Width, SearchResultsPrefix.Frame.Height );
             SearchResultsNeighborhood.Frame = new CGRect( SearchResultsPrefix.Frame.Right, SearchAddressButton.Frame.Bottom, SearchResultsNeighborhood.Frame.Width, SearchResultsNeighborhood.Frame.Height );
         }
@@ -705,6 +729,8 @@ namespace iOS
         {
             base.ViewWillDisappear(animated);
 
+            KeyboardAdjustManager.Deactivate( );
+
             // store the values they type in so that if they leave the page and return, we can re-populate them.
             StreetValue = SearchPage.Street.Text;
             CityValue = SearchPage.City.Text;
@@ -715,6 +741,8 @@ namespace iOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
+            KeyboardAdjustManager.Activate( );
 
             // see if there's an address for this person that we can automatically use.
             if ( RockMobileUser.Instance.HasFullAddress( ) == true )

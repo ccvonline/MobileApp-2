@@ -48,8 +48,6 @@ namespace App.Shared.UI
         {
         }
 
-        public const string Trigger2Str = "rick roll";
-
         public static void Trigger( string trigger, object arg1, object arg2, object arg3, object arg4 )
         {
             switch( trigger )
@@ -81,7 +79,7 @@ namespace App.Shared.UI
                     break;
                 }
 
-                case "rick roll":
+                case "never gonna give you up":
                 {
                     string awesomeUrl = "http://www.jeredmcferron.com/files/ra.mp4";
                     #if __ANDROID__

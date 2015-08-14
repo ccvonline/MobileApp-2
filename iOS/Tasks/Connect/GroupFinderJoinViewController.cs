@@ -7,6 +7,7 @@ using Foundation;
 using App.Shared.UI;
 using CoreGraphics;
 using System.Drawing;
+using Rock.Mobile.PlatformSpecific.iOS.UI;
 
 namespace iOS
 {
@@ -21,6 +22,9 @@ namespace iOS
 
         UIScrollViewWrapper ScrollView { get; set; }
         UITextField CellPhoneTextField { get; set; }
+
+
+        KeyboardAdjustManager KeyboardAdjustManager { get; set; }
         
         public GroupFinderJoinViewController( )
         {
@@ -38,9 +42,16 @@ namespace iOS
             ScrollView.Frame = View.Frame;
             View.AddSubview( ScrollView );
 
+            KeyboardAdjustManager = new KeyboardAdjustManager( View );
+
             JoinGroupView = new UIJoinGroup();
             JoinGroupView.Create( ScrollView, View.Frame.ToRectF( ) );
 
+            UITextField spouseName = (UITextField)JoinGroupView.SpouseName.PlatformNativeObject;
+            spouseName.Delegate = new KeyboardAdjustManager.TextFieldDelegate( );
+
+            UITextField emailName = (UITextField)JoinGroupView.Email.PlatformNativeObject;
+            emailName.Delegate = new KeyboardAdjustManager.TextFieldDelegate( );
 
             // since we're using the platform UI, we need to manually hook up the phone formatting delegate,
             // because that isn't implemented in platform abstracted code.
@@ -52,11 +63,20 @@ namespace iOS
         {
             base.ViewWillAppear(animated);
 
+            KeyboardAdjustManager.Activate( );
+
             // setup the values
             JoinGroupView.DisplayView( GroupTitle, Distance, MeetingTime, GroupID );
 
             // force the cell phone field to update itself so it contains proper formatting
             CellPhoneTextField.Delegate.ShouldChangeCharacters( CellPhoneTextField, new NSRange( CellPhoneTextField.Text.Length, 0 ), "" );
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+            KeyboardAdjustManager.Deactivate( );
         }
 
         public override void LayoutChanged( )

@@ -1,21 +1,8 @@
 Both
-The latest message will now always re-download when updating Launch Data. 
--This fixes an issue where, once published, the note couldn't be updated. 
 
-News Item Links can now optionally take the user out of the app.
-
-News Items can now be for multiple campuses, rather than one or all.
-
-News Items can now be previewed in the app before published to the public.
-
-Added support for optionally passing user information to sites that the app loads.
 
 iOS
-Fixed an issue preventing the camera from working after a clean install of the app.
-Fixed a crash when submitting profile changes on iPad.
-Fixed an issue allowing the keyboard to overlap date / gender pickers in the Profile.
-
+Fixed issues on iPhone 4s where the keyboard would obscure text fields.
 
 Android
-Fixed layout issues on extremely small devices (3.2 inch screens, anyone?)
-Fixed an issue causing buttons to not be rounded on 4.1 and earlier Android devices.
+Fixed occasional crashing when resuming the app from being backgrounded. (Thanks Jim!)

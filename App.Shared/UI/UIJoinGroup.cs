@@ -28,10 +28,10 @@ namespace App.Shared.UI
         PlatformTextField LastName { get; set; }
         PlatformView LastNameLayer { get; set; }
 
-        PlatformTextField SpouseName { get; set; }
+        public PlatformTextField SpouseName { get; set; }
         PlatformView SpouseNameLayer { get; set; }
 
-        PlatformTextField Email { get; set; }
+        public PlatformTextField Email { get; set; }
         PlatformView EmailLayer { get; set; }
 
         // Make CellPhone public so we can attach a platform specific delegate
