@@ -71,7 +71,7 @@ namespace Droid
             {
             }
 
-            protected void PresentFragment( TaskFragment fragment, bool allowBack )
+            public void PresentFragment( TaskFragment fragment, bool allowBack )
             {
                 // allow back means "can you return to the page you're LEAVING? Not, can the
                 // fragment being passed in be returned to"

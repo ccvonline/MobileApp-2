@@ -104,12 +104,10 @@ namespace Droid
                     float Timer { get; set; }
                     bool TimerTicked { get; set; }
                     float ScrollStartY { get; set; }
-                    NavToolbarFragment NavToolbar { get; set; }
+                    public NavToolbarFragment NavToolbar { get; set; }
 
-                    public NavBarReveal( NavToolbarFragment navToolbar )
+                    public NavBarReveal( )
                     {
-                        NavToolbar = navToolbar;
-
                         Timer = 0.00f;
                         TimerTicked = false;
                         ScrollStartY = 0;
@@ -296,6 +294,11 @@ namespace Droid
                 /// </summary>
                 Bitmap TutorialImage { get; set; }
 
+
+                public NotesFragment( ) : base( )
+                {
+                }
+
                 public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
                 {
                     base.OnCreateView( inflater, container, savedInstanceState );
@@ -318,7 +321,6 @@ namespace Droid
 
                     // add it to our main layout.
                     layout.AddView( ScrollView );
-
 
                     Indicator = layout.FindViewById<ProgressBar>( Resource.Id.progressBar );
                     Indicator.Visibility = ViewStates.Gone;
@@ -366,7 +368,7 @@ namespace Droid
                     TutorialOverlay.SetBackgroundColor( Android.Graphics.Color.Transparent );
                     layout.AddView( TutorialOverlay );
 
-                    NavBarRevealTracker = new NavBarReveal( ParentTask.NavbarFragment.NavToolbar );
+                    NavBarRevealTracker = new NavBarReveal( );
 
                     return layout;
                 }
@@ -400,6 +402,8 @@ namespace Droid
                     {
                         Activity.RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
                     }
+
+                    NavBarRevealTracker.NavToolbar = ParentTask.NavbarFragment.NavToolbar;
 
                     WakeLock.Acquire( );
 

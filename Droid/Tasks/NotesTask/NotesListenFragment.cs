@@ -174,6 +174,10 @@ namespace Droid
                     }
                 }
 
+                public NotesListenFragment( ) : base( )
+                {
+                }
+
                 public override void OnCreate( Bundle savedInstanceState )
                 {
                     base.OnCreate( savedInstanceState );

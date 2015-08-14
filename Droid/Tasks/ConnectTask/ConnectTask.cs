@@ -19,13 +19,25 @@ namespace Droid
                 public ConnectTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = new ConnectPrimaryFragment( );
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.ConnectPrimaryFragment" ) as ConnectPrimaryFragment;
+                    if ( MainPage == null )
+                    {
+                        MainPage = new ConnectPrimaryFragment();
+                    }
                     MainPage.ParentTask = this;
 
-                    GroupFinder = new GroupFinderFragment( );
+                    GroupFinder = navFragment.FragmentManager.FindFragmentByTag( "Droid.GroupFinderFragment" ) as GroupFinderFragment;
+                    if ( GroupFinder == null )
+                    {
+                        GroupFinder = new GroupFinderFragment();
+                    }
                     GroupFinder.ParentTask = this;
 
-                    JoinGroup = new JoinGroupFragment( );
+                    JoinGroup = navFragment.FragmentManager.FindFragmentByTag( "Droid.JoinGroupFragment" ) as JoinGroupFragment;
+                    if ( JoinGroup == null )
+                    {
+                        JoinGroup = new JoinGroupFragment();
+                    }
                     JoinGroup.ParentTask = this;
 
                     WebFragment = new TaskWebFragment( );

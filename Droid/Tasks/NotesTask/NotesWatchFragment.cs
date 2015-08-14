@@ -42,6 +42,10 @@ namespace Droid
 
                 UIResultView ResultView { get; set; }
 
+                public NotesWatchFragment( ) : base( )
+                {
+                }
+
                 public override void OnCreate( Bundle savedInstanceState )
                 {
                     base.OnCreate( savedInstanceState );

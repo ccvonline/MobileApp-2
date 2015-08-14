@@ -253,6 +253,10 @@ namespace Droid
                     return base.OnTouch(v, e);
                 }
 
+                public GroupFinderFragment( ) : base( )
+                {
+                }
+
                 public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
                 {
                     if (container == null)

@@ -22,6 +22,7 @@ using Rock.Mobile.Animation;
 using App.Shared;
 using Rock.Mobile.IO;
 using App.Shared.UI;
+using Droid.Tasks.Notes;
 
 namespace Droid
 {
@@ -69,6 +70,10 @@ namespace Droid
                 Switch PublicSwitch { get; set; }
 
                 Spinner Spinner { get; set; }
+
+                public PrayerCreateFragment(  ) : base( )
+                {
+                }
 
                 public override void OnCreate( Bundle savedInstanceState )
                 {
@@ -283,15 +288,9 @@ namespace Droid
                             Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
                             Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                         }
-                        // fun bonus!
-                        else if ( RequestText.Text.ToLower( ) == UISpecial.Trigger )
+                        else
                         {
-                            RelativeLayout relativeLayout = View.FindViewById<RelativeLayout>( Resource.Id.relative_background );
-                            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
-
-                            UISpecial special = new UISpecial();
-                            special.Create( relativeLayout, false, bounds, delegate { special.View.RemoveAsSubview( relativeLayout ); });
-                            special.LayoutChanged( bounds );
+                            UISpecial.Trigger( RequestText.Text.ToLower( ), View, this, ParentTask, null );
                         }
                     }
                 }

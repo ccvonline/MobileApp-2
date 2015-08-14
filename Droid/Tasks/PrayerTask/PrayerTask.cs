@@ -2,6 +2,8 @@
 using Android.App;
 using Android.Content;
 using Android.Views;
+using Droid.Tasks.Notes;
+using App.Shared.UI;
 
 namespace Droid
 {
@@ -18,13 +20,25 @@ namespace Droid
                 public PrayerTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = new PrayerPrimaryFragment( );
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.PrayerPrimaryFragment" ) as PrayerPrimaryFragment;
+                    if ( MainPage == null )
+                    {
+                        MainPage = new PrayerPrimaryFragment();
+                    }
                     MainPage.ParentTask = this;
 
-                    CreatePage = new PrayerCreateFragment();
+                    CreatePage = navFragment.FragmentManager.FindFragmentByTag( "Droid.PrayerCreateFragment" ) as PrayerCreateFragment;
+                    if ( CreatePage == null )
+                    {
+                        CreatePage = new PrayerCreateFragment();
+                    }
                     CreatePage.ParentTask = this;
 
-                    PostPage = new PrayerPostFragment();
+                    PostPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.PrayerPostFragment" ) as PrayerPostFragment;
+                    if ( PostPage == null )
+                    {
+                        PostPage = new PrayerPostFragment();
+                    }
                     PostPage.ParentTask = this;
                 }
 

@@ -48,7 +48,61 @@ namespace App.Shared.UI
         {
         }
 
-        public const string Trigger = "there are no easter eggs";
+        public const string Trigger2Str = "rick roll";
+
+        public static void Trigger( string trigger, object arg1, object arg2, object arg3, object arg4 )
+        {
+            switch( trigger )
+            {
+                case "there are no easter eggs":
+                {
+                    #if __ANDROID__
+                    Android.Widget.RelativeLayout relativeLayout = ((Android.Views.View)arg1).FindViewById<Android.Widget.RelativeLayout>( Droid.Resource.Id.relative_background );
+                    RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
+
+                    UISpecial special = new UISpecial();
+                    special.Create( relativeLayout, false, bounds, delegate
+                        {
+                            special.View.RemoveAsSubview( relativeLayout );
+                        } );
+                    special.LayoutChanged( bounds );
+                    #endif
+
+                    #if __IOS__
+                    RectangleF rectf = new RectangleF( (float)((UIKit.UIView)arg1).Frame.Left, (float)((UIKit.UIView)arg1).Frame.Top, (float)((UIKit.UIView)arg1).Frame.Width, (float)((UIKit.UIView)arg1).Frame.Height );
+
+                    UISpecial special = new UISpecial();
+                    special.Create( (UIKit.UIScrollView)arg2, true, rectf, delegate { special.View.RemoveAsSubview( (UIKit.UIScrollView)arg2 ); });
+                    special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)((UIKit.UIView)arg1).Bounds.Width, (float)((UIKit.UIScrollView)arg2).ContentSize.Height ) );
+
+                    ((UIKit.UIScrollView)arg2).ContentOffset = CoreGraphics.CGPoint.Empty;
+                    ((UIKit.UIScrollView)arg2).ContentSize = new CoreGraphics.CGSize( ((UIKit.UIView)arg1).Frame.Width, special.View.Frame.Height );
+                    #endif
+                    break;
+                }
+
+                case "rick roll":
+                {
+                    string awesomeUrl = "http://www.jeredmcferron.com/files/ra.mp4";
+                    #if __ANDROID__
+                    Droid.Tasks.Notes.NotesWatchFragment watchFrag = new Droid.Tasks.Notes.NotesWatchFragment();
+                    watchFrag.ParentTask = ((Droid.Tasks.Task)arg3);
+                    watchFrag.MediaUrl = awesomeUrl;
+                    watchFrag.Name = trigger;
+                    ((Droid.Tasks.Task)arg3).PresentFragment( watchFrag, true );
+                    #endif
+                    #if __IOS__
+                    iOS.NotesWatchUIViewController viewController = new iOS.NotesWatchUIViewController( );
+                    viewController.MediaUrl = awesomeUrl;
+                    viewController.Name = trigger;
+                    viewController.HideProgressIndicator = true;
+
+                    ((iOS.Task)arg4).PerformSegue( (UIKit.UIViewController)arg3, viewController );
+                    #endif
+                    break;
+                }
+            }
+        }
 
         public delegate void OnCompletion( );
         OnCompletion OnCompletionCallback;

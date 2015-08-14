@@ -39,6 +39,10 @@ namespace Droid
                 UIBlockerView BlockerView { get; set; }
                 UIResultView ResultView { get; set; }
 
+                public PrayerPostFragment( ) : base( )
+                {
+                }
+
                 public override void OnCreate( Bundle savedInstanceState )
                 {
                     base.OnCreate( savedInstanceState );

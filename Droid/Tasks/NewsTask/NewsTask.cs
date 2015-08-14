@@ -25,10 +25,18 @@ namespace Droid
                 public NewsTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = new NewsPrimaryFragment( );
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NewsPrimaryFragment" ) as NewsPrimaryFragment;
+                    if ( MainPage == null )
+                    {
+                        MainPage = new NewsPrimaryFragment();
+                    }
                     MainPage.ParentTask = this;
 
-                    DetailsPage = new NewsDetailsFragment( );
+                    DetailsPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NewsDetailsFragment" ) as NewsDetailsFragment;
+                    if ( DetailsPage == null )
+                    {
+                        DetailsPage = new NewsDetailsFragment();
+                    }
                     DetailsPage.ParentTask = this;
 
                     WebFragment = new TaskWebFragment( );

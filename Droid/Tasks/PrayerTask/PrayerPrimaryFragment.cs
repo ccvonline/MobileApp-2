@@ -395,7 +395,7 @@ namespace Droid
 
                 public Button RetryButton { get; set; }
 
-                public PrayerPrimaryFragment( )
+                public PrayerPrimaryFragment( ) : base( )
                 {
                     LastDownloadTime = DateTime.MinValue;
                     PrayerRequestCards = new List<PrayerCard>();

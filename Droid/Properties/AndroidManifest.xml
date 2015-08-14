@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0" package="com.ccvonline.CCVMobileApp" android:versionCode="29">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0" package="com.ccvonline.CCVMobileApp" android:versionCode="30">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
-	<application android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
+	<application android:name="com.ccvonline.CCVMobileApp" android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
 		<!---Get your API Key for Google Maps at console.developers.google.com-->
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCnspI8VUlD1amF-HQlWlnVMPGBFrRIX_Y" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />

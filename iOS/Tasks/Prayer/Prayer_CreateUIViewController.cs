@@ -365,15 +365,9 @@ namespace iOS
                     Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
                     SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
                 }
-                // fun bonus!
-                else if ( PrayerRequest.Text.ToLower( ) == UISpecial.Trigger )
+                else
                 {
-                    UISpecial special = new UISpecial();
-                    special.Create( ScrollView, true, View.Frame.ToRectF( ), delegate { special.View.RemoveAsSubview( ScrollView ); LayoutChanged( ); });
-                    special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)View.Bounds.Width, (float)ScrollView.ContentSize.Height ) );
-
-                    ScrollView.ContentOffset = CGPoint.Empty;
-                    ScrollView.ContentSize = new CGSize( View.Frame.Width, special.View.Frame.Height );
+                    UISpecial.Trigger( PrayerRequest.Text.ToLower( ), View, ScrollView, this, Task );
                 }
             }
         }

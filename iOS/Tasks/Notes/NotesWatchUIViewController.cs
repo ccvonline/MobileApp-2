@@ -22,6 +22,8 @@ namespace iOS
         public string Name { get; set; }
         public bool AudioOnly { get; set; }
 
+        public bool HideProgressIndicator { get; set; }
+
         MPMoviePlayerController MoviePlayer  { get; set; }
         UIActivityIndicatorView ActivityIndicator { get; set; }
 
@@ -122,7 +124,14 @@ namespace iOS
         {
             ResultView.Hide( );
 
-            ActivityIndicator.Hidden = false;
+            if ( HideProgressIndicator == false )
+            {
+                ActivityIndicator.Hidden = false;
+            }
+            else
+            {
+                ActivityIndicator.Hidden = true;
+            }
 
             DidDisplayError = false;
 

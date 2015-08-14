@@ -81,7 +81,6 @@
     <Compile Include="Tasks\TaskFragment.cs" />
     <Compile Include="Tasks\NewsTask\NewsDetailsFragment.cs" />
     <Compile Include="Tasks\NewsTask\NewsPrimaryFragment.cs" />
-    <Compile Include="Tasks\PlaceholderTask.cs" />
     <Compile Include="NavToolbar.cs" />
     <Compile Include="UserManagement\LoginFragment.cs" />
     <Compile Include="UserManagement\ProfileFragment.cs" />

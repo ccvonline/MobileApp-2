@@ -1,24 +1,46 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/UserManagement/LoginViewController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="iOS/Tasks/Notes/NotesWatchUIViewController.cs">
     <Files>
-      <File FileName="Droid/UserManagement/LoginFragment.cs" Line="26" Column="22" />
-      <File FileName="App.Shared/Strings.cs" Line="96" Column="41" />
-      <File FileName="iOS/UserManagement/LoginViewController.cs" Line="384" Column="45" />
+      <File FileName="Droid/UserManagement/LoginFragment.cs" Line="74" Column="10" />
+      <File FileName="Droid/Tasks/PrayerTask/PrayerCreateFragment.cs" Line="293" Column="106" />
+      <File FileName="App.Shared/UI/UISpecial.cs" Line="98" Column="57" />
+      <File FileName="Droid/Tasks/Task.cs" Line="74" Column="20" />
+      <File FileName="iOS/Tasks/Notes/NotesWatchUIViewController.cs" Line="123" Column="29" />
+      <File FileName="iOS/Tasks/Notes/NotesTask.cs" Line="187" Column="43" />
+      <File FileName="iOS/Tasks/Notes/NotesDetailsUIViewController.cs" Line="561" Column="126" />
+      <File FileName="iOS/Tasks/Prayer/Prayer_CreateUIViewController.cs" Line="370" Column="99" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="CCVApp" expanded="True">
-            <Node name="App.Shared" expanded="True" />
-            <Node name="Droid" expanded="True" />
+            <Node name="App.Shared" expanded="True">
+              <Node name="UI" expanded="True" />
+            </Node>
+            <Node name="Droid" expanded="True">
+              <Node name="Tasks" expanded="True">
+                <Node name="AboutTask" expanded="True" />
+                <Node name="ConnectTask" expanded="True" />
+                <Node name="GiveTask" expanded="True" />
+                <Node name="NewsTask" expanded="True" />
+                <Node name="NotesTask" expanded="True" />
+                <Node name="PrayerTask" expanded="True" />
+              </Node>
+            </Node>
             <Node name="iOS" expanded="True">
-              <Node name="UserManagement" expanded="True">
-                <Node name="LoginViewController.cs" selected="True" />
+              <Node name="Tasks" expanded="True">
+                <Node name="Notes" expanded="True">
+                  <Node name="NotesWatchUIViewController.cs" selected="True" />
+                </Node>
+                <Node name="Prayer" expanded="True" />
               </Node>
             </Node>
           </Node>
         </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

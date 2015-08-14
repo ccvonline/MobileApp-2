@@ -44,6 +44,10 @@ namespace Droid
 
             UIResultView ResultView { get; set; }
 
+            public TaskWebFragment( ) : base( )
+            {
+            }
+
             public override void OnCreate( Bundle savedInstanceState )
             {
                 base.OnCreate( savedInstanceState );

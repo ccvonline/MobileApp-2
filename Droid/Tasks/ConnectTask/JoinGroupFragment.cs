@@ -40,6 +40,10 @@ namespace Droid
                 public int GroupID { get; set; }
 
                 UIJoinGroup JoinGroupView { get; set; }
+
+                public JoinGroupFragment( ) : base( )
+                {
+                }
                 
                 public override void OnCreate( Bundle savedInstanceState )
                 {

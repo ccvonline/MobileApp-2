@@ -12,6 +12,29 @@ using App.Shared.Config;
 
 namespace Droid
 {
+    [Application( Name="com.ccvonline.CCVMobileApp" )]
+    public class MainApplication : Application
+    {
+        public MainApplication( System.IntPtr whatever, Android.Runtime.JniHandleOwnership jniHandle ) : base( whatever, jniHandle )
+        {
+        }
+        
+        public override void OnCreate()
+        {
+            base.OnCreate();
+
+            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
+        }
+        
+        /*public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
+        {
+            base.OnCreate(savedInstanceState, persistentState);
+
+            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
+        }*/
+
+    }
+    
     [Activity( Label = GeneralConfig.AndroidAppName, NoHistory = true, LaunchMode = Android.Content.PM.LaunchMode.SingleTask, MainLauncher = true, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
     public class Splash : Activity
     {
@@ -164,11 +187,22 @@ namespace Droid
             return false;
         }
 
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+
+            // restore our context
+            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
+        }
+
         protected override void OnResume()
         {
             base.OnResume();
 
             OverridePendingTransition( Resource.Animation.abc_fade_in, Resource.Animation.abc_fade_out );
+
+            // restore our context
+            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
         }
 
         protected override void OnNewIntent(Intent intent)
@@ -176,6 +210,14 @@ namespace Droid
             base.OnNewIntent(intent);
 
             Intent = intent;
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+
+            // restore our context
+            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
         }
 
         public override void OnBackPressed()

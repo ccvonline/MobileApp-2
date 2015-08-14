@@ -236,6 +236,10 @@ namespace Droid
                 public List<ConnectLink> LinkEntries { get; set; }
                 public Bitmap [] LinkBillboards { get; set; }
 
+                public ConnectPrimaryFragment( ) : base( )
+                {
+                }
+
                 public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
                 {
                     if (container == null)

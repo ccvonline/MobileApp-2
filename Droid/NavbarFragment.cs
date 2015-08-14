@@ -314,9 +314,6 @@ namespace Droid
                 NavToolbar = new NavToolbarFragment();
             }
 
-            FadeOutFrame = Activity.FindViewById<FrameLayout>(Resource.Id.fadeOutView) as FrameLayout;
-            FadeOutFrame.Alpha = 0.0f;
-
             // Execute a transaction, replacing any existing
             // fragment with this one inside the frame.
             var ft = FragmentManager.BeginTransaction();
@@ -334,6 +331,9 @@ namespace Droid
                 // Currently in a layout without a container, so no reason to create our view.
                 return null;
             }
+
+            FadeOutFrame = Activity.FindViewById<FrameLayout>(Resource.Id.fadeOutView) as FrameLayout;
+            FadeOutFrame.Alpha = 0.0f;
 
             //The navbar should basically be a background with logo and a springboard reveal button in the upper left.
             Navbar = inflater.Inflate(Resource.Layout.navbar, container, false) as RelativeLayout;

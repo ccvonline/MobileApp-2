@@ -191,27 +191,57 @@ namespace Droid
 
             RetainInstance = true;
 
-            // setup our fragments (checking for these to be created might be unnecessary, since we'll retain this fragment)
-            NavbarFragment = new NavbarFragment( );
+            // setup our fragments. See if they already exist before creating a new one. It's possible
+            // Android unloaded some but not all of us.
+            NavbarFragment = FragmentManager.FindFragmentById(Resource.Id.navbar) as NavbarFragment;
+            if ( NavbarFragment == null )
+            {
+                NavbarFragment = new NavbarFragment();
+            }
             NavbarFragment.SpringboardParent = this;
 
-            LoginFragment = new LoginFragment( );
+            LoginFragment = FragmentManager.FindFragmentByTag( "Droid.LoginFragment" ) as LoginFragment;
+            if ( LoginFragment == null )
+            {
+                LoginFragment = new LoginFragment( );
+            }
             LoginFragment.SpringboardParent = this;
 
-            ProfileFragment = new ProfileFragment( );
+            ProfileFragment = FragmentManager.FindFragmentByTag( "Droid.ProfileFragment" ) as ProfileFragment;
+            if( ProfileFragment == null )
+            {
+                ProfileFragment = new ProfileFragment( );
+            }
             ProfileFragment.SpringboardParent = this;
 
-            RegisterFragment = new RegisterFragment( );
+            RegisterFragment = FragmentManager.FindFragmentByTag( "Droid.RegisterFragment" ) as RegisterFragment;
+            if( RegisterFragment == null )
+            {
+                RegisterFragment = new RegisterFragment( );
+            }
             RegisterFragment.SpringboardParent = this;
 
-            OOBEFragment = new OOBEFragment( );
+            OOBEFragment = FragmentManager.FindFragmentByTag( "Droid.OOBEFragment" ) as OOBEFragment;
+            if( OOBEFragment == null )
+            {
+                OOBEFragment = new OOBEFragment( );
+            }
             OOBEFragment.SpringboardParent = this;
 
-            SplashFragment = new SplashFragment( );
+            SplashFragment = FragmentManager.FindFragmentByTag( "Droid.SplashFragment" ) as SplashFragment;
+            if( SplashFragment == null )
+            {
+                SplashFragment = new SplashFragment( );
+            }
             SplashFragment.SpringboardParent = this;
 
-            ImageCropFragment = new ImageCropFragment( );
-            ImageCropFragment.SpringboardParent = this;
+            ImageCropFragment = FragmentManager.FindFragmentByTag( "Droid.ImageCropFragment" ) as ImageCropFragment;
+            if( ImageCropFragment == null )
+            {
+                ImageCropFragment = new ImageCropFragment( );
+                ImageCropFragment.SpringboardParent = this;
+            }
+
 
             // get the mask used for the profile pic
             ProfileMask = BitmapFactory.DecodeResource( Rock.Mobile.PlatformSpecific.Android.Core.Context.Resources, Resource.Drawable.androidPhotoMask );

@@ -25,6 +25,10 @@ namespace Droid
             {
                 VideoView VideoPlayer { get; set; }
 
+                public GivePrimaryFragment( ) : base( )
+                {
+                }
+
                 public override void OnCreate( Bundle savedInstanceState )
                 {
                     base.OnCreate( savedInstanceState );
