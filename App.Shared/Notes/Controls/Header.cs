@@ -171,17 +171,18 @@ namespace App
                                                   mTitle.Position.Y + bounds.Y + padding.Top + borderPaddingPx );
 
                     // guarantee date and speaker are below title.
+                    float titleDetailsSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 10 );
                     mDate.Position = new PointF( mDate.Position.X + bounds.X + padding.Left + borderPaddingPx, 
-                                                 mTitle.Frame.Bottom + mDate.Position.Y + bounds.Y + padding.Top );
+                                                 mTitle.Frame.Bottom + mDate.Position.Y + bounds.Y + titleDetailsSpacing );
 
                     mSpeaker.Position = new PointF( mSpeaker.Position.X + bounds.X + padding.Left + borderPaddingPx, 
-                                                    mTitle.Frame.Bottom + mSpeaker.Position.Y + bounds.Y + padding.Top );
+                                                    mTitle.Frame.Bottom + mSpeaker.Position.Y + bounds.Y + titleDetailsSpacing );
 
 
                     // verify that the speaker won't overlap date. if it will, left justify them under each other beneath the title.
                     if ( mSpeaker.Position.X < mDate.Frame.Right )
                     {
-                        mDate.Position = new PointF( mTitle.Position.X, mTitle.Frame.Bottom );
+                        mDate.Position = new PointF( mTitle.Position.X, mTitle.Frame.Bottom + titleDetailsSpacing);
                         
                         mSpeaker.Position = new PointF( mTitle.Position.X, mDate.Frame.Bottom );
                     }

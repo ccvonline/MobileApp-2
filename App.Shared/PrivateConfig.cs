@@ -333,13 +333,13 @@ namespace App.Shared
             /// <summary>
             /// The icon to use for displaying the delete icon on user notes.
             /// </summary>
-            public const string UserNote_DeleteIcon = "";//"";
+            public const string UserNote_DeleteIcon = "";
 
             /// <summary>
             /// The size of the font/icon when displaying the delete icon on user notes.
             /// </summary>
             /// 
-            public const int UserNote_DeleteIconSize = 40;
+            public const int UserNote_DeleteIconSize = 38;
 
             /// <summary>
             /// The icon to use for displaying the close icon on user notes.
@@ -350,7 +350,7 @@ namespace App.Shared
             /// The size of the font/icon when displaying the close icon on user notes.
             /// </summary>
             /// 
-            public const int UserNote_CloseIconSize = 40;
+            public const int UserNote_CloseIconSize = 38;
 
             /// <summary>
             /// The icon to use representing "Listen to this Message"

@@ -1,9 +1,30 @@
 ﻿<Properties StartupItem="iOS/iOS.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone4s.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../Rock.Mobile/PlatformSpecific/iOS/UI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="App.Shared/Notes/Controls/UserNote.cs">
     <Files>
-      <File FileName="../../Rock.Mobile/PlatformSpecific/iOS/UI.cs" Line="1000" Column="9" />
+      <File FileName="App.Shared/Notes/Controls/UserNote.cs" Line="783" Column="23" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CCVApp" expanded="True">
+            <Node name="iOS" expanded="True" selected="True">
+              <Node name="Tasks" expanded="True">
+                <Node name="Notes" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="Rock.Mobile" expanded="True">
+              <Node name="PlatformSpecific" expanded="True">
+                <Node name="iOS" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

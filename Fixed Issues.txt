@@ -1,5 +1,5 @@
 Both
-
+Improvements to the Messages layout and appearance.
 
 iOS
 Fixed issues on iPhone 4s where the keyboard would obscure text fields.

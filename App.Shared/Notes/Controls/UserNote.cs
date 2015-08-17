@@ -325,7 +325,7 @@ namespace App
                         AnchorFrame.Top + AnchorFrame.Height / 2 );
                     
                     UtilityLayer.Position = new PointF( (TextView.Position.X + width) - UtilityLayer.Bounds.Width, 
-                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) );
+                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) + 1 );
 
                     // set the position for the delete button
                     DeleteButton.Position = new PointF( UtilityLayer.Position.X + DeleteButton.Bounds.Width / 2, 
@@ -672,7 +672,7 @@ namespace App
                     TextView.Bounds = new RectangleF( 0, 0, width, TextView.Bounds.Height);
 
                     UtilityLayer.Position = new PointF( (TextView.Position.X + width) - UtilityLayer.Bounds.Width, 
-                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) );
+                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) + 1 );
 
                     // set the position for the delete button
                     DeleteButton.Position = new PointF( UtilityLayer.Position.X, 
@@ -706,7 +706,7 @@ namespace App
                     TextView.Bounds = new RectangleF( 0, 0, width, TextView.Bounds.Height);
 
                     UtilityLayer.Position = new PointF( (TextView.Position.X + width) - UtilityLayer.Bounds.Width, 
-                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) );
+                        TextView.Position.Y - Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) + 1 );
 
                     // set the position for the delete button
                     DeleteButton.Position = new PointF( UtilityLayer.Position.X, 
@@ -749,7 +749,6 @@ namespace App
 
                     // open the text field
                     TextView.AnimateOpen( becomeFirstResponder );
-                    Rock.Mobile.Util.Debug.WriteLine( "Opening Note" );
                 }
 
                 public void CloseNote()
@@ -759,7 +758,6 @@ namespace App
 
                     // close the text field
                     TextView.AnimateClosed( );
-                    Rock.Mobile.Util.Debug.WriteLine( "Closing Note" );
 
                     TextView.ResignFirstResponder( );
                 }
@@ -770,10 +768,7 @@ namespace App
                     {
                         // the / 4 is a bit of a hack. We don't actually resize the icon, so knowing that it's smaller, this
                         // correctly positions it within the anchor. It'll have to change if the sizing of the icons change.
-                        //return new PointF( Anchor.Frame.Left + ( Anchor.Frame.Width - NoteIconOpenSize.Width ) / 5, 
-                          //  Anchor.Frame.Top - NoteIconOpenSize.Height / 4 );
-
-                        return new PointF( Anchor.Frame.Left + ( Anchor.Frame.Width - NoteIconOpenSize.Width ) / 2, 
+                        return new PointF( Anchor.Frame.Left + ( Anchor.Frame.Width - NoteIconOpenSize.Width ) / 4, 
                                           Anchor.Frame.Top );
                     }
                     else
