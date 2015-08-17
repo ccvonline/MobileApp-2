@@ -81,25 +81,54 @@ namespace App.Shared.UI
 
                 case "never gonna give you up":
                 {
-                    string awesomeUrl = "http://www.jeredmcferron.com/files/ra.mp4";
-                    #if __ANDROID__
-                    Droid.Tasks.Notes.NotesWatchFragment watchFrag = new Droid.Tasks.Notes.NotesWatchFragment();
-                    watchFrag.ParentTask = ((Droid.Tasks.Task)arg3);
-                    watchFrag.MediaUrl = awesomeUrl;
-                    watchFrag.Name = trigger;
-                    ((Droid.Tasks.Task)arg3).PresentFragment( watchFrag, true );
-                    #endif
-                    #if __IOS__
-                    iOS.NotesWatchUIViewController viewController = new iOS.NotesWatchUIViewController( );
-                    viewController.MediaUrl = awesomeUrl;
-                    viewController.Name = trigger;
-                    viewController.HideProgressIndicator = true;
+                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/ra.mp4" );
+                    break;
+                }
 
-                    ((iOS.Task)arg4).PerformSegue( (UIKit.UIViewController)arg3, viewController );
-                    #endif
+                case "gotta get down on friday":
+                {
+                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/friday.mp4" );
+                    break;
+                }
+
+                case "what else have you worked on?":
+                {
+                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/untamed.mp4" );
+                    break;
+                }
+
+                case "do you like turtles?":
+                {
+                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/turtles.mp4" );
+                    break;
+                }
+
+                case "goat in the water!":
+                {
+                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/piggoat.mp4" );
                     break;
                 }
             }
+        }
+
+        public static void DoVideo( string trigger, object arg1, object arg2, object arg3, object arg4, string url )
+        {
+            string awesomeUrl = url;
+            #if __ANDROID__
+            Droid.Tasks.Notes.NotesWatchFragment watchFrag = new Droid.Tasks.Notes.NotesWatchFragment();
+            watchFrag.ParentTask = ((Droid.Tasks.Task)arg3);
+            watchFrag.MediaUrl = awesomeUrl;
+            watchFrag.Name = trigger;
+            ((Droid.Tasks.Task)arg3).PresentFragment( watchFrag, true );
+            #endif
+            #if __IOS__
+            iOS.NotesWatchUIViewController viewController = new iOS.NotesWatchUIViewController( );
+            viewController.MediaUrl = awesomeUrl;
+            viewController.Name = trigger;
+            viewController.HideProgressIndicator = true;
+
+            ((iOS.Task)arg4).PerformSegue( (UIKit.UIViewController)arg3, viewController );
+            #endif
         }
 
         public delegate void OnCompletion( );
