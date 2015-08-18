@@ -22,7 +22,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.ccvonline.CCVMobileApp</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.30</string>
+	<string>2.0.31</string>
 	<key>XSLaunchImageAssets</key>
 	<string>Resources/Images.xcassets/LaunchImage.launchimage</string>
 	<key>XSAppIconAssets</key>
@@ -56,6 +56,6 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>30</string>
+	<string>31</string>
 </dict>
 </plist>
