@@ -9,7 +9,7 @@
      
      <UserNote FontColor="#CCCCCCFF" FontName="OpenSans-Regular" FontSize="20" BorderWidth="1" BorderRadius="5" BorderColor="#323232FF" BackgroundColor="#505050FF"/>
      
-     <Header.Container PaddingLeft="5%" PaddingRight="5%" PaddingBottom="3%" PaddingTop="3%" BackgroundColor="#3E3E3EFF" MarginTop="2%" MarginBottom="5%" Alignment="Left"/>
+     <Header.Container PaddingLeft="5%" PaddingRight="5%" PaddingBottom="2%" PaddingTop="2%" BackgroundColor="#3E3E3EFF" MarginTop="0%" MarginBottom="5%" Alignment="Left"/>
      <Header.Title Alignment="Left" FontName="OpenSans-Bold" FontSize="24" FontColor="#AFAFAFFF"/>
      <Header.Speaker FontName="OpenSans-Light" FontSize="16" FontColor="#AFAFAFFF"/>
      <Header.Date FontName="OpenSans-Light" FontSize="16" FontColor="#AFAFAFFF"/>
