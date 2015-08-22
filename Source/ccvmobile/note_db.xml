@@ -6,6 +6,13 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
+				<Name>BOUNCE BACK</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>8/23/2015</Date>
+				<NoteUrl>xml/message_8_22_2015.xml</NoteUrl>
+			</Message>
+			
+			<Message>
 				<Name>TAKE RISKS</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/16/2015</Date>
