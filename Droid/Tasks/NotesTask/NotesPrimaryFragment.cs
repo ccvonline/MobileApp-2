@@ -602,11 +602,6 @@ namespace Droid
                     ParentTask.OnClick( this, -1, 2 );
                 }
 
-                public Bitmap GetSeriesBillboard( int index )
-                {
-                    return SeriesEntries[ index ].Billboard != null ? SeriesEntries[ index ].Billboard : ImageMainPlaceholder;
-                }
-
                 public override void OnResume()
                 {
                     base.OnResume();
