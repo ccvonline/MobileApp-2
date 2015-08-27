@@ -354,15 +354,15 @@ namespace Droid
             ProfileImageButton.Click += (object sender, EventArgs e) => 
                 {
                     // if we're logged in, manage their profile pic
-                    //if( RockMobileUser.Instance.LoggedIn == true )
+                    if( RockMobileUser.Instance.LoggedIn == true )
                     {
                         ManageProfilePic( );
                     }
-                    /*else
+                    else
                     {
                         // otherwise, use it to let them log in
                         StartModalFragment( LoginFragment );
-                    }*/
+                    }
                 };
             Typeface fontFace = Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( PrivateControlStylingConfig.Icon_Font_Primary );
             ProfileImageButton.SetTypeface( fontFace, TypefaceStyle.Normal );
@@ -731,7 +731,7 @@ namespace Droid
         void ManageProfilePic( )
         {
             // only allow picture taking if they're logged in
-            if( /*RockMobileUser.Instance.LoggedIn &&*/ NavbarFragment.ShouldSpringboardAllowInput( ) )
+            if( RockMobileUser.Instance.LoggedIn && NavbarFragment.ShouldSpringboardAllowInput( ) )
             {
                 // setup the chooser dialog so they can pick the photo source
                 AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
