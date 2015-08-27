@@ -1,8 +1,7 @@
 Both
-Improvements to the Messages layout and appearance.
+News that is unpublished can now be viewed in Developer Mode.
 
 iOS
-Fixed issues on iPhone 4s where the keyboard would obscure text fields.
 
 Android
-Fixed occasional crashing when resuming the app from being backgrounded. (Thanks Jim!)
+Fixed a crash on certain devices when external storage was unavailable to the camera. 
