@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Release Candidate 4 (Version 2.0.32)";
+                    return "Version 2.0.33";
                 }
             }
         }
@@ -62,6 +62,9 @@ namespace App.Shared
 
             public const string Camera_Error_Title = "Camera Unavailable";
             public const string Camera_Error_Message = "Could not access the camera. Make sure this device has a camera and the app is allowed to use it.";
+
+            public const string ExternalDir_Error_Title = "Storage Unavailable";
+            public const string ExternalDir_Error_Message = "There was a problem accessing your storage. Make sure you have available space. If the problem persists, try rebooting your device.";
 
             public const string LoggedIn_Prefix = "Welcome ";
             public const string LoggedOut_Label = "Log In";

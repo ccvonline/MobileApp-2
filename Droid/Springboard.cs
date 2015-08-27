@@ -354,15 +354,15 @@ namespace Droid
             ProfileImageButton.Click += (object sender, EventArgs e) => 
                 {
                     // if we're logged in, manage their profile pic
-                    if( RockMobileUser.Instance.LoggedIn == true )
+                    //if( RockMobileUser.Instance.LoggedIn == true )
                     {
                         ManageProfilePic( );
                     }
-                    else
+                    /*else
                     {
                         // otherwise, use it to let them log in
                         StartModalFragment( LoginFragment );
-                    }
+                    }*/
                 };
             Typeface fontFace = Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( PrivateControlStylingConfig.Icon_Font_Primary );
             ProfileImageButton.SetTypeface( fontFace, TypefaceStyle.Normal );
@@ -731,7 +731,7 @@ namespace Droid
         void ManageProfilePic( )
         {
             // only allow picture taking if they're logged in
-            if( RockMobileUser.Instance.LoggedIn && NavbarFragment.ShouldSpringboardAllowInput( ) )
+            if( /*RockMobileUser.Instance.LoggedIn &&*/ NavbarFragment.ShouldSpringboardAllowInput( ) )
             {
                 // setup the chooser dialog so they can pick the photo source
                 AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
@@ -771,29 +771,38 @@ namespace Droid
                                         {
                                             // start up the camera and get our picture. 
                                             // JHM 4-24-15 - The camera requires an SD Card, so use that path for our temp file.
-                                            string jpgFilename = Rock.Mobile.PlatformSpecific.Android.Core.Context.GetExternalFilesDir( null ).ToString( ) + "cameratemp.jpg";
-                                            Rock.Mobile.Media.PlatformCamera.Instance.CaptureImage( new Java.IO.File( jpgFilename ), null, 
+                                            Java.IO.File externalDir = Rock.Mobile.PlatformSpecific.Android.Core.Context.GetExternalFilesDir( null );
+                                            if( externalDir != null )
+                                            {
+                                                string jpgFilename = externalDir.ToString( ) + "cameratemp.jpg";
+                                                Rock.Mobile.Media.PlatformCamera.Instance.CaptureImage( new Java.IO.File( jpgFilename ), null, 
 
-                                                delegate(object s, Rock.Mobile.Media.PlatformCamera.CaptureImageEventArgs args) 
-                                                {
-                                                    // flag that we want the cropper to start up on resume.
-                                                    // we cannot launch it now because we need to wait for the camera
-                                                    // activity to end and the navBar fragment to resume
-                                                    if( args.Result == true )
+                                                    delegate(object s, Rock.Mobile.Media.PlatformCamera.CaptureImageEventArgs args) 
                                                     {
-                                                        // if the image path is valid, we have a picture.
-                                                        // Otherwise, they pressed cancel, so don't do anything.
-                                                        if( args.ImagePath != null )
+                                                        // flag that we want the cropper to start up on resume.
+                                                        // we cannot launch it now because we need to wait for the camera
+                                                        // activity to end and the navBar fragment to resume
+                                                        if( args.Result == true )
                                                         {
-                                                            ImageCropperPendingFilePath = args.ImagePath;
+                                                            // if the image path is valid, we have a picture.
+                                                            // Otherwise, they pressed cancel, so don't do anything.
+                                                            if( args.ImagePath != null )
+                                                            {
+                                                                ImageCropperPendingFilePath = args.ImagePath;
+                                                            }
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        // couldn't get the picture
-                                                        DisplayError( SpringboardStrings.ProfilePicture_Error_Title, SpringboardStrings.ProfilePicture_Error_Message );
-                                                    }
-                                                });
+                                                        else
+                                                        {
+                                                            // couldn't get the picture
+                                                            DisplayError( SpringboardStrings.ProfilePicture_Error_Title, SpringboardStrings.ProfilePicture_Error_Message );
+                                                        }
+                                                    });
+                                            }
+                                            else
+                                            {
+                                                // error accessing their storage. no dice.
+                                                DisplayError( SpringboardStrings.ExternalDir_Error_Title, SpringboardStrings.ExternalDir_Error_Message );
+                                            }
                                         }
                                         else
                                         {

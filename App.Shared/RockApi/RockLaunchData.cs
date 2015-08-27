@@ -271,49 +271,53 @@ namespace App
                                     // parse and take the new items
                                     foreach( Rock.Client.ContentChannelItem item in model )
                                     {
-                                        // only accept approved items, OR pending IF DEVELOPER MODE IS ON.
-                                        if( item.Status == Rock.Client.Enums.ContentChannelItemStatus.Approved ||
-                                            (item.Status == Rock.Client.Enums.ContentChannelItemStatus.PendingApproval && RockGeneralData.Instance.Data.DeveloperModeEnabled == true ) )
+                                        // only accept items that have started, OR pending start IF DEVELOPER MODE IS ON
+                                        if( item.StartDateTime <= DateTime.Now || RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                                         {
-                                            // it's possible rock sent us bad data, so guard against any incomplete news items
-                                            if( item.AttributeValues != null )
+                                            // only accept approved items, OR pending IF DEVELOPER MODE IS ON.
+                                            if( item.Status == Rock.Client.Enums.ContentChannelItemStatus.Approved ||
+                                                (item.Status == Rock.Client.Enums.ContentChannelItemStatus.PendingApproval && RockGeneralData.Instance.Data.DeveloperModeEnabled == true ) )
                                             {
-                                                string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
-                                                string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
-
-                                                string bannerGuid = item.AttributeValues[ "PromotionImage" ].Value;
-                                                string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
-
-                                                string detailUrl = item.AttributeValues[ "DetailsURL" ].Value;
-
-                                                bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ "DetailsURLLaunchesBrowser" ].Value );
-
-                                                bool includeImpersonationToken = bool.Parse( item.AttributeValues[ "IncludeImpersonationToken" ].Value );
-
-                                                // take a list of the campuses that this news item should display for
-                                                // (if the list is blank, we'll show it for all campuses)
-                                                List<Guid> campusGuids = new List<Guid>( );
-                                                if( item.AttributeValues[ "Campuses" ] != null && string.IsNullOrEmpty( item.AttributeValues[ "Campuses" ].Value ) == false )
+                                                // it's possible rock sent us bad data, so guard against any incomplete news items
+                                                if( item.AttributeValues != null )
                                                 {
-                                                    // this will be a comma-dilimited list of campuses to use for the news
-                                                    string[] campusGuidList = item.AttributeValues[ "Campuses" ].Value.Split( ',' );
-                                                    foreach( string campusGuid in campusGuidList )
-                                                    {
-                                                        campusGuids.Add( Guid.Parse( campusGuid ) );
-                                                    }
-                                                }
+                                                    string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
+                                                    string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
 
-                                                RockNews newsItem = new RockNews( item.Title, 
-                                                                                  item.Content, 
-                                                                                  detailUrl, 
-                                                                                  detailUrlLaunchesBrowser,
-                                                                                  includeImpersonationToken,
-                                                                                  imageUrl, 
-                                                                                  item.Title + "_main.png", 
-                                                                                  bannerUrl, 
-                                                                                  item.Title + "_banner.png", 
-                                                                                  campusGuids );
-                                                Data.News.Add( newsItem );
+                                                    string bannerGuid = item.AttributeValues[ "PromotionImage" ].Value;
+                                                    string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
+
+                                                    string detailUrl = item.AttributeValues[ "DetailsURL" ].Value;
+
+                                                    bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ "DetailsURLLaunchesBrowser" ].Value );
+
+                                                    bool includeImpersonationToken = bool.Parse( item.AttributeValues[ "IncludeImpersonationToken" ].Value );
+
+                                                    // take a list of the campuses that this news item should display for
+                                                    // (if the list is blank, we'll show it for all campuses)
+                                                    List<Guid> campusGuids = new List<Guid>( );
+                                                    if( item.AttributeValues[ "Campuses" ] != null && string.IsNullOrEmpty( item.AttributeValues[ "Campuses" ].Value ) == false )
+                                                    {
+                                                        // this will be a comma-dilimited list of campuses to use for the news
+                                                        string[] campusGuidList = item.AttributeValues[ "Campuses" ].Value.Split( ',' );
+                                                        foreach( string campusGuid in campusGuidList )
+                                                        {
+                                                            campusGuids.Add( Guid.Parse( campusGuid ) );
+                                                        }
+                                                    }
+
+                                                    RockNews newsItem = new RockNews( item.Title, 
+                                                                                      item.Content, 
+                                                                                      detailUrl, 
+                                                                                      detailUrlLaunchesBrowser,
+                                                                                      includeImpersonationToken,
+                                                                                      imageUrl, 
+                                                                                      item.Title + "_main.png", 
+                                                                                      bannerUrl, 
+                                                                                      item.Title + "_banner.png", 
+                                                                                      campusGuids );
+                                                    Data.News.Add( newsItem );
+                                                }
                                             }
                                         }
                                     }

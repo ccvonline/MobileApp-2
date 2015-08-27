@@ -14,9 +14,9 @@ namespace MobileApp
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )
         {
             string oDataFilter = string.Format( "?$filter=ContentChannel/Guid eq guid'EAE51F3E-C27B-4E7C-B9A0-16EB68129637' and " +
-                "(Status eq '2' or Status eq '1') and (StartDateTime le DateTime'{0}' or StartDateTime eq null) and " +
-                "(ExpireDateTime ge DateTime'{1}' or ExpireDateTime eq null)&LoadAttributes=True", 
-                DateTime.Now.ToString( "s" ), DateTime.Now.ToString( "s" ) );
+                "(Status eq '2' or Status eq '1') and " +
+                "(ExpireDateTime ge DateTime'{0}' or ExpireDateTime eq null)&LoadAttributes=True", 
+                DateTime.Now.ToString( "s" ) );
 
             RockApi.Get_ContentChannelItems( oDataFilter, resultHandler );
         }
