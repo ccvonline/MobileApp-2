@@ -5,6 +5,12 @@
 	<SeriesList>
 		<!--Start Series-->
 		<Series>
+			<Message Private="True">
+				<Name>STAND ALONE</Name>
+				<Speaker>Dr. Don Wilson</Speaker>
+				<Date>8/30/2015</Date>
+				<NoteUrl>xml/message_8_29_2015.xml</NoteUrl>
+			</Message>
 			<Message>
 				<Name>BOUNCE BACK</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
