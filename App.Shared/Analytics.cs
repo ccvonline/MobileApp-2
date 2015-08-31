@@ -78,12 +78,12 @@ namespace App.Shared
 
                     if ( GeneralConfig.Use_Analytics == true )
                     {
-                        #if !DEBUG
+#if !DEBUG
                         System.Collections.Generic.Dictionary<string, string> attribs = new System.Collections.Generic.Dictionary<string, string>();
                         attribs.Add( categoryObj.Name, action );
 
                         Xamarin.Insights.Track( Name, attribs );
-                        #endif
+#endif
                     }
                 }
             }

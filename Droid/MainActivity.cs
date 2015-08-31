@@ -89,9 +89,9 @@ namespace Droid
         {
             base.OnCreate( bundle );
 
-            #if !DEBUG
+#if !DEBUG
             Xamarin.Insights.Initialize( GeneralConfig.Droid_Xamarin_Insights_Key, this );
-            #endif
+#endif
 
             Window.AddFlags(WindowManagerFlags.Fullscreen);
 

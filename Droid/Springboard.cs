@@ -31,7 +31,6 @@ using Rock.Mobile.IO;
 using Rock.Mobile.Network;
 using MobileApp;
 
-
 namespace Droid
 {
     class SpringboardElement
@@ -771,6 +770,7 @@ namespace Droid
                                         {
                                             // start up the camera and get our picture. 
                                             // JHM 4-24-15 - The camera requires an SD Card, so use that path for our temp file.
+                                            // JHM 8-31-15 - We can't use Environment.GetFolderPath because Android cameras won't save to it.
                                             Java.IO.File externalDir = Rock.Mobile.PlatformSpecific.Android.Core.Context.GetExternalFilesDir( null );
                                             if( externalDir != null )
                                             {

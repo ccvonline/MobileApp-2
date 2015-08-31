@@ -23,8 +23,6 @@ namespace iOS
             List<NewsEntry> News { get; set; }
             UIImage ImagePlaceholder { get; set; }
 
-            string cellIdentifier = "TableCell";
-
             nfloat PendingCellHeight { get; set; }
 
             public PortraitTableSource (NewsMainUIViewController parent, List<NewsEntry> newsList, UIImage imagePlaceholder)
@@ -64,11 +62,12 @@ namespace iOS
 
             public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
             {
-                UITableViewCell cell = tableView.DequeueReusableCell (cellIdentifier);
+                PrimaryCell cell = tableView.DequeueReusableCell (PrimaryCell.Identifier) as PrimaryCell;
+
                 // if there are no cells to reuse, create a new one
                 if (cell == null)
                 {
-                    cell = new UITableViewCell (UITableViewCellStyle.Default, cellIdentifier);
+                    cell = new PrimaryCell (UITableViewCellStyle.Default, PrimaryCell.Identifier);
                     cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                     cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
                 }
@@ -84,12 +83,15 @@ namespace iOS
                     cell.ContentView.Layer.Contents = ImagePlaceholder.CGImage;
                 }
 
+                cell.PrivateOverlay.Hidden = !News[ indexPath.Row ].News.Private;
+
                 // scale down the image to the width of the device
                 nfloat imageWidth = cell.ContentView.Layer.Contents.Width;
                 nfloat imageHeight = cell.ContentView.Layer.Contents.Height;
 
                 nfloat aspectRatio = (float) (imageHeight / imageWidth);
                 cell.Bounds = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * aspectRatio );
+                cell.PrivateOverlay.Frame = new CGRect( 0, 0, cell.Bounds.Width, 30 );
 
                 PendingCellHeight = cell.Bounds.Height;
                 return cell;
@@ -102,9 +104,6 @@ namespace iOS
 
             List<NewsEntry> News { get; set; }
             UIImage ImagePlaceholder { get; set; }
-
-            string primaryCellIdentifier = "PrimaryTableCell";
-            string standardCellIdentifier = "StandardTableCell";
 
             nfloat PendingCellHeight { get; set; }
 
@@ -181,11 +180,12 @@ namespace iOS
 
             UITableViewCell GetPrimaryCell( UITableView tableView )
             {
-                UITableViewCell cell = tableView.DequeueReusableCell (primaryCellIdentifier);
+                PrimaryCell cell = tableView.DequeueReusableCell (PrimaryCell.Identifier) as PrimaryCell;
+
                 // if there are no cells to reuse, create a new one
                 if (cell == null)
                 {
-                    cell = new UITableViewCell (UITableViewCellStyle.Default, primaryCellIdentifier);
+                    cell = new PrimaryCell (UITableViewCellStyle.Default, PrimaryCell.Identifier);
                     cell.SelectionStyle = UITableViewCellSelectionStyle.Default;
                     cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
                 }
@@ -201,12 +201,16 @@ namespace iOS
                     cell.ContentView.Layer.Contents = ImagePlaceholder.CGImage;
                 }
 
+                cell.PrivateOverlay.Hidden = !News[ 0 ].News.Private;
+
+
                 // scale down the image to the width of the device
                 nfloat imageWidth = cell.ContentView.Layer.Contents.Width;
                 nfloat imageHeight = cell.ContentView.Layer.Contents.Height;
 
                 nfloat aspectRatio = (float) (imageHeight / imageWidth);
                 cell.Bounds = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * aspectRatio );
+                cell.PrivateOverlay.Frame = new CGRect( 0, 0, tableView.Bounds.Width, 30 );
 
                 PendingCellHeight = cell.Bounds.Height;
                 return cell;
@@ -215,7 +219,7 @@ namespace iOS
 
             UITableViewCell GetStandardCell( UITableView tableView, int rowIndex )
             {
-                StandardCell cell = tableView.DequeueReusableCell(standardCellIdentifier) as StandardCell;
+                StandardCell cell = tableView.DequeueReusableCell(StandardCell.Identifier) as StandardCell;
 
                 // convert the position to the appropriate image index.
                 int leftImageIndex = 1 + ( rowIndex * 2 );
@@ -223,7 +227,7 @@ namespace iOS
                 // if there are no cells to reuse, create a new one
                 if (cell == null)
                 {
-                    cell = new StandardCell (UITableViewCellStyle.Default, standardCellIdentifier);
+                    cell = new StandardCell (UITableViewCellStyle.Default, StandardCell.Identifier);
                     cell.SelectionStyle = UITableViewCellSelectionStyle.Default;
                     cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
                     cell.ParentSource = this;
@@ -244,10 +248,13 @@ namespace iOS
                     {
                         cell.LeftImage.Image = ImagePlaceholder;
                     }
+
+                    cell.LeftPrivateOverlay.Hidden = !News[ leftImageIndex ].News.Private;
                 }
                 else
                 {
                     cell.LeftImage.Image = null;
+                    cell.LeftPrivateOverlay.Hidden = true;
                 }
 
                 // now if there's a right item, set it
@@ -261,11 +268,14 @@ namespace iOS
                     else
                     {
                         cell.RightImage.Image = ImagePlaceholder;
-                    }    
+                    }
+
+                    cell.RightPrivateOverlay.Hidden = !News[ rightImageIndex ].News.Private;
                 }
                 else
                 {
                     cell.RightImage.Image = null;
+                    cell.RightPrivateOverlay.Hidden = true;
                 }
 
                 // scale down the image to the width of the device
@@ -278,12 +288,32 @@ namespace iOS
 
                 cell.LeftImage.Frame = new CGRect( cell.Bounds.X, cell.Bounds.Y, cell.Bounds.Width / 2, cell.Bounds.Height );
                 cell.LeftButton.Frame = cell.LeftImage.Frame;
+                cell.LeftPrivateOverlay.Frame = new CGRect( cell.Bounds.X, 0, cell.Bounds.Width / 2, 30 );
 
                 cell.RightImage.Frame = new CGRect( cell.LeftImage.Frame.Right, cell.Bounds.Y, cell.Bounds.Width / 2, cell.Bounds.Height );
                 cell.RightButton.Frame = cell.RightImage.Frame;
+                cell.RightPrivateOverlay.Frame = new CGRect( cell.LeftImage.Frame.Right, 0, cell.Bounds.Width / 2, 30 );
 
                 PendingCellHeight = cell.Bounds.Height;
                 return cell;
+            }
+        }
+
+        class PrimaryCell : UITableViewCell
+        {
+            public static string Identifier = "PrimaryCell";
+            public UILabel PrivateOverlay { get; set; }
+
+            public PrimaryCell( UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
+            {
+                PrivateOverlay = new UILabel( );
+                PrivateOverlay.Layer.AnchorPoint = CGPoint.Empty;
+                PrivateOverlay.Text = "Private";
+                PrivateOverlay.BackgroundColor = UIColor.Red;
+                PrivateOverlay.Alpha = .60f;
+                PrivateOverlay.TextColor = UIColor.Black;
+                PrivateOverlay.TextAlignment = UITextAlignment.Center;
+                AddSubview( PrivateOverlay );
             }
         }
 
@@ -300,10 +330,11 @@ namespace iOS
 
             public UIImageView LeftImage { get; set; }
             public UIButton LeftButton { get; set; }
-
+            public UILabel LeftPrivateOverlay { get; set; } // used only if the news item is private and not visible to the public
 
             public UIImageView RightImage { get; set; }
             public UIButton RightButton { get; set; }
+            public UILabel RightPrivateOverlay { get; set; } // used only if the news item is private and not visible to the public
 
             public StandardCell( UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
             {
@@ -320,6 +351,16 @@ namespace iOS
                     };
                 AddSubview( LeftButton );
 
+                LeftPrivateOverlay = new UILabel( );
+                LeftPrivateOverlay.Layer.AnchorPoint = CGPoint.Empty;
+                LeftPrivateOverlay.BackgroundColor = UIColor.Red;
+                LeftPrivateOverlay.Alpha = .60f;
+                LeftPrivateOverlay.Text = "Private";
+                LeftPrivateOverlay.TextAlignment = UITextAlignment.Center;
+                LeftPrivateOverlay.TextColor = UIColor.Black;
+                AddSubview( LeftPrivateOverlay );
+
+
 
                 RightImage = new UIImageView( );
                 RightImage.ContentMode = UIViewContentMode.ScaleAspectFit;
@@ -333,6 +374,15 @@ namespace iOS
                         ParentSource.RowClicked( LeftImageIndex + 1 );
                     };
                 AddSubview( RightButton );
+
+                RightPrivateOverlay = new UILabel( );
+                RightPrivateOverlay.Layer.AnchorPoint = CGPoint.Empty;
+                RightPrivateOverlay.BackgroundColor = UIColor.Red;
+                RightPrivateOverlay.Alpha = .60f;
+                RightPrivateOverlay.Text = "Private";
+                RightPrivateOverlay.TextAlignment = UITextAlignment.Center;
+                RightPrivateOverlay.TextColor = UIColor.Black;
+                AddSubview( RightPrivateOverlay );
             }
         }
 

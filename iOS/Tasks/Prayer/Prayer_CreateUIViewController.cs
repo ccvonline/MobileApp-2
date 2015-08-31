@@ -362,8 +362,10 @@ namespace iOS
                 }
                 else if ( PrayerRequest.Text.ToLower( ) == "upload dumps" )
                 {
+#if !DEBUG
                     Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
                     SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+#endif
                 }
                 else
                 {

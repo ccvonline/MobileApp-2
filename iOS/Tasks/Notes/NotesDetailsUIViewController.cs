@@ -322,6 +322,11 @@ namespace iOS
 
                 // Title
                 cell.Title.Text = Series.Name;
+                if ( Series.Private == true )
+                {
+                    cell.Title.Text += " (Private)";
+                }
+
                 cell.Title.SizeToFit( );
                 cell.Title.Frame = new CGRect( 5, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 10, cell.Title.Frame.Height + 5 );
 
@@ -414,6 +419,12 @@ namespace iOS
 
                 // Create the title
                 cell.Title.Text = Series.Messages[ row ].Name;
+                if ( Series.Private == true ||
+                    Series.Messages[ row ].Private == true )
+                {
+                    cell.Title.Text += " (Private)";
+                }
+
                 cell.Title.SizeToFit( );
 
                 // Date

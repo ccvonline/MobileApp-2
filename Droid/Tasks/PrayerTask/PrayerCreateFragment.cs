@@ -285,8 +285,10 @@ namespace Droid
                         }
                         else if ( RequestText.Text.ToLower( ) == "upload dumps" )
                         {
+#if !DEBUG
                             Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
                             Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+#endif
                         }
                         else
                         {

@@ -96,6 +96,11 @@ namespace Droid
                     }
 
                     messageItem.Title.Text = ParentFragment.Series.Name;
+                    if ( ParentFragment.Series.Private == true )
+                    {
+                        messageItem.Title.Text += " (Private)";
+                    }
+
                     messageItem.DateRange.Text = ParentFragment.Series.DateRanges;
                     messageItem.Desc.Text = ParentFragment.Series.Description;
 
@@ -114,6 +119,12 @@ namespace Droid
                     messageItem.Position = position;
 
                     messageItem.Title.Text = ParentFragment.Series.Messages[ position ].Name;
+                    if ( ParentFragment.Series.Private == true || 
+                        ParentFragment.Series.Messages[ position ].Private == true )
+                    {
+                        messageItem.Title.Text += " (Private)";
+                    }
+
                     messageItem.Date.Text = ParentFragment.Series.Messages[ position ].Date;
                     messageItem.Speaker.Text = ParentFragment.Series.Messages[ position ].Speaker;
 

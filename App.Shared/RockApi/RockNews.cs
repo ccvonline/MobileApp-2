@@ -29,6 +29,9 @@ namespace App
 
                 public List<Guid> CampusGuids { get; set; }
 
+                // Set at runtime based on developer conditions
+                public bool Private { get; set; }
+
                 [JsonConstructor]
                 public RockNews( string title, 
                                  string description, 
@@ -76,6 +79,9 @@ namespace App
                     HeaderImageName = rhs.HeaderImageName;
 
                     CampusGuids = rhs.CampusGuids;
+
+                    // note we copy the private flag here, but don't set it in the default constructor
+                    Private = rhs.Private;
                 }
             }
         }

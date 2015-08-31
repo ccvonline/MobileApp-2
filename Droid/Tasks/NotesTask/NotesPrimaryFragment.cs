@@ -102,6 +102,12 @@ namespace Droid
                         if ( ParentFragment.SeriesEntries[ 0 ].Series.Messages.Count > 0 )
                         {
                             primaryItem.Title.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
+                            if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || 
+                                ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Private == true )
+                            {
+                                primaryItem.Title.Text += " (Private)";
+                            }
+
                             primaryItem.Speaker.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Speaker;
                             primaryItem.Date.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Date;
 
@@ -169,6 +175,11 @@ namespace Droid
                         }
 
                         seriesItem.Title.Text = ParentFragment.SeriesEntries[ position ].Series.Name;
+                        if ( ParentFragment.SeriesEntries[ position ].Series.Private == true )
+                        {
+                            seriesItem.Title.Text += " (Private)";    
+                        }
+
                         seriesItem.DateRange.Text = ParentFragment.SeriesEntries[ position ].Series.DateRanges;
                     }
 

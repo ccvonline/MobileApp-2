@@ -77,6 +77,15 @@ namespace Droid
                         {
                             listItem.Billboard.SetImageBitmap( null );
                         }
+
+                        if ( ParentFragment.News[ position ].News.Private )
+                        {
+                            listItem.PrivateOverlay.Visibility = ViewStates.Visible;
+                        }
+                        else
+                        {
+                            listItem.PrivateOverlay.Visibility = ViewStates.Gone;
+                        }
                     }
                     else
                     {
@@ -175,6 +184,15 @@ namespace Droid
                         {
                             listItem.Billboard.SetImageBitmap( null );
                         }
+
+                        if ( ParentFragment.News[ position ].News.Private )
+                        {
+                            listItem.PrivateOverlay.Visibility = ViewStates.Visible;
+                        }
+                        else
+                        {
+                            listItem.PrivateOverlay.Visibility = ViewStates.Gone;
+                        }
                     }
 
                     else
@@ -230,6 +248,15 @@ namespace Droid
                             // then just clear it out
                             seriesItem.LeftImage.SetImageBitmap( null );
                         }
+
+                        if ( ParentFragment.News[ leftImageIndex ].News.Private )
+                        {
+                            seriesItem.LeftPrivateOverlay.Visibility = ViewStates.Visible;
+                        }
+                        else
+                        {
+                            seriesItem.LeftPrivateOverlay.Visibility = ViewStates.Gone;
+                        }
                     }
                     else
                     {
@@ -261,6 +288,15 @@ namespace Droid
                             // then just clear it out
                             seriesItem.RightImage.SetImageBitmap( null );
                         }
+
+                        if ( ParentFragment.News[ rightImageIndex ].News.Private )
+                        {
+                            seriesItem.RightPrivateOverlay.Visibility = ViewStates.Visible;
+                        }
+                        else
+                        {
+                            seriesItem.RightPrivateOverlay.Visibility = ViewStates.Gone;
+                        }
                     }
                     else
                     {
@@ -276,20 +312,35 @@ namespace Droid
             /// </summary>
             class SingleNewsListItem : Rock.Mobile.PlatformSpecific.Android.UI.ListAdapter.ListItemView
             {
+                RelativeLayout RelativeLayout { get; set; }
                 public AspectScaledImageView Billboard { get; set; }
                 public bool HasImage { get; set; }
+                public TextView PrivateOverlay { get; set; }
 
                 public SingleNewsListItem( Context context ) : base( context )
                 {
                     SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
+                    RelativeLayout = new RelativeLayout( context );
+                    RelativeLayout.LayoutParameters = new AbsListView.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
+                    AddView( RelativeLayout );
+
                     Billboard = new AspectScaledImageView( context );
-                    Billboard.LayoutParameters = new AbsListView.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
+                    Billboard.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
                     Billboard.SetScaleType( ImageView.ScaleType.CenterCrop );
 
                     Billboard.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
-                    AddView( Billboard );
+                    RelativeLayout.AddView( Billboard );
+
+
+                    PrivateOverlay = new TextView( context );
+                    PrivateOverlay.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
+                    PrivateOverlay.SetBackgroundColor( Android.Graphics.Color.Red );
+                    PrivateOverlay.Alpha = .60f;
+                    PrivateOverlay.Text = "Private";
+                    PrivateOverlay.Gravity = GravityFlags.Center;
+                    RelativeLayout.AddView( PrivateOverlay );
                 }
 
                 public override void Destroy()
@@ -311,11 +362,13 @@ namespace Droid
                 public Button LeftButton { get; set; }
                 public Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView LeftImage { get; set; }
                 public bool LeftHasImage { get; set; }
+                public TextView LeftPrivateOverlay { get; set; }
 
                 public RelativeLayout RightLayout { get; set; }
                 public Button RightButton { get; set; }
                 public Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView RightImage { get; set; }
                 public bool RightHasImage { get; set; }
+                public TextView RightPrivateOverlay { get; set; }
 
                 public DoubleNewsListItem( Context context ) : base( context )
                 {
@@ -324,7 +377,7 @@ namespace Droid
                     SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
                     LeftLayout = new RelativeLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    LeftLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
+                    LeftLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     AddView( LeftLayout );
 
                     LeftImage = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -343,9 +396,17 @@ namespace Droid
                         };
                     LeftLayout.AddView( LeftButton );
 
+                    LeftPrivateOverlay = new TextView( context );
+                    LeftPrivateOverlay.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
+                    LeftPrivateOverlay.SetBackgroundColor( Android.Graphics.Color.Red );
+                    LeftPrivateOverlay.Alpha = .60f;
+                    LeftPrivateOverlay.Text = "Private";
+                    LeftPrivateOverlay.Gravity = GravityFlags.Center;
+                    LeftLayout.AddView( LeftPrivateOverlay );
+
 
                     RightLayout = new RelativeLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    RightLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
+                    RightLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     AddView( RightLayout );
 
                     RightImage = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -363,6 +424,14 @@ namespace Droid
                             ParentAdapter.RowItemClicked( LeftImageIndex + 1 );
                         };
                     RightLayout.AddView( RightButton );
+
+                    RightPrivateOverlay = new TextView( context );
+                    RightPrivateOverlay.LayoutParameters = new RelativeLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, ViewGroup.LayoutParams.WrapContent );
+                    RightPrivateOverlay.SetBackgroundColor( Android.Graphics.Color.Red );
+                    RightPrivateOverlay.Alpha = .60f;
+                    RightPrivateOverlay.Text = "Private";
+                    RightPrivateOverlay.Gravity = GravityFlags.Center;
+                    RightLayout.AddView( RightPrivateOverlay );
                 }
 
                 public override void Destroy()

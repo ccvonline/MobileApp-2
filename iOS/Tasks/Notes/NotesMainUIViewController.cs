@@ -373,6 +373,11 @@ namespace iOS
                     if ( SeriesEntries[ 0 ].Series.Messages.Count > 0 )
                     {
                         cell.Title.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
+                        if( SeriesEntries[ 0 ].Series.Private == true || 
+                            SeriesEntries[ 0 ].Series.Messages[ 0 ].Private == true )
+                        {
+                            cell.Title.Text += " (Private)";
+                        }
                         cell.Title.SizeToFit( );
 
 
@@ -456,6 +461,10 @@ namespace iOS
 
                 // Create the title
                 cell.Title.Text = SeriesEntries[ row ].Series.Name;
+                if ( SeriesEntries[ row ].Series.Private == true )
+                {
+                    cell.Title.Text += " (Private)";    
+                }
                 cell.Title.SizeToFit( );
 
                 // Date Range

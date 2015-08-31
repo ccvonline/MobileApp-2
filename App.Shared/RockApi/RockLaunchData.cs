@@ -271,15 +271,14 @@ namespace App
                                     // parse and take the new items
                                     foreach( Rock.Client.ContentChannelItem item in model )
                                     {
-                                        // only accept items that have started, OR pending start IF DEVELOPER MODE IS ON
-                                        if( item.StartDateTime <= DateTime.Now || RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                                        // allow the item if it's public OR DEVELOPER MODE IS ON
+                                        bool newsPublic = IsNewsPublic( item );
+                                        if( newsPublic || RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                                         {
-                                            // only accept approved items, OR pending IF DEVELOPER MODE IS ON.
-                                            if( item.Status == Rock.Client.Enums.ContentChannelItemStatus.Approved ||
-                                                (item.Status == Rock.Client.Enums.ContentChannelItemStatus.PendingApproval && RockGeneralData.Instance.Data.DeveloperModeEnabled == true ) )
+                                            // it's possible rock sent us bad data, so guard against any incomplete news items
+                                            if( item.AttributeValues != null )
                                             {
-                                                // it's possible rock sent us bad data, so guard against any incomplete news items
-                                                if( item.AttributeValues != null )
+                                                try
                                                 {
                                                     string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
                                                     string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
@@ -316,7 +315,22 @@ namespace App
                                                                                       bannerUrl, 
                                                                                       item.Title + "_banner.png", 
                                                                                       campusGuids );
+
+                                                    // do a quick check and see if this should be flagged 'private'
+                                                    newsItem.Private = !newsPublic;
+
                                                     Data.News.Add( newsItem );
+                                                }
+                                                catch( Exception e )
+                                                {
+                                                    // one of the attribute values we wanted wasn't there. Package up what WAS there and report
+                                                    // the error. We can then use process of elimination to fix it.
+                                                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found. {0}", e ) );
+#if !DEBUG
+                                                    string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
+                                                    Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
+                                                    Xamarin.Insights.Report( reportException );
+#endif
                                                 }
                                             }
                                         }
@@ -333,6 +347,21 @@ namespace App
                                 resultCallback( statusCode, statusDescription );
                             }
                         } );
+                }
+
+                bool IsNewsPublic( Rock.Client.ContentChannelItem newsItem )
+                {
+                    // if the start time is valid
+                    if( newsItem.StartDateTime <= DateTime.Now )
+                    {
+                        // and its approvated
+                        if( newsItem.Status == Rock.Client.Enums.ContentChannelItemStatus.Approved )
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
                 }
 
                 public void GetNoteDB( HttpRequest.RequestResult resultCallback )
