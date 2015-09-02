@@ -43,6 +43,7 @@ namespace App
                         Campuses.Add( new Rock.Client.Campus( ) { Name = "Scottsdale", Id = 6 } );
                         Campuses.Add( new Rock.Client.Campus( ) { Name = "East Valley", Id = 7 } );
                         Campuses.Add( new Rock.Client.Campus( ) { Name = "Anthem", Id = 8 } );
+                        Campuses.Add( new Rock.Client.Campus( ) { Name = "Avondale", Id = 9 } );
 
                         Genders = new List<string>( );
                         Genders.Add( "Unknown" );

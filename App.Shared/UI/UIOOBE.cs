@@ -5,6 +5,7 @@ using App.Shared.Config;
 using App.Shared.Strings;
 using Rock.Mobile.Animation;
 using System.IO;
+using System.Collections.Generic;
 
 namespace App.Shared.UI
 {
@@ -15,6 +16,9 @@ namespace App.Shared.UI
         public PlatformImageView ImageBG { get; set; }
 
         public PlatformLabel WelcomeLabel { get; set; }
+
+        public PlatformLabel CampusHeader { get; set; }
+        public List<PlatformButton> CampusButtons { get; set; }
 
         public PlatformButton RegisterButton { get; set; }
         public PlatformView RegisterSeperator { get; set; }
@@ -30,12 +34,16 @@ namespace App.Shared.UI
         {
             Startup,
             Welcome,
-            RevealControls,
+            CampusIntro,
+            SelectCampus,
+            WaitForCampus,
+            AccountChoice,
+            WaitForAccountChoice,
             Done
         }
         OOBE_State State { get; set; }
 
-        public delegate void OnButtonClick( int index );
+        public delegate void OnButtonClick( int index, bool isCampusSelection );
 
         public void Create( object masterView, string bgLayerImageName, string logoImageName, bool scaleImageLogo, RectangleF frame, OnButtonClick onClick )
         {
@@ -61,6 +69,45 @@ namespace App.Shared.UI
             WelcomeLabel.SizeToFit( );
             WelcomeLabel.AddAsSubview( View.PlatformNativeObject );
 
+
+            // TODO: We need to support scrolling for the eventual day we have too many campuses for a single screen.
+            // TODO: We should be downloading these before display, but I don't want to risk that for the first release.
+            // Setup campuses
+            CampusHeader = PlatformLabel.Create( );
+            CampusHeader.SetFont( ControlStylingConfig.Font_Light, 18 );
+            CampusHeader.TextColor = 0xCCCCCCFF;
+            CampusHeader.Text = "We Are One Church in Many Locations\nSelect Your Home Campus";
+            CampusHeader.TextAlignment = TextAlignment.Center;
+            CampusHeader.Opacity = 0;
+            CampusHeader.SizeToFit( );
+            CampusHeader.AddAsSubview( View.PlatformNativeObject );
+
+            CampusButtons = new List<PlatformButton>( );
+            foreach ( Rock.Client.Campus campus in App.Shared.Network.RockGeneralData.Instance.Data.Campuses )
+            {
+                PlatformButton campusButton = PlatformButton.Create( );
+                campusButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );
+                campusButton.TextColor = 0xCCCCCCFF;
+                campusButton.Text = campus.Name;
+                campusButton.Opacity = 0;
+                campusButton.SizeToFit( );
+                campusButton.ClickEvent = (PlatformButton button ) =>
+                    {
+                        // do not allow multiple campus button taps
+                        if( State == OOBE_State.WaitForCampus )
+                        {
+                            onClick( campus.Id, true );
+
+                            EnterNextState( OOBE_State.AccountChoice );
+                            PerformAccountChoice( );
+                        }
+                    };
+                campusButton.AddAsSubview( View.PlatformNativeObject );
+
+                CampusButtons.Add( campusButton );
+            }
+
+
             RegisterButton = PlatformButton.Create( );
             RegisterButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );
             RegisterButton.TextColor = 0xCCCCCCFF;
@@ -68,9 +115,15 @@ namespace App.Shared.UI
             RegisterButton.Opacity = 0;
             RegisterButton.SizeToFit( );
             RegisterButton.ClickEvent = (PlatformButton button ) =>
-            {
-                onClick( 0 );
-            };
+                {
+                    // do not allow multiple register taps
+                    if( State == OOBE_State.WaitForAccountChoice )
+                    {
+                        onClick( 0, false );
+
+                        EnterNextState( OOBE_State.Done );
+                    }
+                };
             RegisterButton.AddAsSubview( View.PlatformNativeObject );
 
 
@@ -88,7 +141,13 @@ namespace App.Shared.UI
             LoginButton.SizeToFit( );
             LoginButton.ClickEvent = (PlatformButton button ) =>
                 {
-                    onClick( 1 );
+                    // do not allow multiple register taps
+                    if( State == OOBE_State.WaitForAccountChoice )
+                    {
+                        onClick( 1, false );
+
+                        EnterNextState( OOBE_State.Done );
+                    }
                 };
             LoginButton.AddAsSubview( View.PlatformNativeObject );
 
@@ -106,7 +165,13 @@ namespace App.Shared.UI
             SkipButton.SizeToFit( );
             SkipButton.ClickEvent = (PlatformButton button ) =>
                 {
-                    onClick( 2 );
+                    // do not allow multiple register taps
+                    if( State == OOBE_State.WaitForAccountChoice )
+                    {
+                        onClick( 2, false );
+
+                        EnterNextState( OOBE_State.Done );
+                    }
                 };
             SkipButton.AddAsSubview( View.PlatformNativeObject );
 
@@ -129,33 +194,80 @@ namespace App.Shared.UI
             ImageBG.Destroy( );
         }
 
+        static float WelcomeHeightPerc = .01f;
         public void LayoutChanged( RectangleF frame )
         {
             View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
 
             ImageBG.Frame = View.Frame;
 
-            if ( State == OOBE_State.Done )
+            if ( (int)State > (int)OOBE_State.CampusIntro )
             {
-                WelcomeLabel.Position = new PointF( ( ( View.Frame.Width - WelcomeLabel.Frame.Width ) / 2 ), View.Frame.Height * .25f );
+                WelcomeLabel.Position = new PointF( ( ( View.Frame.Width - WelcomeLabel.Frame.Width ) / 2 ), View.Frame.Height * WelcomeHeightPerc );
             }
             else
             {
                 WelcomeLabel.Position = new PointF( ( ( View.Frame.Width - WelcomeLabel.Frame.Width ) / 2 ), View.Frame.Height * .35f );
             }
 
-            float welcomeFinalBottom = ( View.Frame.Height * .25f ) + WelcomeLabel.Bounds.Height;
-            RegisterButton.Position = new PointF( ( ( View.Frame.Width - RegisterButton.Frame.Width ) / 2 ), welcomeFinalBottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+            float welcomeFinalBottom = ( View.Frame.Height * WelcomeHeightPerc ) + WelcomeLabel.Bounds.Height;
+            float availableHeight = ( View.Frame.Height - welcomeFinalBottom );
 
-            RegisterSeperator.Position = new PointF( RegisterButton.Position.X + (( RegisterButton.Frame.Width - RegisterSeperator.Bounds.Width ) / 2), RegisterButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+            ImageLogo.Frame = new RectangleF( ( ( View.Frame.Width - ImageLogo.Frame.Width ) / 2 ), ( ( View.Frame.Height - ImageLogo.Frame.Height ) / 2 ) + 2, ImageLogo.Frame.Width, ImageLogo.Frame.Height );
 
-            LoginButton.Position = new PointF( ( ( View.Frame.Width - LoginButton.Frame.Width ) / 2 ), RegisterSeperator.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
 
-            LoginSeperator.Position = new PointF( LoginButton.Position.X + (( LoginButton.Frame.Width - LoginSeperator.Bounds.Width ) / 2), LoginButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+            // position the campus header just below "Welcome"
+            if ( (int)State <= (int)OOBE_State.WaitForCampus )
+            {
+                float currYPos = welcomeFinalBottom + Rock.Mobile.Graphics.Util.UnitToPx( 0 );
+                CampusHeader.Position = new PointF( ( ( View.Frame.Width - CampusHeader.Frame.Width ) / 2 ), currYPos );
 
-            SkipButton.Position = new PointF( ( ( View.Frame.Width - SkipButton.Frame.Width ) / 2 ), LoginSeperator.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+                // for the campus buttons, we want to center them within the available space below "Welcome".
+                // so figure out that screen space, and the total height of all the campus buttons (with their padding)
+                float totalCampusButtonHeight = 0;
+                foreach ( PlatformButton campusButton in CampusButtons )
+                {
+                    totalCampusButtonHeight += campusButton.Frame.Height + Rock.Mobile.Graphics.Util.UnitToPx( 16 );
+                }
 
-            ImageLogo.Frame = new RectangleF( (( View.Frame.Width - ImageLogo.Frame.Width ) / 2), (( View.Frame.Height - ImageLogo.Frame.Height ) / 2) + 2, ImageLogo.Frame.Width, ImageLogo.Frame.Height );
+                // now lay them out evenly
+                currYPos = welcomeFinalBottom + ( ( availableHeight - totalCampusButtonHeight ) / 2 );
+                foreach ( PlatformButton campusButton in CampusButtons )
+                {
+                    campusButton.Position = new PointF( ( ( View.Frame.Width - campusButton.Frame.Width ) / 2 ), currYPos );
+
+                    currYPos = campusButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 );
+                }
+            }
+            else
+            {
+                foreach ( PlatformButton campusButton in CampusButtons )
+                {
+                    campusButton.Position = PointF.Empty;
+                }
+            }
+
+            if ( (int)State > (int)OOBE_State.WaitForCampus )
+            {
+                float totalRegisterHeight = ( Rock.Mobile.Graphics.Util.UnitToPx( 16 ) * 5 ) + RegisterButton.Frame.Height + RegisterSeperator.Frame.Height + LoginButton.Frame.Height + LoginSeperator.Frame.Height + SkipButton.Frame.Height;
+                float registerYPos = welcomeFinalBottom + ( ( availableHeight - totalRegisterHeight ) / 2 );
+
+                RegisterButton.Position = new PointF( ( ( View.Frame.Width - RegisterButton.Frame.Width ) / 2 ), registerYPos );
+
+                RegisterSeperator.Position = new PointF( RegisterButton.Position.X + ( ( RegisterButton.Frame.Width - RegisterSeperator.Bounds.Width ) / 2 ), RegisterButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+
+                LoginButton.Position = new PointF( ( ( View.Frame.Width - LoginButton.Frame.Width ) / 2 ), RegisterSeperator.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+
+                LoginSeperator.Position = new PointF( LoginButton.Position.X + ( ( LoginButton.Frame.Width - LoginSeperator.Bounds.Width ) / 2 ), LoginButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+
+                SkipButton.Position = new PointF( ( ( View.Frame.Width - SkipButton.Frame.Width ) / 2 ), LoginSeperator.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 ) );
+            }
+            else
+            {
+                RegisterButton.Position = PointF.Empty;
+                LoginButton.Position = PointF.Empty;
+                SkipButton.Position = PointF.Empty;
+            }
         }
 
         public void PerformStartup( )
@@ -220,7 +332,7 @@ namespace App.Shared.UI
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                             {
                                 //AnimateRegSeperator( );
-                                EnterNextState( OOBE_State.RevealControls );
+                                EnterNextState( OOBE_State.CampusIntro );
                             });
                         };
                     timer.Start( );
@@ -228,55 +340,163 @@ namespace App.Shared.UI
             anim.Start( );
         }
 
-        void PerformRevealControls( )
+        void PerformCampusIntro( )
         {
-            // this will be fun. Chain the animations so they go serially. Start with moving up Welcome
-            // now animate it down to a lighter color
-            SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, .15f, 1.10f, delegate(float percent, object value )
+            LayoutChanged( View.Frame );
+
+            // Fade OUT the welcome
+            SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, .15f, 2.00f, delegate(float percent, object value )
                 {
                     WelcomeLabel.Opacity = (float)value;
                 }, null );
             animDown.Start( );
 
-            SimpleAnimator_PointF posAnim = new SimpleAnimator_PointF( WelcomeLabel.Position, new PointF( WelcomeLabel.Position.X, View.Frame.Height * .25f ), .55f,
+            // Move UP the welcome
+            SimpleAnimator_PointF posAnim = new SimpleAnimator_PointF( WelcomeLabel.Position, new PointF( WelcomeLabel.Position.X, View.Frame.Height * WelcomeHeightPerc ), 1.75f,
                 delegate(float posPercent, object posValue )
                 {
                     WelcomeLabel.Position = (PointF) posValue;
                 },
                 delegate
                 {
-                    // now fade in Register
-                    SimpleAnimator_Float regAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                    // once moving up the welcome is done, kick off a timer that will fade in the
+                    // campus header.
+                    System.Timers.Timer timer = new System.Timers.Timer();
+                    timer.Interval = 1000;
+                    timer.AutoReset = false;
+                    timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
                         {
-                            RegisterButton.Opacity = (float)value;
-                        },
-                        delegate
-                        {
-                            // now Login
-                            SimpleAnimator_Float loginAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                            // do this ON the UI thread
+                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
-                                    LoginButton.Opacity = (float)value;
-                                },
-                                delegate
-                                {
-                                    // finally skip
-                                    SimpleAnimator_Float skipAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                                    // now fade in the campuses intro.
+                                    SimpleAnimator_Float campusAnim = new SimpleAnimator_Float( 0.00f, 1.00f, 1.50f, delegate(float percent, object value )
                                         {
-                                            SkipButton.Opacity = (float)value;
+                                            CampusHeader.Opacity = (float)value;
                                         },
                                         delegate
                                         {
-                                            EnterNextState( OOBE_State.Done );
-                                            AnimateRegSeperator( );
-                                        });
-                                    skipAnim.Start( );
+                                            // do this ON the UI thread
+                                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                                {
+                                                    EnterNextState( OOBE_State.SelectCampus );
+                                                });
+                                        } );
+                                    campusAnim.Start( );
                                 });
-                                loginAnim.Start( );
-                        } );
-                    regAnim.Start( );
-                    
+                        };
+                    timer.Start( );
+
                 });
-            posAnim.Start( );
+            posAnim.Start( SimpleAnimator.Style.CurveEaseOut );
+        }
+
+        void PerformSelectCampus( )
+        {
+            // IF THERE IS A COLLISION (i.e. no room) between the CampusHeader and CampusButtons,
+            // we will fade OUT the header and leave it up for longer.
+            bool fadeOutHeader  = false;
+            float animTime = 2.00f;
+            if ( CampusButtons[ 0 ].Frame.Top <= CampusHeader.Frame.Bottom )
+            {
+                fadeOutHeader = true;
+                animTime = 5.00f;
+            }
+                
+            // fade down the campus header and fade up the campuses.
+            SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, .00f, animTime, delegate(float percent, object value )
+                {
+                    // IF THERE IS A COLLISION (i.e. no room) between the CampusHeader and CampusButtons,
+                    // fade down the campus header and fade up the campuses.
+                    if ( fadeOutHeader )
+                    {
+                        CampusHeader.Opacity = (float)value;
+                    }
+                }, 
+                delegate
+                {
+                    // now fade in the campuses
+                    foreach( PlatformButton campusButton in CampusButtons )
+                    {
+                        SimpleAnimator_Float campusAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                            {
+                                campusButton.Opacity = (float)value;
+                            },
+                            null );
+                        campusAnim.Start( );
+                    }
+
+                    // do this ON the UI thread
+                    Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                        {
+                            // immediately move to the next state (while the campuses are fading in)
+                            EnterNextState( OOBE_State.WaitForCampus );
+                        });
+                } );
+            animDown.Start( SimpleAnimator.Style.CurveEaseIn );
+        }
+
+        void PerformAccountChoice( )
+        {
+            // fade out the campus choices and header.
+            bool accountFadeInBegan = false;
+            SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, 0.00f, 1.10f, delegate(float percent, object value )
+                {
+                    // take either the lowered alpha value OR the current opacity. That way if
+                    // the header is already faded out we won't do anything.
+                    CampusHeader.Opacity = Math.Min( (float)value, CampusHeader.Opacity );
+
+                    foreach ( PlatformButton campusButton in CampusButtons )
+                    {
+                        campusButton.Opacity = (float)value;
+                    }
+                }, 
+                delegate
+                {
+                    // make sure we only begin fading in the account stuff ONCE, and not
+                    // for each button animating.
+                    if( accountFadeInBegan == false )
+                    {
+                        Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                            {
+                                LayoutChanged( View.Frame );
+                            } );
+
+                        accountFadeInBegan = true;
+
+                        // now fade in Register
+                        SimpleAnimator_Float regAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                            {
+                                RegisterButton.Opacity = (float)value;
+                            },
+                            delegate
+                            {
+                                // now Login
+                                SimpleAnimator_Float loginAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                                    {
+                                        LoginButton.Opacity = (float)value;
+                                    },
+                                    delegate
+                                    {
+                                        // finally skip
+                                        SimpleAnimator_Float skipAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+                                            {
+                                                SkipButton.Opacity = (float)value;
+                                            },
+                                            delegate
+                                            {
+                                                EnterNextState( OOBE_State.WaitForAccountChoice );
+                                                AnimateRegSeperator( );
+                                            });
+                                        skipAnim.Start( );
+                                    });
+                                loginAnim.Start( );
+                            } );
+                        regAnim.Start( );
+                    }
+
+                } );
+            animDown.Start( SimpleAnimator.Style.CurveEaseIn );
         }
 
         void AnimateRegSeperator( )
@@ -292,7 +512,6 @@ namespace App.Shared.UI
             SimpleAnimator_RectF regBorderAnim = new SimpleAnimator_RectF( startRegBorder, finalRegBorder, .25f, delegate(float percent, object value )
                 {
                      RegisterSeperator.Frame = (RectangleF)value;
-                     Rock.Mobile.Util.Debug.WriteLine( string.Format( "{0}", RegisterSeperator.Frame ) );
                 }, delegate { AnimateLoginSeperator( ); } );
 
             regBorderAnim.Start( );
@@ -332,13 +551,31 @@ namespace App.Shared.UI
                     break;
                 }
 
-                case OOBE_State.RevealControls:
+                case OOBE_State.CampusIntro:
                 {
-                    PerformRevealControls( );
+                    PerformCampusIntro( );
                     break;
                 }
 
-                case OOBE_State.Done:
+                case OOBE_State.SelectCampus:
+                {
+                    PerformSelectCampus( );
+                    break;
+                }
+
+                case OOBE_State.WaitForCampus:
+                {
+                    // just wait for them to pick
+                    break;
+                }
+
+                case OOBE_State.AccountChoice:
+                {
+                    PerformAccountChoice( );
+                    break;
+                }
+
+                case OOBE_State.WaitForAccountChoice:
                 {
                     break;
                 }

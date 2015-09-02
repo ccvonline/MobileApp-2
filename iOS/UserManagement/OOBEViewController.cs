@@ -8,6 +8,7 @@ using Rock.Mobile.PlatformSpecific.Util;
 using System.Drawing;
 using CoreGraphics;
 using Rock.Mobile.Animation;
+using Rock.Mobile.Network;
 
 namespace iOS
 {
@@ -28,10 +29,21 @@ namespace iOS
             // to our logo, we need to use a PER-DEVICE image. Sigh.
             string imageName = GetSplashLogo( UIKit.UIScreen.MainScreen.ApplicationFrame.Size, UIKit.UIScreen.MainScreen.Scale );
 
-            OOBEView = new UIOOBE();
-            OOBEView.Create( View, "oobe_splash_bg.png", imageName, true, View.Frame.ToRectF( ), delegate(int index) 
+            // before anything else, get the campuses. if we cant, use the default ones.
+            /*RockApi.Get_Campuses( 
+                delegate(System.Net.HttpStatusCode statusCode, string statusDescription, System.Collections.Generic.List<Rock.Client.Campus> model )
                 {
-                    Springboard.OOBEOnClick( index );
+                    if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
+                    {
+                        
+                        break;
+                    }
+                } );*/
+
+            OOBEView = new UIOOBE();
+            OOBEView.Create( View, "oobe_splash_bg.png", imageName, true, View.Frame.ToRectF( ), delegate(int index, bool isCampusSelection ) 
+                {
+                    Springboard.OOBEOnClick( index, isCampusSelection );
                 } );
         }
 

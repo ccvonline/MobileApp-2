@@ -516,20 +516,24 @@ namespace iOS
         {
             base.LayoutChanged();
 
-            if ( SpringboardViewController.SupportsLandscapeWide( ) )
+            // make sure this isn't being called before we've loaded
+            if ( NewsTableView != null )
             {
-                NewsTableView.Source = LandscapeSource;
-            }
-            else
-            {
-                NewsTableView.Source = PortraitSource;
-            }
+                if ( SpringboardViewController.SupportsLandscapeWide( ) )
+                {
+                    NewsTableView.Source = LandscapeSource;
+                }
+                else
+                {
+                    NewsTableView.Source = PortraitSource;
+                }
 
-            // adjust the table height for our navbar.
-            // We MUST do it here, and we also have to set ContentType to Top, as opposed to ScaleToFill, on the view itself,
-            // or our changes will be overwritten
-            NewsTableView.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Height );
-            NewsTableView.ReloadData( );
+                // adjust the table height for our navbar.
+                // We MUST do it here, and we also have to set ContentType to Top, as opposed to ScaleToFill, on the view itself,
+                // or our changes will be overwritten
+                NewsTableView.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Height );
+                NewsTableView.ReloadData( );
+            }
         }
 
         public void RowClicked( int row )

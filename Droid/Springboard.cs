@@ -525,12 +525,12 @@ namespace Droid
             builder.Show( );
         }
 
-        void RefreshCampusSelection( )
+        void RefreshCampusSelection( bool forceRefresh = false )
         {
             string newCampusText = string.Format( SpringboardStrings.Viewing_Campus, 
                 RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
 
-            if ( CampusText.Text != newCampusText )
+            if ( CampusText.Text != newCampusText || forceRefresh == true )
             {
                 CampusText.Text = newCampusText;
 
@@ -921,32 +921,38 @@ namespace Droid
             ModalFragmentDone( null );
         }
 
-        public void OOBEUserClick( int index )
+        public void OOBEUserClick( int index, bool isCampusSelection )
         {
-            if ( index == 0 )
+            // if they picked their campus, update their viewing campus immediately.
+            if ( isCampusSelection )
             {
-                StartModalFragment( RegisterFragment, true );
-            }
-            else if ( index == 1 )
-            {
-                StartModalFragment( LoginFragment, true );
+                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
             }
             else
             {
-                // fade the OOBE out
-                SimpleAnimator_Float viewAlphaAnim = new SimpleAnimator_Float( FullScreenLayout.Alpha, 0.00f, .13f, delegate(float percent, object value )
+                if ( index == 0 )
                 {
-                    FullScreenLayout.Alpha = (float)value;
-                },
-                delegate
+                    StartModalFragment( RegisterFragment, true );
+                }
+                else if ( index == 1 )
                 {
-                       
-                    // and launch the appropriate screen
-                    ModalFragmentDone( null );
-
-                    //CompleteOOBE( );
-                } );
-                viewAlphaAnim.Start( );
+                    StartModalFragment( LoginFragment, true );
+                }
+                else
+                {
+                    // fade the OOBE out
+                    SimpleAnimator_Float viewAlphaAnim = new SimpleAnimator_Float( FullScreenLayout.Alpha, 0.00f, .13f, delegate(float percent, object value )
+                        {
+                            FullScreenLayout.Alpha = (float)value;
+                        },
+                        delegate
+                        {
+                           
+                            // and launch the appropriate screen
+                            ModalFragmentDone( null );
+                        } );
+                    viewAlphaAnim.Start( );
+                }
             }
         }
 
@@ -963,8 +969,6 @@ namespace Droid
                             IsOOBERunning = false;
                             RockMobileUser.Instance.OOBEComplete = true;
 
-                            SelectCampus( null, null );
-
                             // if the series billboard will NOT show up,
                             if( TryDisplaySeriesBillboard( ) == false )
                             {
@@ -972,8 +976,8 @@ namespace Droid
                                 NavbarFragment.RevealSpringboard( true );
                             }
 
-                            // NOW go ahead and start downloads.
-                            PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                            // NOW go ahead and start downloads. (refresh their campus since they picked it in the OOBE)
+                            RefreshCampusSelection( true );
                         } );
                 };
             timer.Start( );

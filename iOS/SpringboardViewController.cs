@@ -564,7 +564,7 @@ namespace iOS
             RockNetworkManager.Instance.LoadObjectsFromDevice( );
             Rock.Mobile.Util.Debug.WriteLine( "Loading objects done." );
 
-            // set the viewing campus now that their profile has loaded
+            // set the viewing campus now that their profile has loaded (if they have already done the OOBE)
             CampusSelectionText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
             CampusSelectionText.SizeToFit( );
 
@@ -674,35 +674,42 @@ namespace iOS
         }
 
         //static bool RanOOBE = false;
-        public void OOBEOnClick( int index )
+        public void OOBEOnClick( int index, bool isCampusSelection )
         {
-            // fade out the OOBE
-            SimpleAnimator_Float oobeFadeOutAnim = new SimpleAnimator_Float( 1.00f, 0.00f, .33f, delegate(float percent, object value )
-                {
-                    OOBEViewController.View.Layer.Opacity = (float)value;
-                },
-                delegate
-                {
-                    // if they chose register, present it
-                    if ( index == 0 )
+            if ( isCampusSelection )
+            {
+                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
+            }
+            else
+            {
+                // fade out the OOBE
+                SimpleAnimator_Float oobeFadeOutAnim = new SimpleAnimator_Float( 1.00f, 0.00f, .33f, delegate(float percent, object value )
                     {
-                        PresentModalViewController( RegisterViewController );
-                    }
-                    // if they chose login, present it!
-                    else if ( index == 1 )
+                        OOBEViewController.View.Layer.Opacity = (float)value;
+                    },
+                                                           delegate
                     {
-                        PresentModalViewController( LoginViewController );
-                    }
-                    else
-                    {
-                        // don't present anything. Instead, just wrap up the OOBE.
-                        CompleteOOBE( );
-                    }
+                        // if they chose register, present it
+                        if ( index == 0 )
+                        {
+                            PresentModalViewController( RegisterViewController );
+                        }
+                        // if they chose login, present it!
+                        else if ( index == 1 )
+                        {
+                            PresentModalViewController( LoginViewController );
+                        }
+                        else
+                        {
+                            // don't present anything. Instead, just wrap up the OOBE.
+                            CompleteOOBE( );
+                        }
 
-                    OOBEViewController.RemoveFromParentViewController( );
-                    OOBEViewController.View.RemoveFromSuperview( );
-                } );
-            oobeFadeOutAnim.Start( );
+                        OOBEViewController.RemoveFromParentViewController( );
+                        OOBEViewController.View.RemoveFromSuperview( );
+                    } );
+                oobeFadeOutAnim.Start( );
+            }
         }
 
         void CompleteOOBE( )
@@ -718,8 +725,6 @@ namespace iOS
                             IsOOBERunning = false;
                             RockMobileUser.Instance.OOBEComplete = true;
 
-                            SelectCampus( null, null );
-
                             // if the series billboard will NOT show up,
                             if( TryDisplaySeriesBillboard( ) == false )
                             {
@@ -727,8 +732,10 @@ namespace iOS
                                 NavViewController.RevealSpringboard( true );
                             }
 
-                            // NOW go ahead and start downloads.
-                            PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                            // NOW go ahead and start downloads by forcing a campus selection (since they just picked it in the OOBE)
+                            //PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                            //PerformTaskAction( PrivateGeneralConfig.TaskAction_CampusChanged );
+                            RefreshCampusSelection( true );
                         } );
                 };
             timer.Start( );
@@ -1002,12 +1009,12 @@ namespace iOS
             RefreshCampusSelection( );
         }
 
-        void RefreshCampusSelection( )
+        void RefreshCampusSelection( bool forceRefresh = false )
         {
             string newCampusText = string.Format( SpringboardStrings.Viewing_Campus, 
                 RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
 
-            if ( CampusSelectionText.Text != newCampusText )
+            if ( CampusSelectionText.Text != newCampusText || forceRefresh == true )
             {
                 CampusSelectionText.Text = newCampusText;
 
@@ -1053,16 +1060,20 @@ namespace iOS
 
             ScrollView.Frame = View.Frame;
 
-            UpdateLoginState( );
-
             AdjustSpringboardLayout( );
 
-            // add the billboard now that we're ready
-            if ( Billboard != null && Billboard.Superview == null )
+            // if the OOBE is running, do not do this yet!!!
+            if ( IsOOBERunning == false )
             {
-                View.AddSubview( Billboard );
+                UpdateLoginState( );
 
-                TryDisplaySeriesBillboard( );
+                // add the billboard now that we're ready
+                if ( Billboard != null && Billboard.Superview == null )
+                {
+                    View.AddSubview( Billboard );
+
+                    TryDisplaySeriesBillboard( );
+                }
             }
         }
 

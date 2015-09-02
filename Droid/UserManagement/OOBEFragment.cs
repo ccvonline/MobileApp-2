@@ -55,9 +55,9 @@ namespace Droid
 
             OOBEView.Create( view, "oobe_splash_bg.png", imageName, false, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
 
-                delegate(int index) 
+                delegate(int index, bool isCampusSelection) 
                 {
-                    SpringboardParent.OOBEUserClick( index );
+                    SpringboardParent.OOBEUserClick( index, isCampusSelection );
                 } );
 
             return view;
