@@ -18,6 +18,7 @@ namespace Droid
 
             button.Background = buttonDrawable;
             button.Text = text;
+            button.SetAllCaps( false );
 
             button.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( font ), TypefaceStyle.Normal );
             button.SetTextSize( Android.Util.ComplexUnitType.Dip, size );

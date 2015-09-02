@@ -90,6 +90,7 @@ namespace Droid
                     else
                     {
                         listItem.Billboard.SetImageBitmap( null );
+                        listItem.PrivateOverlay.Visibility = ViewStates.Gone;
                     }
 
                     return base.AddView( listItem );
@@ -198,6 +199,7 @@ namespace Droid
                     else
                     {
                         listItem.Billboard.SetImageBitmap( null );
+                        listItem.PrivateOverlay.Visibility = ViewStates.Gone;
                     }
 
                     return listItem;
@@ -261,6 +263,7 @@ namespace Droid
                     else
                     {
                         seriesItem.LeftImage.SetImageBitmap( null );
+                        seriesItem.LeftPrivateOverlay.Visibility = ViewStates.Gone;
                     }
 
                     // now if there's a right item, set it
@@ -301,6 +304,7 @@ namespace Droid
                     else
                     {
                         seriesItem.RightImage.SetImageBitmap( null );
+                        seriesItem.RightPrivateOverlay.Visibility = ViewStates.Gone;
                     }
 
                     return seriesItem;
