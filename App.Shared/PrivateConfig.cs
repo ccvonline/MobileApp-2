@@ -39,6 +39,8 @@ namespace App.Shared
             public const int PersonConnectionStatusValueId = 146;
             public const int PersonRecordStatusValueId = 5;
 
+            public const string RockCampusContext = "SetContext=Rock.Model.Campus|{0}";
+
             /// <summary>
             /// These are the names of placeholder images. They should not need to change.
             /// </summary>

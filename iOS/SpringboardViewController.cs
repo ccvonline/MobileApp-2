@@ -494,40 +494,7 @@ namespace iOS
 
             CampusSelectionButton = new UIButton();
             ScrollView.AddSubview( CampusSelectionButton );
-            CampusSelectionButton.TouchUpInside += (object sender, EventArgs e ) =>
-            {
-                    UIAlertController actionSheet = UIAlertController.Create( SpringboardStrings.SelectCampus_SourceTitle, 
-                                                                                  SpringboardStrings.SelectCampus_SourceDescription, 
-                                                                                  UIAlertControllerStyle.ActionSheet );
-
-                    // if the device is a tablet, anchor the menu
-                    if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
-                    {
-                        actionSheet.PopoverPresentationController.SourceView = CampusSelectionButton;
-                        actionSheet.PopoverPresentationController.SourceRect = CampusSelectionButton.Bounds;
-                    }
-
-                    // for each campus, create an entry in the action sheet, and its callback will assign
-                    // that campus index to the user's viewing preference
-                    for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
-                    {
-                        UIAlertAction campusAction = UIAlertAction.Create( RockGeneralData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
-                            {
-                                //get the index of the campus based on the selection's title, and then set that campus title as the string
-                                RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( obj.Title );
-
-                                RefreshCampusSelection( );
-                        } );
-
-                        actionSheet.AddAction( campusAction );
-                    }
-
-                    // let them cancel, too
-                    UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
-                    actionSheet.AddAction( cancelAction );
-
-                    PresentViewController( actionSheet, true, null );
-            };
+            CampusSelectionButton.TouchUpInside += SelectCampus;
 
 
             // setup the image that will display when the user is logged in
@@ -656,6 +623,41 @@ namespace iOS
         }
         //static bool RanOOBE { get; set; }
 
+        public void SelectCampus(object sender, EventArgs e )
+        {
+            UIAlertController actionSheet = UIAlertController.Create( SpringboardStrings.SelectCampus_SourceTitle, 
+                SpringboardStrings.SelectCampus_SourceDescription, 
+                UIAlertControllerStyle.ActionSheet );
+
+            // if the device is a tablet, anchor the menu
+            if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+            {
+                actionSheet.PopoverPresentationController.SourceView = CampusSelectionButton;
+                actionSheet.PopoverPresentationController.SourceRect = CampusSelectionButton.Bounds;
+            }
+
+            // for each campus, create an entry in the action sheet, and its callback will assign
+            // that campus index to the user's viewing preference
+            for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+            {
+                UIAlertAction campusAction = UIAlertAction.Create( RockGeneralData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
+                    {
+                        //get the index of the campus based on the selection's title, and then set that campus title as the string
+                        RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( obj.Title );
+
+                        RefreshCampusSelection( );
+                    } );
+
+                actionSheet.AddAction( campusAction );
+            }
+
+            // let them cancel, too
+            UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+            actionSheet.AddAction( cancelAction );
+
+            PresentViewController( actionSheet, true, null );
+        }
+
         public void SplashComplete( )
         {
             SimpleAnimator_Float splashFadeOutAnim = new SimpleAnimator_Float( 1.00f, 0.00f, .33f, delegate(float percent, object value )
@@ -715,6 +717,8 @@ namespace iOS
                         {
                             IsOOBERunning = false;
                             RockMobileUser.Instance.OOBEComplete = true;
+
+                            SelectCampus( null, null );
 
                             // if the series billboard will NOT show up,
                             if( TryDisplaySeriesBillboard( ) == false )
@@ -934,17 +938,19 @@ namespace iOS
                     delegate(string impersonationToken )
                     {
                         // URL encode the givingUrl
-                        NSString displayUrl = GiveConfig.GiveUrl.UrlEncode( );
-                        NSUrl encodedUrl = null;
+                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( GiveConfig.GiveUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
+                        NSString encodedUrlString = fullUrl.UrlEncode( );
 
                         // if we got a token, append it
+                        NSUrl encodedUrl = null;
                         if( string.IsNullOrEmpty( impersonationToken ) == false )
                         {
-                            encodedUrl = new NSUrl( displayUrl + "&" + impersonationToken );
+                            encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
                         }
                         else
                         {
-                            encodedUrl = new NSUrl( displayUrl );
+                            encodedUrl = new NSUrl( encodedUrlString );
                         }
 
                         // launch them over

@@ -143,7 +143,8 @@ namespace Droid
                                         MobileAppApi.TryGetImpersonationToken(
                                             delegate( string impersonationToken )
                                             {
-                                                string fullUrl = DetailsPage.NewsItem.ReferenceURL;
+                                                // append the campus (this is part of their identity)
+                                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DetailsPage.NewsItem.ReferenceURL, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                                                 // if we got the token, append it
                                                 if( string.IsNullOrEmpty( impersonationToken ) == false )

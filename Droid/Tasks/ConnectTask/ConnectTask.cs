@@ -83,7 +83,7 @@ namespace Droid
                             else
                             {
                                 // launch the ConnectWebFragment.
-                                string connectUrl = string.Format( (string)context, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
+                                string connectUrl = (string)context;
                                 WebFragment.DisplayUrl( connectUrl, true );
                                 PresentFragment( WebFragment, true );
                             }

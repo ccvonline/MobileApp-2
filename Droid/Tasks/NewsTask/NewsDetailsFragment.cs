@@ -81,7 +81,7 @@ namespace Droid
                     Button launchUrlButton = view.FindViewById<Button>(Resource.Id.news_details_launch_url);
                     launchUrlButton.Click += (object sender, EventArgs e) => 
                         {
-                            // move to the next page..somehow.
+                            // move to the next page...
                             ParentTask.OnClick( this, launchUrlButton.Id );
                         };
                     ControlStyling.StyleButton( launchUrlButton, NewsStrings.LearnMore, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );

@@ -468,32 +468,7 @@ namespace Droid
 
             // setup the campus selection button.
             Button campusSelectionButton = CampusContainer.FindViewById<Button>( Resource.Id.campus_selection_button );
-            campusSelectionButton.Click += (object sender, EventArgs e ) =>
-                {
-                    // build an alert dialog containing all the campus choices
-                    AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
-                    Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockGeneralData.Instance.Data.Campuses.Count ];
-                    for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
-                    {
-                        campusStrings[ i ] = new Java.Lang.String( App.Shared.Network.RockGeneralData.Instance.Data.Campuses[ i ].Name );
-                    }
-
-                    // launch the dialog, and on selection, update the viewing campus text.
-                    builder.SetItems( campusStrings, delegate(object s, DialogClickEventArgs clickArgs) 
-                        {
-                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                                {
-                                    // get the ID for the campus they selected
-                                    string campusTitle = campusStrings[ clickArgs.Which ].ToString( );
-                                    RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( campusTitle );
-
-                                    // build a label showing what they picked
-                                    RefreshCampusSelection( );
-                                });
-                        });
-
-                    builder.Show( );
-                };
+            campusSelectionButton.Click += SelectCampus;
 
             Billboard = new NotificationBillboard( displayWidth, Rock.Mobile.PlatformSpecific.Android.Core.Context );
             Billboard.SetLabel( SpringboardStrings.TakeNotesNotificationIcon, 
@@ -519,6 +494,35 @@ namespace Droid
             Billboard.Hide( );
 
             return view;
+        }
+
+        public void SelectCampus(object sender, EventArgs e )
+        {
+            // build an alert dialog containing all the campus choices
+            AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
+            Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockGeneralData.Instance.Data.Campuses.Count ];
+            for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+            {
+                campusStrings[ i ] = new Java.Lang.String( App.Shared.Network.RockGeneralData.Instance.Data.Campuses[ i ].Name );
+            }
+
+            builder.SetTitle( new Java.Lang.String( SpringboardStrings.SelectCampus_SourceTitle ) );
+
+            // launch the dialog, and on selection, update the viewing campus text.
+            builder.SetItems( campusStrings, delegate(object s, DialogClickEventArgs clickArgs) 
+                {
+                    Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                        {
+                            // get the ID for the campus they selected
+                            string campusTitle = campusStrings[ clickArgs.Which ].ToString( );
+                            RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( campusTitle );
+
+                            // build a label showing what they picked
+                            RefreshCampusSelection( );
+                        });
+                });
+
+            builder.Show( );
         }
 
         void RefreshCampusSelection( )
@@ -940,7 +944,7 @@ namespace Droid
                     // and launch the appropriate screen
                     ModalFragmentDone( null );
 
-                    CompleteOOBE( );
+                    //CompleteOOBE( );
                 } );
                 viewAlphaAnim.Start( );
             }
@@ -958,6 +962,8 @@ namespace Droid
                         {
                             IsOOBERunning = false;
                             RockMobileUser.Instance.OOBEComplete = true;
+
+                            SelectCampus( null, null );
 
                             // if the series billboard will NOT show up,
                             if( TryDisplaySeriesBillboard( ) == false )
@@ -1173,16 +1179,18 @@ namespace Droid
                 MobileAppApi.TryGetImpersonationToken( 
                     delegate( string impersonationToken )
                     {
+                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( GiveConfig.GiveUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                        
                         // if we got an impersonation token, append it
                         Android.Net.Uri uri = null;
                         if( string.IsNullOrEmpty( impersonationToken ) == false )
                         {
-                            uri = Android.Net.Uri.Parse( GiveConfig.GiveUrl + "&" + impersonationToken );
+                            uri = Android.Net.Uri.Parse( fullUrl + "&" + impersonationToken );
                         }
                         else
                         {
-                            // otherwise just encode the giving url on its own
-                            uri = Android.Net.Uri.Parse( GiveConfig.GiveUrl );
+                            // otherwise just encode the giving url with the campus
+                            uri = Android.Net.Uri.Parse( fullUrl );
                         }
 
                         var intent = new Intent( Intent.ActionView, uri ); 

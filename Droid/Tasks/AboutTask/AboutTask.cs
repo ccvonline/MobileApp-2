@@ -31,7 +31,7 @@ namespace Droid
 
                     if ( forResume == false )
                     {
-                        string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
+                        string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) );
                         MainPage.DisplayUrl( aboutUrl, true );
                     }
                 }

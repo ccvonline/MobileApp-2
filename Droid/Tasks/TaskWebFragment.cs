@@ -39,6 +39,7 @@ namespace Droid
 
             WebLayout WebLayout { get; set; }
             String Url { get; set; }
+            bool IncludeImpersonationToken { get; set; }
 
             bool IsActive { get; set; }
 
@@ -77,7 +78,7 @@ namespace Droid
 
                         if ( string.IsNullOrEmpty( Url ) == false )
                         {
-                            WebLayout.LoadUrl( Url, PageLoaded );
+                            ProcessUrl( );
                         }
                     } );
 
@@ -98,6 +99,7 @@ namespace Droid
             public void DisplayUrl( string url, bool includeImpersonationToken )
             {
                 Url = url;
+                IncludeImpersonationToken = includeImpersonationToken;
 
                 // if we're active, we can go ahead and display the url.
                 // Otherwise, OnResume will take care of it.
@@ -105,34 +107,41 @@ namespace Droid
                 {
                     Activity.RunOnUiThread( delegate
                         {
-                            if ( string.IsNullOrEmpty( Url ) == false )
-                            {
-                                // do they want the impersonation token?
-                                if ( includeImpersonationToken )
-                                {
-                                    // try to get it
-                                    MobileAppApi.TryGetImpersonationToken( 
-                                        delegate( string impersonationToken )
-                                        {
-                                            // if we got it, append it and load
-                                            if ( string.IsNullOrEmpty( impersonationToken ) == false )
-                                            {
-                                                WebLayout.LoadUrl( Url + "&" + impersonationToken, PageLoaded );
-                                            }
-                                            else
-                                            {
-                                                // otherwise just load
-                                                WebLayout.LoadUrl( Url, PageLoaded );
-                                            }
-                                        });
-                                }
-                                else
-                                {
-                                    // no impersonation token requested. just load.
-                                    WebLayout.LoadUrl( Url, PageLoaded );
-                                }
-                            }
+                            ProcessUrl( );
                         } );
+                }
+            }
+
+            void ProcessUrl( )
+            {
+                if ( string.IsNullOrEmpty( Url ) == false )
+                {
+                    // do they want the impersonation token?
+                    if ( IncludeImpersonationToken )
+                    {
+                        // try to get it
+                        MobileAppApi.TryGetImpersonationToken( 
+                            delegate( string impersonationToken )
+                            {
+                                // also include their campus. this is personal data as well.
+                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
+                                // if we got it, append it and load
+                                if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                                {
+                                    fullUrl += "&" + impersonationToken;
+                                }
+
+                                Console.WriteLine( "Browsing to {0}", fullUrl );
+                                WebLayout.LoadUrl( fullUrl, PageLoaded );
+                            });
+                    }
+                    else
+                    {
+                        // no impersonation token requested. just load.
+                        Console.WriteLine( "Browsing to {0}", Url );
+                        WebLayout.LoadUrl( Url, PageLoaded );
+                    }
                 }
             }
 
@@ -165,7 +174,7 @@ namespace Droid
 
                 if ( string.IsNullOrEmpty( Url ) == false )
                 {
-                    WebLayout.LoadUrl( Url, PageLoaded );
+                    ProcessUrl( );
                 }
             }
 

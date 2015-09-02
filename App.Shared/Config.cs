@@ -202,9 +202,9 @@ namespace App
                 /// </summary>
                 public static string[] WebViews = 
                     {
-                        "Starting Point", "http://rock.ccv.church/ma-startingpoint?SetContext=Rock.Model.Campus|{0}", "starting_point_thumb.png",
-                        "Baptisms", "http://rock.ccv.church/ma-baptism?SetContext=Rock.Model.Campus|{0}", "baptism_thumb.png",
-                        "Serve", "http://rock.ccv.church/ma-serve?SetContext=Rock.Model.Campus|{0}", "serve_thumb.png"
+                        "Starting Point", "http://rock.ccv.church/ma-startingpoint", "starting_point_thumb.png",
+                        "Baptisms", "http://rock.ccv.church/ma-baptism", "baptism_thumb.png",
+                        "Serve", "http://rock.ccv.church/ma-serve", "serve_thumb.png"
                     };
                 
                 /// <summary>
@@ -385,7 +385,7 @@ namespace App
                 /// <summary>
                 /// The page to navigate to in the About's embedded webview.
                 /// </summary>
-                public const string Url = "http://rock.ccv.church/ma-more?SetContext=Rock.Model.Campus|{0}";
+                public const string Url = "http://rock.ccv.church/ma-more";
             }
         }
     }

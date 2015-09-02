@@ -23,7 +23,7 @@ namespace iOS
             WebView = new UIWebView( );
             View.AddSubview( WebView );
 
-            string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
+            string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) );
             WebView.LoadRequest( new NSUrlRequest( new NSUrl( aboutUrl ) ) );
         }
 

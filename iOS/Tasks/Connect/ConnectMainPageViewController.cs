@@ -319,8 +319,7 @@ namespace iOS
                 }
                 else
                 {
-                    string campusUrl = string.Format( LinkEntries[ rowIndex ].Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
-                    TaskWebViewController viewController = new TaskWebViewController( campusUrl, Task, true, false, true );
+                    TaskWebViewController viewController = new TaskWebViewController( LinkEntries[ rowIndex ].Url, Task, true, false, true );
                     Task.PerformSegue( this, viewController );
                 }
             }

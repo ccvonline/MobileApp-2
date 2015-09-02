@@ -106,6 +106,18 @@ namespace App
                 /// </summary>
                 public Rock.Client.GroupLocation PrimaryAddress;
 
+                // This will return either their HOME campus if they're logged in, or their
+                // VIEWING campus if they're not.
+                public int GetRelevantCampus( )
+                {
+                    if ( LoggedIn && PrimaryFamily.CampusId.HasValue )
+                    {
+                        return PrimaryFamily.CampusId.Value;
+                    }
+
+                    return ViewingCampus;
+                }
+
                 // make the address getters methods, not properties, so json doesn't try to serialize them.
                 public string Street1( )
                 {

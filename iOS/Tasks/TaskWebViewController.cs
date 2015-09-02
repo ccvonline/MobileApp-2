@@ -185,20 +185,21 @@ namespace iOS
 
             ActivityIndicator.Hidden = false;
 
-            // URL encode the DisplayUrl
-            NSString encodedUrlString = DisplayUrl.UrlEncode( );
-
-
             // do we need an impersonation token?
             if ( IncludeImpersonationToken )
             {
                 MobileAppApi.TryGetImpersonationToken( 
                     delegate( string impersonationToken )
                     {
-                        NSUrl encodedUrl = null;
+                        // include their campus, since that's part of personal data.
+                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DisplayUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
-                        // append it and launch the view if it came back
-                        if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                        // URL encode the value
+                        NSString encodedUrlString = fullUrl.UrlEncode( );
+
+                        // if we got a token, append it
+                        NSUrl encodedUrl = null;
+                        if( string.IsNullOrEmpty( impersonationToken ) == false )
                         {
                             encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
                         }
@@ -212,6 +213,7 @@ namespace iOS
             }
             else
             {
+                NSString encodedUrlString = DisplayUrl.UrlEncode( );
                 NSUrl encodedUrl = new NSUrl( encodedUrlString );
                 LaunchWebview( encodedUrl );
             }

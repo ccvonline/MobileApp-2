@@ -12,7 +12,7 @@ namespace iOS
 
         public AboutTask( string storyboardName ) : base( storyboardName )
         {
-            string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.ViewingCampus );
+            string aboutUrl = string.Format( AboutConfig.Url, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) );
             MainPageVC = new TaskWebViewController( aboutUrl, this, true, false, true );
         }
 
