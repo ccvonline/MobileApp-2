@@ -12,12 +12,13 @@ namespace iOS
 
         public AboutTask( string storyboardName ) : base( storyboardName )
         {
-            MainPageVC = new TaskWebViewController( AboutConfig.Url, this, true, false, true );
         }
 
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )
         {
             base.MakeActive( parentViewController, navToolbar, containerBounds );
+
+            MainPageVC = new TaskWebViewController( AboutConfig.Url, this, true, false, true );
 
             MainPageVC.View.Bounds = containerBounds;
 
