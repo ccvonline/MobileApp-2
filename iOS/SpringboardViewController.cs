@@ -725,6 +725,9 @@ namespace iOS
                             IsOOBERunning = false;
                             RockMobileUser.Instance.OOBEComplete = true;
 
+                            // force a final refresh so we see the login info change (if it did)
+                            ViewDidLayoutSubviews( );
+
                             // if the series billboard will NOT show up,
                             if( TryDisplaySeriesBillboard( ) == false )
                             {
@@ -1060,12 +1063,12 @@ namespace iOS
 
             ScrollView.Frame = View.Frame;
 
-            AdjustSpringboardLayout( );
-
-            // if the OOBE is running, do not do this yet!!!
+            // if the OOBE isn't running, do everything normal
             if ( IsOOBERunning == false )
             {
                 UpdateLoginState( );
+
+                AdjustSpringboardLayout( );
 
                 // add the billboard now that we're ready
                 if ( Billboard != null && Billboard.Superview == null )
@@ -1074,6 +1077,11 @@ namespace iOS
 
                     TryDisplaySeriesBillboard( );
                 }
+            }
+            // if the OOBE is running, only do this!
+            else
+            {
+                AdjustSpringboardLayout( );
             }
         }
 

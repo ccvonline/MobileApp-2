@@ -299,8 +299,6 @@ namespace iOS
                 ResultView.Hide( );
             }
 
-            ActivityIndicator.Hidden = true;
-
             // if we're preloading, then the black page just finished
             if ( PreloadComplete == false )
             {
@@ -311,16 +309,20 @@ namespace iOS
                 timer.Interval = 500;
                 timer.AutoReset = false;
                 timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
-                    {
-                        // do this ON the UI thread
-                        Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                            {
-                                WebView.Hidden = false;
-                                PreloadComplete = true;
-                                PerformRequest( );
-                            });
-                    };
+                {
+                    // do this ON the UI thread
+                    Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                        {
+                            WebView.Hidden = false;
+                            PreloadComplete = true;
+                            PerformRequest( );
+                        } );
+                };
                 timer.Start( );
+            }
+            else
+            {
+                ActivityIndicator.Hidden = true;
             }
         }
 
