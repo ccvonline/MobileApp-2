@@ -106,7 +106,8 @@ namespace Droid
                         seriesItem.Thumbnail.SetScaleType( ImageView.ScaleType.CenterCrop );
                     }
 
-                    seriesItem.Title.Text = ParentFragment.LinkEntries[ position ].Title;
+                    seriesItem.Title.Text = ParentFragment.LinkEntries[ position ].Title.ToUpper( );
+                    seriesItem.SubTitle.Text = ParentFragment.LinkEntries[ position ].SubTitle;
                     return seriesItem;
                 }
             }
@@ -157,6 +158,7 @@ namespace Droid
 
                 public LinearLayout TitleLayout { get; set; }
                 public TextView Title { get; set; }
+                public TextView SubTitle { get; set; }
                 public TextView Chevron { get; set; }
                 public View Seperator { get; set; }
                 public bool HasImage { get; set; }
@@ -187,14 +189,26 @@ namespace Droid
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = 25;
                     contentLayout.AddView( TitleLayout );
 
+
+
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Title.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
+                    Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                     Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Medium_FontSize );
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                     Title.SetSingleLine( );
                     Title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = 5;
                     TitleLayout.AddView( Title );
+
+                    SubTitle = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                    SubTitle.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    SubTitle.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
+                    SubTitle.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+                    SubTitle.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).TopMargin = -10;
+                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).BottomMargin = 5;
+                    TitleLayout.AddView( SubTitle );
 
                     // fill the remaining space with a dummy view, and that will align our chevron to the right
                     View dummyView = new View( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -257,6 +271,7 @@ namespace Droid
                     // insert group finder into the beginning of the list so it's always the first entry
                     ConnectLink groupFinderLink = new ConnectLink( );
                     groupFinderLink.Title = ConnectStrings.Main_Connect_GroupFinder;
+                    groupFinderLink.SubTitle = ConnectStrings.Main_Connect_GroupFinder_SubTitle;
                     groupFinderLink.ImageName = PrivateConnectConfig.GroupFinder_IconImage;
                     LinkEntries.Insert( 0, groupFinderLink );
 

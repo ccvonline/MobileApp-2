@@ -289,9 +289,10 @@ namespace Droid
                     DetailsLayout.Orientation = Orientation.Horizontal;
                     DetailsLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).TopMargin = -20;
                     ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).LeftMargin = 25;
                     ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).RightMargin = 25;
-                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).BottomMargin = 50;
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).BottomMargin = 25;
                     AddView( DetailsLayout );
 
                     Date = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -468,7 +469,7 @@ namespace Droid
 
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Title.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
+                    Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                     Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Medium_FontSize );
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                     Title.SetSingleLine( );
@@ -480,6 +481,7 @@ namespace Droid
                     DateRange.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     DateRange.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     DateRange.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).TopMargin = -10;
                     TitleLayout.AddView( DateRange );
 
                     // fill the remaining space with a dummy view, and that will align our chevron to the right

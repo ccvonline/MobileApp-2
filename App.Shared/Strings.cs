@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.0.34";
+                    return "Version 2.0.35";
                 }
             }
         }
@@ -23,6 +23,7 @@ namespace App.Shared
             public const string HaveAccount = "I have a {0} Account";
             public const string WantAccount = "Create a {0} Account";
             public const string SkipAccount = "Do this Later";
+            public const string CampusIntro = "We Are One Church in Many Locations\nSelect Your Home Campus";
         }
 
         public class GeneralStrings
@@ -198,8 +199,9 @@ namespace App.Shared
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
 
-            public const string Main_Connect_Header = "Connect";
+            public const string Main_Connect_Header = "CONNECT";
             public const string Main_Connect_GroupFinder = "Group Finder";
+            public const string Main_Connect_GroupFinder_SubTitle = "Find a group near you";//"Connect with a group near you";
 
             public const string JoinGroup_FirstNamePlaceholder = "First Name";
             public const string JoinGroup_LastNamePlaceholder = "Last Name";

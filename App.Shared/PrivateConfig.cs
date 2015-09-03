@@ -39,7 +39,16 @@ namespace App.Shared
             public const int PersonConnectionStatusValueId = 146;
             public const int PersonRecordStatusValueId = 5;
 
+            /// <summary>
+            /// The URL parameter we add to websites that need to know what campus the user visits
+            /// </summary>
             public const string RockCampusContext = "SetContext=Rock.Model.Campus|{0}";
+
+
+            /// <summary>
+            /// The URL prefix that directs the embedded browser to launch the link externally
+            /// </summary>
+            public const string ExternalUrlToken = "external:";
 
             /// <summary>
             /// These are the names of placeholder images. They should not need to change.

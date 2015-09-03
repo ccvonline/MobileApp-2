@@ -202,9 +202,9 @@ namespace App
                 /// </summary>
                 public static string[] WebViews = 
                     {
-                        "Starting Point", "http://rock.ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                        "Baptisms", "http://rock.ccv.church/ma-baptism", "baptism_thumb.png",
-                        "Serve", "http://rock.ccv.church/ma-serve", "serve_thumb.png"
+                        "Starting Point", "Begin your journey at CCV", "http://rock.ccv.church/ma-startingpoint", "starting_point_thumb.png",
+                        "Baptisms", "Make your faith public", "http://rock.ccv.church/ma-baptism", "baptism_thumb.png",
+                        "Serve", "Give back by volunteering", "http://rock.ccv.church/ma-serve", "serve_thumb.png"
                     };
                 
                 /// <summary>

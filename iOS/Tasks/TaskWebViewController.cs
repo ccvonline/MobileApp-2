@@ -14,6 +14,40 @@ namespace iOS
 {
 	partial class TaskWebViewController : TaskUIViewController
 	{
+        class CustomWebViewDelegate : UIWebViewDelegate
+        {
+            public TaskWebViewController Parent { get; set; }
+            public CustomWebViewDelegate( TaskWebViewController parent ) : base( )
+            {
+                Parent = parent;
+            }
+
+            public override void LoadFailed(UIWebView webView, NSError error)
+            {
+                Parent.HandleLoadError( );
+            }
+
+            public override void LoadingFinished(UIWebView webView)
+            {
+                Parent.HandleLoadFinished( );
+            }
+
+            public override bool ShouldStartLoad(UIWebView webView, NSUrlRequest request, UIWebViewNavigationType navigationType)
+            {
+                string urlString = request.Url.AbsoluteString.ToString( );
+                if( urlString.StartsWith( PrivateGeneralConfig.ExternalUrlToken ) )
+                {
+                    // strip off the PrivateGeneralConfig.ExternalUrlToken and forward it
+                    urlString = urlString.Substring( PrivateGeneralConfig.ExternalUrlToken.Length );
+                    
+                    UIApplication.SharedApplication.OpenUrl( new NSUrl( urlString ) );
+                    return false;
+                }
+
+                return true;
+            }
+        }
+        
         class WebScrollDelegate : NavBarRevealHelperDelegate
         {
             UIWebView ParentWebView { get; set; }
@@ -154,6 +188,10 @@ namespace iOS
 
         bool IncludeImpersonationToken { get; set; }
 
+        bool PreloadComplete { get; set; }
+
+        const string BlackHtml = "<html><body style=\"background-color:black;\"></body></html>";
+
         public TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool navbarAlwaysVisible ) : base ( )
 		{
             DisplayUrl = displayUrl;
@@ -173,6 +211,8 @@ namespace iOS
             WebView = new UIWebView( );
             WebView.Layer.AnchorPoint = CGPoint.Empty;
             WebView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
+            WebView.Delegate = new CustomWebViewDelegate( this );
+            WebView.ScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             WebView.Hidden = true;
             View.AddSubview( WebView );
 
@@ -185,6 +225,12 @@ namespace iOS
 
             ActivityIndicator.Hidden = false;
 
+            // begin by preloading a black html page that will cover the screen
+            WebView.LoadHtmlString( BlackHtml, null );
+        }
+
+        void PerformRequest( )
+        {
             // do we need an impersonation token?
             if ( IncludeImpersonationToken )
             {
@@ -232,26 +278,49 @@ namespace iOS
 
             WebView.LoadRequest( new NSUrlRequest( encodedUrl ) );
 
-            // if it fails, display the result view
-            WebView.LoadError += (object sender, UIWebErrorArgs e ) =>
-                {
-                    ResultView.Show( GeneralStrings.Network_Status_FailedText, PrivateControlStylingConfig.Result_Symbol_Failed, GeneralStrings.Network_Result_FailedText, GeneralStrings.Retry );
-                    ActivityIndicator.Hidden = true;
-                };
-
-            // if it succeeds, reveal the webView
-            WebView.LoadFinished += (object sender, EventArgs e ) =>
-                {
-                    ResultView.Hide( );
-                    WebView.Hidden = false;
-                    ActivityIndicator.Hidden = true;
-                };
-
             // not 100% sure that this is safe. If WebView sets the scrollView delegate and doesn't back ours up
             // (which it SHOULD) we won't get our calls
             if ( NavbarAlwaysVisible == false )
             {
                 WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
+            }
+        }
+
+        public void HandleLoadError( )
+        {
+            ResultView.Show( GeneralStrings.Network_Status_FailedText, PrivateControlStylingConfig.Result_Symbol_Failed, GeneralStrings.Network_Result_FailedText, GeneralStrings.Retry );
+            ActivityIndicator.Hidden = true;
+        }
+
+        public void HandleLoadFinished( )
+        {
+            if ( ResultView != null )
+            {
+                ResultView.Hide( );
+            }
+
+            ActivityIndicator.Hidden = true;
+
+            // if we're preloading, then the black page just finished
+            if ( PreloadComplete == false )
+            {
+                // now, seriously, kick off a timer so that the renderer has time to
+                // display its default white screen, then render the html.
+                // This will hide the white flicker and look a lot nicer to the end user.
+                System.Timers.Timer timer = new System.Timers.Timer();
+                timer.Interval = 500;
+                timer.AutoReset = false;
+                timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+                    {
+                        // do this ON the UI thread
+                        Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                            {
+                                WebView.Hidden = false;
+                                PreloadComplete = true;
+                                PerformRequest( );
+                            });
+                    };
+                timer.Start( );
             }
         }
 
@@ -264,6 +333,11 @@ namespace iOS
 
             UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
         }
 
         public override void ViewDidLayoutSubviews()

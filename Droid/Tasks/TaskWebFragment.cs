@@ -133,14 +133,14 @@ namespace Droid
                                 }
 
                                 Console.WriteLine( "Browsing to {0}", fullUrl );
-                                WebLayout.LoadUrl( fullUrl, PageLoaded );
+                                WebLayout.LoadUrl( fullUrl, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                             });
                     }
                     else
                     {
                         // no impersonation token requested. just load.
                         Console.WriteLine( "Browsing to {0}", Url );
-                        WebLayout.LoadUrl( Url, PageLoaded );
+                        WebLayout.LoadUrl( Url, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                     }
                 }
             }

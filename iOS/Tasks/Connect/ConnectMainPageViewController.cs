@@ -52,8 +52,8 @@ namespace iOS
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
                     Title.LineBreakMode = UILineBreakMode.TailTruncation;
-                    Title.SizeToFit( );
-                    Title.Frame = new CGRect( 5, Image.Frame.Bottom, Frame.Width - 10, Title.Frame.Height );
+                    //Title.SizeToFit( );
+                    //Title.Frame = new CGRect( 5, Image.Frame.Bottom, Frame.Width - 10, Title.Frame.Height );
                     AddSubview( Title );
 
 
@@ -83,6 +83,7 @@ namespace iOS
 
                 public UIImageView Image { get; set; }
                 public UILabel Title { get; set; }
+                public UILabel SubTitle { get; set; }
                 public UILabel Chevron { get; set; }
 
                 public UIView Seperator { get; set; }
@@ -95,11 +96,18 @@ namespace iOS
                     AddSubview( Image );
 
                     Title = new UILabel( );
-                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
                     Title.LineBreakMode = UILineBreakMode.TailTruncation;
                     AddSubview( Title );
+
+                    SubTitle = new UILabel( );
+                    SubTitle.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+                    SubTitle.Layer.AnchorPoint = CGPoint.Empty;
+                    SubTitle.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
+                    SubTitle.LineBreakMode = UILineBreakMode.TailTruncation;
+                    AddSubview( SubTitle );
 
                     Chevron = new UILabel( );
                     AddSubview( Chevron );
@@ -191,15 +199,11 @@ namespace iOS
                     nfloat imageAspect = PrimaryTableCell.Image.Bounds.Height / PrimaryTableCell.Image.Bounds.Width;
                     PrimaryTableCell.Image.Frame = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * imageAspect );
 
+                    PrimaryTableCell.Title.Frame = new CGRect( 5, PrimaryTableCell.Image.Frame.Bottom, tableView.Bounds.Width - 10, 0 );
+                    PrimaryTableCell.Title.TextAlignment = UITextAlignment.Center;
                     PrimaryTableCell.Title.SizeToFit( );
-                    PrimaryTableCell.Title.Frame = new CGRect( 5, PrimaryTableCell.Image.Frame.Bottom, tableView.Bounds.Width - 10, PrimaryTableCell.Title.Frame.Height );
 
-                    //PrimaryTableCell.BottomBanner.SizeToFit( );
-                    //PrimaryTableCell.BottomBanner.Bounds = new CGRect( 0, 0, tableView.Bounds.Width, PrimaryTableCell.BottomBanner.Bounds.Height + 10 );
-                    //PrimaryTableCell.BottomBanner.Layer.Position = new CGPoint( 0, PrimaryTableCell.Title.Frame.Bottom + 5 );
-
-                    //PendingPrimaryCellHeight = PrimaryTableCell.BottomBanner.Frame.Bottom;
-                    PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom;
+                    PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
 
                     return PrimaryTableCell;
                 }
@@ -246,12 +250,17 @@ namespace iOS
                 cell.Chevron.Layer.Position = new CGPoint( cell.Bounds.Width - cell.Chevron.Bounds.Width - 5, chevronYPos );
 
                 // Create the title
-                cell.Title.Text = Parent.LinkEntries[ row ].Title;
+                cell.Title.Text = Parent.LinkEntries[ row ].Title.ToUpper( );
                 cell.Title.SizeToFit( );
 
+                cell.SubTitle.Text = Parent.LinkEntries[ row ].SubTitle;
+                cell.SubTitle.SizeToFit( );
+
                 // Position the Title & Date in the center to the right of the image
-                nfloat totalTextHeight = cell.Title.Bounds.Height - 1;
+                nfloat totalTextHeight = cell.Title.Bounds.Height + cell.SubTitle.Bounds.Height - 6;
+
                 cell.Title.Frame = new CGRect( cell.Image.Frame.Right + 10, ((PrivateConnectConfig.MainPage_ThumbnailDimension - totalTextHeight) / 2) + topPadding, availableTextWidth - 5, cell.Title.Frame.Height );
+                cell.SubTitle.Frame = new CGRect( cell.Image.Frame.Right + 10, cell.Title.Frame.Bottom - 6, availableTextWidth - 5, cell.Title.Frame.Height );
 
                 // add the seperator to the bottom
                 cell.Seperator.Frame = new CGRect( 0, cell.Image.Frame.Bottom + 10, cell.Bounds.Width, 1 );
@@ -292,6 +301,7 @@ namespace iOS
             // ensure the first link entry is always group finder.
             ConnectLink link = new ConnectLink( );
             link.Title = ConnectStrings.Main_Connect_GroupFinder;
+            link.SubTitle = ConnectStrings.Main_Connect_GroupFinder_SubTitle;
             link.ImageName = PrivateConnectConfig.GroupFinder_IconImage;
             LinkEntries.Insert( 0, link );
 

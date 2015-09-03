@@ -75,9 +75,9 @@ namespace iOS
                     AddSubview( Title );
 
                     Date = new UILabel( );
-                    Date.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
+                    Date.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
                     Date.Layer.AnchorPoint = CGPoint.Empty;
-                    Date.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
+                    Date.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
                     Date.BackgroundColor = UIColor.Clear;
                     Date.LineBreakMode = UILineBreakMode.TailTruncation;
                     AddSubview( Date );
@@ -118,7 +118,7 @@ namespace iOS
                 public SeriesCell( UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
                 {
                     Title = new UILabel( );
-                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
 
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
@@ -269,12 +269,7 @@ namespace iOS
 
                     default:
                     {
-
-                        if ( PendingCellHeight > 0 )
-                        {
-                            return PendingCellHeight;
-                        }
-                        break;
+                        return PrivateNoteConfig.Series_Main_CellHeight;
                     }
                 }
 
@@ -326,20 +321,25 @@ namespace iOS
                 {
                     cell.Title.Text += " (Private)";
                 }
-
                 cell.Title.SizeToFit( );
-                cell.Title.Frame = new CGRect( 5, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 10, cell.Title.Frame.Height + 5 );
 
-                // Date
+                cell.Desc.Text = Series.Description;
+                cell.Desc.Bounds = new CGRect( 0, 0, cell.Frame.Width - 20, float.MaxValue );
+                cell.Desc.SizeToFit( );
+
                 cell.Date.Text = Series.DateRanges;
                 cell.Date.SizeToFit( );
-                cell.Date.Frame = new CGRect( 5, cell.Title.Frame.Bottom - 5, cell.Frame.Width - 5, cell.Date.Frame.Height + 5 );
+
+
+                // now position the 3 text elements
+                // Title
+                cell.Title.Frame = new CGRect( 10, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 20, cell.Title.Frame.Height );
+
+                // Date
+                cell.Date.Frame = new CGRect( 10, cell.Title.Frame.Bottom - 9, cell.Frame.Width - 20, cell.Date.Frame.Height + 5 );
 
                 // Description
-                cell.Desc.Text = Series.Description;
-                cell.Desc.Bounds = new CGRect( 0, 0, cell.Frame.Width - 10, float.MaxValue );
-                cell.Desc.SizeToFit( );
-                cell.Desc.Frame = new CGRect( 5, cell.Date.Frame.Bottom, cell.Frame.Width - 10, cell.Desc.Frame.Height + 5 );
+                cell.Desc.Frame = new CGRect( 10, cell.Date.Frame.Bottom + 5, cell.Frame.Width - 20, cell.Desc.Frame.Height + 5 );
 
                 PendingPrimaryCellHeight = cell.Desc.Frame.Bottom + 5;
 
@@ -367,16 +367,59 @@ namespace iOS
                 // update the cell's row index so on button taps we know which one was tapped
                 cell.RowIndex = row;
 
-                float rowHeight = 100;
+
+                // Create the title
+                cell.Title.Text = Series.Messages[ row ].Name;
+                if ( Series.Private == true ||
+                    Series.Messages[ row ].Private == true )
+                {
+                    cell.Title.Text += " (Private)";
+                }
+
+                cell.Title.SizeToFit( );
+
+                // Date
+                cell.Date.Text = Series.Messages[ row ].Date;
+                cell.Date.SizeToFit( );
+
+                // Speaker
+                cell.Speaker.Text = Series.Messages[ row ].Speaker;
+                cell.Speaker.SizeToFit( );
+
+
+                nfloat rowHeight = PrivateNoteConfig.Series_Main_CellHeight;
+                nfloat availableWidth = cell.Bounds.Width - cell.ListenButton.Bounds.Width - cell.WatchButton.Bounds.Width - cell.TakeNotesButton.Bounds.Width;
+
+                // Position the Title & Date in the center to the right of the image
+                nfloat totalTextHeight = (cell.Title.Bounds.Height + cell.Date.Bounds.Height + cell.Speaker.Bounds.Height) - 6;
+
+                cell.Title.Frame = new CGRect( 10, ((rowHeight - totalTextHeight) / 2) - 1, availableWidth, cell.Title.Frame.Height);
+                //cell.Title.BackgroundColor = UIColor.Blue;
+
+                cell.Date.Frame = new CGRect( cell.Title.Frame.Left, cell.Title.Frame.Bottom - 3, availableWidth, cell.Date.Frame.Height );
+                //cell.Date.BackgroundColor = UIColor.Yellow;
+
+                cell.Speaker.Frame = new CGRect( cell.Title.Frame.Left, cell.Date.Frame.Bottom - 3, availableWidth, cell.Speaker.Frame.Height );
+                //cell.Speaker.BackgroundColor = UIColor.Green;
+
+                // add the seperator to the bottom
+                cell.Seperator.Frame = new CGRect( 0, rowHeight - 1, cell.Bounds.Width, 1 );
+                //cell.Seperator.Hidden = true;
+
+                /*unchecked
+                {
+                    cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( (uint)(0xFF0000FF - (row * 100)) );
+                }*/
+
 
                 // Buttons
                 cell.TakeNotesButton.Frame = new CGRect( cell.Bounds.Width - cell.TakeNotesButton.Bounds.Width, 
                                                         (rowHeight - cell.TakeNotesButton.Bounds.Height) / 2, 
-                                                             cell.TakeNotesButton.Bounds.Width, 
-                                                             cell.TakeNotesButton.Bounds.Height );
+                                                         cell.TakeNotesButton.Bounds.Width, 
+                                                         cell.TakeNotesButton.Bounds.Height );
 
                 cell.WatchButton.Frame = new CGRect( cell.TakeNotesButton.Frame.Left - cell.WatchButton.Bounds.Width, 
-                    (rowHeight - cell.WatchButton.Bounds.Height) / 2, 
+                                                    (rowHeight - cell.WatchButton.Bounds.Height) / 2, 
                                                          cell.WatchButton.Bounds.Width, 
                                                          cell.WatchButton.Bounds.Height );
 
@@ -385,7 +428,7 @@ namespace iOS
                     cell.ListenButton.Bounds.Width, 
                     cell.ListenButton.Bounds.Height );
 
-                nfloat availableWidth = cell.Bounds.Width - cell.ListenButton.Bounds.Width - cell.WatchButton.Bounds.Width - cell.TakeNotesButton.Bounds.Width;
+
 
                 // disable the button if there's no listen URL
                 if ( string.IsNullOrEmpty( Series.Messages[ row ].AudioUrl ) )
@@ -417,34 +460,7 @@ namespace iOS
                     cell.ToggleTakeNotesButton( true );
                 }
 
-                // Create the title
-                cell.Title.Text = Series.Messages[ row ].Name;
-                if ( Series.Private == true ||
-                    Series.Messages[ row ].Private == true )
-                {
-                    cell.Title.Text += " (Private)";
-                }
-
-                cell.Title.SizeToFit( );
-
-                // Date
-                cell.Date.Text = Series.Messages[ row ].Date;
-                cell.Date.SizeToFit( );
-
-                cell.Speaker.Text = Series.Messages[ row ].Speaker;
-                cell.Speaker.SizeToFit( );
-
-                // Position the Title & Date in the center to the right of the image
-                nfloat totalTextHeight = cell.Title.Bounds.Height + cell.Date.Bounds.Height + cell.Speaker.Bounds.Height + 15;
-
-                cell.Title.Frame = new CGRect( 5, (rowHeight - totalTextHeight) / 2, availableWidth, cell.Title.Frame.Height + 10);
-                cell.Date.Frame = new CGRect( cell.Title.Frame.Left, cell.Title.Frame.Bottom - 5, availableWidth, cell.Date.Frame.Height );
-                cell.Speaker.Frame = new CGRect( cell.Title.Frame.Left, cell.Date.Frame.Bottom - 5, availableWidth, cell.Speaker.Frame.Height + 5 );
-
-                // add the seperator to the bottom
-                cell.Seperator.Frame = new CGRect( 0, rowHeight - 1, cell.Bounds.Width, 1 );
-
-                PendingCellHeight = rowHeight;
+                //PendingCellHeight = rowHeight;
 
                 return cell;
             }

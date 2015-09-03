@@ -198,10 +198,10 @@ namespace Droid
 
                     DateRange = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     DateRange.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    DateRange.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
+                    DateRange.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     DateRange.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
-                    DateRange.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor ) );
-                    ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).TopMargin = 0;
+                    DateRange.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).TopMargin = -20;
                     ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).LeftMargin = 25;
                     AddView( DateRange );
 
@@ -256,8 +256,8 @@ namespace Droid
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Weight = 1;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = 25;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = 50;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = 50;
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = 25;
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = 25;
                     contentLayout.AddView( TitleLayout );
 
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -274,6 +274,7 @@ namespace Droid
                     Date.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     Date.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     Date.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    ( (LinearLayout.LayoutParams)Date.LayoutParameters ).TopMargin = -10;
                     TitleLayout.AddView( Date );
 
                     Speaker = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -281,6 +282,7 @@ namespace Droid
                     Speaker.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     Speaker.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     Speaker.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    ( (LinearLayout.LayoutParams)Speaker.LayoutParameters ).TopMargin = -10;
                     Speaker.SetMaxLines( 1 );
                     TitleLayout.AddView( Speaker );
 

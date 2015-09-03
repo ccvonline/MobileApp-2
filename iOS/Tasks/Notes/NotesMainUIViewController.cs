@@ -81,8 +81,8 @@ namespace iOS
                     Title.BackgroundColor = UIColor.Clear;
                     Title.LineBreakMode = UILineBreakMode.TailTruncation;
                     Title.Text = "PLACEHOLDER PLACEHOLDER";
-                    Title.SizeToFit( );
-                    Title.Frame = new CGRect( 5, Image.Frame.Bottom + 5, parentSize.Width - 10, Title.Frame.Height + 5 );
+                    /*Title.SizeToFit( );
+                    Title.Frame = new CGRect( 5, Image.Frame.Bottom + 5, parentSize.Width - 10, Title.Frame.Height + 5 );*/
                     AddSubview( Title );
 
                     // Date & Speaker
@@ -93,8 +93,8 @@ namespace iOS
                     Date.BackgroundColor = UIColor.Clear;
                     Date.LineBreakMode = UILineBreakMode.TailTruncation;
                     Date.Text = "88/88/8888";
-                    Date.SizeToFit( );
-                    Date.Frame = new CGRect( 5, Title.Frame.Bottom - 5, parentSize.Width, Date.Frame.Height + 5 );
+                    /*Date.SizeToFit( );
+                    Date.Frame = new CGRect( 5, Title.Frame.Bottom - 5, parentSize.Width, Date.Frame.Height + 5 );*/
                     AddSubview( Date );
 
                     Speaker = new UILabel( );
@@ -104,8 +104,8 @@ namespace iOS
                     Speaker.BackgroundColor = UIColor.Clear;
                     Speaker.LineBreakMode = UILineBreakMode.TailTruncation;
                     Speaker.Text = "PLACEHOLDER";
-                    Speaker.SizeToFit( );
-                    Speaker.Frame = new CGRect( parentSize.Width - Speaker.Bounds.Width - 5, Title.Frame.Bottom - 5, parentSize.Width, Speaker.Frame.Height + 5 );
+                    /*Speaker.SizeToFit( );
+                    Speaker.Frame = new CGRect( parentSize.Width - Speaker.Bounds.Width - 5, Title.Frame.Bottom - 5, parentSize.Width, Speaker.Frame.Height + 5 );*/
                     AddSubview( Speaker );
 
 
@@ -117,8 +117,6 @@ namespace iOS
                     WatchButton.Layer.BorderColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ).CGColor;
                     WatchButton.Layer.BorderWidth = 1;
                     WatchButton.SizeToFit( );
-                    WatchButton.Bounds = new CGRect( 0, 0, parentSize.Width / 2 + 6, WatchButton.Bounds.Height + 10 );
-                    WatchButton.Layer.Position = new CGPoint( -5, Speaker.Frame.Bottom + 15 );
                     AddSubview( WatchButton );
 
                     WatchButtonIcon = new UILabel( );
@@ -133,10 +131,6 @@ namespace iOS
                     WatchButtonLabel.Text = MessagesStrings.Series_Table_Watch;
                     WatchButtonLabel.SizeToFit( );
 
-                    nfloat labelTotalWidth = WatchButtonIcon.Bounds.Width + WatchButtonLabel.Bounds.Width + 5;
-                    WatchButtonIcon.Layer.Position = new CGPoint( (WatchButton.Bounds.Width - labelTotalWidth) / 2 + (WatchButtonIcon.Bounds.Width / 2), WatchButton.Bounds.Height / 2 );
-                    WatchButtonLabel.Layer.Position = new CGPoint( WatchButtonIcon.Frame.Right + (WatchButtonLabel.Bounds.Width / 2), WatchButton.Bounds.Height / 2 );
-                    
 
 
                     TakeNotesButton = new UIButton( UIButtonType.Custom );
@@ -147,9 +141,6 @@ namespace iOS
                     TakeNotesButton.Layer.BorderWidth = 1;
                     TakeNotesButton.SizeToFit( );
                     AddSubview( TakeNotesButton );
-
-                    TakeNotesButton.Bounds = new CGRect( 0, 0, parentSize.Width / 2 + 5, TakeNotesButton.Bounds.Height + 10 );
-                    TakeNotesButton.Layer.Position = new CGPoint( (parentSize.Width + 5) - TakeNotesButton.Bounds.Width, Speaker.Frame.Bottom + 15 );
 
 
                     TakeNotesButtonIcon = new UILabel( );
@@ -164,11 +155,6 @@ namespace iOS
                     TakeNotesButtonLabel.Text = MessagesStrings.Series_Table_TakeNotes;
                     TakeNotesButtonLabel.SizeToFit( );
 
-                    labelTotalWidth = TakeNotesButtonIcon.Bounds.Width + TakeNotesButtonLabel.Bounds.Width + 5;
-                    TakeNotesButtonIcon.Layer.Position = new CGPoint( (TakeNotesButton.Bounds.Width - labelTotalWidth) / 2 + (TakeNotesButtonIcon.Bounds.Width / 2), TakeNotesButton.Bounds.Height / 2 );
-                    TakeNotesButtonLabel.Layer.Position = new CGPoint( TakeNotesButtonIcon.Frame.Right + (TakeNotesButtonLabel.Bounds.Width / 2), TakeNotesButton.Bounds.Height / 2 );
-
-
                     // bottom banner
                     BottomBanner = new UILabel( );
                     BottomBanner.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
@@ -179,8 +165,7 @@ namespace iOS
                     BottomBanner.TextAlignment = UITextAlignment.Center;
 
                     BottomBanner.SizeToFit( );
-                    BottomBanner.Bounds = new CGRect( 0, 0, parentSize.Width, BottomBanner.Bounds.Height + 10 );
-                    BottomBanner.Layer.Position = new CGPoint( 0, TakeNotesButton.Frame.Bottom - 1 );
+
                     AddSubview( BottomBanner );
                 }
 
@@ -241,7 +226,7 @@ namespace iOS
                     AddSubview( Image );
 
                     Title = new UILabel( );
-                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
                     Title.BackgroundColor = UIColor.Clear;
@@ -379,18 +364,46 @@ namespace iOS
                             cell.Title.Text += " (Private)";
                         }
                         cell.Title.SizeToFit( );
+                        cell.Title.Frame = new CGRect( 10, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 10, cell.Title.Frame.Height );
 
 
                         // Date & Speaker
                         cell.Date.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Date;
                         cell.Date.SizeToFit( );
+                        cell.Date.Frame = new CGRect( 10, 
+                                                      cell.Title.Frame.Bottom - 7, 
+                                                      cell.Date.Bounds.Width, 
+                                                      cell.Date.Bounds.Height );
 
                         cell.Speaker.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Speaker;
                         cell.Speaker.SizeToFit( );
-                        cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 5, 
-                                                         cell.Speaker.Frame.Top, 
+                        cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 10, 
+                                                         cell.Title.Frame.Bottom - 7, 
                                                          cell.Speaker.Bounds.Width, 
-                                                         cell.Speaker.Bounds.Height + 5 );
+                                                         cell.Speaker.Bounds.Height );
+
+
+                        // Position the Watch Button and icon
+                        cell.WatchButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 6, cell.WatchButton.Bounds.Height + 10 );
+                        cell.WatchButton.Layer.Position = new CGPoint( -5, cell.Speaker.Frame.Bottom + 7 );
+
+
+                        nfloat labelTotalWidth = cell.WatchButtonIcon.Bounds.Width + cell.WatchButtonLabel.Bounds.Width + 5;
+                        cell.WatchButtonIcon.Layer.Position = new CGPoint( (cell.WatchButton.Bounds.Width - labelTotalWidth) / 2 + (cell.WatchButtonIcon.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
+                        cell.WatchButtonLabel.Layer.Position = new CGPoint( cell.WatchButtonIcon.Frame.Right + (cell.WatchButtonLabel.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
+
+
+                        // Position the Take Notes icon and button
+                        cell.TakeNotesButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 5, cell.TakeNotesButton.Bounds.Height + 10 );
+                        cell.TakeNotesButton.Layer.Position = new CGPoint( (cell.Bounds.Width + 5) - cell.TakeNotesButton.Bounds.Width, cell.Speaker.Frame.Bottom + 7 );
+
+                        labelTotalWidth = cell.TakeNotesButtonIcon.Bounds.Width + cell.TakeNotesButtonLabel.Bounds.Width + 5;
+                        cell.TakeNotesButtonIcon.Layer.Position = new CGPoint( (cell.TakeNotesButton.Bounds.Width - labelTotalWidth) / 2 + (cell.TakeNotesButtonIcon.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
+                        cell.TakeNotesButtonLabel.Layer.Position = new CGPoint( cell.TakeNotesButtonIcon.Frame.Right + (cell.TakeNotesButtonLabel.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
+
+                        // Position the Bottom Banner
+                        cell.BottomBanner.Bounds = new CGRect( 0, 0, cell.Bounds.Width, cell.BottomBanner.Bounds.Height + 10 );
+                        cell.BottomBanner.Layer.Position = new CGPoint( 0, cell.TakeNotesButton.Frame.Bottom - 1 );
 
                         // Watch Button & Labels
                         // disable the button if there's no watch URL

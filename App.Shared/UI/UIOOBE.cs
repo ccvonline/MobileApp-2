@@ -76,7 +76,7 @@ namespace App.Shared.UI
             CampusHeader = PlatformLabel.Create( );
             CampusHeader.SetFont( ControlStylingConfig.Font_Light, 18 );
             CampusHeader.TextColor = 0xCCCCCCFF;
-            CampusHeader.Text = "We Are One Church in Many Locations\nSelect Your Home Campus";
+            CampusHeader.Text = OOBEStrings.CampusIntro;
             CampusHeader.TextAlignment = TextAlignment.Center;
             CampusHeader.Opacity = 0;
             CampusHeader.SizeToFit( );
