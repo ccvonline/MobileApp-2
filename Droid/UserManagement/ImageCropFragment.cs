@@ -243,7 +243,6 @@ namespace Droid
 
             CropViewMaxPos = new PointF( CropViewMinPos.X + (scaledWidth - CropView.LayoutParameters.Width),
                                          CropViewMinPos.Y + (scaledHeight - CropView.LayoutParameters.Height) );
-
             view.AddView( CropView );
 
             // create a mask layer that will block out the parts of the image that will be cropped
@@ -251,8 +250,6 @@ namespace Droid
             MaskLayer.LayoutParameters = new RelativeLayout.LayoutParams( (int)ScreenSize.Width, (int)ScreenSize.Height );
             MaskLayer.Opacity = 0.00f;
             view.AddView( MaskLayer );
-
-
 
             // Now setup our bottom area with cancel, crop, and text to explain
             RelativeLayout bottomBarLayout = new RelativeLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -263,8 +260,6 @@ namespace Droid
             Color navColor = Rock.Mobile.UI.Util.GetUIColor( PrivateSubNavToolbarConfig.BackgroundColor );
             navColor.A = (Byte) ( (float) navColor.A * PrivateSubNavToolbarConfig.Opacity );
             bottomBarLayout.SetBackgroundColor( navColor );
-
-            bottomBarLayout.LayoutParameters.Height = 150;
             view.AddView( bottomBarLayout );
 
             // setup the cancel button (which will undo cropping or take you back to the picture taker)
