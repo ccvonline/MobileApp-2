@@ -572,15 +572,28 @@ namespace Droid
         /// <param name="xPos">X position.</param>
         void PanContainerViews( float xPos )
         {
-            DropShadowView.SetX( xPos - DropShadowXOffset );
-            View.SetX( xPos );
-            ActiveTaskFrame.SetX( xPos );
-            NavToolbar.ButtonLayout.SetX( xPos );
-            FadeOutFrame.SetX( xPos );
+            // there's a small chance of an exception being thrown
+            // due to one of the below not being valid. Repro'ing this is not easy,
+            // so the safer route is to just guard against all of them, and 
+            // worst case we'll skip a frame of animation
 
-            // now determine the alpha
-            float maxSlide = Springboard.GetSpringboardDisplayWidth( );
-            FadeOutFrame.Alpha = Math.Min( xPos / maxSlide, PrivatePrimaryContainerConfig.SlideDarkenAmount );
+            if ( DropShadowView != null && 
+                View != null && 
+                ActiveTaskFrame != null && 
+                NavToolbar != null &&
+                NavToolbar.ButtonLayout != null && 
+                FadeOutFrame != null )
+            {
+                DropShadowView.SetX( xPos - DropShadowXOffset );
+                View.SetX( xPos );
+                ActiveTaskFrame.SetX( xPos );
+                NavToolbar.ButtonLayout.SetX( xPos );
+                FadeOutFrame.SetX( xPos );
+
+                // now determine the alpha
+                float maxSlide = Springboard.GetSpringboardDisplayWidth( );
+                FadeOutFrame.Alpha = Math.Min( xPos / maxSlide, PrivatePrimaryContainerConfig.SlideDarkenAmount );
+            }
         }
 
         public void OnDown( MotionEvent e )

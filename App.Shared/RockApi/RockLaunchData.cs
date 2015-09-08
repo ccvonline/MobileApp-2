@@ -278,27 +278,37 @@ namespace App
                                             // it's possible rock sent us bad data, so guard against any incomplete news items
                                             if( item.AttributeValues != null )
                                             {
+                                                // we do this so we can store it on the stack and print it out if there's an exception.
+                                                string currKey = "";
+
                                                 try
                                                 {
-                                                    string featuredGuid = item.AttributeValues[ "FeatureImage" ].Value;
+                                                    currKey = "FeatureImage";
+                                                    string featuredGuid = item.AttributeValues[ currKey ].Value;
                                                     string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
 
-                                                    string bannerGuid = item.AttributeValues[ "PromotionImage" ].Value;
+                                                    currKey = "PromotionImage";
+                                                    string bannerGuid = item.AttributeValues[ currKey ].Value;
                                                     string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
 
-                                                    string detailUrl = item.AttributeValues[ "DetailsURL" ].Value;
+                                                    currKey = "DetailsURL";
+                                                    string detailUrl = item.AttributeValues[ currKey ].Value;
 
-                                                    bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ "DetailsURLLaunchesBrowser" ].Value );
+                                                    currKey = "DetailsURLLaunchesBrowser";
+                                                    bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ currKey ].Value );
 
-                                                    bool includeImpersonationToken = bool.Parse( item.AttributeValues[ "IncludeImpersonationToken" ].Value );
+                                                    currKey = "IncludeImpersonationToken";
+                                                    bool includeImpersonationToken = bool.Parse( item.AttributeValues[ currKey ].Value );
 
                                                     // take a list of the campuses that this news item should display for
                                                     // (if the list is blank, we'll show it for all campuses)
+                                                    currKey = "Campuses";
+
                                                     List<Guid> campusGuids = new List<Guid>( );
-                                                    if( item.AttributeValues[ "Campuses" ] != null && string.IsNullOrEmpty( item.AttributeValues[ "Campuses" ].Value ) == false )
+                                                    if( item.AttributeValues[ currKey ] != null && string.IsNullOrEmpty( item.AttributeValues[ currKey ].Value ) == false )
                                                     {
                                                         // this will be a comma-dilimited list of campuses to use for the news
-                                                        string[] campusGuidList = item.AttributeValues[ "Campuses" ].Value.Split( ',' );
+                                                        string[] campusGuidList = item.AttributeValues[ currKey ].Value.Split( ',' );
                                                         foreach( string campusGuid in campusGuidList )
                                                         {
                                                             campusGuids.Add( Guid.Parse( campusGuid ) );
@@ -325,7 +335,7 @@ namespace App
                                                 {
                                                     // one of the attribute values we wanted wasn't there. Package up what WAS there and report
                                                     // the error. We can then use process of elimination to fix it.
-                                                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found. {0}", e ) );
+                                                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found is: {0}. Full Exception {1}", currKey, e ) );
 #if !DEBUG
                                                     string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
                                                     Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
