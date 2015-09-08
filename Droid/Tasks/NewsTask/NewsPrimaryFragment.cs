@@ -531,10 +531,10 @@ namespace Droid
                     AsyncLoader.LoadImage( PrivateGeneralConfig.NewsMainPlaceholder, true, false,
                         delegate( Bitmap imageBmp )
                         {
-                            Placeholder = imageBmp;
-
-                            if( FragmentActive == true )
+                            if( FragmentActive == true && imageBmp != null )
                             {
+                                Placeholder = imageBmp;
+
                                 RefreshListView( );
                                 return true;
                             }
@@ -652,7 +652,7 @@ namespace Droid
                         entry.ImageIsDownloaded = true;
 
                         AsyncLoader.LoadImage( entry.News.ImageName, false, false,
-                            delegate( Bitmap imageBmp )
+                            delegate( Bitmap imageBmp)
                             {
                                 if ( FragmentActive == true )
                                 {
@@ -660,12 +660,16 @@ namespace Droid
                                     if ( imageBmp == null )
                                     {
                                         FileCache.Instance.RemoveFile( entry.News.ImageName );
+
+                                        return false;
                                     }
+                                    else
+                                    {
+                                        entry.Image = imageBmp;
+                                        RefreshListView( );
 
-                                    entry.Image = imageBmp;
-                                    RefreshListView( );
-
-                                    return true;
+                                        return true;
+                                    }
                                 }
 
                                 return false;

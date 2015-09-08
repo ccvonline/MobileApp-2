@@ -318,7 +318,7 @@ namespace Droid
                     AsyncLoader.LoadImage( PrivateConnectConfig.MainPageHeaderImage, true, true,
                         delegate( Bitmap imageBmp )
                         {
-                            if( FragmentActive == true )
+                            if( FragmentActive == true && imageBmp != null )
                             {
                                 Billboard = imageBmp;
 
@@ -338,7 +338,7 @@ namespace Droid
                         AsyncLoader.LoadImage( LinkEntries[ i ].ImageName, true, false,
                             delegate( Bitmap imageBmp )
                             {
-                                if( FragmentActive == true )
+                                if( FragmentActive == true && imageBmp != null )
                                 {
                                     LinkBillboards[ imageIndex ] = imageBmp;
 

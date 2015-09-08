@@ -5,11 +5,34 @@
 	<SeriesList>
 		<!--Start Series-->
 		<Series>
-			<Message Private="True">
+			<Message>
+				<Name>SECRETS</Name>
+				<Speaker>Todd Clark</Speaker>
+				<Date>9/6/2015</Date>
+				<NoteUrl>xml/2015/messy_grace/message_9_5_2015.xml</NoteUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/MessyGrace/MessyGrace_Wk1_Secrets_New.mp3</AudioUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=524</ShareUrl>
+			</Message>
+			<Name>MESSY GRACE</Name>
+			<Description>
+				Messy and Grace – two words that we don’t often see together. But if we’re all honest, extending grace can be messy at times.
+			</Description>
+			<DateRanges>9/6/2015 - 9/27/2015</DateRanges>
+			<BillboardUrl>images/2015_messy_grace.png</BillboardUrl>
+			<ThumbnailUrl>images/2015_messy_grace_thumb.png</ThumbnailUrl>
+		</Series>
+		<!--End Series-->
+		
+		<!--Start Series-->
+		<Series>
+			<Message>
 				<Name>STAND ALONE</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/30/2015</Date>
 				<NoteUrl>xml/message_8_29_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/137845002.m3u8?p=high,standard,mobile&amp;s=149fbf2eabcc31d8b3b5900ef0a7c1d8</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=523</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Courageous/Courageous_Wk5_Stand_Alone.mp3</AudioUrl>
 			</Message>
 			<Message>
 				<Name>BOUNCE BACK</Name>
@@ -378,7 +401,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>State of the Church</Name>
+				<Name>STATE OF THE CHURCH</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>2/8/2015</Date>
 				<NoteUrl>xml/message_2_7_2015.xml</NoteUrl>
@@ -387,7 +410,7 @@
 				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=493</ShareUrl>
 			</Message>
 
-			<Name>State of the Church</Name>
+			<Name>STATE OF THE CHURCH</Name>
 			<Description>
 				State of the Church 2015
 			</Description>
@@ -400,7 +423,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>FAN or FOLLOWER</Name>
+				<Name>FAN OR FOLLOWER</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>2/1/2015</Date>
 				<NoteUrl>xml/message_1_31_2015.xml</NoteUrl>
@@ -409,7 +432,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/FanOrFollower/FanOrFollower.mp3</AudioUrl>
 			</Message>
 
-			<Name>Fan or Follower</Name>
+			<Name>FAN OR FOLLOWER</Name>
 			<Description>
 				Are you a fan of Jesus, or are you a follower of Jesus? Join us as we learn about this critical difference, and why it might matter more than you think.
 			</Description>
@@ -440,7 +463,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/FreshStart/Fresh_Start_WK3_Family.mp3</AudioUrl>
 			</Message>
 			<Message>
-				<Name>Finances</Name>
+				<Name>FINANCES</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>1/11/2015</Date>
 				<NoteUrl>xml/message_1_10_2015.xml</NoteUrl>
@@ -450,7 +473,7 @@
 			</Message>
 
 			<Message>
-				<Name>Faith</Name>
+				<Name>FAITH</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>1/4/2015</Date>
 				<NoteUrl>xml/message_1_3_2015.xml</NoteUrl>
@@ -459,7 +482,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/FreshStart/FreshStart_WK1_Faith.mp3</AudioUrl>
 			</Message>
 
-			<Name>Fresh Start</Name>
+			<Name>FRESH START</Name>
 			<Description>
 				New year’s resolutions center on what we need to change and improve. We often resolve to prioritize our faith, family and friends, take control of our finances and focus on what is really important. But isn’t it easy to find ourselves repeating the same old patterns and routines that we committed to change? Join us as we kick off the new year and discover how to make a Fresh Start that lasts.
 			</Description>
@@ -472,7 +495,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>Paul to the Phoenicians</Name>
+				<Name>PAUL TO THE PHOENICIANS</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>12/28/2014</Date>
 				<NoteUrl>xml/message_12_27_2014.xml</NoteUrl>
@@ -481,7 +504,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/PaulToThePhoenicians/Paul_To_The_Phoenicians.mp3</AudioUrl>
 			</Message>
 
-			<Name>Paul to the Phoenicians</Name>
+			<Name>PAUL TO THE PHOENICIANS</Name>
 			<Description>
 				As we close out 2014, you&apos;ve probably noticed the news stations recapping major stories from this past year. How can we look at these stories through the lens of God&apos;s word? If the Apostle Paul were writing a letter to us, as he did with the Colossians, Philippians and Thessalonians, what would he have to say?
 			</Description>
@@ -494,14 +517,14 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>Christmas at CCV</Name>
+				<Name>CHRISTMAS AT CCV</Name>
 				<Speaker>Teaching Pastors</Speaker>
 				<Date>12/24/2014</Date>
 				<WatchUrl>http://player.vimeo.com/external/115491810.m3u8?p=high,standard,mobile&amp;s=d50d4a828cab06dfb1e970e122f0baea</WatchUrl>
 				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=485</ShareUrl>
 			</Message>
 
-			<Name>Christmas at CCV</Name>
+			<Name>CHRISTMAS AT CCV</Name>
 			<Description>
 				The 2014 Christmas Eve service at Christ's Church of the Valley.
 			</Description>
@@ -514,7 +537,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>Make Room For Giving</Name>
+				<Name>MAKE ROOM FOR GIVING</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>12/21/2014</Date>
 				<NoteUrl>xml/message_12_20_2014.xml</NoteUrl>
@@ -524,7 +547,7 @@
 			</Message>
 
 			<Message>
-				<Name>Make Room For Relationships</Name>
+				<Name>MAKE ROOM FOR RELATIONSHIPS</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>12/14/2014</Date>
 				<NoteUrl>xml/message_12_13_2014.xml</NoteUrl>
@@ -534,7 +557,7 @@
 			</Message>
 
 			<Message>
-				<Name>Make Room For Serving</Name>
+				<Name>MAKE ROOM FOR SERVING</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>12/7/2014</Date>
 				<NoteUrl>xml/message_12_6_2014.xml</NoteUrl>
@@ -543,7 +566,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/Uncluttered/Uncluttered_WK1_Make_Room_For_Serving.mp3</AudioUrl>
 			</Message>
 
-			<Name>Uncluttered</Name>
+			<Name>UNCLUTTERED</Name>
 			<Description>
 				Does the Christmas season have you feeling exhausted? It is easy to become so caught up in the festivities that sometimes we lose the real reason for the celebration. This December we'll discover what an "Uncluttered" Christmas looks like. Invite a friend to join you as we make room for the most important part of the Christmas season, Jesus Christ.
 			</Description>
@@ -556,7 +579,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>There Is Hope - For Our Culture</Name>
+				<Name>FOR OUR CULTURE</Name>
 				<Speaker>John Stonestreet</Speaker>
 				<Date>11/30/2014</Date>
 				<NoteUrl>xml/message_11_29_2014.xml</NoteUrl>
@@ -565,7 +588,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/ThereIsHope/ThereIsHope_WK5_HopeForOurCulture.mp3</AudioUrl>
 			</Message>
 			<Message>
-				<Name>There Is Hope - For Your Finances</Name>
+				<Name>FOR YOUR FINANCES</Name>
 				<Speaker>Dave Ramsey</Speaker>
 				<Date>11/23/2014</Date>
 				<NoteUrl>xml/message_11_22_2014.xml</NoteUrl>
@@ -574,7 +597,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/ThereIsHope/There_Is_Hope_WK4_Hope_For_Your_Finances.mp3</AudioUrl>
 			</Message>
 			<Message>
-				<Name>There Is Hope - For Your Workplace</Name>
+				<Name>FOR YOUR WORKPLACE</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>11/16/2014</Date>
 				<NoteUrl>xml/message_11_15_2014.xml</NoteUrl>
@@ -583,7 +606,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/ThereIsHope/There_Is_Hope_WK3_Hope_For_Your_Workplace.mp3</AudioUrl>
 			</Message>
 			<Message>
-				<Name>There Is Hope - Marriage</Name>
+				<Name>MARRIAGE</Name>
 				<Speaker>Dr. Shaunti Feldhahn</Speaker>
 				<Date>11/9/2014</Date>
 				<NoteUrl>xml/message_11_8_2014.xml</NoteUrl>
@@ -592,7 +615,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/ThereIsHope/ThereIsHope_WK2_HopeForYourMarriage.mp3</AudioUrl>
 			</Message>
 			<Message>
-				<Name>There Is Hope - Family</Name>
+				<Name>FAMILY</Name>
 				<Speaker>Dr. Kevin Leman</Speaker>
 				<Date>11/2/2014</Date>
 				<NoteUrl>xml/message_11_1_2014.xml</NoteUrl>
@@ -601,7 +624,7 @@
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/ThereIsHope/ThereIsHope_WK1_HopeForYourFamilySermon.mp3</AudioUrl>
 			</Message>
 
-			<Name>There Is Hope</Name>
+			<Name>THERE IS HOPE</Name>
 			<DateRanges>11/2/2014 - 11/30/2014</DateRanges>
 			<Description>
 				Hope is a powerful thing. In this series we will be studying how the Bible says we can gain HOPE for our marriages, families, finances, workplaces and culture. Join us as we learn from some of the leading experts in the country and discover There Is Hope.
@@ -614,7 +637,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>Honesty</Name>
+				<Name>HONESTY</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>10/26/2014</Date>
 				<NoteUrl>xml/message_10_25_2014.xml</NoteUrl>
@@ -624,7 +647,7 @@
 			</Message>
 
 			<Message>
-				<Name>Laziness</Name>
+				<Name>LAZINESS</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>10/19/2014</Date>
 				<NoteUrl>xml/message_10_18_2014.xml</NoteUrl>
@@ -634,7 +657,7 @@
 			</Message>
 
 			<Message>
-				<Name>Conflict</Name>
+				<Name>CONFLICT</Name>
 				<Speaker>Dr. Don &amp; Sue Wilson</Speaker>
 				<Date>10/12/2014</Date>
 				<NoteUrl>xml/message_10_11_2014.xml</NoteUrl>
@@ -644,7 +667,7 @@
 			</Message>
 
 			<Message>
-				<Name>Soul</Name>
+				<Name>SOUL</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>10/5/2014</Date>
 				<NoteUrl>xml/message_10_4_2014.xml</NoteUrl>
@@ -654,7 +677,7 @@
 			</Message>
 
 			<Message>
-				<Name>Pride</Name>
+				<Name>PRIDE</Name>
 				<Speaker>Dr. Mark Moore</Speaker>
 				<Date>9/28/2014</Date>
 				<NoteUrl>xml/message_9_27_2014.xml</NoteUrl>
@@ -664,7 +687,7 @@
 			</Message>
 
 			<Message>
-				<Name>Anger</Name>
+				<Name>ANGER</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>9/21/2014</Date>
 				<NoteUrl>xml/message_9_20_2014.xml</NoteUrl>
@@ -674,7 +697,7 @@
 			</Message>
 
 			<Message>
-				<Name>Getting Directions</Name>
+				<Name>GETTING DIRECTIONS</Name>
 				<Speaker>Ashley Wooldridge</Speaker>
 				<Date>9/14/2014</Date>
 				<NoteUrl>xml/message_9_13_2014.xml</NoteUrl>
@@ -684,7 +707,7 @@
 			</Message>
 
 			<Message>
-				<Name>Get Wisdom</Name>
+				<Name>GET WISDOM</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>9/7/2014</Date>
 				<NoteUrl>xml/message_9_6_2014.xml</NoteUrl>
@@ -693,7 +716,7 @@
 				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=469</ShareUrl>
 			</Message>
 
-			<Name>#Wisdom</Name>
+			<Name>#WISDOM</Name>
 			<DateRanges>9/7/2014 - 10/26/2014</DateRanges>
 			<Description>
 				Each day we make decisions and each decision often has many options that are morally permissible. It&apos;s not so much which is the &quot;right&quot; choice, it&apos;s which is the &quot;wise&quot; choice. Wisdom goes beyond right and wrong, and illuminates which choice is best based on the complex realities of life. So join us as we seek and gain wisdom that will benefit every area of our lives.
@@ -706,7 +729,7 @@
 		<!--Start Series-->
 		<Series>
 			<Message>
-				<Name>Worry: When Life Spins Out of Control</Name>
+				<Name>WHEN LIFE SPINS OUT OF CONTROL</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/31/2014</Date>
 				<NoteUrl>xml/message_8_31_2014.xml</NoteUrl>
@@ -716,7 +739,7 @@
 			</Message>
 
 			<Message>
-				<Name>Change: When Life Needs to Change</Name>
+				<Name>WHEN LIFE NEEDS CHANGE</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/24/2014</Date>
 				<NoteUrl>xml/message_8_24_2014.xml</NoteUrl>
@@ -726,7 +749,7 @@
 			</Message>
 
 			<Message>
-				<Name>Priorities: When Life Is Out Of Balance</Name>
+				<Name>WHEN LIFE IS OUT OF BALANCE</Name>
 				<Speaker>Dr. Don Wilson</Speaker>
 				<Date>8/17/2014</Date>
 				<NoteUrl>xml/message_8_17_2014.xml</NoteUrl>
@@ -735,7 +758,7 @@
 				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=466</ShareUrl>
 			</Message>
 
-			<Name>Living on the Edge</Name>
+			<Name>LIVING ON THE EDGE</Name>
 			<Description>
 				Do you ever feel like you are living life right on the edge? The stress associated with maintaining healthy friendships, family, marriages, and career can seem overwhelming at times. In this new series we will discover how to move away from the edge and gain greater margin and balance in our everyday lives.
 			</Description>

@@ -160,6 +160,14 @@ namespace Droid
         View CampusContainer { get; set; }
 
         /// <summary>
+        /// We throttle the rate the user can switch activities via tapping an element.
+        /// If we don't, dozens of image load requests can queue up and we'll run out of memory
+        /// before DALVIK has a chance to purge our unloaded ones.
+        /// </summary>
+        /// <value>The last element tapped time.</value>
+        DateTime LastElementTappedTime { get; set; }
+
+        /// <summary>
         /// True when series info is downloaded and it's safe to start downloading other stuff.
         /// </summary>
         bool SeriesInfoDownloaded { get; set; }
@@ -1085,6 +1093,7 @@ namespace Droid
                                 if ( imageBmp == null )
                                 {
                                     FileCache.Instance.RemoveFile( PrivateSpringboardConfig.ProfilePic );
+                                    return false;
                                 }
                                 else
                                 {
@@ -1111,9 +1120,8 @@ namespace Droid
                                     // set the final result
                                     ProfileImageButton.Text = "";
                                     ProfileImageButton.Background = new BitmapDrawable( ProfileMaskedImage );
+                                    return true;
                                 }
-
-                                return true;
                             });
                     }
                 }
@@ -1131,28 +1139,36 @@ namespace Droid
             {
                 case MotionEventActions.Up:
                 {
-                    // only allow changing tasks via button press if the springboard is open 
-                    // and we're not showing a modal fragment (like the Login screen)
-                    if ( NavbarFragment.ShouldSpringboardAllowInput( ) == true && VisibleModalFragment == null )
+                    // don't allow changing an element more than once every half second.
+                    // This ensures that any pending image loading can finish so we don't run out of memory.
+                    TimeSpan seconds = DateTime.Now - LastElementTappedTime;
+                    if ( seconds.TotalMilliseconds > 500 )
                     {
-                        // if we're not in landscape regular, close the springboard.
-                        // we need this here as WELL as in NavbarFragment's ActivateTask so that
-                        // if we tap an empty space of the springboard, we can close it.
-                        if ( MainActivity.IsLandscapeWide( ) == false )
-                        {
-                            NavbarFragment.RevealSpringboard( false );
-                        }
+                        LastElementTappedTime = DateTime.Now;
 
-                        // did we tap a button?
-                        SpringboardElement element = Elements.Where( el => el.Button == v ).SingleOrDefault( );
-                        if ( element != null )
+                        // only allow changing tasks via button press if the springboard is open 
+                        // and we're not showing a modal fragment (like the Login screen)
+                        if ( NavbarFragment.ShouldSpringboardAllowInput( ) == true && VisibleModalFragment == null )
                         {
-                            // did we tap within the revealed springboard area?
-                            float visibleButtonWidth = NavbarFragment.View.Width * PrivatePrimaryNavBarConfig.Portrait_RevealPercentage_Android;
-                            if ( e.GetX( ) < visibleButtonWidth )
+                            // if we're not in landscape regular, close the springboard.
+                            // we need this here as WELL as in NavbarFragment's ActivateTask so that
+                            // if we tap an empty space of the springboard, we can close it.
+                            if ( MainActivity.IsLandscapeWide( ) == false )
                             {
-                                // we did, so activate the element associated with that button
-                                ActivateElement( element );
+                                NavbarFragment.RevealSpringboard( false );
+                            }
+
+                            // did we tap a button?
+                            SpringboardElement element = Elements.Where( el => el.Button == v ).Single( );
+                            if ( element != null )
+                            {
+                                // did we tap within the revealed springboard area?
+                                float visibleButtonWidth = NavbarFragment.View.Width * PrivatePrimaryNavBarConfig.Portrait_RevealPercentage_Android;
+                                if ( e.GetX( ) < visibleButtonWidth )
+                                {
+                                    // we did, so activate the element associated with that button
+                                    ActivateElement( element );
+                                }
                             }
                         }
                     }
@@ -1203,18 +1219,21 @@ namespace Droid
             }
             else
             {
-                ActiveElementIndex = Elements.IndexOf( activeElement); 
-
-                foreach ( SpringboardElement element in Elements )
+                if ( NavbarFragment.ActiveTask != activeElement.Task )
                 {
-                    if ( activeElement != element )
-                    {
-                        element.Deactivate( );
-                    }
-                }
+                    ActiveElementIndex = Elements.IndexOf( activeElement ); 
 
-                activeElement.Activate( );
-                NavbarFragment.SetActiveTask( activeElement.Task );
+                    foreach ( SpringboardElement element in Elements )
+                    {
+                        if ( activeElement != element )
+                        {
+                            element.Deactivate( );
+                        }
+                    }
+
+                    activeElement.Activate( );
+                    NavbarFragment.SetActiveTask( activeElement.Task );
+                }
             }
         }
 

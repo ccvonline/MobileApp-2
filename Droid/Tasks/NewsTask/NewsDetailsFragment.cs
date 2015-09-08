@@ -110,7 +110,7 @@ namespace Droid
                         AsyncLoader.LoadImage( PrivateGeneralConfig.NewsDetailsPlaceholder, true, false,
                             delegate( Bitmap imageBmp )
                             {
-                                if ( IsFragmentActive == true )
+                                if ( IsFragmentActive == true && imageBmp != null )
                                 {
                                     HeaderImage = imageBmp;
                                     ImageBanner.SetImageBitmap( HeaderImage );
@@ -155,21 +155,25 @@ namespace Droid
                                     if ( imageBmp == null )
                                     {
                                         FileCache.Instance.RemoveFile( filename );
+
+                                        return false;
                                     }
-
-                                    HeaderImage = imageBmp;
-
-                                    if( ImageBanner.Drawable != null )
+                                    else
                                     {
-                                        ImageBanner.Drawable.Dispose( );
+                                        HeaderImage = imageBmp;
+
+                                        if( ImageBanner.Drawable != null )
+                                        {
+                                            ImageBanner.Drawable.Dispose( );
+                                        }
+
+                                        ImageBanner.SetImageBitmap( HeaderImage );
+                                        ImageBanner.Invalidate( );
+
+                                        Rock.Mobile.PlatformSpecific.Android.UI.Util.FadeView( ImageBanner, true, null );
+
+                                        return true;
                                     }
-
-                                    ImageBanner.SetImageBitmap( HeaderImage );
-                                    ImageBanner.Invalidate( );
-
-                                    Rock.Mobile.PlatformSpecific.Android.UI.Util.FadeView( ImageBanner, true, null );
-
-                                    return true;
                                 }
                                 return false;
 

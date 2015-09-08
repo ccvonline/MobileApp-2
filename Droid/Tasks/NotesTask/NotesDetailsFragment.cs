@@ -457,7 +457,7 @@ namespace Droid
                         AsyncLoader.LoadImage( PrivateNoteConfig.NotesMainPlaceholder, true, false,
                             delegate( Bitmap imageBmp )
                             {
-                                if ( FragmentActive == true )
+                                if ( FragmentActive == true && imageBmp != null )
                                 {
                                     PlaceholderImage = imageBmp;
                                      
@@ -496,13 +496,16 @@ namespace Droid
                                     if ( imageBmp == null )
                                     {
                                         FileCache.Instance.RemoveFile( filename );
+                                        return false;
                                     }
+                                    else
+                                    {
+                                        SeriesBillboard = imageBmp;
 
-                                    SeriesBillboard = imageBmp;
+                                        RefreshList( );
 
-                                    RefreshList( );
-
-                                    return true;
+                                        return true;
+                                    }
                                 }
                                 return false;
 

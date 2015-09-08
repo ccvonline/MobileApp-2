@@ -648,7 +648,7 @@ namespace Droid
                     AsyncLoader.LoadImage( PrivateNoteConfig.NotesThumbPlaceholder, true, false,
                         delegate( Bitmap loadedBmp )
                         {
-                            if ( FragmentActive == true )
+                            if ( FragmentActive == true && loadedBmp != null )
                             {
                                 ImageThumbPlaceholder = loadedBmp;
 
@@ -662,7 +662,7 @@ namespace Droid
                     AsyncLoader.LoadImage( PrivateNoteConfig.NotesMainPlaceholder, true, false,
                         delegate( Bitmap loadedBmp )
                         {
-                            if ( FragmentActive == true )
+                            if ( FragmentActive == true && loadedBmp != null )
                             {
                                 ImageMainPlaceholder = loadedBmp;
 
@@ -804,13 +804,16 @@ namespace Droid
                                     if ( loadedBmp == null )
                                     {
                                         FileCache.Instance.RemoveFile( filename );
+                                        return false;
                                     }
+                                    else
+                                    {
+                                        entry.Billboard = loadedBmp;
 
-                                    entry.Billboard = loadedBmp;
+                                        RefreshList( );
 
-                                    RefreshList( );
-
-                                    return true;
+                                        return true;
+                                    }
                                 }
 
                                 return false;
@@ -836,13 +839,16 @@ namespace Droid
                                     if ( loadedBmp == null )
                                     {
                                         FileCache.Instance.RemoveFile( filename );
+                                        return false;
                                     }
+                                    else
+                                    {
+                                        entry.Thumbnail = loadedBmp;
 
-                                    entry.Thumbnail = loadedBmp;
+                                        RefreshList( );
 
-                                    RefreshList( );
-
-                                    return true;
+                                        return true;
+                                    }
                                 }
 
                                 return false;
