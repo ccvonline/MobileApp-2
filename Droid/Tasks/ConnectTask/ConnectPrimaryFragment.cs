@@ -140,9 +140,9 @@ namespace Droid
                     Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Large_FontSize );
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                     Title.Text = ConnectStrings.Main_Connect_Header;
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = 5;
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).LeftMargin = 25;
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).BottomMargin = 5;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
                     AddView( Title );
                 }
 
@@ -176,8 +176,8 @@ namespace Droid
 
                     Thumbnail = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Thumbnail.LayoutParameters = new LinearLayout.LayoutParams( (int)Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.MainPage_ThumbnailDimension ), (int)Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.MainPage_ThumbnailDimension ) );
-                    ( (LinearLayout.LayoutParams)Thumbnail.LayoutParameters ).TopMargin = 25;
-                    ( (LinearLayout.LayoutParams)Thumbnail.LayoutParameters ).BottomMargin = 25;
+                    ( (LinearLayout.LayoutParams)Thumbnail.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)Thumbnail.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
                     ( (LinearLayout.LayoutParams)Thumbnail.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
                     Thumbnail.SetScaleType( ImageView.ScaleType.CenterCrop );
                     contentLayout.AddView( Thumbnail );
@@ -186,7 +186,7 @@ namespace Droid
                     TitleLayout.Orientation = Android.Widget.Orientation.Vertical;
                     TitleLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = 25;
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
                     contentLayout.AddView( TitleLayout );
 
 
@@ -198,7 +198,7 @@ namespace Droid
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                     Title.SetSingleLine( );
                     Title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = 5;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
                     TitleLayout.AddView( Title );
 
                     SubTitle = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -206,8 +206,8 @@ namespace Droid
                     SubTitle.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     SubTitle.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     SubTitle.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
-                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).TopMargin = -10;
-                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).BottomMargin = 5;
+                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
+                    ( (LinearLayout.LayoutParams)SubTitle.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
                     TitleLayout.AddView( SubTitle );
 
                     // fill the remaining space with a dummy view, and that will align our chevron to the right

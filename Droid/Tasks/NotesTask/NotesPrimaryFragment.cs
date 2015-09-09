@@ -281,18 +281,18 @@ namespace Droid
                     Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                     Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Large_FontSize );
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = 25;
-                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).LeftMargin = 25;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 8 );
                     AddView( Title );
 
                     DetailsLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     DetailsLayout.Orientation = Orientation.Horizontal;
                     DetailsLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
-                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).TopMargin = -20;
-                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).LeftMargin = 25;
-                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).RightMargin = 25;
-                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).BottomMargin = 25;
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 8 );
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 8 );
+                    ( (LinearLayout.LayoutParams)DetailsLayout.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
                     AddView( DetailsLayout );
 
                     Date = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -327,8 +327,8 @@ namespace Droid
                     WatchButton = new BorderedActionButton();
                     WatchButton.AddToView( ButtonLayout );
 
-                    ( (LinearLayout.LayoutParams)WatchButton.Layout.LayoutParameters ).LeftMargin = -5;
-                    ( (LinearLayout.LayoutParams)WatchButton.Layout.LayoutParameters ).RightMargin = -1;
+                    ( (LinearLayout.LayoutParams)WatchButton.Layout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -5 );
+                    ( (LinearLayout.LayoutParams)WatchButton.Layout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -1 );
                     ( (LinearLayout.LayoutParams)WatchButton.Layout.LayoutParameters ).Weight = 1;
                     WatchButton.Layout.BorderWidth = 1;
                     WatchButton.Layout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
@@ -356,8 +356,8 @@ namespace Droid
                     TakeNotesButton = new BorderedActionButton();
                     TakeNotesButton.AddToView( ButtonLayout );
 
-                    ( (LinearLayout.LayoutParams)TakeNotesButton.Layout.LayoutParameters ).LeftMargin = -2;
-                    ( (LinearLayout.LayoutParams)TakeNotesButton.Layout.LayoutParameters ).RightMargin = -5;
+                    ( (LinearLayout.LayoutParams)TakeNotesButton.Layout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -2 );
+                    ( (LinearLayout.LayoutParams)TakeNotesButton.Layout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -5 );
                     ( (LinearLayout.LayoutParams)TakeNotesButton.Layout.LayoutParameters ).Weight = 1;
                     TakeNotesButton.Layout.BorderWidth = 1;
                     TakeNotesButton.Layout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
@@ -382,7 +382,7 @@ namespace Droid
 
                     Footer = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Footer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
-                    ( (LinearLayout.LayoutParams)Footer.LayoutParameters ).TopMargin = -5;
+                    ( (LinearLayout.LayoutParams)Footer.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -5 );
                     Footer.Text = MessagesStrings.Series_Table_PreviousMessages;
                     Footer.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     Footer.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
@@ -462,9 +462,9 @@ namespace Droid
                     TitleLayout.Orientation = Orientation.Vertical;
                     TitleLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.WrapContent, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = 25;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = 50;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = 50;
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 8 );
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
                     contentLayout.AddView( TitleLayout );
 
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -481,7 +481,7 @@ namespace Droid
                     DateRange.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     DateRange.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     DateRange.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
-                    ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).TopMargin = -10;
+                    ( (LinearLayout.LayoutParams)DateRange.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
                     TitleLayout.AddView( DateRange );
 
                     // fill the remaining space with a dummy view, and that will align our chevron to the right
@@ -503,7 +503,7 @@ namespace Droid
                     // add our own custom seperator at the bottom
                     Seperator = new View( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Seperator.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, 0 );
-                    Seperator.LayoutParameters.Height = 2;
+                    Seperator.LayoutParameters.Height = (int)Rock.Mobile.Graphics.Util.UnitToPx( 1 );
                     Seperator.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
                     AddView( Seperator );
                 }

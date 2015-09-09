@@ -68,19 +68,15 @@ namespace Droid
                             NameLayout = new BorderedRectView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             NameLayout.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
                             NameLayout.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
-                            //NameLayout.BorderWidth = 1;
-                            //NameLayout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ) );
-                            ( (LinearLayout.LayoutParams)NameLayout.LayoutParameters ).LeftMargin = 0;
-                            ( (LinearLayout.LayoutParams)NameLayout.LayoutParameters ).RightMargin = 0;
                             ( (LinearLayout.LayoutParams)NameLayout.LayoutParameters ).Weight = 1;
                             LinearLayout.AddView( NameLayout );
 
                             Name = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             Name.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).TopMargin = 20;
-                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).LeftMargin = 20;
-                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).RightMargin = 20;
-                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).BottomMargin = 20;
+                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                            ((RelativeLayout.LayoutParams)Name.LayoutParameters).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
                             Name.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                             Name.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                             Name.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
@@ -107,18 +103,18 @@ namespace Droid
                             CategoryLayout.BorderWidth = 1;
                             CategoryLayout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ) );
                             CategoryLayout.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
-                            ( (LinearLayout.LayoutParams)CategoryLayout.LayoutParameters ).LeftMargin = -10;
-                            ( (LinearLayout.LayoutParams)CategoryLayout.LayoutParameters ).RightMargin = -2;
+                            ( (LinearLayout.LayoutParams)CategoryLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
+                            ( (LinearLayout.LayoutParams)CategoryLayout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -1 );
                             ( (LinearLayout.LayoutParams)CategoryLayout.LayoutParameters ).Weight = 1;
                             detailsLayout.AddView( CategoryLayout );
 
                             // category
                             Category = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             Category.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).TopMargin = 10;
-                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).LeftMargin = 20;
-                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).RightMargin = 20;
-                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).BottomMargin = 10;
+                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 9 );
+                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 9 );
+                            ((RelativeLayout.LayoutParams)Category.LayoutParameters).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
                             Category.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                             Category.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
                             Category.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
@@ -137,17 +133,17 @@ namespace Droid
                             DateLayout.BorderWidth = 1;
                             DateLayout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ) );
                             DateLayout.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
-                            ( (LinearLayout.LayoutParams)DateLayout.LayoutParameters ).LeftMargin = -1;
-                            ( (LinearLayout.LayoutParams)DateLayout.LayoutParameters ).RightMargin = -10;
+                            ( (LinearLayout.LayoutParams)DateLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -1 );
+                            ( (LinearLayout.LayoutParams)DateLayout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
                             ( (LinearLayout.LayoutParams)DateLayout.LayoutParameters ).Weight = 1;
                             detailsLayout.AddView( DateLayout );
 
                             // date
                             Date = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             Date.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).TopMargin = 10;
-                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).RightMargin = 20;
-                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).BottomMargin = 10;
+                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 13 );
+                            ((RelativeLayout.LayoutParams)Date.LayoutParameters).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
                             ((RelativeLayout.LayoutParams)Date.LayoutParameters ).AddRule( LayoutRules.AlignParentRight );
                             Date.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
                             Date.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
@@ -163,12 +159,12 @@ namespace Droid
                             // actual prayer
                             Prayer = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).TopMargin = 30;
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).LeftMargin = 20;
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).RightMargin = 20;
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
                             ((LinearLayout.LayoutParams)Prayer.LayoutParameters).BottomMargin = (int)prayerActionHeight;
-                            Prayer.SetMinWidth( (int)bounds.Width - 40 );
-                            Prayer.SetMaxWidth( (int)bounds.Width - 40 );
+                            Prayer.SetMinWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
+                            Prayer.SetMaxWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
                             Prayer.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
                             Prayer.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                             Prayer.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Medium_FontSize );
@@ -197,11 +193,11 @@ namespace Droid
 
                         public void LayoutChanged( RectangleF bounds )
                         {
-                            Prayer.SetMinWidth( (int)bounds.Width - 40 );
-                            Prayer.SetMaxWidth( (int)bounds.Width - 40 );
+                            Prayer.SetMinWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
+                            Prayer.SetMaxWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
 
                             MaxPrayerLayoutHeight = bounds.Height;
-                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
+                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)Rock.Mobile.Graphics.Util.UnitToPx( MaxPrayerLayoutHeight ) );
                         }
                     }
 
@@ -217,7 +213,7 @@ namespace Droid
                     RelativeLayout PrayerActionLayout { get; set; }
                     bool Prayed { get; set; }
 
-                    static float PrayerActionDimension = 100;
+                    static float PrayerActionDimension = 100;//Rock.Mobile.Graphics.Util.UnitToPx( 50 );
 
                     public PrayerCard( Rock.Client.PrayerRequest prayer, RectangleF bounds )
                     {
@@ -272,6 +268,8 @@ namespace Droid
                         PrayerActionLabel.Text = PrayerStrings.Prayer_Before;
                         PrayerActionLabel.Gravity = GravityFlags.Center;
                         //PrayerActionLabel.SetBackgroundColor( Android.Graphics.Color.Orange );
+                        PrayerActionLabel.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
+                        PrayerActionLabel.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                         PrayerActionLabel.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
                         PrayerActionLayout.AddView( PrayerActionLabel );
 
@@ -346,11 +344,15 @@ namespace Droid
                     void PositionPrayedLabel( )
                     {
                         PrayerActionLayout.SetX( ( View.Bounds.Width - PrayerActionSize.Width ) / 2.0f );
-                        PrayerActionLayout.SetY( View.Bounds.Height - PrayerActionSize.Height / 3.5f );
+
+                        //float yPos = Rock.Mobile.Graphics.Util.UnitToPx( ( View.Bounds.Height - PrayerActionSize.Height ) );
+                        float yPos = (View.Bounds.Height - (PrayerActionSize.Height / 3));
+
+                        PrayerActionLayout.SetY( yPos );
 
                         PrayerActionLabel.Measure( 0, 0 );
                         PrayerActionLabel.SetX( (PrayerActionSize.Width - PrayerActionLabel.MeasuredWidth) / 2.0f );
-                        PrayerActionLabel.SetY( 10 );
+                        PrayerActionLabel.SetY( PrayerActionLabel.MeasuredHeight / 2 );
                     }
 
                     public void Scroll( float distanceY )

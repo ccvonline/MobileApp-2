@@ -149,9 +149,9 @@ namespace Droid
                     TitleLayout.Orientation = Orientation.Vertical;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Weight = 1;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = 25;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = 10;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = 10;
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
+                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 5 );
                     contentLayout.AddView( TitleLayout );
 
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );

@@ -1159,7 +1159,7 @@ namespace Droid
                             }
 
                             // did we tap a button?
-                            SpringboardElement element = Elements.Where( el => el.Button == v ).Single( );
+                            SpringboardElement element = Elements.Where( el => el.Button == v ).SingleOrDefault( );
                             if ( element != null )
                             {
                                 // did we tap within the revealed springboard area?
