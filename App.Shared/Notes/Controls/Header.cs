@@ -171,7 +171,7 @@ namespace App
                                                   mTitle.Position.Y + bounds.Y + padding.Top + borderPaddingPx );
 
                     // guarantee date and speaker are below title.
-                    float titleDetailsSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 10 );
+                    float titleDetailsSpacing = Rock.Mobile.Graphics.Util.UnitToPx( -9 );
                     mDate.Position = new PointF( mDate.Position.X + bounds.X + padding.Left + borderPaddingPx, 
                                                  mTitle.Frame.Bottom + mDate.Position.Y + bounds.Y + titleDetailsSpacing );
 
