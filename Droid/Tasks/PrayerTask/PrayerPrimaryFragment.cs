@@ -53,16 +53,16 @@ namespace Droid
 
                         float MaxPrayerLayoutHeight { get; set; }
 
+                        public float PrayerActionHeight { get; set; }
+
                         public PrayerLayoutRender( RectangleF bounds, float prayerActionHeight, Rock.Client.PrayerRequest prayer )
                         {
-                            MaxPrayerLayoutHeight = bounds.Height - prayerActionHeight;
+                            PrayerActionHeight = prayerActionHeight;
 
                             // Create the core layout that stores the prayer
                             LinearLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                             LinearLayout.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
                             LinearLayout.Orientation = Orientation.Vertical;
-
-
 
                             // add the name
                             NameLayout = new BorderedRectView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -86,9 +86,6 @@ namespace Droid
                             Name.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                             Name.Text = prayer.FirstName.ToUpper( );
                             NameLayout.AddView( Name );
-
-
-
 
 
                             // create the layout for managing the category / date
@@ -158,13 +155,7 @@ namespace Droid
 
                             // actual prayer
                             Prayer = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
-                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).BottomMargin = (int)prayerActionHeight;
-                            Prayer.SetMinWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
-                            Prayer.SetMaxWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
+                            UpdatePrayerLayout( bounds );
                             Prayer.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
                             Prayer.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                             Prayer.SetTextSize( ComplexUnitType.Dip, ControlStylingConfig.Medium_FontSize );
@@ -193,11 +184,21 @@ namespace Droid
 
                         public void LayoutChanged( RectangleF bounds )
                         {
+                            UpdatePrayerLayout( bounds );
+                        }
+
+                        void UpdatePrayerLayout( RectangleF bounds )
+                        {
+                            MaxPrayerLayoutHeight = bounds.Height - PrayerActionHeight;
+
+                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)MaxPrayerLayoutHeight );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 10 );
+                            ((LinearLayout.LayoutParams)Prayer.LayoutParameters).BottomMargin = (int)PrayerActionHeight;
+
                             Prayer.SetMinWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
                             Prayer.SetMaxWidth( (int)bounds.Width - (int)Rock.Mobile.Graphics.Util.UnitToPx( 20 ) );
-
-                            MaxPrayerLayoutHeight = bounds.Height;
-                            Prayer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, (int)Rock.Mobile.Graphics.Util.UnitToPx( MaxPrayerLayoutHeight ) );
                         }
                     }
 
@@ -252,7 +253,7 @@ namespace Droid
                         PrayerActionButton.LayoutParameters = new RelativeLayout.LayoutParams( (int)PrayerActionSize.Width, (int)PrayerActionSize.Height );
                         //Pray.SetBackgroundColor( Android.Graphics.Color.Green );
                         PrayerActionLayout.AddView( PrayerActionButton );
-
+                            
 
                         // Layout for the text and circle
                         PrayerActionCircle = new Rock.Mobile.PlatformSpecific.Android.Graphics.CircleView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -287,7 +288,9 @@ namespace Droid
 
 
                         // add it to this view
-                        PrayerLayout = new PrayerLayoutRender( new RectangleF( bounds.Left, bounds.Top, bounds.Width, bounds.Height - PrayerActionSize.Height ), PrayerActionSize.Height * .75f, prayer );
+                        PrayerLayout = new PrayerLayoutRender( new RectangleF( bounds.Left, bounds.Top, bounds.Width, bounds.Height - PrayerActionSize.Height ), 
+                                                               PrayerActionSize.Height * .75f, 
+                                                               prayer );
                         nativeView.AddView( PrayerLayout.LinearLayout );
 
                         PrayerActionButton.Enabled = true;
