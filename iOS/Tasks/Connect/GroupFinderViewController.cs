@@ -527,6 +527,8 @@ namespace iOS
         {
             base.LayoutChanged( );
 
+            ScrollView.Frame = View.Frame;
+
             SearchPage.LayoutChanged( ScrollView.Frame.ToRectF( ) );
 
             // Map
