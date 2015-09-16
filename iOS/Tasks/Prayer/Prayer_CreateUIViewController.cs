@@ -490,7 +490,7 @@ namespace iOS
 
             // todo: determine if we're coming back from the post page.
             UISwitchAnonymous.SetState( false, false );
-            UIPublicSwitch.SetState( true, false );
+            UIPublicSwitch.SetState( false, false );
 
             TogglePlaceholderText( );
 

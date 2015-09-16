@@ -158,7 +158,7 @@ namespace Droid
                     };
 
                     PublicSwitch = (Switch)view.FindViewById<Switch>( Resource.Id.makePublicSwitch );
-                    PublicSwitch.Checked = true;
+                    PublicSwitch.Checked = false;
 
                     TextView postAnonymousLabel = view.FindViewById<TextView>( Resource.Id.postAnonymous );
                     ControlStyling.StyleUILabel( postAnonymousLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );

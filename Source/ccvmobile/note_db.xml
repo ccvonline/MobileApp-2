@@ -5,11 +5,27 @@
 	<SeriesList>
 		<!--Start Series-->
 		<Series>
+			<Message Private="true">
+				<Name>FORGIVENESS_TEST</Name>
+				<Speaker>Ashley Woolridge</Speaker>
+				<Date>9/12/2015</Date>
+				<NoteUrl>xml/2015/messy_grace/message_9_12_2015_jjb.xml</NoteUrl>
+			</Message>
+			<Message>
+				<Name>FORGIVENESS</Name>
+				<Speaker>Ashley Wooldridge</Speaker>
+				<Date>9/12/2015</Date>
+				<NoteUrl>xml/2015/messy_grace/message_9_12_2015.xml</NoteUrl>
+				<WatchUrl>https://player.vimeo.com/external/139261880.m3u8?p=high,standard,mobile&amp;s=11fd00ab1b906d56822fd3036a0463d9</WatchUrl>
+				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=525</ShareUrl>
+				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/MessyGrace/Messy_Grace_Wk2_Forgiveness.mp3</AudioUrl>
+			</Message>
 			<Message>
 				<Name>SECRETS</Name>
 				<Speaker>Todd Clark</Speaker>
 				<Date>9/6/2015</Date>
 				<NoteUrl>xml/2015/messy_grace/message_9_5_2015.xml</NoteUrl>
+				<WatchUrl>http://player.vimeo.com/external/138645597.m3u8?p=high,standard,mobile&amp;s=3b8f1eecad4787f38f9cbcbc295179f0</WatchUrl>
 				<AudioUrl>http://podcasts.ccvonline.com.s3.amazonaws.com/contemporaryaudio/MessyGrace/MessyGrace_Wk1_Secrets_New.mp3</AudioUrl>
 				<ShareUrl>http://ccv.church/Arena/default.aspx?page=17529&amp;item=524</ShareUrl>
 			</Message>
