@@ -237,19 +237,21 @@ namespace App
                 string LastSyncdCellPhoneNumberJson { get; set; }
 
                 [JsonProperty]
-                Rock.Client.PhoneNumber _CellPhoneNumber = null;
+                //Rock.Client.PhoneNumber _CellPhoneNumber = null;
+                Rock.Client.PhoneNumber _CellPhoneNumber { get; set; }
 
                 public string CellPhoneNumberDigits( )
                 {
-                    return _CellPhoneNumber != null ? _CellPhoneNumber.Number : "";
+                    //return _CellPhoneNumber != null ? _CellPhoneNumber.Number : "";
+                    return _CellPhoneNumber.Number;
                 }
 
                 public void SetPhoneNumberDigits( string digits )
                 { 
-                    if ( _CellPhoneNumber == null )
+                    /*if ( _CellPhoneNumber == null )
                     {
                         _CellPhoneNumber = new Rock.Client.PhoneNumber();
-                    }
+                    }*/
 
                     _CellPhoneNumber.Number = digits;
                     _CellPhoneNumber.NumberFormatted = digits.AsPhoneNumber( );
@@ -273,7 +275,9 @@ namespace App
                     PrimaryAddress = new GroupLocation();
                     PrimaryAddress.GroupLocationTypeValueId = PrivateGeneralConfig.GroupLocationTypeHomeValueId;
 
-                    _CellPhoneNumber = null;
+                    //_CellPhoneNumber = null;
+                    _CellPhoneNumber = new PhoneNumber( );
+                    SetPhoneNumberDigits( "" );
 
                     ViewingCampus = RockGeneralData.Instance.Data.Campuses[ 0 ].Id;
 
@@ -284,7 +288,7 @@ namespace App
                     LastSyncdPersonJson = JsonConvert.SerializeObject( Person );
                     LastSyncdFamilyJson = JsonConvert.SerializeObject( PrimaryFamily );
                     LastSyncdAddressJson = JsonConvert.SerializeObject( PrimaryAddress );
-                    LastSyncdCellPhoneNumberJson = "";
+                    LastSyncdCellPhoneNumberJson = JsonConvert.SerializeObject( _CellPhoneNumber );
                 }
 
                 public string PreferredName( )
@@ -473,15 +477,20 @@ namespace App
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
-                                // on retrieval, convert this version for dirty compares later
+                                // take the person
                                 Person = model;
 
-                                // store their contact phone number seperately so we don't
-                                // get conflicts with syncing.
-                                _CellPhoneNumber = TryGetPhoneNumber( PrivateGeneralConfig.CellPhoneValueId );
-                                Person.PhoneNumbers = null;
+                                // search for a phone number (which should match whatever we already have, unless this is a new login)
+                                PhoneNumber cellPhoneNumber = TryGetPhoneNumber( PrivateGeneralConfig.CellPhoneValueId );
+                                if( cellPhoneNumber != null )
+                                {
+                                    _CellPhoneNumber = cellPhoneNumber;
+                                    LastSyncdCellPhoneNumberJson = JsonConvert.SerializeObject( _CellPhoneNumber );
+                                }
 
-                                LastSyncdCellPhoneNumberJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
+                                // now before storing the person, clear their phone list, as we need to store and manage
+                                // the number seperately.
+                                Person.PhoneNumbers = null;
                                 LastSyncdPersonJson = JsonConvert.SerializeObject( Person );
 
                                 // save!
@@ -552,16 +561,24 @@ namespace App
 
                 public void UpdateOrAddPhoneNumber( HttpRequest.RequestResult phoneResult )
                 {   
+                    //bool addNewPhoneNumber = string.IsNullOrEmpty( LastSyncdCellPhoneNumberJson ) ? true : false;
+
                     // we know if it's a new phone number based on whether our sync'd cell number is blank or not.
-                    bool addNewPhoneNumber = string.IsNullOrEmpty( LastSyncdCellPhoneNumberJson ) ? true : false;
+                    bool addNewPhoneNumber = false;
+                    PhoneNumber lastSyncdNumber = JsonConvert.DeserializeObject<PhoneNumber>( LastSyncdCellPhoneNumberJson ) as PhoneNumber;
+                    if ( lastSyncdNumber != null && string.IsNullOrEmpty( lastSyncdNumber.Number ) == true )
+                    {
+                        addNewPhoneNumber = true;
+                    }
 
                     MobileAppApi.UpdateOrAddPhoneNumber( Person, _CellPhoneNumber, addNewPhoneNumber, 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, PhoneNumber model )
                         {
-                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
                             {
                                 _CellPhoneNumber = model;
-                                LastSyncdCellPhoneNumberJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
+                                //LastSyncdCellPhoneNumberJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
+                                LastSyncdCellPhoneNumberJson = JsonConvert.SerializeObject( _CellPhoneNumber );
                             }
 
                             // save either way!
@@ -778,14 +795,15 @@ namespace App
                     // created at a point when we know we were sync'd with the server
                     // no longer matches our object, we should update it.
                     string currPersonJson = JsonConvert.SerializeObject( Person );
-                    string currPhoneNumbersJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
+                    //string currPhoneNumbersJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
+                    string currPhoneNumbersJson = JsonConvert.SerializeObject( _CellPhoneNumber );
                     string currFamilyJson = JsonConvert.SerializeObject( PrimaryFamily );
                     string currAddressJson = JsonConvert.SerializeObject( PrimaryAddress );
 
                     // assume things will work
                     System.Net.HttpStatusCode returnCode = System.Net.HttpStatusCode.OK;
 
-                    if( string.Compare( LastSyncdPersonJson, currPersonJson ) != 0 || 
+                    if( string.Compare( LastSyncdPersonJson, currPersonJson ) == 0 || 
                         string.Compare( LastSyncdCellPhoneNumberJson, currPhoneNumbersJson ) != 0 ||
                         string.Compare( LastSyncdFamilyJson, currFamilyJson ) != 0 ||
                         string.Compare( LastSyncdAddressJson, currAddressJson ) != 0 ||

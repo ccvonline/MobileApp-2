@@ -5,6 +5,12 @@
 	<SeriesList>
 		<!--Start Series-->
 		<Series>
+			<Message>
+				<Name>IDENTITY</Name>
+				<Speaker>Caleb Kaltenbach</Speaker>
+				<Date>9/20/2015</Date>
+				<NoteUrl>xml/2015/messy_grace/message_9_19_2015.xml</NoteUrl>
+			</Message>
 			<Message Private="true">
 				<Name>FORGIVENESS_TEST</Name>
 				<Speaker>Ashley Woolridge</Speaker>

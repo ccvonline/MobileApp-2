@@ -34,7 +34,7 @@ namespace MobileApp
                 delegate(HttpStatusCode statusCode, string statusDescription, List<DateTimeModel> dateTimeList) 
                 {
                     DateTime dateTime = DateTime.MinValue;
-                    if( dateTimeList != null && dateTimeList.Count > 0 )
+                    if( dateTimeList != null && dateTimeList.Count > 0 && dateTimeList[ 0 ].ValueAsDateTime != null )
                     {
                         dateTime = DateTime.Parse( dateTimeList[ 0 ].ValueAsDateTime );
                     }
@@ -75,18 +75,29 @@ namespace MobileApp
 
         public static void UpdateOrAddPhoneNumber( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, bool isNew, HttpRequest.RequestResult<Rock.Client.PhoneNumber> resultHandler )
         {
-            // if it isn't new and it IS blank, we should delete.
-            if ( isNew == false && string.IsNullOrEmpty( phoneNumber.Number ) == true )
+            // is it blank?
+            if ( string.IsNullOrEmpty( phoneNumber.Number ) == true )
             {
-                ApplicationApi.DeleteCellPhoneNumber( phoneNumber, 
-                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
-                    {
-                        if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                // if it's not new, we should delete an existing
+                if ( isNew == false )
+                {
+                    ApplicationApi.DeleteCellPhoneNumber( phoneNumber, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
-                            resultHandler( statusCode, statusDescription, null );
-                        }
-                    } );
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                            {
+                                // return the blank number back to them
+                                resultHandler( statusCode, statusDescription, phoneNumber );
+                            }
+                        } );
+                }
+                // otherwise, simply ignore it and say we're done.
+                else
+                {
+                    resultHandler( System.Net.HttpStatusCode.OK, "", phoneNumber );
+                }
             }
+            // not blank, so we're adding or updating
             else
             {
                 // send it to the server

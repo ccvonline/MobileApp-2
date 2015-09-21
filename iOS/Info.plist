@@ -57,5 +57,11 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>38</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	
 </dict>
 </plist>
