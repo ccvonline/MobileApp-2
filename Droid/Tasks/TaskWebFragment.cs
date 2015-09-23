@@ -189,6 +189,13 @@ namespace Droid
 
                 IsActive = false;
             }
+
+            public override void OnDestroyView()
+            {
+                base.OnDestroyView();
+
+                WebLayout.Destroy( );
+            }
         }
     }
 }

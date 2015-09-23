@@ -448,43 +448,6 @@ namespace Droid
                     View view = inflater.Inflate(Resource.Layout.Notes_Details, container, false);
                     view.SetOnTouchListener( this );
 
-                    // setup our message list view
-                    MessagesListView = view.FindViewById<ListView>( Resource.Id.notes_details_list );
-                    MessagesListView.SetOnTouchListener( this );
-                    MessagesListView.Divider = null;
-
-
-                    // load the placeholder and series image
-                    SeriesBillboard = null;
-
-                    bool imageExists = TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
-                    if ( imageExists == false )
-                    {
-                        string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-
-                        // use the placeholder and request the image download
-                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl + widthParam, NotesTask.FormatBillboardImageName( Series.Name ), delegate
-                            {
-                                TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
-                            } );
-
-
-                        AsyncLoader.LoadImage( PrivateNoteConfig.NotesMainPlaceholder, true, false,
-                            delegate( Bitmap imageBmp )
-                            {
-                                if ( FragmentActive == true && imageBmp != null )
-                                {
-                                    PlaceholderImage = imageBmp;
-                                     
-                                    RefreshList( );
-
-                                    return true;
-                                }
-
-                                return false;
-                            } );
-                    }
-
                     return view;
                 }
 
@@ -539,6 +502,48 @@ namespace Droid
                     ParentTask.OnClick( this, position, buttonIndex );
                 }
 
+                void SetupDisplay( View view )
+                {
+                    // setup our message list view
+                    MessagesListView = view.FindViewById<ListView>( Resource.Id.notes_details_list );
+                    MessagesListView.SetOnTouchListener( this );
+                    MessagesListView.Divider = null;
+
+                    // setup the messages list
+                    MessagesListView.Adapter = new NotesDetailsArrayAdapter( this );
+
+                    // load the placeholder and series image
+                    SeriesBillboard = null;
+
+                    bool imageExists = TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
+                    if ( imageExists == false )
+                    {
+                        //string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+
+                        // use the placeholder and request the image download
+                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), delegate
+                            {
+                                TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
+                            } );
+
+
+                        AsyncLoader.LoadImage( PrivateNoteConfig.NotesMainPlaceholder, true, false,
+                            delegate( Bitmap imageBmp )
+                            {
+                                if ( FragmentActive == true && imageBmp != null )
+                                {
+                                    PlaceholderImage = imageBmp;
+
+                                    RefreshList( );
+
+                                    return true;
+                                }
+
+                                return false;
+                            } );
+                    }
+                }
+
                 public override void OnResume()
                 {
                     base.OnResume();
@@ -553,8 +558,18 @@ namespace Droid
                     // log the series they tapped on.
                     MessageAnalytic.Instance.Trigger( MessageAnalytic.BrowseSeries, Series.Name );
 
-                    // setup the messages list
-                    MessagesListView.Adapter = new NotesDetailsArrayAdapter( this );
+                    if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
+                    {
+                        SetupDisplay( View );
+                    }
+                }
+
+                public override void TaskReadyForFragmentDisplay( )
+                {
+                    if ( View != null )
+                    {
+                        SetupDisplay( View );
+                    }
                 }
 
                 public override void OnPause( )

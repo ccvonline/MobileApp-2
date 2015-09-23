@@ -66,7 +66,7 @@ namespace Droid
                     ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( width, height );
 
                     TextView title = view.FindViewById<TextView>( Resource.Id.news_details_title );
-                    title.Text = NewsItem.Title;
+                    title.Text = NewsItem.Title.ToUpper( );
                     title.SetSingleLine( );
                     title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                     title.SetMaxLines( 1 );
@@ -93,7 +93,11 @@ namespace Droid
                         launchUrlButton.Visibility = ViewStates.Invisible;
                     }
 
+                    return view;
+                }
 
+                void SetupDisplay( View view )
+                {
                     // get the placeholder image in case we need it
                     // attempt to load the image from cache. If that doesn't work, use a placeholder
                     HeaderImage = null;
@@ -126,8 +130,6 @@ namespace Droid
                                 return false;
                             } );
                     }
-
-                    return view;
                 }
 
                 public override void OnResume()
@@ -140,6 +142,19 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
 
                     IsFragmentActive = true;
+
+                    if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
+                    {
+                        SetupDisplay( View );
+                    }
+                }
+
+                public override void TaskReadyForFragmentDisplay( )
+                {
+                    if ( View != null )
+                    {
+                        SetupDisplay( View );
+                    }
                 }
 
                 bool TryLoadBanner( string filename )
@@ -202,7 +217,7 @@ namespace Droid
                         HeaderImage = null;
                     }
 
-                    if ( ImageBanner.Drawable != null )
+                    if ( ImageBanner != null && ImageBanner.Drawable != null )
                     {
                         ImageBanner.Drawable.Dispose( );
                         ImageBanner.SetImageBitmap( null );

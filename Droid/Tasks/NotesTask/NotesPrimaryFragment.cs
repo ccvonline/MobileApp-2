@@ -908,6 +908,21 @@ namespace Droid
                         ( (ListAdapter)ListView.Adapter ).Destroy( );
                     }
 
+                    foreach ( SeriesEntry entry in SeriesEntries )
+                    {
+                        if ( entry.Billboard != null )
+                        {
+                            entry.Billboard.Dispose( );
+                            entry.Billboard = null;
+                        }
+
+                        if ( entry.Thumbnail != null )
+                        {
+                            entry.Thumbnail.Dispose( );
+                            entry.Thumbnail = null;
+                        }
+                    }
+
                     if ( ImageMainPlaceholder != null )
                     {
                         ImageMainPlaceholder.Dispose( );
