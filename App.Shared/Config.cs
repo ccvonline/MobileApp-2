@@ -50,7 +50,7 @@ namespace App
                 /// <summary>
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
-                public const string RockBaseUrl = "http://rock.ccvonline.com/";
+                public const string RockBaseUrl = "http://rock.ccv.church/";
 
                 /// <summary>
                 /// Defined in Rock, this should be generated ONCE at Rock's initial setup and then never changed.

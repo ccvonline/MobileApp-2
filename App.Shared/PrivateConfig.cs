@@ -264,13 +264,13 @@ namespace App.Shared
             /// <summary>
             /// Limit the amount of news items we display (which helps memory big time)
             /// </summary>
-            public const int MaxNews = 6;
+            public const int MaxNews = 7;
 
             /// <summary>
             /// The height of news image banners
             /// </summary>
             public const float NewsBannerWidth = 1242;
-            public const float NewsBannerHeight = 540;
+            public const float NewsBannerHeight = 699;
 
             public const float NewsBannerAspectRatio = NewsBannerHeight / NewsBannerWidth;
 

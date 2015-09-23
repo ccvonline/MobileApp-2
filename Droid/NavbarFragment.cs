@@ -382,7 +382,7 @@ namespace Droid
                 FadeOutFrame.Visibility = ViewStates.Invisible;
 
                 // resize the containers to use the remaining width
-                int containerWidth = GetContainerDisplayWidth( );
+                int containerWidth = GetCurrentContainerDisplayWidth( );
 
                 SetContainerWidth( containerWidth );
 
@@ -501,7 +501,7 @@ namespace Droid
                 if ( MainActivity.IsLandscapeWide( ) == true )
                 {
                     PanContainerViews( Springboard.GetSpringboardDisplayWidth( ) );
-                    SetContainerWidth( GetContainerDisplayWidth( ) );
+                    SetContainerWidth( GetCurrentContainerDisplayWidth( ) );
                 }
             }
         }
@@ -547,7 +547,7 @@ namespace Droid
         /// For example, if in portrait mode, it'll be the width device.
         /// If in LandscapeWide mode, it'll be the width minus the springboard width.
         /// </summary>
-        public static int GetContainerDisplayWidth( )
+        public static int GetCurrentContainerDisplayWidth( )
         {
             float displayWidthPixels = Rock.Mobile.PlatformSpecific.Android.Core.Context.Resources.DisplayMetrics.WidthPixels;
 
@@ -563,6 +563,24 @@ namespace Droid
             {
                 return (int)displayWidthPixels;
             }
+        }
+
+        public static int GetContainerDisplayWidth_Landscape( )
+        {
+            Point displaySize = new Point();
+            ( (Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context ).WindowManager.DefaultDisplay.GetSize( displaySize );
+
+            // assume the natural width of the device.
+            float largestDimension = displaySize.X;
+
+            // if this device can be landscape wide, take the largest dimension and reduce that side by the reveal percentage
+            if ( MainActivity.SupportsLandscapeWide( ) == true )
+            {
+                largestDimension = Math.Max( displaySize.X, displaySize.Y );
+                largestDimension = largestDimension - ( largestDimension * PrivatePrimaryNavBarConfig.Landscape_RevealPercentage_Android ); 
+            }
+
+            return (int)largestDimension;
         }
 
         /// <summary>

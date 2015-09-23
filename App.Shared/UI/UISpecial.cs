@@ -56,7 +56,7 @@ namespace App.Shared.UI
                 {
                     #if __ANDROID__
                     Android.Widget.RelativeLayout relativeLayout = ((Android.Views.View)arg1).FindViewById<Android.Widget.RelativeLayout>( Droid.Resource.Id.relative_background );
-                    RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
+                    RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetCurrentContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
 
                     UISpecial special = new UISpecial();
                     special.Create( relativeLayout, false, bounds, delegate

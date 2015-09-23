@@ -71,7 +71,7 @@ namespace Droid
 
                 view.AddView( WebLayout );
 
-                ResultView = new UIResultView( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+                ResultView = new UIResultView( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
                     delegate 
                     { 
                         ResultView.Hide( );
@@ -93,7 +93,7 @@ namespace Droid
             {
                 base.OnConfigurationChanged(newConfig);
 
-                ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
             }
 
             public void DisplayUrl( string url, bool includeImpersonationToken )

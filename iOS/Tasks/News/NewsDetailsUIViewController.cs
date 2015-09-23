@@ -77,7 +77,8 @@ namespace iOS
                 ImageBanner.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateGeneralConfig.NewsDetailsPlaceholder );
 
                 // resize the image to fit the width of the device
-                nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+                //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+                nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
                 ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
                 // request!
@@ -167,7 +168,8 @@ namespace iOS
                     ImageBanner.Image = new UIImage( imageData );
 
                     // resize the image to fit the width of the device
-                    nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+                    //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+                    nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
                     ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
                     success = true;
@@ -210,7 +212,8 @@ namespace iOS
             float textVertPadding = 50;
 
             // resize the image to fit the width of the device
-            nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+            //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
+            nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
             ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
             // adjust the news title to have padding on the left and right.

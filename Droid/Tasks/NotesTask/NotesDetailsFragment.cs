@@ -70,10 +70,14 @@ namespace Droid
                     {
                         messageItem = new MessagePrimaryListItem( ParentFragment.Activity.BaseContext );
 
-                        int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateNoteConfig.NotesMainPlaceholderAspectRatio );
+                        int height = (int)System.Math.Ceiling( NavbarFragment.GetCurrentContainerDisplayWidth( ) * PrivateNoteConfig.NotesMainPlaceholderAspectRatio );
                         messageItem.Thumbnail.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
 
                         messageItem.HasImage = false;
+                    }
+                    else
+                    {
+                        messageItem.FreeImageResources( );
                     }
 
                     messageItem.ParentAdapter = this;
@@ -217,9 +221,18 @@ namespace Droid
                     AddView( Desc );
                 }
 
-                public override void Destroy()
+                public override void Destroy( )
                 {
-                    Thumbnail.SetImageBitmap( null );   
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Thumbnail != null && Thumbnail.Drawable != null )
+                    {
+                        Thumbnail.Drawable.Dispose( );
+                        Thumbnail.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -447,8 +460,10 @@ namespace Droid
                     bool imageExists = TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
                     if ( imageExists == false )
                     {
+                        string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+
                         // use the placeholder and request the image download
-                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), delegate
+                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl + widthParam, NotesTask.FormatBillboardImageName( Series.Name ), delegate
                             {
                                 TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
                             } );
@@ -547,12 +562,19 @@ namespace Droid
                     base.OnPause( );
 
                     FragmentActive = false;
+
+                    FreeImageResources( );
                 }
 
                 public override void OnDestroyView()
                 {
                     base.OnDestroyView();
 
+                    FreeImageResources( );
+                }
+
+                void FreeImageResources( )
+                {
                     if ( PlaceholderImage != null )
                     {
                         PlaceholderImage.Dispose( );

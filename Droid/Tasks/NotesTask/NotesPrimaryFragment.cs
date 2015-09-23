@@ -73,9 +73,13 @@ namespace Droid
                     {
                         primaryItem = new SeriesPrimaryListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
 
-                        int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateNoteConfig.NotesMainPlaceholderAspectRatio );
+                        int height = (int)System.Math.Ceiling( NavbarFragment.GetCurrentContainerDisplayWidth( ) * PrivateNoteConfig.NotesMainPlaceholderAspectRatio );
                         primaryItem.Billboard.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
                         primaryItem.HasImage = false;
+                    }
+                    else
+                    {
+                        primaryItem.FreeImageResources( );
                     }
 
                     primaryItem.ParentAdapter = this;
@@ -148,6 +152,10 @@ namespace Droid
                     {
                         seriesItem = new SeriesListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                         seriesItem.HasImage = false;
+                    }
+                    else
+                    {
+                        seriesItem.FreeImageResources( );
                     }
 
                     // make sure we don't somehow attempt to render outside our list bounds
@@ -426,7 +434,16 @@ namespace Droid
 
                 public override void Destroy()
                 {
-                    Billboard.SetImageBitmap( null );   
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Billboard != null && Billboard.Drawable != null )
+                    {
+                        Billboard.Drawable.Dispose( );
+                        Billboard.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -510,7 +527,16 @@ namespace Droid
 
                 public override void Destroy()
                 {
-                    Thumbnail.SetImageBitmap( null );
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Thumbnail != null && Thumbnail.Drawable != null )
+                    {
+                        Thumbnail.Drawable.Dispose( );
+                        Thumbnail.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -543,28 +569,6 @@ namespace Droid
                     SeriesEntries = new List<SeriesEntry>();
                 }
 
-                public override void OnDestroyView()
-                {
-                    base.OnDestroyView();
-
-                    if ( ImageMainPlaceholder != null )
-                    {
-                        ImageMainPlaceholder.Dispose( );
-                        ImageMainPlaceholder = null;
-                    }
-
-                    if ( ImageThumbPlaceholder != null )
-                    {
-                        ImageThumbPlaceholder.Dispose( );
-                        ImageThumbPlaceholder = null;
-                    }
-
-                    if ( ListView != null && ListView.Adapter != null )
-                    {
-                        ( (ListAdapter)ListView.Adapter ).Destroy( );
-                    }
-                }
-
                 public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
                 {
                     if (container == null)
@@ -589,7 +593,7 @@ namespace Droid
                         };
                     ListView.SetOnTouchListener( this );
 
-                    ResultView = new UIResultView( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), delegate { TrySetupSeries( ); } );
+                    ResultView = new UIResultView( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), delegate { TrySetupSeries( ); } );
 
                     ResultView.Hide( );
 
@@ -600,7 +604,7 @@ namespace Droid
                 {
                     base.OnConfigurationChanged(newConfig);
 
-                    ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
                 }
 
                 public void WatchButtonClicked( )
@@ -764,6 +768,7 @@ namespace Droid
 
 
                         // attempt to load / download images.
+                        //string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
 
                         // for billboards, we ONLY CARE about loading the first series' billboard.
                         if ( i == 0 )
@@ -808,6 +813,12 @@ namespace Droid
                                     }
                                     else
                                     {
+                                        if( entry.Billboard != null )
+                                        {
+                                            entry.Billboard.Dispose( );
+                                            entry.Billboard = null;
+                                        }
+
                                         entry.Billboard = loadedBmp;
 
                                         RefreshList( );
@@ -843,6 +854,12 @@ namespace Droid
                                     }
                                     else
                                     {
+                                        if( entry.Thumbnail != null )
+                                        {
+                                            entry.Thumbnail.Dispose( );
+                                            entry.Thumbnail = null;
+                                        }
+
                                         entry.Thumbnail = loadedBmp;
 
                                         RefreshList( );
@@ -868,12 +885,40 @@ namespace Droid
                     }
                 }
 
+                public override void OnDestroyView()
+                {
+                    base.OnDestroyView();
+
+                    FreeImageResources( );
+                }
 
                 public override void OnPause( )
                 {
                     base.OnPause( );
 
                     FragmentActive = false;
+
+                    FreeImageResources( );
+                }
+
+                void FreeImageResources( )
+                {
+                    if ( ListView != null && ListView.Adapter != null )
+                    {
+                        ( (ListAdapter)ListView.Adapter ).Destroy( );
+                    }
+
+                    if ( ImageMainPlaceholder != null )
+                    {
+                        ImageMainPlaceholder.Dispose( );
+                        ImageMainPlaceholder = null;
+                    }
+
+                    if ( ImageThumbPlaceholder != null )
+                    {
+                        ImageThumbPlaceholder.Dispose( );
+                        ImageThumbPlaceholder = null;
+                    }
                 }
             }
         }

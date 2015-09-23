@@ -66,9 +66,13 @@ namespace Droid
                     {
                         primaryItem = new PrimaryListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
 
-                        int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateConnectConfig.MainPageHeaderAspectRatio );
+                        int height = (int)System.Math.Ceiling( NavbarFragment.GetCurrentContainerDisplayWidth( ) * PrivateConnectConfig.MainPageHeaderAspectRatio );
                         primaryItem.Billboard.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, height );
                         primaryItem.HasImage = false;
+                    }
+                    else
+                    {
+                        primaryItem.FreeImageResources( );
                     }
 
                     if ( ParentFragment.Billboard != null )
@@ -92,6 +96,10 @@ namespace Droid
                     {
                         seriesItem = new ListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                         seriesItem.HasImage = false;
+                    }
+                    else
+                    {
+                        seriesItem.FreeImageResources( );
                     }
 
                     if ( position < ParentFragment.LinkBillboards.Count( ) && ParentFragment.LinkBillboards[ position ] != null )
@@ -148,7 +156,16 @@ namespace Droid
 
                 public override void Destroy( )
                 {
-                    Billboard.SetImageBitmap( null );
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Billboard != null && Billboard.Drawable != null )
+                    {
+                        Billboard.Drawable.Dispose( );
+                        Billboard.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -236,7 +253,16 @@ namespace Droid
 
                 public override void Destroy( )
                 {
-                    Thumbnail.SetImageBitmap( null );
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Thumbnail != null && Thumbnail.Drawable != null )
+                    {
+                        Thumbnail.Drawable.Dispose( );
+                        Thumbnail.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -372,12 +398,19 @@ namespace Droid
                     base.OnPause( );
 
                     FragmentActive = false;
+
+                    FreeImageResources( );
                 }
 
                 public override void OnDestroyView()
                 {
                     base.OnDestroyView();
 
+                    FreeImageResources( );
+                }
+
+                void FreeImageResources( )
+                {
                     if ( ListView != null && ListView.Adapter != null )
                     {
                         ( (ArrayAdapter)ListView.Adapter ).Destroy( );

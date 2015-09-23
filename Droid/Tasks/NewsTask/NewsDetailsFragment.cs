@@ -61,8 +61,9 @@ namespace Droid
                     ImageBanner = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Activity );
                     ( (LinearLayout)view ).AddView( ImageBanner, 0 );
 
-                    int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateNewsConfig.NewsBannerAspectRatio );
-                    ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
+                    int width = NavbarFragment.GetCurrentContainerDisplayWidth( );
+                    int height = (int)System.Math.Ceiling( width * PrivateNewsConfig.NewsBannerAspectRatio );
+                    ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( width, height );
 
                     TextView title = view.FindViewById<TextView>( Resource.Id.news_details_title );
                     title.Text = NewsItem.Title;
@@ -101,7 +102,8 @@ namespace Droid
                     if ( imageExists == false )
                     {
                         // use the placeholder and request the image download
-                        FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL, NewsItem.HeaderImageName, delegate
+                        string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+                        FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, delegate
                             {
                                 TryLoadBanner( NewsItem.HeaderImageName );
                             } );
@@ -160,12 +162,9 @@ namespace Droid
                                     }
                                     else
                                     {
-                                        HeaderImage = imageBmp;
+                                        FreeImageResources( );
 
-                                        if( ImageBanner.Drawable != null )
-                                        {
-                                            ImageBanner.Drawable.Dispose( );
-                                        }
+                                        HeaderImage = imageBmp;
 
                                         ImageBanner.SetImageBitmap( HeaderImage );
                                         ImageBanner.Invalidate( );
@@ -187,14 +186,18 @@ namespace Droid
                     }
                 }
 
-                public override void OnPause()
+                public override void OnDestroyView()
                 {
-                    base.OnPause();
+                    base.OnDestroyView();
 
-                    IsFragmentActive = false;
+                    FreeImageResources( );
+                }
 
+                void FreeImageResources( )
+                {
                     if ( HeaderImage != null )
                     {
+                        HeaderImage.Recycle( );
                         HeaderImage.Dispose( );
                         HeaderImage = null;
                     }
@@ -204,6 +207,15 @@ namespace Droid
                         ImageBanner.Drawable.Dispose( );
                         ImageBanner.SetImageBitmap( null );
                     }
+                }
+
+                public override void OnPause()
+                {
+                    base.OnPause();
+
+                    IsFragmentActive = false;
+
+                    FreeImageResources( );
                 }
             }
         }

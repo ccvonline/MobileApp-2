@@ -349,7 +349,7 @@ namespace Droid
                     PowerManager pm = PowerManager.FromContext( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     WakeLock = pm.NewWakeLock(WakeLockFlags.Full, "Notes");
 
-                    ResultView = new UIResultView( layout, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), OnResultViewDone );
+                    ResultView = new UIResultView( layout, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), OnResultViewDone );
 
                     ResultView.Hide( );
 
@@ -387,7 +387,7 @@ namespace Droid
 
                     PrepareCreateNotes( );
 
-                    ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
 
                     AnimateTutorialScreen( false );
                 }
@@ -715,7 +715,7 @@ namespace Droid
 
                         // Use the metrics and not ScrollView for dimensions, because depending on when this gets called the ScrollView
                         // may not have its dimensions set yet.
-                        float scrollPercentOffset = Note.Create( NavbarFragment.GetContainerDisplayWidth( ), 
+                        float scrollPercentOffset = Note.Create( NavbarFragment.GetCurrentContainerDisplayWidth( ), 
                                                                  this.Resources.DisplayMetrics.HeightPixels, 
                                                                  ScrollViewLayout, 
                                                                  NoteFileName + PrivateNoteConfig.UserNoteSuffix, 

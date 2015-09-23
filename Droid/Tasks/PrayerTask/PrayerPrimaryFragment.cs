@@ -416,7 +416,7 @@ namespace Droid
 
                 float GetCardWidth( )
                 {
-                    return NavbarFragment.GetContainerDisplayWidth( ) * PrayerCardSizePerc;
+                    return NavbarFragment.GetCurrentContainerDisplayWidth( ) * PrayerCardSizePerc;
                 }
 
                 float GetCardHeight( )
@@ -457,7 +457,7 @@ namespace Droid
                     PrayerCardSize = new RectangleF( 0, 0, cardWidth, cardHeight );
 
                     // setup the card positions to be to the offscreen to the left, centered on screen, and offscreen to the right
-                    Carousel = PlatformCardCarousel.Create( view, cardWidth, cardHeight, new RectangleF( 0, cardYOffset, NavbarFragment.GetContainerDisplayWidth( ), prayerRegionHeight ), PrivatePrayerConfig.Card_AnimationDuration );
+                    Carousel = PlatformCardCarousel.Create( view, cardWidth, cardHeight, new RectangleF( 0, cardYOffset, NavbarFragment.GetCurrentContainerDisplayWidth( ), prayerRegionHeight ), PrivatePrayerConfig.Card_AnimationDuration );
 
 
                     // setup our error UI
@@ -514,7 +514,7 @@ namespace Droid
 
                     PrayerCardSize = new RectangleF( 0, 0, cardWidth, cardHeight );
 
-                    Carousel.LayoutChanged( cardWidth, cardHeight, new RectangleF( 0, cardYOffset, NavbarFragment.GetContainerDisplayWidth( ), prayerRegionHeight ) );
+                    Carousel.LayoutChanged( cardWidth, cardHeight, new RectangleF( 0, cardYOffset, NavbarFragment.GetCurrentContainerDisplayWidth( ), prayerRegionHeight ) );
 
                     // now update the layout for each prayer card
                     foreach ( PrayerCard prayerCard in PrayerRequestCards )

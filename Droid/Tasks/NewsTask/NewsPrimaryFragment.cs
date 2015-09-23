@@ -49,9 +49,13 @@ namespace Droid
                     {
                         listItem = new SingleNewsListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
 
-                        int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateNewsConfig.NewsMainAspectRatio );
+                        int height = (int)System.Math.Ceiling( NavbarFragment.GetCurrentContainerDisplayWidth( ) * PrivateNewsConfig.NewsMainAspectRatio );
                         listItem.LayoutParameters = new AbsListView.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
                         listItem.HasImage = false;
+                    }
+                    else
+                    {
+                        listItem.FreeImageResources( );
                     }
 
                     // if we have a valid item
@@ -69,7 +73,7 @@ namespace Droid
                             listItem.Billboard.SetImageBitmap( ParentFragment.News[ position ].Image );
                         }
                         // only show the "Loading..." if the image isn't actually downloaded.
-                        else if ( ParentFragment.Placeholder != null && ParentFragment.News[ position ].ImageIsDownloaded == false )
+                        else if ( ParentFragment.Placeholder != null )
                         {
                             listItem.Billboard.SetImageBitmap( ParentFragment.Placeholder );
                         }
@@ -157,9 +161,14 @@ namespace Droid
                     {
                         listItem = new SingleNewsListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
 
-                        int height = (int)System.Math.Ceiling( NavbarFragment.GetContainerDisplayWidth( ) * PrivateNewsConfig.NewsMainAspectRatio );
-                        listItem.LayoutParameters = new AbsListView.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
+                        int width = NavbarFragment.GetCurrentContainerDisplayWidth( );
+                        int height = (int)System.Math.Ceiling( width * PrivateNewsConfig.NewsBannerAspectRatio );
+                        listItem.LayoutParameters = new AbsListView.LayoutParams( width, height );
                         listItem.HasImage = false;
+                    }
+                    else
+                    {
+                        listItem.FreeImageResources( );
                     }
 
                     // if we have a valid item
@@ -177,7 +186,7 @@ namespace Droid
                             listItem.Billboard.SetImageBitmap( ParentFragment.News[ position ].Image );
                         }
                         // then should we use the placeholder?
-                        else if ( ParentFragment.Placeholder != null && ParentFragment.News[ position ].ImageIsDownloaded == false )
+                        else if ( ParentFragment.Placeholder != null )
                         {
                             listItem.Billboard.SetImageBitmap( ParentFragment.Placeholder );
                         }
@@ -217,11 +226,15 @@ namespace Droid
                         seriesItem = new DoubleNewsListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                         seriesItem.ParentAdapter = this;
 
-                        int height = (int)System.Math.Ceiling( (NavbarFragment.GetContainerDisplayWidth( ) / 2) * PrivateNewsConfig.NewsMainAspectRatio );
+                        int height = (int)System.Math.Ceiling( (NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2) * PrivateNewsConfig.NewsMainAspectRatio );
                         seriesItem.LayoutParameters = new AbsListView.LayoutParams( ViewGroup.LayoutParams.WrapContent, height );
 
                         seriesItem.LeftHasImage = false;
                         seriesItem.RightHasImage = false;
+                    }
+                    else
+                    {
+                        seriesItem.FreeImageResources( );
                     }
 
                     seriesItem.LeftImageIndex = leftImageIndex;
@@ -241,7 +254,7 @@ namespace Droid
                             seriesItem.LeftImage.SetImageBitmap( ParentFragment.News[ leftImageIndex ].Image );
                         }
                         // should we use the placeholder instead?
-                        else if ( ParentFragment.Placeholder != null && ParentFragment.News[ leftImageIndex ].ImageIsDownloaded == false )
+                        else if ( ParentFragment.Placeholder != null )
                         {
                             seriesItem.LeftImage.SetImageBitmap( ParentFragment.Placeholder );
                         }
@@ -282,7 +295,7 @@ namespace Droid
                             seriesItem.RightImage.SetImageBitmap( ParentFragment.News[ rightImageIndex ].Image );
                         }
                         // should we use the placeholder instead?
-                        else if ( ParentFragment.Placeholder != null && ParentFragment.News[ rightImageIndex ].ImageIsDownloaded == false )
+                        else if ( ParentFragment.Placeholder != null )
                         {
                             seriesItem.RightImage.SetImageBitmap( ParentFragment.Placeholder );
                         }
@@ -349,7 +362,16 @@ namespace Droid
 
                 public override void Destroy()
                 {
-                    Billboard.SetImageBitmap( null );
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( Billboard != null && Billboard.Drawable != null )
+                    {
+                        Billboard.Drawable.Dispose( );
+                        Billboard.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -381,11 +403,11 @@ namespace Droid
                     SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
                     LeftLayout = new RelativeLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    LeftLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
+                    LeftLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     AddView( LeftLayout );
 
                     LeftImage = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    LeftImage.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
+                    LeftImage.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)LeftImage.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
                     LeftImage.SetScaleType( ImageView.ScaleType.CenterCrop );
                     LeftLayout.AddView( LeftImage );
@@ -410,11 +432,11 @@ namespace Droid
 
 
                     RightLayout = new RelativeLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    RightLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
+                    RightLayout.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     AddView( RightLayout );
 
                     RightImage = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                    RightImage.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
+                    RightImage.LayoutParameters = new LinearLayout.LayoutParams( NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2, LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)RightImage.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
                     RightImage.SetScaleType( ImageView.ScaleType.CenterCrop );
                     RightLayout.AddView( RightImage );
@@ -430,7 +452,7 @@ namespace Droid
                     RightLayout.AddView( RightButton );
 
                     RightPrivateOverlay = new TextView( context );
-                    RightPrivateOverlay.LayoutParameters = new RelativeLayout.LayoutParams( NavbarFragment.GetContainerDisplayWidth( ) / 2, ViewGroup.LayoutParams.WrapContent );
+                    RightPrivateOverlay.LayoutParameters = new RelativeLayout.LayoutParams( NavbarFragment.GetCurrentContainerDisplayWidth( ) / 2, ViewGroup.LayoutParams.WrapContent );
                     RightPrivateOverlay.SetBackgroundColor( Android.Graphics.Color.Red );
                     RightPrivateOverlay.Alpha = .60f;
                     RightPrivateOverlay.Text = "Private";
@@ -440,8 +462,22 @@ namespace Droid
 
                 public override void Destroy()
                 {
-                    LeftImage.SetImageBitmap( null );
-                    RightImage.SetImageBitmap( null );
+                    FreeImageResources( );
+                }
+
+                public void FreeImageResources( )
+                {
+                    if ( LeftImage != null && LeftImage.Drawable != null )
+                    {
+                        LeftImage.Drawable.Dispose( );
+                        LeftImage.SetImageBitmap( null );
+                    }
+
+                    if ( RightImage != null && RightImage.Drawable != null )
+                    {
+                        RightImage.Drawable.Dispose( );
+                        RightImage.SetImageBitmap( null );
+                    }
                 }
             }
 
@@ -449,7 +485,6 @@ namespace Droid
             {
                 public RockNews News { get; set; }
                 public Bitmap Image { get; set; }
-                public bool ImageIsDownloaded { get; set; }
             }
 
             public class NewsPrimaryFragment : TaskFragment
@@ -527,13 +562,15 @@ namespace Droid
                         ListView.Adapter = new PortraitNewsArrayAdapter( this );
                     }
 
+
                     // load the placeholder image
                     AsyncLoader.LoadImage( PrivateGeneralConfig.NewsMainPlaceholder, true, false,
                         delegate( Bitmap imageBmp )
                         {
-                            if( FragmentActive == true && imageBmp != null )
+                            if ( FragmentActive == true && imageBmp != null )
                             {
                                 Placeholder = imageBmp;
+                                imageBmp = null;
 
                                 RefreshListView( );
                                 return true;
@@ -542,7 +579,12 @@ namespace Droid
                             return false;
                         } );
 
-                    LoadImages( );
+                    // here we're simply trying to load the images that are already
+                    // stored
+                    foreach ( NewsEntry newsEntry in News )
+                    {
+                        TryLoadCachedImageAsync( newsEntry );
+                    }
                 }
 
                 public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
@@ -579,23 +621,11 @@ namespace Droid
                 public void UpdateNews( List<RockNews> sourceNews )
                 {
                     // free existing news
-
-                    // be sure to dump the existing news images so
-                    // Dalvik knows it can use the memory
-                    foreach ( NewsEntry newsEntry in News )
-                    {
-                        if ( newsEntry.Image != null )
-                        {
-                            newsEntry.Image.Dispose( );
-                            newsEntry.Image = null;
-                        }
-                    }
+                    FreeImageResources( );
 
                     News.Clear( );
 
-
-
-                    // copy the new news
+                    // copy the new news.
                     foreach ( RockNews rockEntry in sourceNews )
                     {
                         NewsEntry newsEntry = new NewsEntry();
@@ -608,7 +638,8 @@ namespace Droid
                         if ( fileFound == false )
                         {
                             // if not, download it
-                            FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL, newsEntry.News.ImageName, 
+                            string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+                            FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, 
                                 delegate
                                 {
                                     // and THEN load it
@@ -618,27 +649,20 @@ namespace Droid
                     }
                 }
 
-                void LoadImages( )
-                {
-                    // here we're simply trying to load the images that are already
-                    // stored
-                    foreach ( NewsEntry news in News )
-                    {
-                        TryLoadCachedImageAsync( news );
-                    }
-                }
-
                 void RefreshListView( )
                 {
-                    if ( ListView != null && ListView.Adapter != null )
+                    if ( IsVisible )
                     {
-                        if ( MainActivity.SupportsLandscapeWide( ) == true )
+                        if ( ListView != null && ListView.Adapter != null )
                         {
-                            ( ListView.Adapter as LandscapeNewsArrayAdapter ).NotifyDataSetChanged( );
-                        }
-                        else
-                        {
-                            ( ListView.Adapter as PortraitNewsArrayAdapter ).NotifyDataSetChanged( );
+                            if ( MainActivity.SupportsLandscapeWide( ) == true )
+                            {
+                                ( ListView.Adapter as LandscapeNewsArrayAdapter ).NotifyDataSetChanged( );
+                            }
+                            else
+                            {
+                                ( ListView.Adapter as PortraitNewsArrayAdapter ).NotifyDataSetChanged( );
+                            }
                         }
                     }
                 }
@@ -648,9 +672,6 @@ namespace Droid
                     // if it exists, spawn a thread to load and decode it
                     if ( FileCache.Instance.FileExists( entry.News.ImageName ) == true )
                     {
-                        // flag that we do HAVE the image
-                        entry.ImageIsDownloaded = true;
-
                         AsyncLoader.LoadImage( entry.News.ImageName, false, false,
                             delegate( Bitmap imageBmp)
                             {
@@ -665,7 +686,16 @@ namespace Droid
                                     }
                                     else
                                     {
+                                        // we might be replacing an existing image, so be sure to dispose our reference to it.
+                                        if( entry.Image != null )
+                                        {
+                                            entry.Image.Dispose( );
+                                            entry.Image = null;
+                                        }
+
+                                        // flag that we do HAVE the image
                                         entry.Image = imageBmp;
+
                                         RefreshListView( );
 
                                         return true;
@@ -688,22 +718,32 @@ namespace Droid
                     base.OnPause();
 
                     FragmentActive = false;
+
+                    FreeImageResources( );
                 }
 
                 public override void OnDestroyView()
                 {
                     base.OnDestroyView();
 
+                    FreeImageResources( );
+                }
+
+                void FreeImageResources( )
+                {
                     // unload all resource
                     if ( ListView != null && ListView.Adapter != null )
                     {
                         ( (ListAdapter)ListView.Adapter ).Destroy( );
                     }
 
+                    // be sure to dump the existing news images so
+                    // Dalvik knows it can use the memory
                     foreach ( NewsEntry newsEntry in News )
                     {
                         if ( newsEntry.Image != null )
                         {
+                            newsEntry.Image.Recycle( );
                             newsEntry.Image.Dispose( );
                             newsEntry.Image = null;
                         }
@@ -711,6 +751,7 @@ namespace Droid
 
                     if ( Placeholder != null )
                     {
+                        Placeholder.Recycle( );
                         Placeholder.Dispose( );
                         Placeholder = null;
                     }

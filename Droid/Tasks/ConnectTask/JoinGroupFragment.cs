@@ -67,7 +67,7 @@ namespace Droid
 
                     RelativeLayout backgroundView = view.FindViewById<RelativeLayout>( Resource.Id.view_background );
 
-                    JoinGroupView.Create( backgroundView, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    JoinGroupView.Create( backgroundView, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
 
 
                     // get the native object types so we can hook in necessary support pointers
@@ -87,14 +87,14 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
 
                     JoinGroupView.DisplayView( GroupTitle, MeetingTime, Distance, GroupID );
-                    JoinGroupView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    JoinGroupView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
                 }
 
                 public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
                 {
                     base.OnConfigurationChanged(newConfig);
 
-                    JoinGroupView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    JoinGroupView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
                 }
             }
         }
