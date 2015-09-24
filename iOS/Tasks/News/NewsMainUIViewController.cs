@@ -104,16 +104,18 @@ namespace iOS
 
             List<NewsEntry> News { get; set; }
             UIImage ImagePlaceholder { get; set; }
+            UIImage HeaderImagePlaceholder { get; set; }
 
             nfloat PendingCellHeight { get; set; }
 
-            public LandscapeTableSource (NewsMainUIViewController parent, List<NewsEntry> newsList, UIImage imagePlaceholder)
+            public LandscapeTableSource (NewsMainUIViewController parent, List<NewsEntry> newsList, UIImage imagePlaceholder, UIImage headerImagePlaceholder )
             {
                 Parent = parent;
 
                 News = newsList;
 
                 ImagePlaceholder = imagePlaceholder;
+                HeaderImagePlaceholder = headerImagePlaceholder;
             }
 
             public override nint RowsInSection (UITableView tableview, nint section)
@@ -198,7 +200,7 @@ namespace iOS
                 }
                 else
                 {
-                    cell.ContentView.Layer.Contents = ImagePlaceholder.CGImage;
+                    cell.ContentView.Layer.Contents = HeaderImagePlaceholder.CGImage;
                 }
 
                 cell.PrivateOverlay.Hidden = !News[ 0 ].News.Private;
@@ -206,9 +208,10 @@ namespace iOS
 
                 // scale down the image to the width of the device
                 nfloat imageWidth = cell.ContentView.Layer.Contents.Width;
-                nfloat imageHeight = cell.ContentView.Layer.Contents.Height;
+                //nfloat imageHeight = cell.ContentView.Layer.Contents.Height;
 
-                nfloat aspectRatio = (float) (imageHeight / imageWidth);
+                //nfloat aspectRatio = (float) (imageHeight / imageWidth);
+                nfloat aspectRatio = PrivateNewsConfig.NewsBannerAspectRatio;
                 cell.Bounds = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * aspectRatio );
                 cell.PrivateOverlay.Frame = new CGRect( 0, 0, tableView.Bounds.Width, 30 );
 
@@ -395,6 +398,7 @@ namespace iOS
 
         bool IsVisible { get; set; }
         UIImage ImagePlaceholder { get; set; }
+        UIImage HeaderImagePlaceholder { get; set; }
 
         UITableView NewsTableView { get; set; }
 
@@ -404,6 +408,12 @@ namespace iOS
 
             string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivateGeneralConfig.NewsMainPlaceholder;
             ImagePlaceholder = new UIImage( imagePath );
+
+            if ( SpringboardViewController.SupportsLandscapeWide( ) )
+            {
+                imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivateGeneralConfig.NewsDetailsPlaceholder;
+                HeaderImagePlaceholder = new UIImage( imagePath );
+            }
 		}
 
         LandscapeTableSource LandscapeSource { get; set; }
@@ -424,7 +434,7 @@ namespace iOS
             IsVisible = true;
 
             // populate our table
-            LandscapeSource = new LandscapeTableSource( this, News, ImagePlaceholder );
+            LandscapeSource = new LandscapeTableSource( this, News, ImagePlaceholder, HeaderImagePlaceholder );
             PortraitSource = new PortraitTableSource( this, News, ImagePlaceholder );
 
             NewsTableView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
@@ -458,35 +468,58 @@ namespace iOS
         public void LoadAndDownloadImages( )
         {
             // go through the news
-            foreach ( NewsEntry news in News )
+            for( int i = 0;  i < News.Count; i++ )
             {
                 // and attempt to load each image
-                if ( TryLoadCachedImage( news ) == false )
+                if ( SpringboardViewController.SupportsLandscapeWide( ) && i == 0 )
                 {
-                    // it failed, so download it and try again.
-                    FileCache.Instance.DownloadFileToCache( news.News.ImageURL, news.News.ImageName, 
-                        delegate
-                        {
-                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                                {
-                                    if( IsVisible == true )
+                    NewsEntry newsEntry = News[ i ];
+                    if ( TryLoadCachedImage( newsEntry, newsEntry.News.HeaderImageName ) == false )
+                    {
+                        // it failed, so download it and try again.
+                        FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL, newsEntry.News.HeaderImageName, 
+                            delegate
+                            {
+                                Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                     {
-                                        TryLoadCachedImage( news );
-                                    }
-                                });
-                        } );
+                                        if ( IsVisible == true )
+                                        {
+                                            TryLoadCachedImage( newsEntry, newsEntry.News.HeaderImageName );
+                                        }
+                                    } );
+                            } );
+                    }
+                }
+                else
+                {
+                    NewsEntry newsEntry = News[ i ];
+                    if ( TryLoadCachedImage( newsEntry, newsEntry.News.ImageName ) == false )
+                    {
+                        // it failed, so download it and try again.
+                        FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL, newsEntry.News.ImageName, 
+                            delegate
+                            {
+                                Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                    {
+                                        if ( IsVisible == true )
+                                        {
+                                            TryLoadCachedImage( newsEntry, newsEntry.News.ImageName );
+                                        }
+                                    } );
+                            } );
+                    }
                 }
             }
         }
 
-        bool TryLoadCachedImage( NewsEntry entry )
+        bool TryLoadCachedImage( NewsEntry entry, string imageName )
         {
             bool success = false;
 
             // check the billboard
-            if( FileCache.Instance.FileExists( entry.News.ImageName ) == true )
+            if( FileCache.Instance.FileExists( imageName ) == true )
             {
-                MemoryStream imageStream = (MemoryStream)FileCache.Instance.LoadFile( entry.News.ImageName );
+                MemoryStream imageStream = (MemoryStream)FileCache.Instance.LoadFile( imageName );
                 if ( imageStream != null )
                 {
                     try
@@ -502,8 +535,8 @@ namespace iOS
                     }
                     catch( Exception )
                     {
-                        FileCache.Instance.RemoveFile( entry.News.ImageName );
-                        Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing.", entry.News.ImageName ) );
+                        FileCache.Instance.RemoveFile( imageName );
+                        Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing.", imageName ) );
                     }
                     imageStream.Dispose( );
                 }

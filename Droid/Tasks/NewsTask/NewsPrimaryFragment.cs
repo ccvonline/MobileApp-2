@@ -185,10 +185,10 @@ namespace Droid
 
                             listItem.Billboard.SetImageBitmap( ParentFragment.News[ position ].Image );
                         }
-                        // then should we use the placeholder?
-                        else if ( ParentFragment.Placeholder != null )
+                        // then should we use the (details) placeholder?
+                        else if ( ParentFragment.DetailsPlaceholder != null )
                         {
-                            listItem.Billboard.SetImageBitmap( ParentFragment.Placeholder );
+                            listItem.Billboard.SetImageBitmap( ParentFragment.DetailsPlaceholder );
                         }
                         else
                         {
@@ -494,6 +494,7 @@ namespace Droid
                 ListView ListView { get; set; }
 
                 public Bitmap Placeholder { get; set; }
+                public Bitmap DetailsPlaceholder { get; set; }
 
                 bool FragmentActive { get; set; }
 
@@ -579,11 +580,38 @@ namespace Droid
                             return false;
                         } );
 
+                    // and if we're a landscape wide device, load the details placeholder as well -- we'll need it.
+                    if ( MainActivity.SupportsLandscapeWide( ) )
+                    {
+                        AsyncLoader.LoadImage( PrivateGeneralConfig.NewsDetailsPlaceholder, true, false,
+                            delegate( Bitmap imageBmp )
+                            {
+                                if ( FragmentActive == true && imageBmp != null )
+                                {
+                                    DetailsPlaceholder = imageBmp;
+                                    imageBmp = null;
+
+                                    RefreshListView( );
+                                    return true;
+                                }
+
+                                return false;
+                            } );
+                    }
+
                     // here we're simply trying to load the images that are already
                     // stored
-                    foreach ( NewsEntry newsEntry in News )
+                    for ( int i = 0; i < News.Count; i++ )
                     {
-                        TryLoadCachedImageAsync( newsEntry );
+                        // the top image should use the header if we're a landscape wide device.
+                        if ( MainActivity.SupportsLandscapeWide( ) && i == 0 )
+                        {
+                            TryLoadCachedImageAsync( News[ i ], News[ i ].News.HeaderImageName );
+                        }
+                        else
+                        {
+                            TryLoadCachedImageAsync( News[ i ], News[ i ].News.ImageName );
+                        }
                     }
                 }
 
@@ -626,25 +654,45 @@ namespace Droid
                     News.Clear( );
 
                     // copy the new news.
-                    foreach ( RockNews rockEntry in sourceNews )
+                    int i;
+                    for( i = 0; i < sourceNews.Count; i++ )
                     {
                         NewsEntry newsEntry = new NewsEntry();
                         News.Add( newsEntry );
 
-                        newsEntry.News = rockEntry;
+                        newsEntry.News = sourceNews[ i ];
 
-                        // see if we can load the file
-                        bool fileFound = TryLoadCachedImageAsync( newsEntry );
-                        if ( fileFound == false )
+                        // if this is the top news item on a landscape device, use it's 'Header' image instead.
+                        if ( MainActivity.SupportsLandscapeWide( ) && i == 0 )
                         {
-                            // if not, download it
-                            string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                            FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, 
-                                delegate
-                                {
-                                    // and THEN load it
-                                    TryLoadCachedImageAsync( newsEntry );
-                                } );
+                            bool fileFound = TryLoadCachedImageAsync( newsEntry, newsEntry.News.HeaderImageName );
+                            if ( fileFound == false )
+                            {
+                                // if not, download it
+                                string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+                                FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL + widthParam, newsEntry.News.HeaderImageName, 
+                                    delegate
+                                    {
+                                        // and THEN load it
+                                        TryLoadCachedImageAsync( newsEntry, newsEntry.News.HeaderImageName );
+                                    } );
+                            }
+                        }
+                        else
+                        {
+                            // see if we can load the file
+                            bool fileFound = TryLoadCachedImageAsync( newsEntry, newsEntry.News.ImageName );
+                            if ( fileFound == false )
+                            {
+                                // if not, download it
+                                string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
+                                FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, 
+                                    delegate
+                                    {
+                                        // and THEN load it
+                                        TryLoadCachedImageAsync( newsEntry, newsEntry.News.ImageName );
+                                    } );
+                            }
                         }
                     }
                 }
@@ -667,12 +715,12 @@ namespace Droid
                     }
                 }
 
-                bool TryLoadCachedImageAsync( NewsEntry entry )
+                bool TryLoadCachedImageAsync( NewsEntry entry, string imageName )
                 {
                     // if it exists, spawn a thread to load and decode it
-                    if ( FileCache.Instance.FileExists( entry.News.ImageName ) == true )
+                    if ( FileCache.Instance.FileExists( imageName ) == true )
                     {
-                        AsyncLoader.LoadImage( entry.News.ImageName, false, false,
+                        AsyncLoader.LoadImage( imageName, false, false,
                             delegate( Bitmap imageBmp)
                             {
                                 if ( FragmentActive == true )
@@ -680,7 +728,7 @@ namespace Droid
                                     // if for some reason it loaded corrupt, remove it.
                                     if ( imageBmp == null )
                                     {
-                                        FileCache.Instance.RemoveFile( entry.News.ImageName );
+                                        FileCache.Instance.RemoveFile( imageName );
 
                                         return false;
                                     }
@@ -747,6 +795,13 @@ namespace Droid
                             newsEntry.Image.Dispose( );
                             newsEntry.Image = null;
                         }
+                    }
+
+                    if ( DetailsPlaceholder != null )
+                    {
+                        DetailsPlaceholder.Recycle( );
+                        DetailsPlaceholder.Dispose( );
+                        DetailsPlaceholder = null;
                     }
 
                     if ( Placeholder != null )
