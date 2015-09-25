@@ -48,6 +48,12 @@ namespace MobileApp
             RockApi.Get_Categories_GetChildren_1( resultHandler );
         }
 
+        public static void GetPublicGroupsByLocation( int geoFenceGroupTypeId, int groupTypeId, int locationId, HttpRequest.RequestResult< List<Rock.Client.Group> > resultHandler )
+        {
+            string oDataFilter = "?$filter=IsPublic eq true";
+            RockApi.Get_Groups_ByLocation( geoFenceGroupTypeId, groupTypeId, locationId, oDataFilter, resultHandler );
+        }
+
         const int GroupRegistrationValueId = 52;
         public static void JoinGroup( Rock.Client.Person person, string firstName, string lastName, string spouseName, string email, string phone, int groupId, string groupName, HttpRequest.RequestResult resultHandler )
         {
