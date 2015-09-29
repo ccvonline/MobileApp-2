@@ -9,6 +9,8 @@ using Android.OS;
 using Android.Util;
 using Android.Gms.Maps;
 using App.Shared.Config;
+using Rock.Mobile.PlatformSpecific.Android.Graphics;
+using Android.Graphics;
 
 namespace Droid
 {
@@ -38,6 +40,9 @@ namespace Droid
     [Activity( Label = GeneralConfig.AndroidAppName, NoHistory = true, LaunchMode = Android.Content.PM.LaunchMode.SingleTask, MainLauncher = true, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
     public class Splash : Activity
     {
+        AspectScaledImageView SplashImage { get; set; }
+        Bitmap SplashBitmap { get; set; }
+
         protected override void OnCreate( Bundle bundle )
         {
             base.OnCreate( bundle );
@@ -58,6 +63,17 @@ namespace Droid
             // Set our view from the "main" layout resource
             SetContentView( Resource.Layout.Splash );
 
+            // load our image.
+            RelativeLayout layout = FindViewById<RelativeLayout>(Resource.Id.fragment_container);
+
+            SplashImage = new AspectScaledImageView( this );
+            SplashImage.LayoutParameters = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent );
+            SplashImage.SetScaleType( ImageView.ScaleType.CenterCrop );
+            layout.AddView( SplashImage );
+
+            SplashBitmap = BitmapFactory.DecodeResource( Rock.Mobile.PlatformSpecific.Android.Core.Context.Resources, Resource.Drawable.splash_combo_android );
+            SplashImage.SetImageBitmap( SplashBitmap );
+
             System.Timers.Timer splashTimer = new System.Timers.Timer();
             splashTimer.Interval = 500;
             splashTimer.AutoReset = false;
@@ -73,6 +89,24 @@ namespace Droid
                 };
 
             splashTimer.Start( );
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if ( SplashImage != null && SplashImage.Drawable != null )
+            {
+                SplashImage.Drawable.Dispose( );
+                SplashImage.SetImageBitmap( null );
+            }
+
+            if ( SplashBitmap != null )
+            {
+                SplashBitmap.Recycle( );
+                SplashBitmap.Dispose( );
+                SplashBitmap = null;
+            }
         }
     }
 

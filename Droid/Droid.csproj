@@ -117,12 +117,8 @@
       <Link>Resources\drawable-hdpi\androidPhotoMask.png</Link>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable-hdpi\shadow.9.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\shadow.9.png" />
     <AndroidResource Include="..\Assets\Icons\Icon%402x.png">
       <Link>Resources\drawable-hdpi\Icon.png</Link>
-    </AndroidResource>
-    <AndroidResource Include="..\Assets\Icons\Icon.png">
-      <Link>Resources\drawable-mdpi\Icon.png</Link>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Prayer_Create.axml" />
     <AndroidResource Include="Resources\layout\Profile.axml" />
@@ -158,8 +154,16 @@
     <AndroidResource Include="..\Assets\navbarLogo%402x.png">
       <Link>Resources\drawable-hdpi\navbarLogo.png</Link>
     </AndroidResource>
-    <AndroidResource Include="..\Assets\splash_combo_android.png">
+    <AndroidResource Include="Resources\drawable-xhdpi\shadow.9.png" />
+    <AndroidResource Include="..\Assets\splash_combo_android_xhdpi.png">
+      <Link>Resources\drawable-xhdpi\splash_combo_android.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="..\Assets\splash_combo_android_hdpi.png">
       <Link>Resources\drawable-hdpi\splash_combo_android.png</Link>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\shadow.9.png" />
+    <AndroidResource Include="..\Assets\splash_combo_android_xxhdpi.png">
+      <Link>Resources\drawable-xxhdpi\splash_combo_android.png</Link>
     </AndroidResource>
   </ItemGroup>
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
@@ -173,7 +177,6 @@
     <Folder Include="Tasks\NotesTask\" />
     <Folder Include="Resources\layout-sw600dp\" />
     <Folder Include="Resources\drawable-hdpi\" />
-    <Folder Include="Resources\drawable-mdpi\" />
     <Folder Include="Resources\layout-sw320dp\" />
     <Folder Include="UserManagement\" />
     <Folder Include="Tasks\AboutTask\" />
@@ -184,6 +187,8 @@
     <Folder Include="Resources\drawable\" />
     <Folder Include="Resources\values-v21\" />
     <Folder Include="Tasks\ConnectTask\" />
+    <Folder Include="Resources\drawable-xhdpi\" />
+    <Folder Include="Resources\drawable-xxhdpi\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\Assets\Fonts\Bevan.ttf">
@@ -342,9 +347,6 @@
     <AndroidAsset Include="..\Assets\placeholder_notes_thumb.png">
       <Link>Assets\placeholder_notes_thumb.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\oobe_splash_bg.png">
-      <Link>Assets\oobe_splash_bg.png</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Assets\groupfinder_thumb.png">
       <Link>Assets\groupfinder_thumb.png</Link>
     </AndroidAsset>
@@ -383,6 +385,15 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\note_tutorial%403x.png">
       <Link>Assets\note_tutorial.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg_high.png">
+      <Link>Assets\oobe_splash_bg_high.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg_Xhigh.png">
+      <Link>Assets\oobe_splash_bg_Xhigh.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg_XXhigh.png">
+      <Link>Assets\oobe_splash_bg_XXhigh.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

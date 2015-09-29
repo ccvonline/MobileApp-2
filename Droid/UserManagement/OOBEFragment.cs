@@ -32,6 +32,8 @@ namespace Droid
 
         UIOOBE OOBEView { get; set; }
 
+        bool DidLaunch { get; set; }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -53,7 +55,11 @@ namespace Droid
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
 
-            OOBEView.Create( view, "oobe_splash_bg.png", imageName, false, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+            DisplayMetrics metrics = Resources.DisplayMetrics;
+
+            string bgImageName = string.Format( "oobe_splash_bg_1{0}.png", metrics.DensityDpi );
+
+            OOBEView.Create( view, bgImageName, imageName, false, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
 
                 delegate(int index, bool isCampusSelection) 
                 {
@@ -72,24 +78,28 @@ namespace Droid
         public override void OnResume()
         {
             base.OnResume();
-            
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 750;
-            timer.AutoReset = false;
-            timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+
+            // guard against backgrounding / resuming
+            if ( DidLaunch == false )
+            {
+                DidLaunch = true;
+
+                System.Timers.Timer timer = new System.Timers.Timer();
+                timer.Interval = 750;
+                timer.AutoReset = false;
+                timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
                 {
                     Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                         {
                             OOBEView.PerformStartup( );
                         } );
                 };
-            timer.Start( );
+                timer.Start( );
 
-            SpringboardParent.ModalFragmentOpened( this );
+                SpringboardParent.ModalFragmentOpened( this );
 
-            //Point displaySize = new Point( );
-            //Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
-            OOBEView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                OOBEView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+            }
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)

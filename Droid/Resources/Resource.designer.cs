@@ -1586,20 +1586,20 @@ namespace Droid
 			// aapt resource value: 0x7f0c00ab
 			public const int campusText = 2131493035;
 			
-			// aapt resource value: 0x7f0c00cd
-			public const int campus_container = 2131493069;
+			// aapt resource value: 0x7f0c00cc
+			public const int campus_container = 2131493068;
 			
 			// aapt resource value: 0x7f0c00aa
 			public const int campus_middle_border = 2131493034;
 			
-			// aapt resource value: 0x7f0c00ce
-			public const int campus_selection_button = 2131493070;
-			
-			// aapt resource value: 0x7f0c00d0
-			public const int campus_selection_icon = 2131493072;
+			// aapt resource value: 0x7f0c00cd
+			public const int campus_selection_button = 2131493069;
 			
 			// aapt resource value: 0x7f0c00cf
-			public const int campus_selection_text = 2131493071;
+			public const int campus_selection_icon = 2131493071;
+			
+			// aapt resource value: 0x7f0c00ce
+			public const int campus_selection_text = 2131493070;
 			
 			// aapt resource value: 0x7f0c0068
 			public const int cancelButton = 2131492968;
@@ -1673,8 +1673,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c0029
 			public const int end = 2131492905;
 			
-			// aapt resource value: 0x7f0c00cc
-			public const int end_seperator = 2131493068;
+			// aapt resource value: 0x7f0c00cb
+			public const int end_seperator = 2131493067;
 			
 			// aapt resource value: 0x7f0c0036
 			public const int expand_activities_button = 2131492918;
@@ -1895,14 +1895,14 @@ namespace Droid
 			// aapt resource value: 0x7f0c0012
 			public const int production = 2131492882;
 			
-			// aapt resource value: 0x7f0c00c2
-			public const int profile_name = 2131493058;
+			// aapt resource value: 0x7f0c00c1
+			public const int profile_name = 2131493057;
+			
+			// aapt resource value: 0x7f0c00bf
+			public const int profile_name_linearlayout = 2131493055;
 			
 			// aapt resource value: 0x7f0c00c0
-			public const int profile_name_linearlayout = 2131493056;
-			
-			// aapt resource value: 0x7f0c00c1
-			public const int profile_prefix = 2131493057;
+			public const int profile_prefix = 2131493056;
 			
 			// aapt resource value: 0x7f0c007e
 			public const int progressBar = 2131492990;
@@ -1982,8 +1982,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c0016
 			public const int selectionDetails = 2131492886;
 			
-			// aapt resource value: 0x7f0c00c6
-			public const int seperator = 2131493062;
+			// aapt resource value: 0x7f0c00c5
+			public const int seperator = 2131493061;
 			
 			// aapt resource value: 0x7f0c003e
 			public const int shortcut = 2131492926;
@@ -2000,50 +2000,47 @@ namespace Droid
 			// aapt resource value: 0x7f0c0089
 			public const int spinner_background = 2131493001;
 			
-			// aapt resource value: 0x7f0c00ba
-			public const int splashscreen = 2131493050;
-			
 			// aapt resource value: 0x7f0c0007
 			public const int split_action_bar = 2131492871;
 			
 			// aapt resource value: 0x7f0c006a
 			public const int springboard = 2131492970;
 			
-			// aapt resource value: 0x7f0c00cb
-			public const int springboard_about_frame = 2131493067;
-			
-			// aapt resource value: 0x7f0c00c7
-			public const int springboard_connect_frame = 2131493063;
-			
-			// aapt resource value: 0x7f0c00c4
-			public const int springboard_container = 2131493060;
-			
 			// aapt resource value: 0x7f0c00ca
-			public const int springboard_give_frame = 2131493066;
+			public const int springboard_about_frame = 2131493066;
 			
-			// aapt resource value: 0x7f0c00bf
-			public const int springboard_login_button = 2131493055;
+			// aapt resource value: 0x7f0c00c6
+			public const int springboard_connect_frame = 2131493062;
 			
-			// aapt resource value: 0x7f0c00c5
-			public const int springboard_news_frame = 2131493061;
-			
-			// aapt resource value: 0x7f0c00c8
-			public const int springboard_notes_frame = 2131493064;
+			// aapt resource value: 0x7f0c00c3
+			public const int springboard_container = 2131493059;
 			
 			// aapt resource value: 0x7f0c00c9
-			public const int springboard_prayer_frame = 2131493065;
+			public const int springboard_give_frame = 2131493065;
 			
 			// aapt resource value: 0x7f0c00be
-			public const int springboard_profile_image = 2131493054;
+			public const int springboard_login_button = 2131493054;
 			
-			// aapt resource value: 0x7f0c00bc
-			public const int springboard_profile_image_container = 2131493052;
+			// aapt resource value: 0x7f0c00c4
+			public const int springboard_news_frame = 2131493060;
+			
+			// aapt resource value: 0x7f0c00c7
+			public const int springboard_notes_frame = 2131493063;
+			
+			// aapt resource value: 0x7f0c00c8
+			public const int springboard_prayer_frame = 2131493064;
 			
 			// aapt resource value: 0x7f0c00bd
-			public const int springboard_profile_image_layout = 2131493053;
+			public const int springboard_profile_image = 2131493053;
 			
 			// aapt resource value: 0x7f0c00bb
-			public const int springboard_relative_layout = 2131493051;
+			public const int springboard_profile_image_container = 2131493051;
+			
+			// aapt resource value: 0x7f0c00bc
+			public const int springboard_profile_image_layout = 2131493052;
+			
+			// aapt resource value: 0x7f0c00ba
+			public const int springboard_relative_layout = 2131493050;
 			
 			// aapt resource value: 0x7f0c00a2
 			public const int stateAddressText = 2131493026;
@@ -2105,8 +2102,8 @@ namespace Droid
 			// aapt resource value: 0x7f0c005a
 			public const int view_background = 2131492954;
 			
-			// aapt resource value: 0x7f0c00c3
-			public const int view_profile = 2131493059;
+			// aapt resource value: 0x7f0c00c2
+			public const int view_profile = 2131493058;
 			
 			// aapt resource value: 0x7f0c002f
 			public const int withText = 2131492911;

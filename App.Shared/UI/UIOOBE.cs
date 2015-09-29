@@ -54,12 +54,15 @@ namespace App.Shared.UI
             ImageBG = PlatformImageView.Create( true );
             ImageBG.AddAsSubview( View.PlatformNativeObject );
             MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( bgLayerImageName );
-            stream.Position = 0;
-            ImageBG.Opacity = 0;
-            ImageBG.Image = stream;
-            ImageBG.SizeToFit( );
-            ImageBG.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
-            stream.Dispose( );
+            if ( stream != null )
+            {
+                stream.Position = 0;
+                ImageBG.Opacity = 0;
+                ImageBG.Image = stream;
+                ImageBG.SizeToFit( );
+                ImageBG.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
+                stream.Dispose( );
+            }
 
             WelcomeLabel = PlatformLabel.Create( );
             WelcomeLabel.SetFont( ControlStylingConfig.Font_Bold, 85 );

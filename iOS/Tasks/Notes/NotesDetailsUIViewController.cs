@@ -175,6 +175,17 @@ namespace iOS
                     Seperator.Layer.BorderColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ).CGColor;
                 }
 
+                public void HideControls( bool hidden )
+                {
+                    // used for the final "dummy" row
+                    Title.Hidden = hidden;
+                    Date.Hidden = hidden;
+                    Speaker.Hidden = hidden;
+                    ListenButton.Hidden = hidden;
+                    WatchButton.Hidden = hidden;
+                    TakeNotesButton.Hidden = hidden;
+                }
+
                 public void ToggleListenButton( bool enabled )
                 {
                     if ( enabled == true )
@@ -234,7 +245,7 @@ namespace iOS
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                return MessageEntries.Count + 1;
+                return MessageEntries.Count + 2;
             }
 
             public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
@@ -364,109 +375,121 @@ namespace iOS
                     cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                 }
 
-                // update the cell's row index so on button taps we know which one was tapped
-                cell.RowIndex = row;
-
-
-                // Create the title
-                cell.Title.Text = Series.Messages[ row ].Name;
-                if ( Series.Private == true ||
-                    Series.Messages[ row ].Private == true )
+                if ( row < Series.Messages.Count )
                 {
-                    cell.Title.Text += " (Private)";
-                }
+                    cell.HideControls( false );
 
-                cell.Title.SizeToFit( );
-
-                // Date
-                cell.Date.Text = Series.Messages[ row ].Date;
-                cell.Date.SizeToFit( );
-
-                // Speaker
-                cell.Speaker.Text = Series.Messages[ row ].Speaker;
-                cell.Speaker.SizeToFit( );
+                    // update the cell's row index so on button taps we know which one was tapped
+                    cell.RowIndex = row;
 
 
-                nfloat rowHeight = PrivateNoteConfig.Series_Main_CellHeight;
-                nfloat availableWidth = cell.Bounds.Width - cell.ListenButton.Bounds.Width - cell.WatchButton.Bounds.Width - cell.TakeNotesButton.Bounds.Width;
+                    // Create the title
+                    cell.Title.Text = Series.Messages[ row ].Name;
+                    if ( Series.Private == true ||
+                         Series.Messages[ row ].Private == true )
+                    {
+                        cell.Title.Text += " (Private)";
+                    }
 
-                // Position the Title & Date in the center to the right of the image
-                nfloat totalTextHeight = (cell.Title.Bounds.Height + cell.Date.Bounds.Height + cell.Speaker.Bounds.Height) - 6;
+                    cell.Title.SizeToFit( );
 
-                cell.Title.Frame = new CGRect( 10, ((rowHeight - totalTextHeight) / 2) - 1, availableWidth, cell.Title.Frame.Height);
-                //cell.Title.BackgroundColor = UIColor.Blue;
+                    // Date
+                    cell.Date.Text = Series.Messages[ row ].Date;
+                    cell.Date.SizeToFit( );
 
-                cell.Date.Frame = new CGRect( cell.Title.Frame.Left, cell.Title.Frame.Bottom - 3, availableWidth, cell.Date.Frame.Height );
-                //cell.Date.BackgroundColor = UIColor.Yellow;
-
-                cell.Speaker.Frame = new CGRect( cell.Title.Frame.Left, cell.Date.Frame.Bottom - 3, availableWidth, cell.Speaker.Frame.Height );
-                //cell.Speaker.BackgroundColor = UIColor.Green;
-
-                // add the seperator to the bottom
-                cell.Seperator.Frame = new CGRect( 0, rowHeight - 1, cell.Bounds.Width, 1 );
-                //cell.Seperator.Hidden = true;
-
-                /*unchecked
-                {
-                    cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( (uint)(0xFF0000FF - (row * 100)) );
-                }*/
+                    // Speaker
+                    cell.Speaker.Text = Series.Messages[ row ].Speaker;
+                    cell.Speaker.SizeToFit( );
 
 
-                // Buttons
-                cell.TakeNotesButton.Frame = new CGRect( cell.Bounds.Width - cell.TakeNotesButton.Bounds.Width, 
-                                                        (rowHeight - cell.TakeNotesButton.Bounds.Height) / 2, 
-                                                         cell.TakeNotesButton.Bounds.Width, 
-                                                         cell.TakeNotesButton.Bounds.Height );
+                    nfloat rowHeight = PrivateNoteConfig.Series_Main_CellHeight;
+                    nfloat availableWidth = cell.Bounds.Width - cell.ListenButton.Bounds.Width - cell.WatchButton.Bounds.Width - cell.TakeNotesButton.Bounds.Width;
 
-                cell.WatchButton.Frame = new CGRect( cell.TakeNotesButton.Frame.Left - cell.WatchButton.Bounds.Width, 
-                                                    (rowHeight - cell.WatchButton.Bounds.Height) / 2, 
-                                                         cell.WatchButton.Bounds.Width, 
-                                                         cell.WatchButton.Bounds.Height );
+                    // Position the Title & Date in the center to the right of the image
+                    nfloat totalTextHeight = ( cell.Title.Bounds.Height + cell.Date.Bounds.Height + cell.Speaker.Bounds.Height ) - 6;
 
-                cell.ListenButton.Frame = new CGRect( cell.WatchButton.Frame.Left - cell.ListenButton.Bounds.Width, 
-                    (rowHeight - cell.ListenButton.Bounds.Height) / 2, 
-                    cell.ListenButton.Bounds.Width, 
-                    cell.ListenButton.Bounds.Height );
+                    cell.Title.Frame = new CGRect( 10, ( ( rowHeight - totalTextHeight ) / 2 ) - 1, availableWidth, cell.Title.Frame.Height );
+                    //cell.Title.BackgroundColor = UIColor.Blue;
+
+                    cell.Date.Frame = new CGRect( cell.Title.Frame.Left, cell.Title.Frame.Bottom - 3, availableWidth, cell.Date.Frame.Height );
+                    //cell.Date.BackgroundColor = UIColor.Yellow;
+
+                    cell.Speaker.Frame = new CGRect( cell.Title.Frame.Left, cell.Date.Frame.Bottom - 3, availableWidth, cell.Speaker.Frame.Height );
+                    //cell.Speaker.BackgroundColor = UIColor.Green;
+
+                    // add the seperator to the bottom
+                    cell.Seperator.Frame = new CGRect( 0, rowHeight - 1, cell.Bounds.Width, 1 );
+                    //cell.Seperator.Hidden = true;
+
+                    /*unchecked
+                    {
+                        cell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( (uint)(0xFF0000FF - (row * 100)) );
+                    }*/
+
+
+                    // Buttons
+                    cell.TakeNotesButton.Frame = new CGRect( cell.Bounds.Width - cell.TakeNotesButton.Bounds.Width, 
+                        ( rowHeight - cell.TakeNotesButton.Bounds.Height ) / 2, 
+                        cell.TakeNotesButton.Bounds.Width, 
+                        cell.TakeNotesButton.Bounds.Height );
+
+                    cell.WatchButton.Frame = new CGRect( cell.TakeNotesButton.Frame.Left - cell.WatchButton.Bounds.Width, 
+                        ( rowHeight - cell.WatchButton.Bounds.Height ) / 2, 
+                        cell.WatchButton.Bounds.Width, 
+                        cell.WatchButton.Bounds.Height );
+
+                    cell.ListenButton.Frame = new CGRect( cell.WatchButton.Frame.Left - cell.ListenButton.Bounds.Width, 
+                        ( rowHeight - cell.ListenButton.Bounds.Height ) / 2, 
+                        cell.ListenButton.Bounds.Width, 
+                        cell.ListenButton.Bounds.Height );
 
 
 
-                // disable the button if there's no listen URL
-                if ( string.IsNullOrEmpty( Series.Messages[ row ].AudioUrl ) )
-                {
-                    cell.ToggleListenButton( false );
+                    // disable the button if there's no listen URL
+                    if ( string.IsNullOrEmpty( Series.Messages[ row ].AudioUrl ) )
+                    {
+                        cell.ToggleListenButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleListenButton( true );
+                    }
+
+                    // disable the button if there's no watch URL
+                    if ( string.IsNullOrEmpty( Series.Messages[ row ].WatchUrl ) )
+                    {
+                        cell.ToggleWatchButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleWatchButton( true );
+                    }
+
+                    // disable the button if there's no note URL
+                    if ( string.IsNullOrEmpty( Series.Messages[ 0 ].NoteUrl ) )
+                    {
+                        cell.ToggleTakeNotesButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleTakeNotesButton( true );
+                    }
+
+                    //PendingCellHeight = rowHeight;
                 }
                 else
                 {
-                    cell.ToggleListenButton( true );
+                    // dummy row for padding.
+                    cell.HideControls( true );
                 }
-
-                // disable the button if there's no watch URL
-                if ( string.IsNullOrEmpty( Series.Messages[ row ].WatchUrl ) )
-                {
-                    cell.ToggleWatchButton( false );
-                }
-                else
-                {
-                    cell.ToggleWatchButton( true );
-                }
-
-                // disable the button if there's no note URL
-                if ( string.IsNullOrEmpty( Series.Messages[ 0 ].NoteUrl ) )
-                {
-                    cell.ToggleTakeNotesButton( false );
-                }
-                else
-                {
-                    cell.ToggleTakeNotesButton( true );
-                }
-
-                //PendingCellHeight = rowHeight;
 
                 return cell;
             }
 
             public void RowButtonClicked( int row, int buttonIndex )
             {
+                // we dont need to check for the dummy row being clicked, because
+                // its buttons are hidden, making it impossible.
                 Parent.RowClicked( row, buttonIndex );
             }
         }
