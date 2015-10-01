@@ -48,12 +48,16 @@ namespace App.Shared.UI
         {
         }
 
-        public static void Trigger( string trigger, object arg1, object arg2, object arg3, object arg4 )
+        public static bool Trigger( string trigger, object arg1, object arg2, object arg3, object arg4 )
         {
+            bool didTrigger = false;
+
             switch( trigger )
             {
                 case "there are no easter eggs":
                 {
+                    didTrigger = true;
+
                     #if __ANDROID__
                     Android.Widget.RelativeLayout relativeLayout = ((Android.Views.View)arg1).FindViewById<Android.Widget.RelativeLayout>( Droid.Resource.Id.relative_background );
                     RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetCurrentContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
@@ -81,34 +85,46 @@ namespace App.Shared.UI
 
                 case "never gonna give you up":
                 {
+                    didTrigger = true;
+
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/ra.mp4" );
                     break;
                 }
 
                 case "gotta get down on friday":
                 {
+                    didTrigger = true;
+
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/friday.mp4" );
                     break;
                 }
 
                 case "what else have you worked on?":
                 {
+                    didTrigger = true;
+
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/untamed.mp4" );
                     break;
                 }
 
                 case "do you like turtles?":
                 {
+                    didTrigger = true;
+
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/turtles.mp4" );
                     break;
                 }
 
                 case "goat in the water!":
                 {
+                    didTrigger = true;
+
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/piggoat.mp4" );
                     break;
                 }
             }
+
+            return didTrigger;
         }
 
         public static void DoVideo( string trigger, object arg1, object arg2, object arg3, object arg4, string url )

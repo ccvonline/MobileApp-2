@@ -252,41 +252,41 @@ namespace iOS
             }
             else
             {
-                if( ValidateInput( ) )
+                // if first and last name are valid, OR anonymous is on
+                // and if there's text in the request field.
+                if ( CheckDebug( ) == false )
                 {
-                    Rock.Client.PrayerRequest prayerRequest = new Rock.Client.PrayerRequest();
-
-                    EnableControls( false );
-
-                    prayerRequest.FirstName = FirstName.Field.Text;
-                    prayerRequest.LastName = LastName.Field.Text;
-
-                    // see if there's a person alias ID to use.
-                    int? personAliasId = null;
-                    if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                    if ( ValidateInput( ) )
                     {
-                        personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                        Rock.Client.PrayerRequest prayerRequest = new Rock.Client.PrayerRequest();
+
+                        EnableControls( false );
+
+                        prayerRequest.FirstName = FirstName.Field.Text;
+                        prayerRequest.LastName = LastName.Field.Text;
+
+                        // see if there's a person alias ID to use.
+                        int? personAliasId = null;
+                        if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                        {
+                            personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                        }
+
+                        prayerRequest.Text = PrayerRequest.Text;
+                        prayerRequest.EnteredDateTime = DateTime.Now;
+                        prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
+                        prayerRequest.CategoryId = RockGeneralData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
+                        prayerRequest.IsActive = true;
+                        prayerRequest.IsPublic = UIPublicSwitch.On; // use the public switch's state to determine whether it's a public prayer or not.
+                        prayerRequest.Guid = Guid.NewGuid( );
+                        prayerRequest.IsApproved = false;
+                        prayerRequest.CreatedByPersonAliasId = UISwitchAnonymous.On == true ? null : personAliasId;
+
+                        // launch the post view controller
+                        Prayer_PostUIViewController postPrayerVC = new Prayer_PostUIViewController();
+                        postPrayerVC.PrayerRequest = prayerRequest;
+                        Task.PerformSegue( this, postPrayerVC );
                     }
-
-                    prayerRequest.Text = PrayerRequest.Text;
-                    prayerRequest.EnteredDateTime = DateTime.Now;
-                    prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
-                    prayerRequest.CategoryId = RockGeneralData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
-                    prayerRequest.IsActive = true;
-                    prayerRequest.IsPublic = UIPublicSwitch.On; // use the public switch's state to determine whether it's a public prayer or not.
-                    prayerRequest.Guid = Guid.NewGuid( );
-                    prayerRequest.IsApproved = false;
-                    prayerRequest.CreatedByPersonAliasId = UISwitchAnonymous.On == true ? null : personAliasId;
-
-                    // launch the post view controller
-                    Prayer_PostUIViewController postPrayerVC = new Prayer_PostUIViewController();
-                    postPrayerVC.PrayerRequest = prayerRequest;
-                    Task.PerformSegue( this, postPrayerVC );
-                }
-                else
-                {
-                    // check for debug features
-                    CheckDebug( );
                 }
             }
         }
@@ -341,37 +341,47 @@ namespace iOS
             return result;
         }
 
-        void CheckDebug( )
+        bool CheckDebug( )
         {
-            if( string.IsNullOrEmpty( FirstName.Field.Text ) == true && string.IsNullOrEmpty( LastName.Field.Text ) == true )
+            bool debugKeyEntered = false;
+
+            if ( PrayerRequest.Text.ToLower( ) == "clear cache" )
             {
-                if ( PrayerRequest.Text.ToLower( ) == "clear cache" )
-                {
-                    FileCache.Instance.CleanUp( true );
-                    SpringboardViewController.DisplayError( "Cache Cleared", "All cached items have been deleted" );
-                }
-                else if ( PrayerRequest.Text.ToLower( ) == "developer" )
-                {
-                    App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
-                    SpringboardViewController.DisplayError( "Developer Mode", 
-                        string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
-                }
-                else if ( PrayerRequest.Text.ToLower( ) == "version" )
-                {
-                    SpringboardViewController.DisplayError( "Current Version", BuildStrings.Version );
-                }
-                else if ( PrayerRequest.Text.ToLower( ) == "upload dumps" )
-                {
-#if !DEBUG
-                    Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
-                    SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
-#endif
-                }
-                else
-                {
-                    UISpecial.Trigger( PrayerRequest.Text.ToLower( ), View, ScrollView, this, Task );
-                }
+                debugKeyEntered = true;
+
+                FileCache.Instance.CleanUp( true );
+                SpringboardViewController.DisplayError( "Cache Cleared", "All cached items have been deleted" );
             }
+            else if ( PrayerRequest.Text.ToLower( ) == "developer" )
+            {
+                debugKeyEntered = true;
+
+                App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                SpringboardViewController.DisplayError( "Developer Mode", 
+                    string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+            }
+            else if ( PrayerRequest.Text.ToLower( ) == "version" )
+            {
+                debugKeyEntered = true;
+
+                SpringboardViewController.DisplayError( "Current Version", BuildStrings.Version );
+            }
+            else if ( PrayerRequest.Text.ToLower( ) == "upload dumps" )
+            {
+#if !DEBUG
+                debugKeyEntered = true;
+
+                Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
+                SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+#endif
+            }
+            else
+            {
+                // otherwise, see if our special UI caught it.
+                debugKeyEntered = UISpecial.Trigger( PrayerRequest.Text.ToLower( ), View, ScrollView, this, Task );
+            }
+
+            return debugKeyEntered;
         }
        
         /// <summary>

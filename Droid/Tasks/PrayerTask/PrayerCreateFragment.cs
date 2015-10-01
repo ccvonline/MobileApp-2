@@ -192,39 +192,38 @@ namespace Droid
                 {
                     // if first and last name are valid, OR anonymous is on
                     // and if there's text in the request field.
-                    if ( ValidateInput( ) )
+                    if ( CheckDebug( ) == false )
                     {
-                        Rock.Client.PrayerRequest prayerRequest = new Rock.Client.PrayerRequest();
-
-                        FirstNameText.Enabled = false;
-                        LastNameText.Enabled = false;
-                        RequestText.Enabled = false;
-
-                        // setup the request
-                        prayerRequest.FirstName = FirstNameText.Text;
-                        prayerRequest.LastName = LastNameText.Text;
-
-                        int? personAliasId = null;
-                        if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                        if ( ValidateInput( ) )
                         {
-                            personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                            Rock.Client.PrayerRequest prayerRequest = new Rock.Client.PrayerRequest();
+
+                            FirstNameText.Enabled = false;
+                            LastNameText.Enabled = false;
+                            RequestText.Enabled = false;
+
+                            // setup the request
+                            prayerRequest.FirstName = FirstNameText.Text;
+                            prayerRequest.LastName = LastNameText.Text;
+
+                            int? personAliasId = null;
+                            if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                            {
+                                personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                            }
+
+                            prayerRequest.Text = RequestText.Text;
+                            prayerRequest.EnteredDateTime = DateTime.Now;
+                            prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
+                            prayerRequest.CategoryId = App.Shared.Network.RockGeneralData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
+                            prayerRequest.IsActive = true;
+                            prayerRequest.Guid = Guid.NewGuid( );
+                            prayerRequest.IsPublic = PublicSwitch.Checked;
+                            prayerRequest.IsApproved = false;
+                            prayerRequest.CreatedByPersonAliasId = AnonymousSwitch.Checked == true ? null : personAliasId;
+
+                            ParentTask.OnClick( this, 0, prayerRequest );
                         }
-
-                        prayerRequest.Text = RequestText.Text;
-                        prayerRequest.EnteredDateTime = DateTime.Now;
-                        prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
-                        prayerRequest.CategoryId = App.Shared.Network.RockGeneralData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
-                        prayerRequest.IsActive = true;
-                        prayerRequest.Guid = Guid.NewGuid( );
-                        prayerRequest.IsPublic = PublicSwitch.Checked;
-                        prayerRequest.IsApproved = false;
-                        prayerRequest.CreatedByPersonAliasId = AnonymousSwitch.Checked == true ? null : personAliasId;
-
-                        ParentTask.OnClick( this, 0, prayerRequest );
-                    }
-                    else
-                    {
-                        CheckDebug( );
                     }
                 }
 
@@ -264,37 +263,46 @@ namespace Droid
                     return result;
                 }
 
-                void CheckDebug( )
+                bool CheckDebug( )
                 {
-                    if( string.IsNullOrEmpty( FirstNameText.Text ) == true && string.IsNullOrEmpty( LastNameText.Text ) == true )
+                    bool debugKeyEntered = false;
+                    if ( RequestText.Text.ToLower( ) == "clear cache" )
                     {
-                        if ( RequestText.Text.ToLower( ) == "clear cache" )
-                        {
-                            FileCache.Instance.CleanUp( true );
-                            Springboard.DisplayError( "Cache Cleared", "All cached items have been deleted" );
-                        }
-                        else if ( RequestText.Text.ToLower( ) == "developer" )
-                        {
-                            App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
-                            Springboard.DisplayError( "Developer Mode", 
-                                string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
-                        }
-                        else if ( RequestText.Text.ToLower( ) == "version" )
-                        {
-                            Springboard.DisplayError( "Current Version", BuildStrings.Version );
-                        }
-                        else if ( RequestText.Text.ToLower( ) == "upload dumps" )
-                        {
-#if !DEBUG
-                            Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
-                            Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
-#endif
-                        }
-                        else
-                        {
-                            UISpecial.Trigger( RequestText.Text.ToLower( ), View, this, ParentTask, null );
-                        }
+                        debugKeyEntered = true;
+
+                        FileCache.Instance.CleanUp( true );
+                        Springboard.DisplayError( "Cache Cleared", "All cached items have been deleted" );
                     }
+                    else if ( RequestText.Text.ToLower( ) == "developer" )
+                    {
+                        debugKeyEntered = true;
+
+                        App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                        Springboard.DisplayError( "Developer Mode", 
+                            string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+                    }
+                    else if ( RequestText.Text.ToLower( ) == "version" )
+                    {
+                        debugKeyEntered = true;
+
+                        Springboard.DisplayError( "Current Version", BuildStrings.Version );
+                    }
+                    else if ( RequestText.Text.ToLower( ) == "upload dumps" )
+                    {
+#if !DEBUG
+                        debugKeyEntered = true;
+
+                        Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
+                        Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
+#endif
+                    }
+                    else
+                    {
+                        // otherwise, see if our special UI caught it.
+                        debugKeyEntered = UISpecial.Trigger( RequestText.Text.ToLower( ), View, this, ParentTask, null );
+                    }
+
+                    return debugKeyEntered;
                 }
 
                 public override void OnResume()
