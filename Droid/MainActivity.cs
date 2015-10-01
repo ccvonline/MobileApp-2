@@ -11,10 +11,12 @@ using Android.Gms.Maps;
 using App.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
+using Com.Localytics.Android;
 
 namespace Droid
 {
     [Application( Name="com.ccvonline.CCVMobileApp" )]
+    [MetaData ("LOCALYTICS_APP_KEY", Value=GeneralConfig.Droid_Localytics_Key)]
     public class MainApplication : Application
     {
         public MainApplication( System.IntPtr whatever, Android.Runtime.JniHandleOwnership jniHandle ) : base( whatever, jniHandle )
@@ -26,15 +28,12 @@ namespace Droid
             base.OnCreate();
 
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
+
+            //#if !DEBUG
+            LocalyticsActivityLifecycleCallbacks callback = new LocalyticsActivityLifecycleCallbacks( this );
+            RegisterActivityLifecycleCallbacks( callback );
+            //#endif
         }
-        
-        /*public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
-        {
-            base.OnCreate(savedInstanceState, persistentState);
-
-            Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
-        }*/
-
     }
     
     [Activity( Label = GeneralConfig.AndroidAppName, NoHistory = true, LaunchMode = Android.Content.PM.LaunchMode.SingleTask, MainLauncher = true, Icon = "@drawable/icon", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]

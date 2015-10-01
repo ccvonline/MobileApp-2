@@ -6,6 +6,7 @@ using Foundation;
 using UIKit;
 using AVFoundation;
 using App.Shared.Config;
+using LocalyticsBinding;
 
 namespace iOS
 {
@@ -21,6 +22,10 @@ namespace iOS
         //protected static UIStoryboard Storyboard = UIStoryboard.FromName ("MainStoryboard", null);
         private SpringboardViewController Springboard { get; set; }
 
+        public AppDelegate( ) : base()
+        {
+        }
+
         // This method is invoked when the application has loaded and is ready to run. In this
         // method you should instantiate the window, load the UI into it and then make the window
         // visible.
@@ -29,6 +34,10 @@ namespace iOS
         //
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
+//#if !DEBUG
+            LocalyticsBinding.Localytics.AutoIntegrate( GeneralConfig.iOS_Localytics_Key, options );
+//#endif
+
             // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 
             // force a portait layout.
             if ( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone && UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width )
@@ -86,7 +95,7 @@ namespace iOS
 
         // not guaranteed that this will run
         public override void WillTerminate(UIApplication application)
-        {
+        {   
             Rock.Mobile.Util.Debug.WriteLine("App is terminating.");
             Springboard.WillTerminate( );
         }

@@ -20,6 +20,8 @@ using Rock.Mobile.UI;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Rock.Mobile.Animation;
 using App.Shared.PrivateConfig;
+using System.IO;
+using Android.Media;
 
 namespace Droid
 {
@@ -145,21 +147,86 @@ namespace Droid
 
         public void Begin( string sourceImagePath, float cropAspectRatio )
         {
+            SourceImage = RotateDownsizeBitmap( sourceImagePath, 2048.0f );
+            CropAspectRatio = cropAspectRatio;
+        }
+
+        Bitmap RotateDownsizeBitmap( string imageFile, float size )
+        {
             // first see how big this image is.
             BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
             decodeOptions.InJustDecodeBounds = true;
-            BitmapFactory.DecodeFile( sourceImagePath, decodeOptions );
+            BitmapFactory.DecodeFile( imageFile, decodeOptions );
 
-            // now limit its size to 2k x 2k
-            float scaleFactor = (float)decodeOptions.OutWidth / 2048.0f;
+            // now limit its size to 'size'
+            float scaleFactor = (float)decodeOptions.OutWidth / size;
             if ( scaleFactor > 1.00f )
             {
                 decodeOptions.InSampleSize = (int)System.Math.Ceiling( scaleFactor );
             }
+            else
+            {
+                scaleFactor = (float)decodeOptions.OutHeight / size;
+                if ( scaleFactor > 1.00f )
+                {
+                    decodeOptions.InSampleSize = (int)System.Math.Ceiling( scaleFactor );
+                }
+            }
 
             decodeOptions.InJustDecodeBounds = false;
-            SourceImage = BitmapFactory.DecodeFile( sourceImagePath, decodeOptions );
-            CropAspectRatio = cropAspectRatio;
+
+            // Open the bitmap
+            Bitmap sourceBmp = BitmapFactory.DecodeFile( imageFile, decodeOptions );
+
+            // does the image need to be rotated?
+            Java.IO.File javaImageFile = new Java.IO.File( imageFile );
+
+            int neededRotation = NeededRotation( javaImageFile );
+            if ( neededRotation != 0 )
+            {
+                // create a rotation matrix to orient the picture "up"
+                Matrix transform = new Matrix();
+                transform.PostRotate( neededRotation );
+
+                // re-create the bitmap rotated.
+                Bitmap rotatedBmp = Bitmap.CreateBitmap( sourceBmp, 0, 0, sourceBmp.Width, sourceBmp.Height, transform, true );
+
+                // release our refs to the bmps
+                sourceBmp.Dispose( );
+                sourceBmp = null;
+
+                return rotatedBmp;
+            }
+            else
+            {
+                return sourceBmp;
+            }
+        }
+
+        int NeededRotation(Java.IO.File ff)
+        {
+            try
+            {
+                // extract the header info
+                ExifInterface exif = new ExifInterface( ff.AbsolutePath );
+
+                // determine how we should rotate the image
+                int orientation = exif.GetAttributeInt( ExifInterface.TagOrientation, 0 );
+                switch( orientation )
+                {
+                    case 3: return 180;
+                    case 6: return 90;
+                    case 8: return 270;
+                }
+
+                return 0;
+
+            } 
+            catch (Exception )
+            {
+            }
+
+            return 0;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

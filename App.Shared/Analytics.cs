@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using App.Shared.Config;
 
-
 namespace App.Shared
 {
     namespace Analytics
@@ -78,12 +77,16 @@ namespace App.Shared
 
                     if ( GeneralConfig.Use_Analytics == true )
                     {
-#if !DEBUG
-                        System.Collections.Generic.Dictionary<string, string> attribs = new System.Collections.Generic.Dictionary<string, string>();
-                        attribs.Add( categoryObj.Name, action );
-
-                        Xamarin.Insights.Track( Name, attribs );
-#endif
+//#if !DEBUG
+                        #if __IOS__
+                            Foundation.NSDictionary nsAttribs = Foundation.NSDictionary.FromObjectAndKey( new Foundation.NSString( action ), new Foundation.NSString( categoryObj.Name ) );
+                            LocalyticsBinding.Localytics.TagEvent( Name, nsAttribs );
+                        #elif __ANDROID__
+                            System.Collections.Generic.Dictionary<string, string> attribs = new System.Collections.Generic.Dictionary<string, string>();
+                            attribs.Add( categoryObj.Name, action );
+                            Com.Localytics.Android.Localytics.TagEvent( Name, attribs );
+                        #endif
+//#endif
                     }
                 }
             }

@@ -126,6 +126,9 @@
     <Reference Include="PLCrashReporterUnifiedBinding">
       <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\PLCrashReporterUnifiedBinding.dll</HintPath>
     </Reference>
+    <Reference Include="iOSLocalytics">
+      <HintPath>..\Libs\iOSLocalytics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Assets\Fonts\Bevan.ttf">

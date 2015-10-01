@@ -68,6 +68,9 @@
     <Reference Include="Xamarin.Insights">
       <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
     </Reference>
+    <Reference Include="AndroidLocalytics">
+      <HintPath>..\Libs\AndroidLocalytics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -389,11 +392,11 @@
     <AndroidAsset Include="..\Assets\oobe_splash_bg_high.png">
       <Link>Assets\oobe_splash_bg_high.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\oobe_splash_bg_Xhigh.png">
-      <Link>Assets\oobe_splash_bg_Xhigh.png</Link>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg_xhigh.png">
+      <Link>Assets\oobe_splash_bg_xhigh.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\oobe_splash_bg_XXhigh.png">
-      <Link>Assets\oobe_splash_bg_XXhigh.png</Link>
+    <AndroidAsset Include="..\Assets\oobe_splash_bg_xxhigh.png">
+      <Link>Assets\oobe_splash_bg_xxhigh.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using RestSharp;
 using App.Shared.Config;
 using Rock.Mobile.IO;
 using MobileApp;
+using Rock.Mobile.Util.Strings;
 
 namespace App
 {
@@ -321,9 +322,9 @@ namespace App
                                                                                       detailUrlLaunchesBrowser,
                                                                                       includeImpersonationToken,
                                                                                       imageUrl, 
-                                                                                      item.Title + "_main.png", 
+                                                                                      item.Title.AsLegalFilename( ) + "_main.png", 
                                                                                       bannerUrl, 
-                                                                                      item.Title + "_banner.png", 
+                                                                                      item.Title.AsLegalFilename( ) + "_banner.png", 
                                                                                       campusGuids );
 
                                                     // do a quick check and see if this should be flagged 'private'

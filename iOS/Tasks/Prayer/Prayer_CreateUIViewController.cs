@@ -515,7 +515,7 @@ namespace iOS
             PickerAdjustManager.LayoutChanged( );
             PickerAdjustManager.TogglePicker( false, false );
 
-            ScrollView.Frame = View.Frame;
+            ScrollView.Bounds = View.Bounds;
 
             FirstName.SetFrame( new CGRect( -10, 25, View.Bounds.Width + 20, 33 ) );
             LastName.SetFrame( new CGRect( -10, FirstName.Background.Frame.Bottom, View.Bounds.Width + 20, 33 ) );

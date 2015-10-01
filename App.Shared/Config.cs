@@ -73,6 +73,9 @@ namespace App
                 /// </summary>
                 public const string iOS_Xamarin_Insights_Key = "0ddb3228fc1eb8272392278ae7d73aa64bb535a5";
                 public const string Droid_Xamarin_Insights_Key = "4d2a2e4245f141dad44ee3f8e89fb2370dfab628";
+
+                public const string iOS_Localytics_Key = "ba64af94d379a0e732e4ffe-0841c882-67b7-11e5-bef4-0013a62af900";
+                public const string Droid_Localytics_Key = "ba64af94d379a0e732e4ffe-0841c882-67b7-11e5-bef4-0013a62af900";
             }
 
             public class SpringboardConfig
