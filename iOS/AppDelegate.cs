@@ -35,7 +35,12 @@ namespace iOS
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
 #if !DEBUG
-            LocalyticsBinding.Localytics.AutoIntegrate( GeneralConfig.iOS_Localytics_Key, options );
+            //LocalyticsBinding.Localytics.AutoIntegrate( GeneralConfig.iOS_Localytics_Key, options );
+            LocalyticsBinding.Localytics.Integrate( GeneralConfig.iOS_Localytics_Key );
+            if( app.ApplicationState != UIApplicationState.Background )
+            {
+                LocalyticsBinding.Localytics.OpenSession( );
+            }
 #endif
 
             // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 
@@ -73,12 +78,18 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine("OnActivated called, App is active.");
 
             Springboard.OnActivated( );
+
+            LocalyticsBinding.Localytics.OpenSession( );
+            LocalyticsBinding.Localytics.Upload( );
         }
         public override void WillEnterForeground(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("App will enter foreground");
 
             Springboard.WillEnterForeground( );
+
+            LocalyticsBinding.Localytics.OpenSession( );
+            LocalyticsBinding.Localytics.Upload( );
         }
         public override void OnResignActivation(UIApplication application)
         {
@@ -91,6 +102,9 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine("App entering background state.");
 
             Springboard.DidEnterBackground( );
+
+            LocalyticsBinding.Localytics.CloseSession( );
+            LocalyticsBinding.Localytics.Upload( );
         }
 
         // not guaranteed that this will run
