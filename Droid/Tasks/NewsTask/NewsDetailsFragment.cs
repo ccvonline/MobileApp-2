@@ -79,6 +79,16 @@ namespace Droid
                     description.MovementMethod = new ScrollingMovementMethod();
                     ControlStyling.StyleUILabel( description, ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
 
+                    // if we're in developer mode, add the start / end times for this promotion
+                    if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                    {
+                        // if we're in developer mode, add the start / end times for this promotion
+                        if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                        {
+                            description.Text += NewsItem.GetDeveloperInfo( );
+                        }
+                    }
+
                     Button launchUrlButton = view.FindViewById<Button>(Resource.Id.news_details_launch_url);
                     launchUrlButton.Click += (object sender, EventArgs e) => 
                         {

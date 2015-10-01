@@ -83,7 +83,7 @@ namespace iOS
                     cell.ContentView.Layer.Contents = ImagePlaceholder.CGImage;
                 }
 
-                cell.PrivateOverlay.Hidden = !News[ indexPath.Row ].News.Private;
+                cell.PrivateOverlay.Hidden = !News[ indexPath.Row ].News.Developer_Private;
 
                 // scale down the image to the width of the device
                 nfloat imageWidth = cell.ContentView.Layer.Contents.Width;
@@ -203,7 +203,7 @@ namespace iOS
                     cell.ContentView.Layer.Contents = HeaderImagePlaceholder.CGImage;
                 }
 
-                cell.PrivateOverlay.Hidden = !News[ 0 ].News.Private;
+                cell.PrivateOverlay.Hidden = !News[ 0 ].News.Developer_Private;
 
 
                 // scale down the image to the width of the device
@@ -252,7 +252,7 @@ namespace iOS
                         cell.LeftImage.Image = ImagePlaceholder;
                     }
 
-                    cell.LeftPrivateOverlay.Hidden = !News[ leftImageIndex ].News.Private;
+                    cell.LeftPrivateOverlay.Hidden = !News[ leftImageIndex ].News.Developer_Private;
                 }
                 else
                 {
@@ -273,7 +273,7 @@ namespace iOS
                         cell.RightImage.Image = ImagePlaceholder;
                     }
 
-                    cell.RightPrivateOverlay.Hidden = !News[ rightImageIndex ].News.Private;
+                    cell.RightPrivateOverlay.Hidden = !News[ rightImageIndex ].News.Developer_Private;
                 }
                 else
                 {

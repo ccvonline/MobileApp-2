@@ -77,7 +77,7 @@ namespace App.Shared
 
                     if ( GeneralConfig.Use_Analytics == true )
                     {
-//#if !DEBUG
+#if !DEBUG
                         #if __IOS__
                             Foundation.NSDictionary nsAttribs = Foundation.NSDictionary.FromObjectAndKey( new Foundation.NSString( action ), new Foundation.NSString( categoryObj.Name ) );
                             LocalyticsBinding.Localytics.TagEvent( Name, nsAttribs );
@@ -86,7 +86,7 @@ namespace App.Shared
                             attribs.Add( categoryObj.Name, action );
                             Com.Localytics.Android.Localytics.TagEvent( Name, attribs );
                         #endif
-//#endif
+#endif
                     }
                 }
             }

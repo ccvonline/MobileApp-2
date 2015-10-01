@@ -77,8 +77,8 @@ namespace Droid
                                 if ( newsItem.CampusGuids.Contains( viewingCampusGuid ) || newsItem.CampusGuids.Count == 0 )
                                 {
                                     // Limit the amount of news to display to MaxNews so we don't show so many we
-                                    // run out of memory
-                                    if( News.Count < PrivateNewsConfig.MaxNews )
+                                    // run out of memory. If DEVELOPER MODE is on, show them all.
+                                    if( News.Count < PrivateNewsConfig.MaxNews || App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                                     {
                                         News.Add( new RockNews( newsItem ) );
                                     }

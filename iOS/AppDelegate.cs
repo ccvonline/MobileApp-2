@@ -34,9 +34,9 @@ namespace iOS
         //
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
-//#if !DEBUG
+#if !DEBUG
             LocalyticsBinding.Localytics.AutoIntegrate( GeneralConfig.iOS_Localytics_Key, options );
-//#endif
+#endif
 
             // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 
             // force a portait layout.

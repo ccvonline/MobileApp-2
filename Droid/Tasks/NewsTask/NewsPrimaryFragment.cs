@@ -82,7 +82,7 @@ namespace Droid
                             listItem.Billboard.SetImageBitmap( null );
                         }
 
-                        if ( ParentFragment.News[ position ].News.Private )
+                        if ( ParentFragment.News[ position ].News.Developer_Private )
                         {
                             listItem.PrivateOverlay.Visibility = ViewStates.Visible;
                         }
@@ -195,7 +195,7 @@ namespace Droid
                             listItem.Billboard.SetImageBitmap( null );
                         }
 
-                        if ( ParentFragment.News[ position ].News.Private )
+                        if ( ParentFragment.News[ position ].News.Developer_Private )
                         {
                             listItem.PrivateOverlay.Visibility = ViewStates.Visible;
                         }
@@ -264,7 +264,7 @@ namespace Droid
                             seriesItem.LeftImage.SetImageBitmap( null );
                         }
 
-                        if ( ParentFragment.News[ leftImageIndex ].News.Private )
+                        if ( ParentFragment.News[ leftImageIndex ].News.Developer_Private )
                         {
                             seriesItem.LeftPrivateOverlay.Visibility = ViewStates.Visible;
                         }
@@ -305,7 +305,7 @@ namespace Droid
                             seriesItem.RightImage.SetImageBitmap( null );
                         }
 
-                        if ( ParentFragment.News[ rightImageIndex ].News.Private )
+                        if ( ParentFragment.News[ rightImageIndex ].News.Developer_Private )
                         {
                             seriesItem.RightPrivateOverlay.Visibility = ViewStates.Visible;
                         }

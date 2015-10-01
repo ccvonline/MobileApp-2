@@ -29,10 +29,10 @@ namespace Droid
 
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
 
-            //#if !DEBUG
+            #if !DEBUG
             LocalyticsActivityLifecycleCallbacks callback = new LocalyticsActivityLifecycleCallbacks( this );
             RegisterActivityLifecycleCallbacks( callback );
-            //#endif
+            #endif
         }
     }
     

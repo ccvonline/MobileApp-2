@@ -85,7 +85,18 @@ namespace App
                     {
                         // guard against old, bad values.
                         Rock.Client.Campus campusObj = Campuses.Find( c => c.Id == campusId );
-                        return campusObj != null ? campusObj.Name : Campuses[ 0 ].Name;
+                        return campusObj != null ? campusObj.Name : "";
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a campus' guid to its name
+                    /// </summary>
+                    /// <returns>The identifier to name.</returns>
+                    public string CampusGuidToName( Guid campusGuid )
+                    {
+                        // guard against old, bad values.
+                        Rock.Client.Campus campusObj = Campuses.Find( c => c.Guid == campusGuid );
+                        return campusObj != null ? campusObj.Name : "";
                     }
 
                     /// <summary>

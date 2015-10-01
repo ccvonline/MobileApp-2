@@ -93,6 +93,12 @@ namespace iOS
                     } );
             }
 
+            // if we're in developer mode, add the start / end times for this promotion
+            if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+            {
+                NewsDescription.Text += NewsItem.GetDeveloperInfo( );
+            }
+
 
             // finally setup the Learn More button
             LearnMoreButton = UIButton.FromType( UIButtonType.System );

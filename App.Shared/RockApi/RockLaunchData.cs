@@ -272,77 +272,80 @@ namespace App
                                     // parse and take the new items
                                     foreach( Rock.Client.ContentChannelItem item in model )
                                     {
-                                        // allow the item if it's public OR DEVELOPER MODE IS ON
-                                        bool newsPublic = IsNewsPublic( item );
-                                        if( newsPublic || RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                                        // it's possible rock sent us bad data, so guard against any incomplete news items
+                                        if( item.AttributeValues != null )
                                         {
-                                            // it's possible rock sent us bad data, so guard against any incomplete news items
-                                            if( item.AttributeValues != null )
+                                            // we do this so we can store it on the stack and print it out if there's an exception.
+                                            string currKey = "";
+
+                                            try
                                             {
-                                                // we do this so we can store it on the stack and print it out if there's an exception.
-                                                string currKey = "";
+                                                currKey = "FeatureImage";
+                                                string featuredGuid = item.AttributeValues[ currKey ].Value;
+                                                string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
 
-                                                try
+                                                currKey = "PromotionImage";
+                                                string bannerGuid = item.AttributeValues[ currKey ].Value;
+                                                string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
+
+                                                currKey = "DetailsURL";
+                                                string detailUrl = item.AttributeValues[ currKey ].Value;
+
+                                                currKey = "DetailsURLLaunchesBrowser";
+                                                bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ currKey ].Value );
+
+                                                currKey = "IncludeImpersonationToken";
+                                                bool includeImpersonationToken = bool.Parse( item.AttributeValues[ currKey ].Value );
+
+                                                // take a list of the campuses that this news item should display for
+                                                // (if the list is blank, we'll show it for all campuses)
+                                                currKey = "Campuses";
+
+                                                List<Guid> campusGuids = new List<Guid>( );
+                                                if( item.AttributeValues[ currKey ] != null && string.IsNullOrEmpty( item.AttributeValues[ currKey ].Value ) == false )
                                                 {
-                                                    currKey = "FeatureImage";
-                                                    string featuredGuid = item.AttributeValues[ currKey ].Value;
-                                                    string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
-
-                                                    currKey = "PromotionImage";
-                                                    string bannerGuid = item.AttributeValues[ currKey ].Value;
-                                                    string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
-
-                                                    currKey = "DetailsURL";
-                                                    string detailUrl = item.AttributeValues[ currKey ].Value;
-
-                                                    currKey = "DetailsURLLaunchesBrowser";
-                                                    bool detailUrlLaunchesBrowser = bool.Parse( item.AttributeValues[ currKey ].Value );
-
-                                                    currKey = "IncludeImpersonationToken";
-                                                    bool includeImpersonationToken = bool.Parse( item.AttributeValues[ currKey ].Value );
-
-                                                    // take a list of the campuses that this news item should display for
-                                                    // (if the list is blank, we'll show it for all campuses)
-                                                    currKey = "Campuses";
-
-                                                    List<Guid> campusGuids = new List<Guid>( );
-                                                    if( item.AttributeValues[ currKey ] != null && string.IsNullOrEmpty( item.AttributeValues[ currKey ].Value ) == false )
+                                                    // this will be a comma-dilimited list of campuses to use for the news
+                                                    string[] campusGuidList = item.AttributeValues[ currKey ].Value.Split( ',' );
+                                                    foreach( string campusGuid in campusGuidList )
                                                     {
-                                                        // this will be a comma-dilimited list of campuses to use for the news
-                                                        string[] campusGuidList = item.AttributeValues[ currKey ].Value.Split( ',' );
-                                                        foreach( string campusGuid in campusGuidList )
-                                                        {
-                                                            campusGuids.Add( Guid.Parse( campusGuid ) );
-                                                        }
+                                                        campusGuids.Add( Guid.Parse( campusGuid ) );
                                                     }
-
-                                                    RockNews newsItem = new RockNews( item.Title, 
-                                                                                      item.Content, 
-                                                                                      detailUrl, 
-                                                                                      detailUrlLaunchesBrowser,
-                                                                                      includeImpersonationToken,
-                                                                                      imageUrl, 
-                                                                                      item.Title.AsLegalFilename( ) + "_main.png", 
-                                                                                      bannerUrl, 
-                                                                                      item.Title.AsLegalFilename( ) + "_banner.png", 
-                                                                                      campusGuids );
-
-                                                    // do a quick check and see if this should be flagged 'private'
-                                                    newsItem.Private = !newsPublic;
-
-                                                    Data.News.Add( newsItem );
                                                 }
-                                                catch( Exception e )
-                                                {
-                                                    // one of the attribute values we wanted wasn't there. Package up what WAS there and report
-                                                    // the error. We can then use process of elimination to fix it.
-                                                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found is: {0}. Full Exception {1}", currKey, e ) );
+
+                                                RockNews newsItem = new RockNews( item.Title, 
+                                                                                  item.Content, 
+                                                                                  detailUrl, 
+                                                                                  detailUrlLaunchesBrowser,
+                                                                                  includeImpersonationToken,
+                                                                                  imageUrl, 
+                                                                                  item.Title.AsLegalFilename( ) + "_main.png", 
+                                                                                  bannerUrl, 
+                                                                                  item.Title.AsLegalFilename( ) + "_banner.png", 
+                                                                                  campusGuids );
+
+
+                                                // handle developer fields
+
+                                                // do a quick check and see if this should be flagged 'private'
+                                                bool newsPublic = IsNewsPublic( item );
+                                                newsItem.Developer_Private = !newsPublic;
+
+                                                newsItem.Developer_StartTime = item.StartDateTime;
+                                                newsItem.Developer_EndTime = item.ExpireDateTime;
+                                                newsItem.Developer_ItemStatus = item.Status;
+
+                                                Data.News.Add( newsItem );
+                                            }
+                                            catch( Exception e )
+                                            {
+                                                // one of the attribute values we wanted wasn't there. Package up what WAS there and report
+                                                // the error. We can then use process of elimination to fix it.
+                                                Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found is: {0}. Full Exception {1}", currKey, e ) );
 #if !DEBUG
-                                                    string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
-                                                    Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
-                                                    Xamarin.Insights.Report( reportException );
+                                                string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
+                                                Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
+                                                Xamarin.Insights.Report( reportException );
 #endif
-                                                }
                                             }
                                         }
                                     }
