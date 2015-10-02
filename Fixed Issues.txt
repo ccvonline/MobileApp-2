@@ -1,7 +1,0 @@
-Both
-News that is unpublished can now be viewed in Developer Mode.
-
-iOS
-
-Android
-Fixed a crash on certain devices when external storage was unavailable to the camera. 
