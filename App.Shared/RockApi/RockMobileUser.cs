@@ -507,7 +507,7 @@ namespace App
 
                 public void UpdateProfile( HttpRequest.RequestResult profileResult )
                 {
-                    ApplicationApi.UpdatePerson( Person, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                    ApplicationApi.UpdatePerson( Person, 0, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
@@ -643,7 +643,7 @@ namespace App
                 {
                     // unlike Profile and Address, it's possible they haven't selected a campus, in which
                     // case we don't want to update it.
-                    ApplicationApi.UpdateHomeCampus( PrimaryFamily, 
+                    ApplicationApi.UpdateHomeCampus( PrimaryFamily, 0,
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -696,7 +696,7 @@ namespace App
                         // that way if it fails, we can know to sync it on next run.
                         ProfileImageDirty = true;
 
-                        ApplicationApi.UploadSavedProfilePicture( Person, imageStream, 
+                        ApplicationApi.UploadSavedProfilePicture( Person, imageStream, 0, 
                             delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                             {
                                 // now we know that the profile image group was updated correctly, and that's the last step

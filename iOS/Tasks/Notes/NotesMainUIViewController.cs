@@ -757,6 +757,8 @@ namespace iOS
             NotesWatchUIViewController viewController = new NotesWatchUIViewController( );
             viewController.MediaUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].WatchUrl;
             viewController.ShareUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].ShareUrl;
+            viewController.Name = SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
+            viewController.AudioOnly = false;
 
             Task.PerformSegue( this, viewController );
         }

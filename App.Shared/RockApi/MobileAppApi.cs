@@ -121,7 +121,7 @@ namespace MobileApp
             else
             {
                 // send it to the server
-                ApplicationApi.AddOrUpdateCellPhoneNumber( person, phoneNumber, isNew,
+                ApplicationApi.AddOrUpdateCellPhoneNumber( person, phoneNumber, isNew, 0, 
                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                     {
                         if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -183,7 +183,7 @@ namespace MobileApp
             //4. Post the location, phone number and home campus
             person.Guid = Guid.NewGuid( );
 
-            RockApi.Post_People( person, 
+            RockApi.Post_People( person, 0, 
                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                 {
                     if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
@@ -203,7 +203,7 @@ namespace MobileApp
                                                 // now update their phone number, if valid
                                                 if( phoneNumber != null )
                                                 {
-                                                    ApplicationApi.AddOrUpdateCellPhoneNumber( createdPerson, phoneNumber, true,
+                                                    ApplicationApi.AddOrUpdateCellPhoneNumber( createdPerson, phoneNumber, true, 0, 
                                                         delegate(HttpStatusCode phoneStatusCode, string phoneStatusDescription) 
                                                         {
                                                             // NOTICE: We are passing back the loginStatus, not the phone status.

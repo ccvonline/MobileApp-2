@@ -35,7 +35,6 @@ namespace iOS
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
 #if !DEBUG
-            //LocalyticsBinding.Localytics.AutoIntegrate( GeneralConfig.iOS_Localytics_Key, options );
             LocalyticsBinding.Localytics.Integrate( GeneralConfig.iOS_Localytics_Key );
             if( app.ApplicationState != UIApplicationState.Background )
             {
@@ -78,9 +77,10 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine("OnActivated called, App is active.");
 
             Springboard.OnActivated( );
-
+#if !DEBUG
             LocalyticsBinding.Localytics.OpenSession( );
             LocalyticsBinding.Localytics.Upload( );
+#endif
         }
         public override void WillEnterForeground(UIApplication application)
         {
@@ -88,8 +88,10 @@ namespace iOS
 
             Springboard.WillEnterForeground( );
 
+#if !DEBUG
             LocalyticsBinding.Localytics.OpenSession( );
             LocalyticsBinding.Localytics.Upload( );
+#endif
         }
         public override void OnResignActivation(UIApplication application)
         {
@@ -103,8 +105,10 @@ namespace iOS
 
             Springboard.DidEnterBackground( );
 
+#if !DEBUG
             LocalyticsBinding.Localytics.CloseSession( );
             LocalyticsBinding.Localytics.Upload( );
+#endif
         }
 
         // not guaranteed that this will run
