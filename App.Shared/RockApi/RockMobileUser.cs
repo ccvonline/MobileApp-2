@@ -795,7 +795,6 @@ namespace App
                     // created at a point when we know we were sync'd with the server
                     // no longer matches our object, we should update it.
                     string currPersonJson = JsonConvert.SerializeObject( Person );
-                    //string currPhoneNumbersJson = _CellPhoneNumber != null ? JsonConvert.SerializeObject( _CellPhoneNumber ) : "";
                     string currPhoneNumbersJson = JsonConvert.SerializeObject( _CellPhoneNumber );
                     string currFamilyJson = JsonConvert.SerializeObject( PrimaryFamily );
                     string currAddressJson = JsonConvert.SerializeObject( PrimaryAddress );
@@ -803,7 +802,7 @@ namespace App
                     // assume things will work
                     System.Net.HttpStatusCode returnCode = System.Net.HttpStatusCode.OK;
 
-                    if( string.Compare( LastSyncdPersonJson, currPersonJson ) == 0 || 
+                    if( string.Compare( LastSyncdPersonJson, currPersonJson ) != 0 || 
                         string.Compare( LastSyncdCellPhoneNumberJson, currPhoneNumbersJson ) != 0 ||
                         string.Compare( LastSyncdFamilyJson, currFamilyJson ) != 0 ||
                         string.Compare( LastSyncdAddressJson, currAddressJson ) != 0 ||
@@ -871,7 +870,7 @@ namespace App
                                                     else
                                                     {
                                                         // return finished. just tell them OK, because it really doesn't matter if it worked or not.
-                                                            resultCallback( returnCode, "" );
+                                                        resultCallback( returnCode, "" );
                                                     }
                                                 });
                                         });
@@ -920,6 +919,13 @@ namespace App
                                     RockMobileUser loadedInstance = JsonConvert.DeserializeObject<RockMobileUser>( json ) as RockMobileUser;
                                     if( _Instance.Version == loadedInstance.Version )
                                     {
+                                        // hack to fix old data that used a null cell phone number. We can remove on the next build.
+                                        if( loadedInstance._CellPhoneNumber == null )
+                                        {
+                                            loadedInstance._CellPhoneNumber = new PhoneNumber( );
+                                            SetPhoneNumberDigits( "" );
+                                        }
+
                                         _Instance = loadedInstance;
                                     }
                                 }
