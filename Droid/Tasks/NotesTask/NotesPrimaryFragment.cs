@@ -746,7 +746,7 @@ namespace Droid
                                     // error
                                     ResultView.Show( MessagesStrings.Series_Error_Title, 
                                         PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                        MessagesStrings.Series_Error_Message, 
+                                        MessagesStrings.Series_Error_Message + "\n" + App.Shared.Network.RockLaunchData.HackNotesErrorCheck, 
                                         GeneralStrings.Retry );
                                 }
                             }

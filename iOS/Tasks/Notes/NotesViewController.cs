@@ -363,7 +363,7 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
         }
 
-        CGRect GetTappedTextFieldFrame( RectangleF textFrame )
+        /*CGRect GetTappedTextFieldFrame( RectangleF textFrame )
         {
             // first subtract the amount scrolled by the view.
             nfloat yPos = textFrame.Y - UIScrollView.ContentOffset.Y;
@@ -374,7 +374,7 @@ namespace iOS
             xPos += UIScrollView.Frame.X;
 
             return new CGRect( xPos, yPos, textFrame.Width, textFrame.Height );
-        }
+        }*/
 
         public override void ViewDidDisappear(bool animated)
         {

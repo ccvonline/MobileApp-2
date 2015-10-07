@@ -378,6 +378,9 @@ namespace App
                     return false;
                 }
 
+                // jhm hack: store the error so I can debug and figure this out.
+                public static string HackNotesErrorCheck = "";
+
                 public void GetNoteDB( HttpRequest.RequestResult resultCallback )
                 {
                     RequestingNoteDB = true;
@@ -424,7 +427,7 @@ namespace App
                                     }
                                 }
                             }
-                            else if ( noteModel == null )
+                            else if ( noteModel == null || noteModel.SeriesList.Count == 0 )
                             {
                                 statusDescription = "NoteDB downloaded but failed parsing.";
                                 statusCode = System.Net.HttpStatusCode.BadRequest;
@@ -436,9 +439,22 @@ namespace App
                                 {
                                     resultCallback( statusCode, statusDescription );
                                 }
+
+                                // jhm hack: store the error so I can debug and figure this out.
+                                if( noteModel == null )
+                                {
+                                    HackNotesErrorCheck = "Code 1";
+                                }
+                                else if ( noteModel.SeriesList.Count == 0 )
+                                {
+                                    HackNotesErrorCheck = "Code 2";
+                                }
                             }
                             else
                             {
+                                // jhm hack: store the error so I can debug and figure this out.
+                                HackNotesErrorCheck = "Code 3: " + statusCode;
+                                
                                 Rock.Mobile.Util.Debug.WriteLine( "NoteDB request failed." );
                                 RequestingNoteDB = false;
 

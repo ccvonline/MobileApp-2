@@ -405,7 +405,7 @@ namespace iOS
             ScrollView = new UIScrollViewWrapper();
             ScrollView.Layer.AnchorPoint = CGPoint.Empty;
             ScrollView.Parent = this;
-            ScrollView.Frame = View.Frame;
+            ScrollView.Bounds = View.Bounds;
             View.AddSubview( ScrollView );
 
             ScrollView.ScrollEnabled = false;
@@ -527,7 +527,7 @@ namespace iOS
         {
             base.LayoutChanged( );
 
-            ScrollView.Frame = View.Frame;
+            ScrollView.Bounds = View.Bounds;
 
             SearchPage.LayoutChanged( ScrollView.Frame.ToRectF( ) );
 

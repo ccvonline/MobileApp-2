@@ -39,7 +39,7 @@ namespace iOS
             ScrollView = new UIScrollViewWrapper();
             ScrollView.Layer.AnchorPoint = CGPoint.Empty;
             ScrollView.Parent = this;
-            ScrollView.Frame = View.Frame;
+            ScrollView.Bounds = View.Bounds;
             View.AddSubview( ScrollView );
 
             KeyboardAdjustManager = new KeyboardAdjustManager( View );

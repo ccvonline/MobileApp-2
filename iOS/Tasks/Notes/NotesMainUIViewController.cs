@@ -671,9 +671,10 @@ namespace iOS
                     }
                     else if ( IsVisible == true )
                     {
+                        // jhm hack : Show our stupid error message
                         ResultView.Show( MessagesStrings.Series_Error_Title, 
                                          PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                         MessagesStrings.Series_Error_Message, 
+                                         MessagesStrings.Series_Error_Message + "\n" + App.Shared.Network.RockLaunchData.HackNotesErrorCheck, 
                                          GeneralStrings.Retry );
                     }
                 });

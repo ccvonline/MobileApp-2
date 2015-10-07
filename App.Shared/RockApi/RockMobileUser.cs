@@ -108,12 +108,14 @@ namespace App
 
                 // This will return either their HOME campus if they're logged in, or their
                 // VIEWING campus if they're not.
+                // JHM 10-7: seems like this confuses people more. It now just returns the viewing campus.
                 public int GetRelevantCampus( )
                 {
-                    if ( LoggedIn && PrimaryFamily.CampusId.HasValue )
+                    // JHM 10-7: seems like this confuses people more.
+                    /*if ( LoggedIn && PrimaryFamily.CampusId.HasValue )
                     {
                         return PrimaryFamily.CampusId.Value;
-                    }
+                    }*/
 
                     return ViewingCampus;
                 }

@@ -50,7 +50,11 @@ namespace App
                 /// <summary>
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
+                #if DEBUG
+                public const string RockBaseUrl = "http://ccvdev.ccvonline.com/";
+                #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
+                #endif
 
                 /// <summary>
                 /// Defined in Rock, this should be generated ONCE at Rock's initial setup and then never changed.
@@ -61,7 +65,7 @@ namespace App
                 /// <summary>
                 /// The base URL to look for Notes.
                 /// </summary>
-                public const string NoteBaseURL = "http://ccv.church/ccvmobile/";
+                public const string NoteBaseURL = "http://ccv.church/content/mobileapp/";
 
                 /// <summary>
                 /// Set to true if you wish to use Analytics
