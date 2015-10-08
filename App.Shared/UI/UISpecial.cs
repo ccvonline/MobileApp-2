@@ -11,43 +11,6 @@ namespace App.Shared.UI
 {
     public class UISpecial
     {
-        public PlatformView View { get; set; }
-
-        public PlatformButton CloseButton { get; set; }
-
-        class Credit
-        {
-            public Credit( string message, string image, bool scaleImage, RectangleF frame, PlatformView parent )
-            {
-                MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( image );
-                logoStream.Position = 0;
-                Image = PlatformImageView.Create( scaleImage );
-                Image.AddAsSubview( parent.PlatformNativeObject );
-                Image.Image = logoStream;
-                Image.SizeToFit( );
-                Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
-                logoStream.Dispose( );
-
-                Label = PlatformLabel.Create( );
-                Label.Text = message;
-                Label.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
-                Label.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
-                Label.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
-                Label.TextColor = ControlStylingConfig.Label_TextColor;
-                Label.Bounds = new RectangleF( 0, 0, frame.Width * .75f, 0 );
-                Label.SizeToFit( );
-                Label.AddAsSubview( parent.PlatformNativeObject );
-            }
-            
-            public PlatformImageView Image { get; set; }
-            public PlatformLabel Label { get; set; }    
-        }
-        List<Credit> Credits { get; set; }
-
-        public UISpecial( )
-        {
-        }
-
         public static bool Trigger( string trigger, object arg1, object arg2, object arg3, object arg4 )
         {
             bool didTrigger = false;
@@ -62,23 +25,23 @@ namespace App.Shared.UI
                     Android.Widget.RelativeLayout relativeLayout = ((Android.Views.View)arg1).FindViewById<Android.Widget.RelativeLayout>( Droid.Resource.Id.relative_background );
                     RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetCurrentContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
 
-                    UISpecial special = new UISpecial();
-                    special.Create( relativeLayout, false, bounds, delegate
-                        {
-                            special.View.RemoveAsSubview( relativeLayout );
-                        } );
-                    special.LayoutChanged( bounds );
+                    UICredits credits = new UICredits();
+                    credits.Create( relativeLayout, false, bounds, delegate
+                    {
+                        credits.View.RemoveAsSubview( relativeLayout );
+                    } );
+                    credits.LayoutChanged( bounds );
                     #endif
 
                     #if __IOS__
                     RectangleF rectf = new RectangleF( (float)((UIKit.UIView)arg1).Frame.Left, (float)((UIKit.UIView)arg1).Frame.Top, (float)((UIKit.UIView)arg1).Frame.Width, (float)((UIKit.UIView)arg1).Frame.Height );
 
-                    UISpecial special = new UISpecial();
-                    special.Create( (UIKit.UIScrollView)arg2, true, rectf, delegate { special.View.RemoveAsSubview( (UIKit.UIScrollView)arg2 ); });
-                    special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)((UIKit.UIView)arg1).Bounds.Width, (float)((UIKit.UIScrollView)arg2).ContentSize.Height ) );
+                    UICredits credits = new UICredits();
+                    credits.Create( (UIKit.UIScrollView)arg2, true, rectf, delegate { credits.View.RemoveAsSubview( (UIKit.UIScrollView)arg2 ); });
+                    credits.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)((UIKit.UIView)arg1).Bounds.Width, (float)((UIKit.UIScrollView)arg2).ContentSize.Height ) );
 
                     ((UIKit.UIScrollView)arg2).ContentOffset = CoreGraphics.CGPoint.Empty;
-                    ((UIKit.UIScrollView)arg2).ContentSize = new CoreGraphics.CGSize( ((UIKit.UIView)arg1).Frame.Width, special.View.Frame.Height );
+                    ((UIKit.UIScrollView)arg2).ContentSize = new CoreGraphics.CGSize( ((UIKit.UIView)arg1).Frame.Width, credits.View.Frame.Height );
                     #endif
                     break;
                 }
@@ -122,9 +85,42 @@ namespace App.Shared.UI
                     DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/piggoat.mp4" );
                     break;
                 }
+
+                case "i want a pony":
+                {
+                    didTrigger = true;
+
+                    DoPicture( trigger, arg1, arg2, "pony.png" );
+                    break;
+                }
             }
 
             return didTrigger;
+        }
+
+        public static void DoPicture( string trigger, object arg1, object arg2, string imageName )
+        {
+            #if __ANDROID__
+            Android.Widget.RelativeLayout relativeLayout = ((Android.Views.View)arg1).FindViewById<Android.Widget.RelativeLayout>( Droid.Resource.Id.relative_background );
+            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, Droid.NavbarFragment.GetCurrentContainerDisplayWidth( ), ((Android.App.Fragment)arg2).Resources.DisplayMetrics.HeightPixels );
+
+            UIPony special = new UIPony();
+            special.Create( relativeLayout, false, imageName, bounds, delegate
+                {
+                    special.View.RemoveAsSubview( relativeLayout );
+                } );
+            special.LayoutChanged( bounds );
+            #endif
+            #if __IOS__
+            RectangleF rectf = new RectangleF( (float)((UIKit.UIView)arg1).Frame.Left, (float)((UIKit.UIView)arg1).Frame.Top, (float)((UIKit.UIView)arg1).Frame.Width, (float)((UIKit.UIView)arg1).Frame.Height );
+
+            UIPony special = new UIPony();
+            special.Create( (UIKit.UIScrollView)arg2, true, imageName, rectf, delegate { special.View.RemoveAsSubview( (UIKit.UIScrollView)arg2 ); });
+            special.LayoutChanged( new System.Drawing.RectangleF( 0, 0, (float)((UIKit.UIView)arg1).Bounds.Width, (float)((UIKit.UIScrollView)arg2).ContentSize.Height ) );
+
+            ((UIKit.UIScrollView)arg2).ContentOffset = CoreGraphics.CGPoint.Empty;
+            ((UIKit.UIScrollView)arg2).ContentSize = new CoreGraphics.CGSize( ((UIKit.UIView)arg1).Frame.Width, special.View.Frame.Height );
+            #endif
         }
 
         public static void DoVideo( string trigger, object arg1, object arg2, object arg3, object arg4, string url )
@@ -145,6 +141,148 @@ namespace App.Shared.UI
 
             ((iOS.Task)arg4).PerformSegue( (UIKit.UIViewController)arg3, viewController );
             #endif
+        }
+    }
+
+    public class UIPony
+    {
+        public PlatformView View { get; set; }
+        public PlatformImageView PonyImage { get; set; }
+
+        public PlatformButton CloseButton { get; set; }
+
+        public UIPony( )
+        {
+        }
+
+        public delegate void OnCompletion( );
+        OnCompletion OnCompletionCallback;
+
+        public void Create( object masterView, bool scaleImage, string imageName, RectangleF frame, OnCompletion onCompletion )
+        {
+            View = PlatformView.Create( );
+            View.BackgroundColor = ControlStylingConfig.BackgroundColor;
+            View.Frame = frame;
+            View.AddAsSubview( masterView );
+
+            MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( imageName );
+            logoStream.Position = 0;
+            PonyImage = PlatformImageView.Create( scaleImage );
+            PonyImage.AddAsSubview( View.PlatformNativeObject );
+            PonyImage.Image = logoStream;
+            PonyImage.SizeToFit( );
+            PonyImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+            logoStream.Dispose( );
+
+            CloseButton = PlatformButton.Create( );
+            CloseButton.AddAsSubview( View.PlatformNativeObject );
+            CloseButton.Text = "Prance! Dance! It's Magic Pony Time!";
+            CloseButton.BackgroundColor = PrayerConfig.PrayedForColor;
+            CloseButton.TextColor = ControlStylingConfig.Button_TextColor;
+            CloseButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
+            CloseButton.SizeToFit( );
+            CloseButton.ClickEvent = delegate(PlatformButton button) 
+                {
+                    OnCompletionCallback( );
+                };
+
+            OnCompletionCallback = onCompletion;
+        }
+
+        public void Destroy( )
+        {
+            // clean up resources (looking at you, Android)
+            PonyImage.Destroy( );
+        }
+
+
+        bool Animating { get; set; }
+
+        public void LayoutChanged( RectangleF frame )
+        {
+            View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
+
+            float currentYPos = Rock.Mobile.Graphics.Util.UnitToPx( 250 );
+            PonyImage.Frame = new RectangleF( ( ( View.Frame.Width - PonyImage.Frame.Width ) / 2 ), currentYPos, PonyImage.Bounds.Width, PonyImage.Frame.Height );
+
+            currentYPos = PonyImage.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 25 );
+            CloseButton.Frame = new RectangleF( ( ( View.Frame.Width - CloseButton.Frame.Width ) / 2 ), currentYPos, CloseButton.Bounds.Width, CloseButton.Bounds.Height );
+
+            View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
+
+            StartAnimation( );
+        }
+
+        void StartAnimation( )
+        {
+            if ( Animating == false )
+            {
+                Animating = true;
+
+                float startingYPos = PonyImage.Position.Y;
+
+                SimpleAnimator_Float animJump = new SimpleAnimator_Float( startingYPos, 50, 1.00f, 
+                    delegate(float percent, object value )
+                    {
+                        PonyImage.Position = new PointF( PonyImage.Position.X, (float)value );
+                    }, 
+                    delegate
+                    {
+                        SimpleAnimator_Float animFall = new SimpleAnimator_Float( PonyImage.Position.Y, startingYPos, 1.00f, 
+                            delegate(float percent, object value )
+                            {
+                                PonyImage.Position = new PointF( PonyImage.Position.X, (float)value );
+                            }, 
+                            delegate
+                            {
+                                Animating = false;
+                                StartAnimation( );
+                            });
+
+                        animFall.Start( SimpleAnimator.Style.CurveEaseIn );
+                    } );
+                animJump.Start( SimpleAnimator.Style.CurveEaseOut );
+            }
+        }
+    }
+
+    public class UICredits
+    {
+        public PlatformView View { get; set; }
+
+        public PlatformButton CloseButton { get; set; }
+
+        class Credit
+        {
+            public Credit( string message, string image, bool scaleImage, RectangleF frame, PlatformView parent )
+            {
+                MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( image );
+                logoStream.Position = 0;
+                Image = PlatformImageView.Create( scaleImage );
+                Image.AddAsSubview( parent.PlatformNativeObject );
+                Image.Image = logoStream;
+                Image.SizeToFit( );
+                Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+                logoStream.Dispose( );
+
+                Label = PlatformLabel.Create( );
+                Label.Text = message;
+                Label.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
+                Label.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
+                Label.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
+                Label.TextColor = ControlStylingConfig.Label_TextColor;
+                Label.Bounds = new RectangleF( 0, 0, frame.Width * .75f, 0 );
+                Label.SizeToFit( );
+                Label.AddAsSubview( parent.PlatformNativeObject );
+            }
+            
+            public PlatformImageView Image { get; set; }
+            public PlatformLabel Label { get; set; }    
+        }
+        List<Credit> Credits { get; set; }
+
+        public UICredits( )
+        {
         }
 
         public delegate void OnCompletion( );

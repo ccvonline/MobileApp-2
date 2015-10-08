@@ -398,6 +398,9 @@
     <AndroidAsset Include="..\Assets\oobe_splash_bg_xxhigh.png">
       <Link>Assets\oobe_splash_bg_xxhigh.png</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\pony.png">
+      <Link>Assets\pony.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

@@ -434,6 +434,9 @@
     <BundleResource Include="..\Assets\note_tutorial%403x.png">
       <Link>Resources\note_tutorial%403x.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Assets\pony.png">
+      <Link>Resources\pony.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
