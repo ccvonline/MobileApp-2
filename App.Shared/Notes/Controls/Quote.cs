@@ -340,12 +340,13 @@ namespace App
                     return ActiveUrl;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     htmlStream += "<q>" + QuoteLabel.Text + "&nbsp; - " + Citation.Text + "</q>";
+                    textStream += "\"" + QuoteLabel.Text + " - " + Citation.Text + "\"";
 
                     // handle user notes
-                    EmbedIntersectingUserNotes( ref htmlStream, userNotes );
+                    EmbedIntersectingUserNotes( ref htmlStream, ref textStream, userNotes );
                 }
 
                 public static bool ElementTagMatches(string elementTag)

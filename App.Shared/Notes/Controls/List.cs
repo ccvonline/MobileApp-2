@@ -297,7 +297,7 @@ namespace App
                     return ChildControls;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     /// add the appropriate list tag
                     if( ListType == ListTypeNumbered )
@@ -315,12 +315,12 @@ namespace App
                         // HTML will insert for us.
                         if( control as ListItem != null )
                         {
-                            control.BuildHTMLContent( ref htmlStream, userNotes );
+                            control.BuildHTMLContent( ref htmlStream, ref textStream, userNotes );
                         }
                     }
 
                     // handle user notes
-                    EmbedIntersectingUserNotes( ref htmlStream, userNotes );
+                    EmbedIntersectingUserNotes( ref htmlStream, ref textStream, userNotes );
 
                     if( ListType == ListTypeNumbered )
                     {

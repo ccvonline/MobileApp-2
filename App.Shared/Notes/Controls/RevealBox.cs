@@ -168,9 +168,10 @@ namespace App
                     return PlatformLabel;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     htmlStream += string.Format( "<U>{0}</U>", PlatformLabel.Text );
+                    textStream += PlatformLabel.Text;
                 }
 
                 public static bool ElementTagMatches(string elementTag)

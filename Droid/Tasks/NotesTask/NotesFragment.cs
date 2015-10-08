@@ -422,10 +422,11 @@ namespace Droid
                             string subject = string.Format( MessagesStrings.Read_Share_Notes, NoteName );
                             sendIntent.PutExtra( Intent.ExtraSubject, subject );
 
-                            string noteString = null;
-                            Note.GetNotesForEmail( out noteString );
+                            string htmlStream = null;
+                            string textStream = null;
+                            Note.GetNotesForEmail( out htmlStream, out textStream );
 
-                            sendIntent.PutExtra( Intent.ExtraText, Android.Text.Html.FromHtml( noteString ) );
+                            sendIntent.PutExtra( Intent.ExtraText, Android.Text.Html.FromHtml( htmlStream ) );
                             sendIntent.SetType( "text/html" );
                             StartActivity( sendIntent );
                         } );

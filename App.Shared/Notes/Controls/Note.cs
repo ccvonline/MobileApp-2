@@ -807,10 +807,11 @@ namespace App
                     }
                 }
 
-                public void GetNotesForEmail( out string htmlStream )
+                public void GetNotesForEmail( out string htmlStream, out string textStream )
                 {
                     // first setup the string that will contain the notes
                     htmlStream = "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<HTML><Body>\n";
+                    textStream = "";
 
                     // make a COPY of the user notes so the html stream generator can modify it
                     IUIControl[] userNotes = UserNoteControls.ToArray( );
@@ -826,8 +827,9 @@ namespace App
                     // provide the user note list so it can embed user notes in the appropriate spots.
                     foreach( IUIControl control in ChildControls )
                     {
-                        control.BuildHTMLContent( ref htmlStream, userNoteListCopy );
+                        control.BuildHTMLContent( ref htmlStream, ref textStream, userNoteListCopy );
                         htmlStream += "<br><br>";
+                        textStream += "\n\n";
                     }
 
                     // if there happened to be any user note that wasn't already added, drop it in at the bottom
@@ -835,9 +837,11 @@ namespace App
                     {
                         foreach( UserNote note in userNoteListCopy )
                         {
-                            note.BuildHTMLContent( ref htmlStream, null );
+                            note.BuildHTMLContent( ref htmlStream, ref textStream, null );
                         }
                     }
+
+                    htmlStream += "</Body></HTML>";
                 }
 
                 public float GetNoteAbsoluteHeight( )

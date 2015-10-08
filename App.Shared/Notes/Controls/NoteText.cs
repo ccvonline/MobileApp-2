@@ -137,8 +137,9 @@ namespace App
                     return PlatformLabel;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
+                    textStream += PlatformLabel.Text;
                     htmlStream += PlatformLabel.Text;
                 }
 

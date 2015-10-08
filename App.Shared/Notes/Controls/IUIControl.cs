@@ -37,7 +37,7 @@ namespace App
 
                 bool ShouldShowBulletPoint();
 
-                void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes );
+                void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes );
 
                 PlatformBaseUI GetPlatformControl( );
             }

@@ -325,14 +325,17 @@ namespace App
                     return Frame;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     htmlStream += "<h1>" + mTitle.Text + "</h1>" + 
                                   "<h3>" + mSpeaker.Text + "&nbsp;&nbsp;&nbsp;" + mDate.Text + "</h3>";
 
+                    textStream += mTitle.Text + "\n" +
+                                  mSpeaker.Text + " " + mDate.Text + "\n";
+                                 
 
                     // handle user notes
-                    EmbedIntersectingUserNotes( ref htmlStream, userNotes );
+                    EmbedIntersectingUserNotes( ref htmlStream, ref textStream, userNotes );
                 }
 
                 public static bool ElementTagMatches(string elementTag)

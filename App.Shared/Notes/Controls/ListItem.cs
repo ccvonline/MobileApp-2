@@ -145,18 +145,20 @@ namespace App
                     return ChildControls[0].ShouldShowBulletPoint( );
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     htmlStream += "<li>";
 
                     foreach( IUIControl control in ChildControls )
                     {
-                        control.BuildHTMLContent( ref htmlStream, userNotes );
+                        control.BuildHTMLContent( ref htmlStream, ref textStream, userNotes );
+
+                        textStream += "\n";
                         htmlStream += "<br>";
                     }
 
                     // handle user notes
-                    EmbedIntersectingUserNotes( ref htmlStream, userNotes );
+                    EmbedIntersectingUserNotes( ref htmlStream, ref textStream, userNotes );
 
                     // closing markup
                     htmlStream += "</li>";

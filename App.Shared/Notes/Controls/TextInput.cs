@@ -180,10 +180,12 @@ namespace App
                     TryRemoveDebugLayer( obj );
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
+                    textStream += TextView.Text;
                     htmlStream += TextView.Text;
                 }
+
                 public override PlatformBaseUI GetPlatformControl()
                 {
                     return TextView;

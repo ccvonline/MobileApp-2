@@ -313,16 +313,18 @@ namespace App
                     return false;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     foreach( IUIControl control in ChildControls )
                     {
-                        control.BuildHTMLContent( ref htmlStream, userNotes );
+                        control.BuildHTMLContent( ref htmlStream, ref textStream, userNotes );
+
                         htmlStream += "<br><br>";
+                        textStream += "\n\n";
                     }
 
                     // handle user notes
-                    EmbedIntersectingUserNotes( ref htmlStream, userNotes );
+                    EmbedIntersectingUserNotes( ref htmlStream, ref textStream, userNotes );
                 }
 
                 public static bool ElementTagMatches(string elementTag)

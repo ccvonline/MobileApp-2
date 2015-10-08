@@ -37,7 +37,7 @@ namespace iOS
         {
             // transform the point into absolute coords (as if there was no scrolling)
             CGPoint absolutePoint = new CGPoint( ( point.X - ContentOffset.X ) + Frame.Left,
-                                               ( point.Y - ContentOffset.Y ) + Frame.Top );
+                                                 ( point.Y - ContentOffset.Y ) + Frame.Top );
 
             if ( Frame.Contains( absolutePoint ) )
             {
@@ -445,25 +445,55 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer ON" );
         }
 
+        public class ExportedNoteSource : UIActivityItemSource
+        {
+            public NSString TextStream { get; set; }
+            public NSString HTMLStream { get; set; }
+
+            public override string GetDataTypeIdentifierForActivity(UIActivityViewController activityViewController, NSString activityType)
+            {
+                // let iOS know that we can offer it as simply as plan text.
+                return "public.plain-text";
+            }
+
+            public override NSObject GetItemForActivity(UIActivityViewController activityViewController, NSString activityType)
+            {
+                // if it's the mail app, use HTML so it's fancy!
+                if ( activityType == UIActivityType.Mail )
+                {
+                    return HTMLStream;
+                }
+                else
+                {
+                    // offer everything else plan text.
+                    return TextStream;
+                }
+            }
+
+            public override NSObject GetPlaceholderData(UIActivityViewController activityViewController)
+            {
+                return TextStream;
+            }
+        }
+
         public void ShareNotes()
         {
             if ( Note != null )
             {
-                string emailNote;
-                Note.GetNotesForEmail( out emailNote );
+                string htmlStream;
+                string textStream;
+                Note.GetNotesForEmail( out htmlStream, out textStream );
 
-                var items = new NSObject[] { new NSString( emailNote ) };
+                ExportedNoteSource noteSource = new ExportedNoteSource();
+                noteSource.HTMLStream = new NSString( htmlStream );
+                noteSource.TextStream = new NSString( textStream );
+                var items = new NSObject[] { noteSource };
 
                 UIActivityViewController shareController = new UIActivityViewController( items, null );
 
+                // set the subject line in case the share to email
                 string emailSubject = string.Format( App.Shared.Strings.MessagesStrings.Read_Share_Notes, NoteName );
                 shareController.SetValueForKey( new NSString( emailSubject ), new NSString( "subject" ) );
-
-                shareController.ExcludedActivityTypes = new NSString[] { UIActivityType.PostToFacebook, 
-                                                                         UIActivityType.AirDrop, 
-                                                                         UIActivityType.PostToTwitter, 
-                                                                         UIActivityType.CopyToPasteboard,
-                                                                         UIActivityType.Message };
 
                 // if devices like an iPad want an anchor, set it
                 if ( shareController.PopoverPresentationController != null )

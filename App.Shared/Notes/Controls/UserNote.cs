@@ -922,11 +922,13 @@ namespace App
                     return fullFrame;
                 }
 
-                public override void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public override void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     if ( string.IsNullOrEmpty( TextView.Text ) == false )
                     {
                         htmlStream += string.Format( "<br><p><b>{0}", MessagesStrings.UserNote_Prefix ) + TextView.Text + "</b></p>";
+
+                        textStream += string.Format( "\n\n{0}", MessagesStrings.UserNote_Prefix ) + TextView.Text + "\n\n";
                     }
                 }
 

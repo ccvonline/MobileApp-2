@@ -187,7 +187,7 @@ namespace App
                 {
                 }
 
-                public void EmbedIntersectingUserNotes( ref string htmlStream, List<IUIControl> userNotes )
+                public void EmbedIntersectingUserNotes( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                     // this will test to see if any notes in the userNotes list intersect
                     // the Y region of our bounding box. If any do, they will be embedded in the htmlStrea
@@ -210,7 +210,7 @@ namespace App
                         // if the user note is within the bounding vertical box of this control, embed it here
                         if( userNoteFrame.Y >= expandedFrame.Y && userNoteFrame.Y <= expandedFrame.Bottom )
                         {
-                            note.BuildHTMLContent( ref htmlStream, null );
+                            note.BuildHTMLContent( ref htmlStream, ref textStream, null );
 
                             // this note has been placed, so remove it from the list.
                             userNotes.Remove( userNotes[ i ] );
@@ -285,7 +285,7 @@ namespace App
                     return null;
                 }
 
-                public virtual void BuildHTMLContent( ref string htmlStream, List<IUIControl> userNotes )
+                public virtual void BuildHTMLContent( ref string htmlStream, ref string textStream, List<IUIControl> userNotes )
                 {
                 }
 
