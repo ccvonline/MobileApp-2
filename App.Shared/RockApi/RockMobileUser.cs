@@ -706,6 +706,8 @@ namespace App
                                 {
                                     // so now we can finally flag everything as good
                                     ProfileImageDirty = false;
+
+                                    SaveToDevice( );
                                 }
 
                                 if ( result != null )
