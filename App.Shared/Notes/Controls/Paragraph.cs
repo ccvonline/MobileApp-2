@@ -160,18 +160,17 @@ namespace App
                         {
                             case XmlNodeType.Element:
                             {
-                                // don't allow notes to 
                                 IUIControl control = Parser.TryParseControl( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), reader );
                                 if ( control != null )
                                 {
-                                    // if the last control was a reveal, then we have two in a row. So place a space between them!
+                                    // if the last control was an element (NoteText or Reveal), then we have two in a row. So place a space between them!
                                     if ( lastControlWasElement )
                                     {
                                         NoteText textLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), " " );
                                         ChildControls.Add( textLabel );
                                     }
 
-                                    // only allow RevealBoxes as children.
+                                    // only allow RevealBoxes / NoteText as children.
                                     if ( control as RevealBox == null && control as NoteText == null )
                                     {
                                         throw new Exception( String.Format( "Paragraph only supports children of type <RevealBox> or <NoteText>. Found <{0}>", control.GetType( ) ) );
