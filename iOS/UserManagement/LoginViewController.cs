@@ -566,15 +566,15 @@ namespace iOS
             }
         }
 
-        public void ProfileComplete(System.Net.HttpStatusCode code, string desc, Rock.Client.Person model) 
+        public void ProfileComplete(System.Net.HttpStatusCode code, string desc) 
         {
             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                 {
-                    UIThread_ProfileComplete( code, desc, model );
+                    UIThread_ProfileComplete( code, desc );
                 } );
         }
 
-        void UIThread_ProfileComplete( System.Net.HttpStatusCode code, string desc, Rock.Client.Person model ) 
+        void UIThread_ProfileComplete( System.Net.HttpStatusCode code, string desc ) 
         {
             switch ( code )
                 {
@@ -604,15 +604,15 @@ namespace iOS
                 }
         }
 
-        public void AddressComplete( System.Net.HttpStatusCode code, string desc, List<Rock.Client.Group> model )
+        public void AddressComplete( System.Net.HttpStatusCode code, string desc )
         {
             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                 {
-                    UIThread_AddressComplete( code, desc, model );
+                    UIThread_AddressComplete( code, desc );
                 } );
         }
 
-        void UIThread_AddressComplete( System.Net.HttpStatusCode code, string desc, List<Rock.Client.Group> model ) 
+        void UIThread_AddressComplete( System.Net.HttpStatusCode code, string desc ) 
         {
             BlockerView.Hide( delegate
                 {

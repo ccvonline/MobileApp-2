@@ -179,13 +179,6 @@ namespace Droid
         public bool EnableBack { get; set; }
 
         /// <summary>
-        /// Stores the time of the last rock sync.
-        /// If the user has left our app running > 24 hours we'll redownload
-        /// </summary>
-        /// <value>The last rock sync.</value>
-        DateTime LastRockSync { get; set; }
-
-        /// <summary>
         /// True if we've run the splash intro.
         /// </summary>
         bool IsSplashDone { get; set; }
@@ -280,14 +273,9 @@ namespace Droid
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Loading objects from device." ) );
             RockNetworkManager.Instance.LoadObjectsFromDevice( );
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Loading objects done." ) );
-
-            // seed the last sync time with now, so that when OnResume gets called we don't do it again.
-            LastRockSync = DateTime.Now;
-
-            SyncRockData( );
         }
 
-        void SyncRockData( )
+        void OnActivated_SyncRockData( )
         {
             SeriesInfoDownloaded = false;
 
@@ -301,7 +289,8 @@ namespace Droid
                 },
                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                 {
-                    LastRockSync = DateTime.Now;
+                    // refresh the login state in case their profile info is new (maybe it was updated in Rock)
+                    UpdateLoginState( );
 
                     //If the OOBE isn't running
                     if( IsOOBERunning == false )
@@ -405,6 +394,11 @@ namespace Droid
                     // if we're logged in, it'll be the profile one
                     if( RockMobileUser.Instance.LoggedIn == true )
                     {
+                        // Because we aren't syncing RIGHT HERE, Rock data could technically be overwritten.
+                        // If WHILE they're running the app, their data is updated in Rock, those changes will
+                        // be lost when they submit their profile changes.
+                        // But, the odds that Rock data will update WHILE THE APP IS RUNNING, and they then decide to
+                        // update their profile without having even backgrounded the app, are extremely low.
                         StartModalFragment( ProfileFragment );
                     }
                     else
@@ -864,17 +858,7 @@ namespace Droid
 
             Rock.Mobile.Util.Debug.WriteLine( "Springboard OnResume()" );
 
-            // if it's been longer than N hours, resync rock.
-            // JHM 4-27-15: Now we will always sync on resume. We do this to avoid issues like Christopher had,
-            // where he ran the app early Saturday, and then didn't see the sermon notes Saturday evening.
-            //if ( DateTime.Now.Subtract( LastRockSync ).TotalHours > SpringboardConfig.SyncRockHoursFrequency )
-            {
-                SyncRockData( );
-            }
-            /*else
-            {
-                RockLaunchData.Instance.GetNoteDB( null );
-            }*/
+            OnActivated_SyncRockData( );
 
             // refresh the viewing campus
             RefreshCampusSelection( );
