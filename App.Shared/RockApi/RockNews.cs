@@ -27,6 +27,8 @@ namespace App
 
                 public bool IncludeImpersonationToken { get; set; }
 
+                public bool SkipDetailsPage { get; set; }
+
                 public List<Guid> CampusGuids { get; set; }
 
                 // Set at runtime based on developer conditions
@@ -40,6 +42,7 @@ namespace App
                 public RockNews( string title, 
                                  string description, 
                                  string referenceUrl, 
+                                 bool skipDetailsPage,
                                  bool referenceUrlLaunchesBrowser, 
                                  bool includeImpersonationToken, 
                                  string imageUrl, 
@@ -53,6 +56,8 @@ namespace App
                     ReferenceURL = referenceUrl;
 
                     ReferenceUrlLaunchesBrowser = referenceUrlLaunchesBrowser;
+
+                    SkipDetailsPage = skipDetailsPage;
 
                     IncludeImpersonationToken = includeImpersonationToken;
 
@@ -73,6 +78,8 @@ namespace App
                     ReferenceURL = rhs.ReferenceURL;
 
                     ReferenceUrlLaunchesBrowser = rhs.ReferenceUrlLaunchesBrowser;
+
+                    SkipDetailsPage = rhs.SkipDetailsPage;
 
                     IncludeImpersonationToken = rhs.IncludeImpersonationToken;
 

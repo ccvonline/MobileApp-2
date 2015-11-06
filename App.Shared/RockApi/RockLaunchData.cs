@@ -52,6 +52,7 @@ namespace App
 
                             false,
                             false,
+                            false,
 
                             "",
                             NewsConfig.DefaultNews_A[ 3 ],
@@ -68,6 +69,7 @@ namespace App
 
                             NewsConfig.DefaultNews_B[ 2 ],
 
+                            false,
                             false,
                             false,
 
@@ -87,6 +89,7 @@ namespace App
 
                             NewsConfig.DefaultNews_C[ 2 ],
 
+                            false,
                             false,
                             false,
 
@@ -297,6 +300,9 @@ namespace App
                                                 currKey = "IncludeImpersonationToken";
                                                 bool includeImpersonationToken = bool.Parse( item.AttributeValues[ currKey ].Value );
 
+                                                currKey = "MobileAppSkipDetailsPage";
+                                                bool mobileAppSkipDetailsPage = bool.Parse( item.AttributeValues[ currKey ].Value );
+
                                                 // take a list of the campuses that this news item should display for
                                                 // (if the list is blank, we'll show it for all campuses)
                                                 currKey = "Campuses";
@@ -315,6 +321,7 @@ namespace App
                                                 RockNews newsItem = new RockNews( item.Title, 
                                                                                   item.Content, 
                                                                                   detailUrl, 
+                                                    mobileAppSkipDetailsPage,
                                                                                   detailUrlLaunchesBrowser,
                                                                                   includeImpersonationToken,
                                                                                   imageUrl, 

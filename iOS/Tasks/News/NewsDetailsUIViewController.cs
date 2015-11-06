@@ -105,49 +105,7 @@ namespace iOS
             View.AddSubview( LearnMoreButton );
             LearnMoreButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    // do we launch them out of the app?
-                    if ( NewsItem.ReferenceUrlLaunchesBrowser == true )
-                    {
-                        // should we get the impersonation token?
-                        if( NewsItem.IncludeImpersonationToken == true )
-                        {
-                            MobileAppApi.TryGetImpersonationToken( 
-                                delegate(string impersonationToken )
-                                {
-                                    // build the full url with their preferred campus (since thats personal data)
-                                    string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( NewsItem.ReferenceURL, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
-                                    // URL encode the value
-                                    NSString encodedUrlString = fullUrl.UrlEncode( );
-
-                                    // if we got a token, append it
-                                    NSUrl encodedUrl = null;
-                                    if( string.IsNullOrEmpty( impersonationToken ) == false )
-                                    {
-                                        encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
-                                    }
-                                    else
-                                    {
-                                        encodedUrl = new NSUrl( encodedUrlString );
-                                    }
-                                                                        
-                                    UIApplication.SharedApplication.OpenUrl( encodedUrl );
-                                });
-                        }
-                        else
-                        {
-                            // first encode the url
-                            NSString encodedUrlString = NewsItem.ReferenceURL.UrlEncode( );
-
-                            UIApplication.SharedApplication.OpenUrl( new NSUrl( encodedUrlString ) );
-                        }
-                    }
-                    // they are using an embedded browser, so this is pretty simple
-                    else
-                    {
-                        TaskWebViewController viewController = new TaskWebViewController( NewsItem.ReferenceURL, Task, NewsItem.IncludeImpersonationToken, false, true );
-                        Task.PerformSegue( this, viewController );
-                    }
+                    ((NewsTask)Task).HandleReferenceUrl( NewsItem, this );
                 };
 
             // if there's no URL associated with this news item, hide the learn more button.

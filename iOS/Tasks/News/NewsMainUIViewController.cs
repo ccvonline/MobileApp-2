@@ -573,10 +573,17 @@ namespace iOS
         {
             if ( row < News.Count )
             {
-                NewsDetailsUIViewController viewController = new NewsDetailsUIViewController();
-                viewController.NewsItem = News[ row ].News;
+                if ( News[ row ].News.SkipDetailsPage == true && string.IsNullOrEmpty( News[ row ].News.ReferenceURL ) == false )
+                {
+                    ((NewsTask)Task).HandleReferenceUrl( News[ row ].News, this );
+                }
+                else
+                {
+                    NewsDetailsUIViewController viewController = new NewsDetailsUIViewController();
+                    viewController.NewsItem = News[ row ].News;
 
-                Task.PerformSegue( this, viewController );
+                    Task.PerformSegue( this, viewController );
+                }
             }
         }
 	}
