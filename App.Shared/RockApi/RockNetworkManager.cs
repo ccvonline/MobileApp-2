@@ -43,7 +43,7 @@ namespace App
                                 Rock.Mobile.Util.Debug.WriteLine( "Logged in. Syncing out-of-sync data." );
 
                                 //( this includes notes, profile changes, etc.)
-                                RockMobileUser.Instance.SyncDirtyObjects( 
+                                RockMobileUser.Instance.TrySyncDirtyObjects( 
                                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
                                     {
                                         // IF THERE WAS A PROBLEM SYNCING, DO NOT PULL DOWN THE LATEST PROFILE.

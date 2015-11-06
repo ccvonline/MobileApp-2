@@ -542,7 +542,7 @@ namespace iOS
                         }
                     }
                 };
-
+            
             ViewProfileButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
                     // don't allow launching a model view controller unless the springboard is open.
@@ -550,6 +550,11 @@ namespace iOS
                     {
                         if( RockMobileUser.Instance.LoggedIn == true )
                         {
+                            // Because we aren't syncing RIGHT HERE, Rock data could technically be overwritten.
+                            // If WHILE they're running the app, their data is updated in Rock, those changes will
+                            // be lost when they submit their profile changes.
+                            // But, the odds that Rock data will update WHILE THE APP IS RUNNING, and they then decide to
+                            // update their profile without having even backgrounded the app, are extremely low.
                             PresentModalViewController( ProfileViewController );
                         }
                         else
@@ -570,9 +575,6 @@ namespace iOS
 
             // seed the last sync time with now, so that when OnActivated gets called we don't do it again.
             LastRockSync = DateTime.Now;
-
-            // don't sync here, because OnActivated will do it.
-            //SyncRockData( );
 
             // setup the Notification Banner for Taking Notes
             Billboard = new NotificationBillboard( View.Bounds.Width, View.Bounds.Height );
@@ -736,15 +738,13 @@ namespace iOS
                             }
 
                             // NOW go ahead and start downloads by forcing a campus selection (since they just picked it in the OOBE)
-                            //PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
-                            //PerformTaskAction( PrivateGeneralConfig.TaskAction_CampusChanged );
                             RefreshCampusSelection( true );
                         } );
                 };
             timer.Start( );
         }
 
-        void SyncRockData( )
+        void OnActivated_SyncRockData( )
         {
             SeriesInfoDownloaded = false;
 
@@ -767,6 +767,8 @@ namespace iOS
                         // Allow the news to update, and begin downloading all
                         // news and note images we need.
                         PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+
+                        View.SetNeedsLayout( );
                     }
                 });
         }
@@ -902,6 +904,11 @@ namespace iOS
                         DisplayError( SpringboardStrings.ProfilePicture_Error_Title, SpringboardStrings.ProfilePicture_Error_Message );
                     }
                 }
+            }
+            else if ( modelViewController == ProfileViewController )
+            {
+                // make sure we update the UI if they just finished editing their profile
+                View.SetNeedsLayout( );
             }
 
             modelViewController.DismissViewController( true, delegate
@@ -1332,7 +1339,7 @@ namespace iOS
             // where he ran the app early Saturday, and then didn't see the sermon notes Saturday evening.
             //if ( DateTime.Now.Subtract( LastRockSync ).TotalHours > SpringboardConfig.SyncRockHoursFrequency )
             {
-                SyncRockData( );
+                OnActivated_SyncRockData( );
                 UpdateLoginState( );
             }
         }
