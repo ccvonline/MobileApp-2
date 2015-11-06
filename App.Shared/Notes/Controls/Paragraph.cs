@@ -58,7 +58,6 @@ namespace App
                     base.Initialize( );
 
                     ChildControls = new List<IUIControl>( );
-
                     ChildHorzAlignment = Alignment.Inherit;
 
                     BorderView = PlatformView.Create( );
@@ -116,7 +115,6 @@ namespace App
                     // see if there's a URL we should care about
                     ActiveUrl = reader.GetAttribute( "Url" );
 
-
                     // now read what our children's alignment should be
                     // check for alignment
                     string result = reader.GetAttribute( "ChildAlignment" );
@@ -153,7 +151,7 @@ namespace App
                     }
 
                     bool removedLeadingWhitespace = false;
-                    bool lastControlWasReveal = false;
+                    bool lastControlWasElement = false;
 
                     bool finishedReading = false;
                     while( finishedReading == false && reader.Read( ) )
@@ -163,19 +161,19 @@ namespace App
                             case XmlNodeType.Element:
                             {
                                 IUIControl control = Parser.TryParseControl( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), reader );
-                                if( control != null )
+                                if ( control != null )
                                 {
-                                    // if the last control was a reveal, then we have two in a row. So place a space between them!
-                                    if ( lastControlWasReveal )
+                                    // if the last control was an element (NoteText or Reveal), then we have two in a row. So place a space between them!
+                                    if ( lastControlWasElement )
                                     {
                                         NoteText textLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), " " );
                                         ChildControls.Add( textLabel );
                                     }
 
-                                    // only allow RevealBoxes as children.
-                                    if( control as RevealBox == null )
+                                    // only allow RevealBoxes / NoteText as children.
+                                    if ( control as RevealBox == null && control as NoteText == null )
                                     {
-                                        throw new Exception( String.Format("Paragraph only supports children of type <RevealBox>. Found <{0}>", control.GetType()) );
+                                        throw new Exception( String.Format( "Paragraph only supports children of type <RevealBox> or <NoteText>. Found <{0}>", control.GetType( ) ) );
                                     }
                                     ChildControls.Add( control );
 
@@ -187,7 +185,7 @@ namespace App
                                     // flag that the last control placed was a reveal, so that
                                     // should we come across another one immediately, we know to insert a space
                                     // so they don't render concatenated.
-                                    lastControlWasReveal = true;
+                                    lastControlWasElement = true;
                                 }
                                 break;
                             }
@@ -220,10 +218,10 @@ namespace App
                                         // need the first label after that to have a leading space so it doesn't bunch up against
                                         // the control
                                         string nextWord = word;
-                                        if( lastControlWasReveal )
+                                        if( lastControlWasElement )
                                         {
                                             nextWord = word.Insert(0, " ");
-                                            lastControlWasReveal = false;
+                                            lastControlWasElement = false;
                                         }
 
                                         NoteText wordLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), nextWord + " " );
@@ -232,16 +230,7 @@ namespace App
                                     }
                                 }
 
-                                lastControlWasReveal = false;
-
-
-                                // Note - Treating the entire block of text as a single NoteText has an advantage and disadvantage.
-                                // The advantage is it's extremely fast. It causes note creation to go from 1500ms to about 800ms in debug.
-                                // The disadvantage is we can't have quite as precise word wrapping. So, if the ENTIRE block of text doesn't fit on the line,
-                                // it will be forced to the line below. This is extremely rare tho, and I've never seen it in normal notes.
-                                // If it does become an issue, we can revert to the slower code below.
-                                //NoteText textLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), text );
-                                //ChildControls.Add( textLabel );
+                                lastControlWasElement = false;
 
                                 break;
                             }
@@ -257,6 +246,24 @@ namespace App
                                 break;
                             }
                         }
+                    }
+
+                    // should we add a URL Glyph? We're gonna be clever and add it AS a NoteText, so that it integrates with the paragraph nicely.
+                    // now add our glyph, if relevant
+                    if ( string.IsNullOrEmpty( ActiveUrl ) == false )
+                    {
+                        // give the text a style that doesn't include things it shouldn't inherit
+                        Styles.Style textStyle = mStyle;
+                        textStyle.mBorderColor = 0;
+                        textStyle.mBorderRadius = 0;
+                        textStyle.mBorderWidth = 0;
+                        textStyle.mFont.mColor = NoteConfig.CitationUrl_IconColor;
+                        textStyle.mFont.mName = PrivateControlStylingConfig.Icon_Font_Secondary;
+                        textStyle.mFont.mSize = PrivateNoteConfig.CitationUrl_IconSize;
+                        textStyle.mAlignment = Alignment.Right;
+
+                        NoteText wordLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );
+                        ChildControls.Add( wordLabel );
                     }
 
 
@@ -359,8 +366,6 @@ namespace App
                     frame.Height += padding.Height + padding.Top + (borderPaddingPx * 2); //add in padding
                     frame.Width = bounds.Width;
 
-
-
                     // setup our bounding rect for the border
                     frame = new RectangleF( frame.X, 
                                             frame.Y,
@@ -442,7 +447,7 @@ namespace App
 
                     BorderView.Position = new PointF( BorderView.Position.X + xOffset,
                                                       BorderView.Position.Y + yOffset );
-
+                                        
                     // update our bounds by the new offsets.
                     Frame = new RectangleF( Frame.X + xOffset, Frame.Y + yOffset, Frame.Width, Frame.Height );
                 }

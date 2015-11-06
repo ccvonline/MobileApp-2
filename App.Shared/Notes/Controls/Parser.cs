@@ -85,6 +85,10 @@ namespace App
                     {
                         return new Header( parentParams, reader );
                     }
+                    else if ( NoteText.ElementTagMatches( reader.Name ) )
+                    {
+                        return new NoteText( parentParams, reader );
+                    }
 
                     throw new Exception( String.Format( "Control of type {0} does not exist.", reader.Name ) );
                 }

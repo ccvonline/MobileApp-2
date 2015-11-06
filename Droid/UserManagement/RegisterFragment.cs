@@ -307,8 +307,8 @@ namespace Droid
                     newPerson.FirstName = NickNameText.Text;
 
                     newPerson.LastName = LastNameText.Text;
-                    newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
-                    newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
+                    //newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
+                    //newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
 
                     // Update their cell phone. 
                     if ( string.IsNullOrEmpty( CellPhoneText.Text ) == false )

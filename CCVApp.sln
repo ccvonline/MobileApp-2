@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS", "iOS\iOS.csproj", "{8493BB83-6542-4BAE-BE1B-FCFE349AF1E6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rock.Mobile", "..\..\Rock.Mobile\Rock.Mobile.shproj", "{A72997A9-2CAA-402A-AA22-632CB99DC3DD}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rock.Mobile", "..\..\Spark\Rock.Mobile\Rock.Mobile.shproj", "{A72997A9-2CAA-402A-AA22-632CB99DC3DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Droid", "Droid\Droid.csproj", "{68BFCE9C-3ABC-4ACC-9054-BA9340AA598C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rock.Client.Models", "..\..\Rock\Rock.Client\Rock.Client.Models.shproj", "{633206D3-C28A-481F-8CF3-2C9A9877FAC3}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rock.Client.Models", "..\..\Spark\Rock\Rock.Client\Rock.Client.Models.shproj", "{633206D3-C28A-481F-8CF3-2C9A9877FAC3}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "App.Shared", "App.Shared\App.Shared.shproj", "{E6C9AE3A-C70B-4AD7-924D-950870FEC080}"
 EndProject

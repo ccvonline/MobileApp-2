@@ -174,7 +174,7 @@ namespace App
                     textStream += PlatformLabel.Text;
                 }
 
-                public static bool ElementTagMatches(string elementTag)
+                public static new bool ElementTagMatches(string elementTag)
                 {
                     if ( elementTag == "RB" || elementTag == "RevealBox" )
                     {

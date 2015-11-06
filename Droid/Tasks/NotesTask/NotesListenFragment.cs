@@ -98,6 +98,8 @@ namespace Droid
                     base.OnDestroy();
 
                     MediaPlayer.Stop( );
+                    MediaPlayer.Release( );
+                    MediaPlayer = null;
                 }
 
                 // when bound, return the Binder object containing our instance
@@ -219,13 +221,11 @@ namespace Droid
                     // setup our media controller for viewing the position of media
                     MediaController = new MediaController( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     MediaController.SetAnchorView( view );
-                    MediaController.SetMediaPlayer( this );
 
                     ResultView = new UIResultView( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
                         delegate 
                         { 
                             // we know we're bound, so now just retry.
-
                             ResultView.Hide( );
                             PlayerState = MediaPlayerState.Preparing; 
                             StartAudio( );
@@ -299,6 +299,8 @@ namespace Droid
 
                     // if our activity is being destroyed, kill the audio service too
                     Activity.StopService( new Intent( Activity, typeof( AudioService ) ) );
+
+                    AudioServiceConnection = null;
                 }
 
                 void TrySaveMediaPosition( )
@@ -357,6 +359,9 @@ namespace Droid
                 {
                     Rock.Mobile.Util.Debug.WriteLine( "OnPrepared - Audio ready to play" );
 
+                    // now that we know the media player is read, set the controller's player
+                    MediaController.SetMediaPlayer( this );
+
                     // setup a seek listener
                     mp.SetOnSeekCompleteListener( this );
 
@@ -401,11 +406,10 @@ namespace Droid
 
                     mp.Stop( );
                     mp.Reset( );
-                    //Activity.UnbindService( AudioServiceConnection );
 
-                    PlayerState = MediaPlayerState.Stopped;
+                    PlayerState = MediaPlayerState.None;
 
-                    SyncUI( );
+                    //SyncUI( );
 
                     return true;
                 }

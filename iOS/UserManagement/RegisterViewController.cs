@@ -407,8 +407,8 @@ namespace iOS
                             newPerson.FirstName = NickNameText.Field.Text;
 
                             newPerson.LastName = LastNameText.Field.Text;
-                            newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
-                            newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
+                            //newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
+                            //newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
 
                             // Update their cell phone. 
                             if ( string.IsNullOrEmpty( CellPhoneText.Field.Text ) == false )

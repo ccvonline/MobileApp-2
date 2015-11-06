@@ -472,18 +472,17 @@ namespace App
                     Person.Email = FacebookManager.Instance.GetEmail( infoObj );
                 }
 
-                public void GetProfileAndCellPhone( HttpRequest.RequestResult<Rock.Client.Person> profileResult )
+                public void GetProfileAndCellPhone( HttpRequest.RequestResult profileResult )
                 {
-                    RockApi.Get_People_ByUserName( UserID, 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Rock.Client.Person model)
+                    MobileAppApi.GetProfileAndCellPhone( UserID, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Person person, PhoneNumber cellPhoneNumber )
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
                                 // take the person
-                                Person = model;
+                                Person = person;
 
                                 // search for a phone number (which should match whatever we already have, unless this is a new login)
-                                PhoneNumber cellPhoneNumber = TryGetPhoneNumber( PrivateGeneralConfig.CellPhoneValueId );
                                 if( cellPhoneNumber != null )
                                 {
                                     _CellPhoneNumber = cellPhoneNumber;
@@ -498,13 +497,13 @@ namespace App
                                 // save!
                                 SaveToDevice( );
                             }
-
+                            
                             // notify the caller
                             if( profileResult != null )
                             {
-                                profileResult( statusCode, statusDescription, model );
+                                profileResult( statusCode, statusDescription );
                             }
-                        });
+                        } );
                 }
 
                 public void UpdateProfile( HttpRequest.RequestResult profileResult )
@@ -525,40 +524,6 @@ namespace App
                                 profileResult( statusCode, statusDescription );
                             }
                         });
-                }
-
-                /// <summary>
-                /// Returns the phone number matching phoneTypeId, or an empty one if no match is found.
-                /// </summary>
-                /// <returns>The phone number.</returns>
-                /// <param name="phoneTypeId">Phone type identifier.</param>
-                Rock.Client.PhoneNumber TryGetPhoneNumber( int phoneTypeId )
-                {
-                    Rock.Client.PhoneNumber requestedNumber = null;
-
-                    // if the user has phone numbers
-                    if ( Person.PhoneNumbers != null )
-                    {
-                        // get an enumerator
-                        IEnumerator<Rock.Client.PhoneNumber> enumerator = Person.PhoneNumbers.GetEnumerator( );
-                        enumerator.MoveNext( );
-
-                        // search for the phone number type requested
-                        while ( enumerator.Current != null )
-                        {
-                            Rock.Client.PhoneNumber phoneNumber = enumerator.Current as Rock.Client.PhoneNumber;
-
-                            // is this the right type?
-                            if ( phoneNumber.NumberTypeValueId == phoneTypeId )
-                            {
-                                requestedNumber = phoneNumber;
-                                break;
-                            }
-                            enumerator.MoveNext( );
-                        }
-                    }
-
-                    return requestedNumber;
                 }
 
                 public void UpdateOrAddPhoneNumber( HttpRequest.RequestResult phoneResult )
@@ -593,39 +558,24 @@ namespace App
                         } );
                 }
 
-                public void GetFamilyAndAddress( HttpRequest.RequestResult< List<Rock.Client.Group> > addressResult )
+                public void GetFamilyAndAddress( HttpRequest.RequestResult addressResult )
                 {
-                    // for the address (which implicitly is their primary residence address), first get all group locations associated with them
-                    ApplicationApi.GetFamiliesOfPerson( Person, 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Group> model)
+                    MobileAppApi.GetFamilyAndAddress( Person, 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Group family, GroupLocation familyAddress )
                         {
                             if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                             {
-                                // find what we'll consider their primary address.
-
-                                // look thru each group (family)
-                                foreach( Rock.Client.Group personGroup in model )
+                                // only take valid values
+                                if( family != null )
                                 {
-                                    // If we find a groupType of family, that should be their primary family.
-                                    if( personGroup.GroupType.Guid.ToString( ).ToLower( ) == Rock.Client.SystemGuid.GroupType.GROUPTYPE_FAMILY.ToLower( ) )
-                                    {
-                                        // store the family
-                                        PrimaryFamily = personGroup;
-
-                                        // look at each location within the family
-                                        foreach( Rock.Client.GroupLocation groupLocation in personGroup.GroupLocations )
-                                        {
-                                            // find their "Home Location" within the family group type.
-                                            if( groupLocation.GroupLocationTypeValue.Guid.ToString( ).ToLower( ) == Rock.Client.SystemGuid.DefinedValue.GROUP_LOCATION_TYPE_HOME.ToLower( ) )
-                                            {
-                                                PrimaryAddress = groupLocation;
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    PrimaryFamily = family;
                                 }
 
-                                // on retrieval, convert this version for dirty compares later
+                                if( familyAddress != null )
+                                {
+                                    PrimaryAddress = familyAddress;
+                                }
+
                                 LastSyncdAddressJson = JsonConvert.SerializeObject( PrimaryAddress );
                                 LastSyncdFamilyJson = JsonConvert.SerializeObject( PrimaryFamily );
 
@@ -633,12 +583,11 @@ namespace App
                                 SaveToDevice( );
                             }
 
-                            // notify the caller
                             if( addressResult != null )
                             {
-                                addressResult( statusCode, statusDescription, model );
+                                addressResult( statusCode, statusDescription );
                             }
-                        });
+                        } );
                 }
 
                 public void UpdateHomeCampus( HttpRequest.RequestResult result )
@@ -706,6 +655,8 @@ namespace App
                                 {
                                     // so now we can finally flag everything as good
                                     ProfileImageDirty = false;
+
+                                    SaveToDevice( );
                                 }
 
                                 if ( result != null )
@@ -786,13 +737,29 @@ namespace App
                                         }
                                     } );
                             }
+                            // they might not have a photo ID, and that's ok. In that case, just callback with finished.
+                            else
+                            {
+                                // notify the caller
+                                if ( profilePictureResult != null )
+                                {
+                                    profilePictureResult( System.Net.HttpStatusCode.NotFound, string.Empty );
+                                }
+                            }
                             break;
                         }
                     }
                 }
 
-                public void SyncDirtyObjects( HttpRequest.RequestResult resultCallback )
+                public void TrySyncDirtyObjects( HttpRequest.RequestResult resultCallback )
                 {
+                    // Syncing: First, we'll see if we have something that doesn't match what WE LAST SENT TO ROCK.
+                    // If that's true, we should sync.
+                    // Before we actually sync, however, we'll pull down the person's profile and inspect the ModifiedDate.
+                    // If the ModifiedDate is greater (newer) than the mobile app's ModifiedDate, we know that their profile was updated
+                    // by someone on Rock, and therefore, those changes should overwrite even our unsync'd changes.
+                    // Mason, you r0xor for this idea.
+                    
                     // check to see if our person object OR address object changed. If our original json
                     // created at a point when we know we were sync'd with the server
                     // no longer matches our object, we should update it.
@@ -801,28 +768,65 @@ namespace App
                     string currFamilyJson = JsonConvert.SerializeObject( PrimaryFamily );
                     string currAddressJson = JsonConvert.SerializeObject( PrimaryAddress );
 
-                    // assume things will work
-                    System.Net.HttpStatusCode returnCode = System.Net.HttpStatusCode.OK;
-
                     if( string.Compare( LastSyncdPersonJson, currPersonJson ) != 0 || 
                         string.Compare( LastSyncdCellPhoneNumberJson, currPhoneNumbersJson ) != 0 ||
                         string.Compare( LastSyncdFamilyJson, currFamilyJson ) != 0 ||
                         string.Compare( LastSyncdAddressJson, currAddressJson ) != 0 ||
                         ProfileImageDirty == true )
                     {
-                        Rock.Mobile.Util.Debug.WriteLine( "RockMobileUser: Syncing Profile" );
+                        // assume our data is newer
+                        bool mobileDataNewer = true;
 
-                        // PROFILE
-                        UpdateProfile( delegate( System.Net.HttpStatusCode profileCode, string profileResult )
+                        // get the very latest profile from Rock
+                        MobileAppApi.GetProfileAndCellPhone( UserID, 
+                            delegate(System.Net.HttpStatusCode statusCode, string desc, Person person, PhoneNumber phoneNumber )
                             {
-                                // if there's a failure, flag it and continue so the caller can know there was a problem.
-                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( profileCode ) == false )
+                                // If we got a result, and the resulting person is NEWER than what we have, then do not sync.
+                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && 
+                                    person.ModifiedDateTime > Person.ModifiedDateTime )
                                 {
-                                    returnCode = System.Net.HttpStatusCode.BadRequest;
+                                    mobileDataNewer = false;
                                 }
 
-                                // PHONE NUMBER
-                                UpdateOrAddPhoneNumber( delegate( System.Net.HttpStatusCode phoneCode, string phoneResult )
+                                // if, and only if, the mobile data is newer than Rock's, should we do the sync.
+                                if ( mobileDataNewer == true )
+                                {
+                                    PerformDirtySync( resultCallback );
+                                }
+                                else
+                                {
+                                    // nothing need be sync'd, call back with ok.
+                                    Rock.Mobile.Util.Debug.WriteLine( "RockMobileUser: No sync needed." );
+                                    resultCallback( System.Net.HttpStatusCode.OK, "Success" );
+                                }
+                            } );
+                    }
+                    else
+                    {
+                        // nothing need be sync'd, call back with ok.
+                        Rock.Mobile.Util.Debug.WriteLine( "RockMobileUser: No sync needed." );
+                        resultCallback( System.Net.HttpStatusCode.OK, "Success" );
+                    }
+                }
+
+                void PerformDirtySync( HttpRequest.RequestResult resultCallback )
+                {
+                    Rock.Mobile.Util.Debug.WriteLine( "RockMobileUser: Performing Sync" );
+
+                    // assume things will work
+                    System.Net.HttpStatusCode returnCode = System.Net.HttpStatusCode.OK;
+
+                    // PROFILE
+                    UpdateProfile( delegate( System.Net.HttpStatusCode profileCode, string profileResult )
+                        {
+                            // if there's a failure, flag it and continue so the caller can know there was a problem.
+                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( profileCode ) == false )
+                            {
+                                returnCode = System.Net.HttpStatusCode.BadRequest;
+                            }
+
+                            // PHONE NUMBER
+                            UpdateOrAddPhoneNumber( delegate( System.Net.HttpStatusCode phoneCode, string phoneResult )
                                 {
                                     // if there's a failure, flag it and continue so the caller can know there was a problem.
                                     if( Rock.Mobile.Network.Util.StatusInSuccessRange( phoneCode ) == false )
@@ -855,19 +859,19 @@ namespace App
                                                     // just because the rest of the stuff needs updating.
                                                     if ( ProfileImageDirty == true )
                                                     {
-                                                            UploadSavedProfilePicture( 
-                                                                delegate( System.Net.HttpStatusCode pictureCode, string pictureDesc )
+                                                        UploadSavedProfilePicture( 
+                                                            delegate( System.Net.HttpStatusCode pictureCode, string pictureDesc )
+                                                            {
+                                                                // if there's a failure, flag it and continue so the caller can know there was a problem.
+                                                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( pictureCode ) == false )
                                                                 {
-                                                                    // if there's a failure, flag it and continue so the caller can know there was a problem.
-                                                                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( pictureCode ) == false )
-                                                                    {
-                                                                        returnCode = System.Net.HttpStatusCode.BadRequest;
-                                                                    }
+                                                                    returnCode = System.Net.HttpStatusCode.BadRequest;
+                                                                }
 
-                                                                    // return finished. just tell them OK, because it really doesn't matter if it worked or not.
-                                                                    resultCallback( returnCode, "" );
-                                                                } );
-                                                        
+                                                                // return finished. just tell them OK, because it really doesn't matter if it worked or not.
+                                                                resultCallback( returnCode, "" );
+                                                            } );
+
                                                     }
                                                     else
                                                     {
@@ -877,15 +881,7 @@ namespace App
                                                 });
                                         });
                                 });
-                            });
-                    }
-                    else
-                    {
-                        Rock.Mobile.Util.Debug.WriteLine( "RockMobileUser: No sync needed." );
-
-                        // nothing need be sync'd, call back with ok.
-                        resultCallback( System.Net.HttpStatusCode.OK, "Success" );
-                    }
+                        });
                 }
 
                 public void SaveToDevice( )
