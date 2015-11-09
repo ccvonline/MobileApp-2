@@ -127,7 +127,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="center" />
                     <TextView
-                        android:text="Connect"
+                        android:text="Next Steps"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

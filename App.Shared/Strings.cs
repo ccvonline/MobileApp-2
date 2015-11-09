@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.0.2 (Build 1)";
+                    return "Version 2.0.3 (Build 0)";
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace App.Shared
             public const string ViewProfile = "View Profile";
 
             public const string Element_News_Title = "News";
-            public const string Element_Connect_Title = "Connect";
+            public const string Element_Connect_Title = "Next Steps";
             public const string Element_Messages_Title = "Messages";
             public const string Element_Prayer_Title = "Prayer";
             public const string Element_Give_Title = "Give";
@@ -199,7 +199,7 @@ namespace App.Shared
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
 
-            public const string Main_Connect_Header = "CONNECT";
+            public const string Main_Connect_Header = "NEXT STEPS";
             public const string Main_Connect_GroupFinder = "Group Finder";
             public const string Main_Connect_GroupFinder_SubTitle = "Find a group near you";//"Connect with a group near you";
 

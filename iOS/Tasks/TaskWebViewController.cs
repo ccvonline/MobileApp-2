@@ -24,7 +24,22 @@ namespace iOS
 
             public override void LoadFailed(UIWebView webView, NSError error)
             {
-                Parent.HandleLoadError( );
+                // if it's within the URL domain
+                if ( error.Domain == NSError.NSUrlErrorDomain )
+                {
+                    // make sure it isn't simply a cancelled resource load.
+                    var urlError = default(NSUrlError);
+                    if(!Enum.TryParse<NSUrlError>(error.Code.ToString(), out urlError))
+                    {
+                        urlError = NSUrlError.Unknown;
+                    }
+
+                    // if it ISN'T cancelled, show the error page.
+                    if ( urlError != NSUrlError.Cancelled )
+                    {
+                        Parent.HandleLoadError( );
+                    }
+                }
             }
 
             public override void LoadingFinished(UIWebView webView)
