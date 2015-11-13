@@ -513,7 +513,7 @@ namespace App
                     }
                 }
 
-                public string TouchesEnded( PointF touch )
+                public string TouchesEnded( PointF touch, out bool urlLaunchesExternalBrowser, out bool urlUsesRockImpersonation )
                 {
                     // TouchesEnded is tricky. It's reasonable a User will have
                     // the keyboard up and decide to open/close/move another Note.
@@ -527,6 +527,8 @@ namespace App
                     // consumes input, we will ask it for its link and return that to the caller.
                     // An example would be a Quote. It will consume input and then return a link to the citation.
                     string activeUrl = string.Empty;
+                    urlLaunchesExternalBrowser = false;
+                    urlUsesRockImpersonation = false;
 
                     // If there's an active UserNote Anchor, notify only it.
                     if( ActiveUserNoteAnchor != null )
@@ -620,7 +622,7 @@ namespace App
                                     if ( consumingControl != null )
                                     {
                                         // then see if it has an active URL we should hit
-                                        activeUrl = consumingControl.GetActiveUrl( );
+                                        activeUrl = consumingControl.GetActiveUrl( out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
                                         break;
                                     }
                                 }

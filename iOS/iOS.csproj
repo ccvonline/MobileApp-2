@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -459,6 +459,7 @@
     <Compile Include="Tasks\TaskUIViewController.designer.cs">
       <DependentUpon>TaskUIViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tasks\About\AboutMainPageUIViewController.cs" />
     <Compile Include="Tasks\About\AboutTask.cs" />
     <Compile Include="Tasks\Give\GiveTask.cs" />
     <Compile Include="Tasks\News\NewsTask.cs" />
@@ -471,7 +472,6 @@
       <DependentUpon>NewsMainUIViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Tasks\News\NewsDetailsUIViewController.cs" />
-    <Compile Include="Tasks\About\AboutMainPageUIViewController.cs" />
     <Compile Include="Tasks\About\AboutMainPageUIViewController.designer.cs">
       <DependentUpon>AboutMainPageUIViewController.cs</DependentUpon>
     </Compile>

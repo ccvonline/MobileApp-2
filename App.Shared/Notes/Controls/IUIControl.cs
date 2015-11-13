@@ -31,7 +31,7 @@ namespace App
 
                 IUIControl TouchesEnded( PointF touch );
 
-                string GetActiveUrl( );
+                string GetActiveUrl( out bool urlLaunchesExternalBrowser, out bool urlUsesRockImpersonation );
 
                 Styles.Alignment GetHorzAlignment( );
 

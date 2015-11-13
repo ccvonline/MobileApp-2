@@ -593,15 +593,17 @@ namespace iOS
                 if( Note != null )
                 {
                     // should we visit a website?
-                    string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ) );
+                    bool urlLaunchesExternalBrowser = false;
+                    bool urlUsesRockImpersonation = false;
+
+                    string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
                     if ( string.IsNullOrEmpty( activeUrl ) == false )
                     {
                         SaveNoteState( UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height ) );
 
                         DestroyNotes( );
 
-                        TaskWebViewController viewController = new TaskWebViewController( activeUrl, Task, false, true, true );
-                        Task.PerformSegue( this, viewController );
+                        TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false );
                     }
                 }
             }

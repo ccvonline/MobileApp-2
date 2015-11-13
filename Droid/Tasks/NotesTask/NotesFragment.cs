@@ -566,6 +566,13 @@ namespace Droid
                     NavBarRevealTracker.Update( scrollDelta, ScrollView.ScrollY, ScrollViewLayout.LayoutParameters.Height );
                 }
 
+                public class UrlClickParams
+                {
+                    public bool UseExternalBrowser { get; set; }
+                    public bool UseImpersonationToken { get; set; }
+                    public string Url { get; set; }
+                }
+
                 public override bool OnTouch( View v, MotionEvent e )
                 {
                     // check to see if we should monitor navBar reveal
@@ -605,7 +612,18 @@ namespace Droid
                                 {
                                     AnimateTutorialScreen( false );
 
-                                    string activeUrl = Note.TouchesEnded( new System.Drawing.PointF( e.GetX( ), e.GetY( ) ) );
+                                    bool urlLaunchesExternalBrowser = false;
+                                    bool urlUsesRockImpersonation = false;
+
+                                    string activeUrl = Note.TouchesEnded( new System.Drawing.PointF( e.GetX( ), e.GetY( ) ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
+
+                                    // create a params object we can send to the parent
+                                    UrlClickParams clickParams = new UrlClickParams()
+                                    {
+                                            UseExternalBrowser = urlLaunchesExternalBrowser,
+                                            UseImpersonationToken = urlUsesRockImpersonation,
+                                            Url = activeUrl
+                                    };
 
                                     // again, only process this if we didn't create a note. We don't want to treat a double tap
                                     // like a request to view a note
@@ -613,7 +631,7 @@ namespace Droid
                                     {
                                         if ( string.IsNullOrEmpty( activeUrl ) == false )
                                         {
-                                            ParentTask.OnClick( this, 0, activeUrl );
+                                            ParentTask.OnClick( this, 0, clickParams );
                                         }
                                     }
                                 }

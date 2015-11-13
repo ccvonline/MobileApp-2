@@ -207,7 +207,60 @@ namespace iOS
 
         const string BlackHtml = "<html><body style=\"background-color:black;\"></body></html>";
 
-        public TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool navbarAlwaysVisible ) : base ( )
+        /// <summary>
+        /// Handles taking a URL and either launching it externally or within a webView, with or without impersonation token info. (Showing an embedded web page OR launching Safari)
+        /// </summary>
+        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool navbarAlwaysVisible )
+        {
+            // do we launch them out of the app?
+            if ( launchExternalBrowser == true )
+            {
+                // should we get the impersonation token?
+                if ( includeImpersonationToken == true )
+                {
+                    MobileAppApi.TryGetImpersonationToken( 
+                        delegate(string impersonationToken )
+                        {
+                            // put the platform we're running
+                            string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( url, PrivateGeneralConfig.MobilePlatform );
+
+                            // build the full url with their preferred campus (since thats personal data)
+                            fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
+                            // URL encode the value
+                            NSString encodedUrlString = fullUrl.UrlEncode( );
+
+                            // if we got a token, append it
+                            NSUrl encodedUrl = null;
+                            if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                            {
+                                encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
+                            }
+                            else
+                            {
+                                encodedUrl = new NSUrl( encodedUrlString );
+                            }
+
+                            UIApplication.SharedApplication.OpenUrl( encodedUrl );
+                        } );
+                }
+                else
+                {
+                    // first encode the url
+                    NSString encodedUrlString = url.UrlEncode( );
+
+                    UIApplication.SharedApplication.OpenUrl( new NSUrl( encodedUrlString ) );
+                }
+            }
+            // they are using an embedded browser, so this is pretty simple
+            else
+            {
+                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, navbarAlwaysVisible );
+                parentTask.PerformSegue( currController, viewController );
+            }
+        }
+
+        protected TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool navbarAlwaysVisible ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
@@ -252,8 +305,11 @@ namespace iOS
                 MobileAppApi.TryGetImpersonationToken( 
                     delegate( string impersonationToken )
                     {
+                        // put the platform we're running
+                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DisplayUrl, PrivateGeneralConfig.MobilePlatform );
+
                         // include their campus, since that's part of personal data.
-                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DisplayUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                        fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                         // URL encode the value
                         NSString encodedUrlString = fullUrl.UrlEncode( );

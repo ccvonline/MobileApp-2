@@ -55,6 +55,16 @@ namespace App
                 /// </summary>
                 protected string ActiveUrl { get; set; }
 
+                /// <summary>
+                /// If true, the URL should include rock impersonation info, like campus and identity.
+                /// </summary>
+                protected bool UrlUsesRockImpersonation { get; set; }
+
+                /// <summary>
+                /// If true, the URL should open via an external browser
+                /// </summary>
+                protected bool UrlLaunchesExternalBrowser { get; set; }
+
                 protected override void Initialize( )
                 {
                     base.Initialize( );
@@ -154,6 +164,18 @@ namespace App
                         UrlGlyph.Text = PrivateNoteConfig.CitationUrl_Icon;
                         UrlGlyph.Bounds = new RectangleF( Citation.Frame.Right, Citation.Frame.Top, (availableWidth - Citation.Frame.Right), 0 );
                         UrlGlyph.SizeToFit( );
+                    }
+
+                    string urlLaunchesExternalBrowser = reader.GetAttribute( "UrlLaunchesExternalBrowser" );
+                    if ( string.IsNullOrEmpty( urlLaunchesExternalBrowser ) == false )
+                    {
+                        UrlLaunchesExternalBrowser = bool.Parse( urlLaunchesExternalBrowser );
+                    }
+
+                    string urlUsesRockImpersonation = reader.GetAttribute( "UrlUsesRockImpersonation" );
+                    if ( string.IsNullOrEmpty( urlUsesRockImpersonation ) == false )
+                    {
+                        UrlUsesRockImpersonation = bool.Parse( urlUsesRockImpersonation );
                     }
 
                     bool finishedScripture = false;
@@ -335,8 +357,11 @@ namespace App
                     return null;
                 }
 
-                public override string GetActiveUrl()
+                public override string GetActiveUrl( out bool urlLaunchesExternalBrowser, out bool urlUsesRockImpersonation )
                 {
+                    urlLaunchesExternalBrowser = UrlLaunchesExternalBrowser;
+                    urlUsesRockImpersonation = UrlUsesRockImpersonation;
+
                     return ActiveUrl;
                 }
 

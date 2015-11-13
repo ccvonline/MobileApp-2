@@ -51,6 +51,15 @@ namespace App.Shared
             public const string ExternalUrlToken = "external:";
 
             /// <summary>
+            /// Used for notifying a website which platform the user is running.
+            /// </summary>
+            #if __IOS__
+            public const string MobilePlatform = "ma-platform=ios";
+            #elif __ANDROID__
+            public const string MobilePlatform = "ma-platform=android";
+            #endif
+
+            /// <summary>
             /// These are the names of placeholder images. They should not need to change.
             /// </summary>
             public const string NewsMainPlaceholder = "placeholder_news_main.png";

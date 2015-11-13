@@ -45,6 +45,63 @@ namespace Droid
 
             UIResultView ResultView { get; set; }
 
+            /// <summary>
+            /// Utility function to simplify handling a URL with or without an impersonation token, in an embedded webView OR external browser.
+            /// </summary>
+            /// <param name="launchesExternalBrowser">If set to <c>true</c> launches external browser.</param>
+            /// <param name="usesImpersonationToken">If set to <c>true</c> uses impersonation token.</param>
+            /// <param name="url">URL.</param>
+            /// <param name="currTask">Curr task.</param>
+            /// <param name="webFragment">Web fragment.</param>
+            public static void HandleUrl( bool launchesExternalBrowser, bool usesImpersonationToken, string url, Task currTask, TaskWebFragment webFragment )
+            {
+                // are we launching a seperate browser?
+                if ( launchesExternalBrowser == true )
+                {
+                    // do they also want the impersonation token?
+                    if ( usesImpersonationToken )
+                    {
+                        // try to get it
+                        MobileAppApi.TryGetImpersonationToken(
+                            delegate( string impersonationToken )
+                            {
+                                // append the mobile platform
+                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( url, PrivateGeneralConfig.MobilePlatform );
+
+                                // append the campus (this is part of their identity)
+                                fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
+                                // if we got the token, append it
+                                if( string.IsNullOrEmpty( impersonationToken ) == false )
+                                {
+                                    fullUrl += "&" + impersonationToken;
+                                }
+
+                                // now fire off an intent.
+                                Android.Net.Uri uri = Android.Net.Uri.Parse( fullUrl );
+
+                                var intent = new Intent( Intent.ActionView, uri ); 
+                                ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                            } );
+
+                    }
+                    else
+                    {
+                        // pretty easy, just fire off an intent.
+                        Android.Net.Uri uri = Android.Net.Uri.Parse( url );
+
+                        var intent = new Intent( Intent.ActionView, uri ); 
+                        ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
+                    }
+                }
+                else
+                {
+                    // otherwise we're not, so its simpler
+                    webFragment.DisplayUrl( url, usesImpersonationToken );
+                    currTask.PresentFragment( webFragment, true );
+                }
+            }
+
             public TaskWebFragment( ) : base( )
             {
             }
@@ -96,7 +153,7 @@ namespace Droid
                 ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
             }
 
-            public void DisplayUrl( string url, bool includeImpersonationToken )
+            void DisplayUrl( string url, bool includeImpersonationToken )
             {
                 Url = url;
                 IncludeImpersonationToken = includeImpersonationToken;
@@ -123,8 +180,11 @@ namespace Droid
                         MobileAppApi.TryGetImpersonationToken( 
                             delegate( string impersonationToken )
                             {
+                                // append the mobile platform
+                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, PrivateGeneralConfig.MobilePlatform );
+
                                 // also include their campus. this is personal data as well.
-                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                                fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                                 // if we got it, append it and load
                                 if ( string.IsNullOrEmpty( impersonationToken ) == false )

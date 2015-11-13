@@ -256,10 +256,10 @@ namespace Droid
             // create our tasks
             Elements = new List<SpringboardElement>();
             Elements.Add( new SpringboardElement( new Droid.Tasks.News.NewsTask( NavbarFragment ), Resource.Id.springboard_news_frame, SpringboardConfig.Element_News_Icon, SpringboardStrings.Element_News_Title ) );
-            Elements.Add( new SpringboardElement( new Droid.Tasks.Connect.ConnectTask( NavbarFragment ), Resource.Id.springboard_connect_frame, SpringboardConfig.Element_Connect_Icon, SpringboardStrings.Element_Connect_Title ) );
             Elements.Add( new SpringboardElement( new Droid.Tasks.Notes.NotesTask( NavbarFragment ), Resource.Id.springboard_notes_frame, SpringboardConfig.Element_Messages_Icon, SpringboardStrings.Element_Messages_Title ) );
-            Elements.Add( new SpringboardElement( new Droid.Tasks.Prayer.PrayerTask( NavbarFragment ), Resource.Id.springboard_prayer_frame, SpringboardConfig.Element_Prayer_Icon, SpringboardStrings.Element_Prayer_Title ) );
             Elements.Add( new SpringboardElement( new Droid.Tasks.Give.GiveTask( NavbarFragment ), Resource.Id.springboard_give_frame, SpringboardConfig.Element_Give_Icon, SpringboardStrings.Element_Give_Title ) );
+            Elements.Add( new SpringboardElement( new Droid.Tasks.Connect.ConnectTask( NavbarFragment ), Resource.Id.springboard_connect_frame, SpringboardConfig.Element_Connect_Icon, SpringboardStrings.Element_Connect_Title ) );
+            Elements.Add( new SpringboardElement( new Droid.Tasks.Prayer.PrayerTask( NavbarFragment ), Resource.Id.springboard_prayer_frame, SpringboardConfig.Element_Prayer_Icon, SpringboardStrings.Element_Prayer_Title ) );
             Elements.Add( new SpringboardElement( new Droid.Tasks.About.AboutTask( NavbarFragment ), Resource.Id.springboard_about_frame, SpringboardConfig.Element_More_Icon, SpringboardStrings.Element_More_Title ) );
 
             ActiveElementIndex = 0;
@@ -1180,26 +1180,7 @@ namespace Droid
                 // trigger the Give analytic
                 GiveAnalytic.Instance.Trigger( GiveAnalytic.Give );
 
-                MobileAppApi.TryGetImpersonationToken( 
-                    delegate( string impersonationToken )
-                    {
-                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( GiveConfig.GiveUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-                        
-                        // if we got an impersonation token, append it
-                        Android.Net.Uri uri = null;
-                        if( string.IsNullOrEmpty( impersonationToken ) == false )
-                        {
-                            uri = Android.Net.Uri.Parse( fullUrl + "&" + impersonationToken );
-                        }
-                        else
-                        {
-                            // otherwise just encode the giving url with the campus
-                            uri = Android.Net.Uri.Parse( fullUrl );
-                        }
-
-                        var intent = new Intent( Intent.ActionView, uri ); 
-                        ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
-                    } );
+                TaskWebFragment.HandleUrl( true, true, GiveConfig.GiveUrl, null, null );
             }
             else
             {

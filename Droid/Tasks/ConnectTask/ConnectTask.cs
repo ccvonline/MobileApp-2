@@ -84,8 +84,7 @@ namespace Droid
                             {
                                 // launch the ConnectWebFragment.
                                 string connectUrl = (string)context;
-                                WebFragment.DisplayUrl( connectUrl, true );
-                                PresentFragment( WebFragment, true );
+                                TaskWebFragment.HandleUrl( false, true, connectUrl, this, WebFragment );
                             }
                         }
                         else if ( source == GroupFinder )

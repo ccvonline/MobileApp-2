@@ -329,8 +329,7 @@ namespace iOS
                 }
                 else
                 {
-                    TaskWebViewController viewController = new TaskWebViewController( LinkEntries[ rowIndex ].Url, Task, true, false, true );
-                    Task.PerformSegue( this, viewController );
+                    TaskWebViewController.HandleUrl( false, true, LinkEntries[ rowIndex ].Url, Task, this );
                 }
             }
         }

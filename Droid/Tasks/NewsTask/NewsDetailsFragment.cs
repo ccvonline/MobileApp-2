@@ -100,7 +100,11 @@ namespace Droid
                     // hide the button if there's no reference URL.
                     if ( string.IsNullOrEmpty( NewsItem.ReferenceURL ) == true )
                     {
-                        launchUrlButton.Visibility = ViewStates.Invisible;
+                        launchUrlButton.Visibility = ViewStates.Gone;
+                    }
+                    else
+                    {
+                        launchUrlButton.Visibility = ViewStates.Visible;
                     }
 
                     return view;

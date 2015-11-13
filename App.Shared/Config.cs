@@ -131,7 +131,7 @@ namespace App
                         "reflect your life change. Find out more about baptism through Starting Point, register online or contact your neighborhood pastor.",
 
                         // Reference URL
-                        "http://www.ccvonline.com/Arena/default.aspx?page=17655&campus=1",
+                        "http://ccv.church/ma-baptism",
 
                         // Image Names
                         "default_news_a_main",
@@ -150,7 +150,7 @@ namespace App
                         "faith, and learn how you can get involved. Childcare is available for attending parents.",
 
                         // Reference URL
-                        "http://www.ccvonline.com/Arena/default.aspx?page=17400&campus=1",
+                        "http://ccv.church/ma-startingpoint",
 
                         // Image Names
                         "default_news_b_main",
@@ -167,7 +167,7 @@ namespace App
                         "Wondering what else CCV is about? Check out our website.",
 
                         // Reference URL
-                        "http://ccv.church/Arena/default.aspx?page=17369&campus=1",
+                        "http://ccv.church/ma-more",
 
                         // Image Names
                         "default_news_c_main",
@@ -209,9 +209,9 @@ namespace App
                 /// </summary>
                 public static string[] WebViews = 
                     {
-                        "Starting Point", "Begin your journey at CCV", "http://rock.ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                        "Baptisms", "Make your faith public", "http://rock.ccv.church/ma-baptism", "baptism_thumb.png",
-                        "Serve", "Give back by volunteering", "http://rock.ccv.church/ma-serve", "serve_thumb.png"
+                        "Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
+                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
+                        "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png"
                     };
                 
                 /// <summary>
@@ -240,11 +240,7 @@ namespace App
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
-                #if __IOS__
-                public const string GiveUrl = "http://rock.ccv.church/ma-give?ma-platform=ios";
-                #elif __ANDROID__
-                public const string GiveUrl = "http://rock.ccv.church/ma-give?ma-platform=android";
-                #endif
+                public const string GiveUrl = "http://ccv.church/ma-give";
             }
 
             public class ControlStylingConfig
@@ -392,7 +388,7 @@ namespace App
                 /// <summary>
                 /// The page to navigate to in the About's embedded webview.
                 /// </summary>
-                public const string Url = "http://rock.ccv.church/ma-more";
+                public const string Url = "http://ccv.church/ma-more";
             }
         }
     }

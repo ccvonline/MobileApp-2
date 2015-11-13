@@ -105,7 +105,7 @@ namespace iOS
             View.AddSubview( LearnMoreButton );
             LearnMoreButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    ((NewsTask)Task).HandleReferenceUrl( NewsItem, this );
+                    TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this );
                 };
 
             // if there's no URL associated with this news item, hide the learn more button.
@@ -193,7 +193,16 @@ namespace iOS
 
 
             // determine whether we can use the height of the description, or limit it and enable scrolling
-            nfloat paddedLearnMoreTop = ( LearnMoreButton.Frame.Top - 10 );
+            nfloat paddedLearnMoreTop = 0;
+            if ( LearnMoreButton.Hidden == false )
+            {
+                paddedLearnMoreTop = LearnMoreButton.Frame.Top - 10;
+            }
+            else
+            {
+                paddedLearnMoreTop = LearnMoreButton.Frame.Bottom - 10;
+            }
+
             nfloat descriptionHeight = NewsDescription.Frame.Bottom > paddedLearnMoreTop ? paddedLearnMoreTop - NewsTitle.Frame.Bottom - 10 : NewsDescription.Frame.Height;
 
             NewsDescription.Frame = new CGRect( NewsDescription.Frame.Left, NewsDescription.Frame.Top, NewsDescription.Frame.Width, descriptionHeight );

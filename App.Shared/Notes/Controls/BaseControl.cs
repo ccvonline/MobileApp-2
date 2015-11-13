@@ -304,8 +304,11 @@ namespace App
                     return Margin;
                 }
 
-                public virtual string GetActiveUrl( )
+                public virtual string GetActiveUrl( out bool urlLaunchesExternalBrowser, out bool urlUsesRockImpersonation )
                 {
+                    urlLaunchesExternalBrowser = false;
+                    urlUsesRockImpersonation = false;
+
                     return string.Empty;
                 }
 

@@ -423,21 +423,21 @@ namespace iOS
             NewsElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
             ScrollView.AddSubview( NewsElement );
 
-            ConnectElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
-            ScrollView.AddSubview( ConnectElement );
-
             MessagesElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
             ScrollView.AddSubview( MessagesElement );
-
-            PrayerElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
-            ScrollView.AddSubview( PrayerElement );
 
             GiveElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
             ScrollView.AddSubview( GiveElement );
 
+            ConnectElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
+            ScrollView.AddSubview( ConnectElement );
+
+            PrayerElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
+            ScrollView.AddSubview( PrayerElement );
+
             MoreElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
             ScrollView.AddSubview( MoreElement );
-
+            //
 
             EditPictureButton = new UIButton( new CGRect( 0, 0, 112, 112 )  );
             ScrollView.AddSubview( EditPictureButton );
@@ -457,10 +457,10 @@ namespace iOS
         
 
             Elements.Add( new SpringboardElement( this, new NewsTask( "NewsStoryboard_iPhone" )      , NewsElement    , SpringboardConfig.Element_News_Icon    , SpringboardStrings.Element_News_Title ) );
-            Elements.Add( new SpringboardElement( this, new ConnectTask( "ConnectStoryboard_iPhone" ), ConnectElement , SpringboardConfig.Element_Connect_Icon , SpringboardStrings.Element_Connect_Title ) );
             Elements.Add( new SpringboardElement( this, new NotesTask( "NotesStoryboard_iPhone" )    , MessagesElement, SpringboardConfig.Element_Messages_Icon, SpringboardStrings.Element_Messages_Title ) );
-            Elements.Add( new SpringboardElement( this, new PrayerTask( "PrayerStoryboard_iPhone" )  , PrayerElement  , SpringboardConfig.Element_Prayer_Icon  , SpringboardStrings.Element_Prayer_Title ) );
             Elements.Add( new SpringboardElement( this, new GiveTask( "GiveStoryboard_iPhone" )      , GiveElement    , SpringboardConfig.Element_Give_Icon    , SpringboardStrings.Element_Give_Title ) );
+            Elements.Add( new SpringboardElement( this, new ConnectTask( "ConnectStoryboard_iPhone" ), ConnectElement , SpringboardConfig.Element_Connect_Icon , SpringboardStrings.Element_Connect_Title ) );
+            Elements.Add( new SpringboardElement( this, new PrayerTask( "PrayerStoryboard_iPhone" )  , PrayerElement  , SpringboardConfig.Element_Prayer_Icon  , SpringboardStrings.Element_Prayer_Title ) );
             Elements.Add( new SpringboardElement( this, new AboutTask( "" )                          , MoreElement    , SpringboardConfig.Element_More_Icon    , SpringboardStrings.Element_More_Title ) );
 
             // add a bottom seperator for the final element
@@ -951,28 +951,7 @@ namespace iOS
                 // trigger the Give analytic
                 GiveAnalytic.Instance.Trigger( GiveAnalytic.Give );
 
-                MobileAppApi.TryGetImpersonationToken( 
-                    delegate(string impersonationToken )
-                    {
-                        // URL encode the givingUrl
-                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( GiveConfig.GiveUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
-                        NSString encodedUrlString = fullUrl.UrlEncode( );
-
-                        // if we got a token, append it
-                        NSUrl encodedUrl = null;
-                        if( string.IsNullOrEmpty( impersonationToken ) == false )
-                        {
-                            encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
-                        }
-                        else
-                        {
-                            encodedUrl = new NSUrl( encodedUrlString );
-                        }
-
-                        // launch them over
-                        UIApplication.SharedApplication.OpenUrl( encodedUrl );
-                    } );
+                TaskWebViewController.HandleUrl( true, true, GiveConfig.GiveUrl, null, null );
             }
             else
             {
@@ -1189,24 +1168,24 @@ namespace iOS
 
 
             
-            // position the login button
+            // HERE IS WHERE WE ORDER THE SPRINGBOARD ITEMS 
             NewsElement.Layer.AnchorPoint = CGPoint.Empty;
             NewsElement.Layer.Position = new CGPoint( 0, ViewProfileButton.Frame.Bottom + 40 );
 
-            ConnectElement.Layer.AnchorPoint = CGPoint.Empty;
-            ConnectElement.Layer.Position = new CGPoint( 0, NewsElement.Frame.Bottom );
-            
             MessagesElement.Layer.AnchorPoint = CGPoint.Empty;
-            MessagesElement.Layer.Position = new CGPoint( 0, ConnectElement.Frame.Bottom );
-
-            PrayerElement.Layer.AnchorPoint = CGPoint.Empty;
-            PrayerElement.Layer.Position = new CGPoint( 0, MessagesElement.Frame.Bottom );
+            MessagesElement.Layer.Position = new CGPoint( 0, NewsElement.Frame.Bottom );
 
             GiveElement.Layer.AnchorPoint = CGPoint.Empty;
-            GiveElement.Layer.Position = new CGPoint( 0, PrayerElement.Frame.Bottom );
+            GiveElement.Layer.Position = new CGPoint( 0, MessagesElement.Frame.Bottom );
+
+            ConnectElement.Layer.AnchorPoint = CGPoint.Empty;
+            ConnectElement.Layer.Position = new CGPoint( 0, GiveElement.Frame.Bottom );
+
+            PrayerElement.Layer.AnchorPoint = CGPoint.Empty;
+            PrayerElement.Layer.Position = new CGPoint( 0, ConnectElement.Frame.Bottom );
 
             MoreElement.Layer.AnchorPoint = CGPoint.Empty;
-            MoreElement.Layer.Position = new CGPoint( 0, GiveElement.Frame.Bottom );
+            MoreElement.Layer.Position = new CGPoint( 0, PrayerElement.Frame.Bottom );
 
             BottomSeperator.Layer.AnchorPoint = CGPoint.Empty;
             BottomSeperator.Layer.Position = new CGPoint( 0, MoreElement.Frame.Bottom );

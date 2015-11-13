@@ -8,7 +8,7 @@ namespace iOS
 {
     public class AboutTask : Task
     {
-        TaskWebViewController MainPageVC { get; set; }
+        TaskUIViewController MainPageVC { get; set; }
 
         public AboutTask( string storyboardName ) : base( storyboardName )
         {
@@ -18,12 +18,15 @@ namespace iOS
         {
             base.MakeActive( parentViewController, navToolbar, containerBounds );
 
-            MainPageVC = new TaskWebViewController( AboutConfig.Url, this, true, false, true );
-
+            MainPageVC = new TaskUIViewController();
+            MainPageVC.Task = this;
             MainPageVC.View.Bounds = containerBounds;
 
             // set our current page as root
             parentViewController.PushViewController(MainPageVC, false);
+
+            // and immediately handle the URL
+            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC );
         }
 
         public override void WillShowViewController(TaskUIViewController viewController)
@@ -44,41 +47,6 @@ namespace iOS
         public override void MakeInActive( )
         {
             base.MakeInActive( );
-        }
-
-        public override void OnActivated( )
-        {
-            base.OnActivated( );
-
-            MainPageVC.OnActivated( );
-        }
-
-        public override void WillEnterForeground()
-        {
-            base.WillEnterForeground();
-
-            MainPageVC.WillEnterForeground( );
-        }
-
-        public override void AppOnResignActive( )
-        {
-            base.AppOnResignActive( );
-
-            MainPageVC.AppOnResignActive( );
-        }
-
-        public override void AppDidEnterBackground()
-        {
-            base.AppDidEnterBackground();
-
-            MainPageVC.AppDidEnterBackground( );
-        }
-
-        public override void AppWillTerminate()
-        {
-            base.AppWillTerminate( );
-
-            MainPageVC.AppWillTerminate( );
         }
     }
 }

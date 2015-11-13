@@ -111,40 +111,6 @@
             <!--Definition for a springboard element-->
                 <RelativeLayout
                     android:layout_below="@id/springboard_news_frame"
-                    android:id="@+id/springboard_connect_frame"
-                    android:layout_height="45dp"
-                    android:layout_width="match_parent">
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/button" />
-                    <TextView
-                        android:text=""
-                        android:layout_height="wrap_content"
-                        android:layout_width="25dp"
-                        android:id="@+id/icon"
-                        android:layout_marginLeft="10dp"
-                        android:layout_centerVertical="true"
-                        android:gravity="center" />
-                    <TextView
-                        android:text="Next Steps"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text"
-                        android:layout_marginLeft="55dp"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical" />
-                    <View
-                        android:id="@+id/seperator"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#FFFFFFFF" />
-                </RelativeLayout>
-            <!--End springboard element definition-->
-            <!--Definition for a springboard element-->
-                <RelativeLayout
-                    android:layout_below="@id/springboard_connect_frame"
                     android:id="@+id/springboard_notes_frame"
                     android:layout_height="45dp"
                     android:layout_width="match_parent">
@@ -179,40 +145,6 @@
             <!--Definition for a springboard element-->
                 <RelativeLayout
                     android:layout_below="@id/springboard_notes_frame"
-                    android:id="@+id/springboard_prayer_frame"
-                    android:layout_height="45dp"
-                    android:layout_width="match_parent">
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/button" />
-                    <TextView
-                        android:text=""
-                        android:layout_height="wrap_content"
-                        android:layout_width="25dp"
-                        android:id="@+id/icon"
-                        android:layout_marginLeft="10dp"
-                        android:layout_centerVertical="true"
-                        android:gravity="center" />
-                    <TextView
-                        android:text="Prayer"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text"
-                        android:layout_marginLeft="55dp"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical" />
-                    <View
-                        android:id="@+id/seperator"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#FFFFFFFF" />
-                </RelativeLayout>
-            <!--End springboard element definition-->
-            <!--Definition for a springboard element-->
-                <RelativeLayout
-                    android:layout_below="@id/springboard_prayer_frame"
                     android:id="@+id/springboard_give_frame"
                     android:layout_height="45dp"
                     android:layout_width="match_parent">
@@ -247,6 +179,74 @@
             <!--Definition for a springboard element-->
                 <RelativeLayout
                     android:layout_below="@id/springboard_give_frame"
+                    android:id="@+id/springboard_connect_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Next Steps"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_connect_frame"
+                    android:id="@+id/springboard_prayer_frame"
+                    android:layout_height="45dp"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/button" />
+                    <TextView
+                        android:text=""
+                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:id="@+id/icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center" />
+                    <TextView
+                        android:text="Prayer"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text"
+                        android:layout_marginLeft="55dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical" />
+                    <View
+                        android:id="@+id/seperator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#FFFFFFFF" />
+                </RelativeLayout>
+            <!--End springboard element definition-->
+            <!--Definition for a springboard element-->
+                <RelativeLayout
+                    android:layout_below="@id/springboard_prayer_frame"
                     android:id="@+id/springboard_about_frame"
                     android:layout_height="45dp"
                     android:layout_width="match_parent">

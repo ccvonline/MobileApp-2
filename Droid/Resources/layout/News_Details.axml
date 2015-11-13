@@ -7,10 +7,9 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="-10dp"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center">
         <TextView
             android:text="Baptisms"
@@ -25,6 +24,7 @@
         <TextView
             android:text="Baptism is one of the most important events in the life of a Christian."
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/news_details_details"
@@ -34,15 +34,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center">
         <Button
             android:text="Learn More"
+            android:layout_weight="0"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_width="match_parent"

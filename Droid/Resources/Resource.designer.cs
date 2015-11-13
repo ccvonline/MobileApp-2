@@ -2009,14 +2009,14 @@ namespace Droid
 			// aapt resource value: 0x7f0c00ca
 			public const int springboard_about_frame = 2131493066;
 			
-			// aapt resource value: 0x7f0c00c6
-			public const int springboard_connect_frame = 2131493062;
+			// aapt resource value: 0x7f0c00c8
+			public const int springboard_connect_frame = 2131493064;
 			
 			// aapt resource value: 0x7f0c00c3
 			public const int springboard_container = 2131493059;
 			
-			// aapt resource value: 0x7f0c00c9
-			public const int springboard_give_frame = 2131493065;
+			// aapt resource value: 0x7f0c00c7
+			public const int springboard_give_frame = 2131493063;
 			
 			// aapt resource value: 0x7f0c00be
 			public const int springboard_login_button = 2131493054;
@@ -2024,11 +2024,11 @@ namespace Droid
 			// aapt resource value: 0x7f0c00c4
 			public const int springboard_news_frame = 2131493060;
 			
-			// aapt resource value: 0x7f0c00c7
-			public const int springboard_notes_frame = 2131493063;
+			// aapt resource value: 0x7f0c00c6
+			public const int springboard_notes_frame = 2131493062;
 			
-			// aapt resource value: 0x7f0c00c8
-			public const int springboard_prayer_frame = 2131493064;
+			// aapt resource value: 0x7f0c00c9
+			public const int springboard_prayer_frame = 2131493065;
 			
 			// aapt resource value: 0x7f0c00bd
 			public const int springboard_profile_image = 2131493053;

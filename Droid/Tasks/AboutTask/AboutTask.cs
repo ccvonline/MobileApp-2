@@ -31,7 +31,11 @@ namespace Droid
 
                     if ( forResume == false )
                     {
-                        MainPage.DisplayUrl( AboutConfig.Url, true );
+                        TaskWebFragment.HandleUrl( false, 
+                            true, 
+                            AboutConfig.Url,
+                            this, 
+                            MainPage );
                     }
                 }
             }

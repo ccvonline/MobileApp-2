@@ -128,7 +128,11 @@ namespace Droid
                             // either take them to the details page, or skip it and go straight to Learn More.
                             if ( MainPage.News[ buttonId ].News.SkipDetailsPage == true && string.IsNullOrEmpty( MainPage.News[ buttonId ].News.ReferenceURL ) == false )
                             {
-                                HandleReferenceUrl( MainPage.News[ buttonId ].News );
+                                TaskWebFragment.HandleUrl( MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser, 
+                                    MainPage.News[ buttonId ].News.IncludeImpersonationToken, 
+                                    MainPage.News[ buttonId ].News.ReferenceURL,
+                                    this, 
+                                    WebFragment );
                             }
                             else
                             {
@@ -141,55 +145,13 @@ namespace Droid
                             // otherwise visit the reference URL
                             if ( buttonId == Resource.Id.news_details_launch_url )
                             {
-                                HandleReferenceUrl( DetailsPage.NewsItem );   
+                                TaskWebFragment.HandleUrl( DetailsPage.NewsItem.ReferenceUrlLaunchesBrowser, 
+                                                           DetailsPage.NewsItem.IncludeImpersonationToken, 
+                                                           DetailsPage.NewsItem.ReferenceURL,
+                                                           this, 
+                                                           WebFragment );
                             }
                         }
-                    }
-                }
-
-                public void HandleReferenceUrl( RockNews newsItem )
-                {
-                    // are we launching a seperate browser?
-                    if ( newsItem.ReferenceUrlLaunchesBrowser == true )
-                    {
-                        // do they also want the impersonation token?
-                        if ( newsItem.IncludeImpersonationToken )
-                        {
-                            // try to get it
-                            MobileAppApi.TryGetImpersonationToken(
-                                delegate( string impersonationToken )
-                                {
-                                    // append the campus (this is part of their identity)
-                                    string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( newsItem.ReferenceURL, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
-                                    // if we got the token, append it
-                                    if( string.IsNullOrEmpty( impersonationToken ) == false )
-                                    {
-                                        fullUrl += "&" + impersonationToken;
-                                    }
-
-                                    // now fire off an intent.
-                                    Android.Net.Uri uri = Android.Net.Uri.Parse( fullUrl );
-
-                                    var intent = new Intent( Intent.ActionView, uri ); 
-                                    ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
-                                } );
-
-                        }
-                        else
-                        {
-                            // pretty easy, just fire off an intent.
-                            Android.Net.Uri uri = Android.Net.Uri.Parse( newsItem.ReferenceURL );
-
-                            var intent = new Intent( Intent.ActionView, uri ); 
-                            ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
-                        }
-                    }
-                    else
-                    {
-                        // otherwise we're not, so its simpler
-                        WebFragment.DisplayUrl( newsItem.ReferenceURL, newsItem.IncludeImpersonationToken );
-                        PresentFragment( WebFragment, true );
                     }
                 }
             }

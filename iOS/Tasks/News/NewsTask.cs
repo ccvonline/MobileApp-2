@@ -91,56 +91,6 @@ namespace iOS
             }
         }
 
-        /// <summary>
-        /// Handles taking a news item and managing its reference URL. (Showing an embedded web page OR launching Safari)
-        /// </summary>
-        public void HandleReferenceUrl( RockNews newsItem, UIViewController currController )
-        {
-            // do we launch them out of the app?
-            if ( newsItem.ReferenceUrlLaunchesBrowser == true )
-            {
-                // should we get the impersonation token?
-                if ( newsItem.IncludeImpersonationToken == true )
-                {
-                    MobileAppApi.TryGetImpersonationToken( 
-                        delegate(string impersonationToken )
-                        {
-                            // build the full url with their preferred campus (since thats personal data)
-                            string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( newsItem.ReferenceURL, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
-                            // URL encode the value
-                            NSString encodedUrlString = fullUrl.UrlEncode( );
-
-                            // if we got a token, append it
-                            NSUrl encodedUrl = null;
-                            if ( string.IsNullOrEmpty( impersonationToken ) == false )
-                            {
-                                encodedUrl = new NSUrl( encodedUrlString + "&" + impersonationToken );
-                            }
-                            else
-                            {
-                                encodedUrl = new NSUrl( encodedUrlString );
-                            }
-
-                            UIApplication.SharedApplication.OpenUrl( encodedUrl );
-                        } );
-                }
-                else
-                {
-                    // first encode the url
-                    NSString encodedUrlString = newsItem.ReferenceURL.UrlEncode( );
-
-                    UIApplication.SharedApplication.OpenUrl( new NSUrl( encodedUrlString ) );
-                }
-            }
-            // they are using an embedded browser, so this is pretty simple
-            else
-            {
-                TaskWebViewController viewController = new TaskWebViewController( newsItem.ReferenceURL, this, newsItem.IncludeImpersonationToken, false, true );
-                PerformSegue( currController, viewController );
-            }
-        }
-
         public override void PerformAction(string action)
         {
             base.PerformAction(action);

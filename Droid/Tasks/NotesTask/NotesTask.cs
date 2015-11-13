@@ -186,11 +186,15 @@ namespace Droid
                         }
                         else if ( source == NotesPage )
                         {
+                            NotesFragment.UrlClickParams clickParams = (NotesFragment.UrlClickParams)context;
+                            
                             // the context is the activeURL to visit.
                             WebViewPage.DisableIdleTimer = true;
-                            WebViewPage.DisplayUrl( (string)context, false );
-
-                            PresentFragment( WebViewPage, true );
+                            TaskWebFragment.HandleUrl( clickParams.UseExternalBrowser, 
+                                                       clickParams.UseImpersonationToken, 
+                                                       clickParams.Url,
+                                                       this, 
+                                                       WebViewPage );
                         }
                     }
                 }
@@ -213,4 +217,3 @@ namespace Droid
         }
     }
 }
-
