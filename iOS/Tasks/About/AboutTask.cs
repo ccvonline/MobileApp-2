@@ -26,7 +26,7 @@ namespace iOS
             parentViewController.PushViewController(MainPageVC, false);
 
             // and immediately handle the URL
-            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC );
+            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, false );
         }
 
         public override void WillShowViewController(TaskUIViewController viewController)

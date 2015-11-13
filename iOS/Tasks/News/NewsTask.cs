@@ -110,6 +110,7 @@ namespace iOS
 
 
                     MainPageVC.UpdateNews( News );
+
                     MainPageVC.LoadAndDownloadImages( );
                     MainPageVC.LayoutChanged( );
                     break;

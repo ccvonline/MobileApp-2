@@ -105,7 +105,7 @@ namespace iOS
             View.AddSubview( LearnMoreButton );
             LearnMoreButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this );
+                    TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this, false, true );
                 };
 
             // if there's no URL associated with this news item, hide the learn more button.

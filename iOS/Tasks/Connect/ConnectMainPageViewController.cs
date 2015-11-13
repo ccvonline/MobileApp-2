@@ -329,7 +329,7 @@ namespace iOS
                 }
                 else
                 {
-                    TaskWebViewController.HandleUrl( false, true, LinkEntries[ rowIndex ].Url, Task, this );
+                    TaskWebViewController.HandleUrl( false, true, LinkEntries[ rowIndex ].Url, Task, this, false, true );
                 }
             }
         }
