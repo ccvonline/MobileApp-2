@@ -41,21 +41,64 @@ namespace Droid
 
                 public override int Count 
                 {
-                    get { return ParentFragment.LinkEntries.Count + 1; }
+                    get { return ParentFragment.GetStartedEntries.Count + ParentFragment.GetEngagedEntries.Count + 2; }
                 }
 
                 public override View GetView(int position, View convertView, ViewGroup parent)
                 {
                     ListItemView returnedView = null;
+
+                    // if 0, return the primary header view
                     if ( position == 0 )
                     {
                         returnedView = GetPrimaryView( convertView, parent );
                     }
                     else
                     {
-                        returnedView = GetStandardView( position - 1, convertView, parent );
+                        // otherwise, see if this is an item in the 'GetStarted' list
+                        int getStartedRowIndex = position - 1;
+                        if ( getStartedRowIndex < ParentFragment.GetStartedEntries.Count )
+                        {
+                            // toggle the seperator depending on whether this is the last of the GetStared entries or not.
+                            bool showSeperator = getStartedRowIndex == ParentFragment.GetStartedEntries.Count - 1 ? false : true;
+
+                            returnedView = GetStandardView( ParentFragment.GetStartedEntries, 
+                                                            ParentFragment.GetStartedBillboards,
+                                                            getStartedRowIndex,
+                                                            convertView, 
+                                                            parent, 
+                                                            showSeperator );
+                        }
+                        // is it the seperator between lists?
+                        else if ( getStartedRowIndex == ParentFragment.GetStartedEntries.Count )
+                        {
+                            SeperatorListItem seperatorItem = convertView as SeperatorListItem;
+                            if ( seperatorItem == null )
+                            {
+                                seperatorItem = new SeperatorListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                            }
+
+                            returnedView = seperatorItem;
+                        }
+                        // then it must be a GetEngaged item.
+                        else
+                        {
+                            int getEngagedRowIndex = getStartedRowIndex - ParentFragment.GetStartedEntries.Count - 1;
+                            
+                            returnedView = GetStandardView( ParentFragment.GetEngagedEntries, 
+                                                            ParentFragment.GetEngagedBillboards,
+                                                            getEngagedRowIndex,
+                                                            convertView, 
+                                                            parent, 
+                                                            true );
+                        }
                     }
 
+                    // guard against not creating a row item
+                    if ( returnedView == null )
+                    {
+                        throw new NullReferenceException();
+                    }
                     return base.AddView( returnedView );
                 }
 
@@ -89,7 +132,7 @@ namespace Droid
                     return primaryItem;
                 }
 
-                ListItemView GetStandardView( int position, View convertView, ViewGroup parent )
+                ListItemView GetStandardView( List<ConnectLink> linkEntries, Bitmap[] linkBillboards, int position, View convertView, ViewGroup parent, bool showSeperator )
                 {
                     ListItem seriesItem = convertView as ListItem;
                     if ( seriesItem == null )
@@ -102,7 +145,8 @@ namespace Droid
                         seriesItem.FreeImageResources( );
                     }
 
-                    if ( position < ParentFragment.LinkBillboards.Count( ) && ParentFragment.LinkBillboards[ position ] != null )
+                    // validate that the billboard needed exists. It could still be loading.
+                    if ( position < linkBillboards.Count( ) && linkBillboards[ position ] != null )
                     {
                         if ( seriesItem.HasImage == false )
                         {
@@ -110,12 +154,22 @@ namespace Droid
                             Rock.Mobile.PlatformSpecific.Android.UI.Util.FadeView( seriesItem.Thumbnail, true, null );
                         }
                             
-                        seriesItem.Thumbnail.SetImageBitmap( ParentFragment.LinkBillboards[ position ] );
+                        seriesItem.Thumbnail.SetImageBitmap( linkBillboards[ position ] );
                         seriesItem.Thumbnail.SetScaleType( ImageView.ScaleType.CenterCrop );
                     }
 
-                    seriesItem.Title.Text = ParentFragment.LinkEntries[ position ].Title.ToUpper( );
-                    seriesItem.SubTitle.Text = ParentFragment.LinkEntries[ position ].SubTitle;
+                    seriesItem.Title.Text = linkEntries[ position ].Title.ToUpper( );
+                    seriesItem.SubTitle.Text = linkEntries[ position ].SubTitle;
+
+                    if ( showSeperator )
+                    {
+                        seriesItem.Seperator.Visibility = ViewStates.Visible;
+                    }
+                    else
+                    {
+                        seriesItem.Seperator.Visibility = ViewStates.Gone;
+                    }
+
                     return seriesItem;
                 }
             }
@@ -166,6 +220,33 @@ namespace Droid
                         Billboard.Drawable.Dispose( );
                         Billboard.SetImageBitmap( null );
                     }
+                }
+            }
+
+            public class SeperatorListItem : Rock.Mobile.PlatformSpecific.Android.UI.ListAdapter.ListItemView
+            {
+                public TextView Title { get; set; }
+
+                public SeperatorListItem( Context context ) : base( context )
+                {
+                    SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ) );
+
+                    Orientation = Android.Widget.Orientation.Vertical;
+
+                    Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                    Title.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
+                    Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Large_FontSize );
+                    Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
+                    Title.Text = ConnectStrings.Main_Connect_Seperator;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 2 );
+                    AddView( Title );
+                }
+
+                public override void Destroy( )
+                {
                 }
             }
 
@@ -273,8 +354,11 @@ namespace Droid
 
                 public Bitmap Billboard { get; set; }
 
-                public List<ConnectLink> LinkEntries { get; set; }
-                public Bitmap [] LinkBillboards { get; set; }
+                public List<ConnectLink> GetStartedEntries { get; set; }
+                public List<ConnectLink> GetEngagedEntries { get; set; }
+
+                public Bitmap [] GetStartedBillboards { get; set; }
+                public Bitmap [] GetEngagedBillboards { get; set; }
 
                 public ConnectPrimaryFragment( ) : base( )
                 {
@@ -292,16 +376,11 @@ namespace Droid
                     view.SetOnTouchListener( this );
 
 
-                    LinkEntries = ConnectLink.BuildList( );
+                    GetStartedEntries = ConnectLink.BuildGetStartedList( );
+                    GetEngagedEntries = ConnectLink.BuildGetEngagedList( );
 
-                    // insert group finder into the beginning of the list so it's always the first entry
-                    ConnectLink groupFinderLink = new ConnectLink( );
-                    groupFinderLink.Title = ConnectStrings.Main_Connect_GroupFinder;
-                    groupFinderLink.SubTitle = ConnectStrings.Main_Connect_GroupFinder_SubTitle;
-                    groupFinderLink.ImageName = PrivateConnectConfig.GroupFinder_IconImage;
-                    LinkEntries.Insert( 0, groupFinderLink );
-
-                    LinkBillboards = new Bitmap[ LinkEntries.Count ];
+                    GetStartedBillboards = new Bitmap[ GetStartedEntries.Count ];
+                    GetEngagedBillboards = new Bitmap[ GetEngagedEntries.Count ];
 
                     ListView = view.FindViewById<ListView>( Resource.Id.connect_primary_list );
 
@@ -310,14 +389,22 @@ namespace Droid
                             // ignore clicks to the top banner
                             if( e.Position > 0 )
                             {
-                                if( e.Position == 1 )
-                                {
-                                    ParentTask.OnClick( this, 0 );
-                                }
-                                else
+                                // get the row index relative to getStarted
+                                int getStartedRowIndex = e.Position - 1;
+
+                                // if it should be a get started row
+                                if ( getStartedRowIndex < GetStartedEntries.Count )
                                 {
                                     // if they clicked a non-groupfinder row, get the link they want to visit
-                                    ParentTask.OnClick( this, e.Position - 1, LinkEntries[ e.Position - 1 ].Url );
+                                    ParentTask.OnClick( this, getStartedRowIndex, GetStartedEntries[ getStartedRowIndex ] );
+                                }
+                                else if( getStartedRowIndex > GetStartedEntries.Count )
+                                {
+                                    // create the row index relative to getEngaged.
+                                    int getEngagedRowIndex = getStartedRowIndex - GetStartedEntries.Count - 1;
+
+                                    // if they clicked a non-groupfinder row, get the link they want to visit
+                                    ParentTask.OnClick( this, getEngagedRowIndex, GetEngagedEntries[ getEngagedRowIndex ] );
                                 }
                             }
                         };
@@ -357,16 +444,34 @@ namespace Droid
 
 
                     // load the thumbnails
-                    for( int i = 0; i < LinkEntries.Count; i++ )
+                    for( int i = 0; i < GetStartedEntries.Count; i++ )
                     {
                         int imageIndex = i;
 
-                        AsyncLoader.LoadImage( LinkEntries[ i ].ImageName, true, false,
+                        AsyncLoader.LoadImage( GetStartedEntries[ i ].ImageName, true, false,
                             delegate( Bitmap imageBmp )
                             {
                                 if( FragmentActive == true && imageBmp != null )
                                 {
-                                    LinkBillboards[ imageIndex ] = imageBmp;
+                                    GetStartedBillboards[ imageIndex ] = imageBmp;
+
+                                    ((ListAdapter)ListView.Adapter).NotifyDataSetChanged( );   
+                                    return true;
+                                }
+                                return false;
+                            } );
+                    }
+
+                    for( int i = 0; i < GetEngagedEntries.Count; i++ )
+                    {
+                        int imageIndex = i;
+
+                        AsyncLoader.LoadImage( GetEngagedEntries[ i ].ImageName, true, false,
+                            delegate( Bitmap imageBmp )
+                            {
+                                if( FragmentActive == true && imageBmp != null )
+                                {
+                                    GetEngagedBillboards[ imageIndex ] = imageBmp;
 
                                     ((ListAdapter)ListView.Adapter).NotifyDataSetChanged( );   
                                     return true;
@@ -423,7 +528,15 @@ namespace Droid
                         Billboard = null;
                     }
 
-                    foreach ( Bitmap image in LinkBillboards )
+                    foreach ( Bitmap image in GetStartedBillboards )
+                    {
+                        if ( image != null )
+                        {
+                            image.Dispose( );
+                        }
+                    }
+
+                    foreach ( Bitmap image in GetEngagedBillboards )
                     {
                         if ( image != null )
                         {

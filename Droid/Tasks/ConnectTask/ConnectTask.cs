@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Views;
 using App.Shared.Strings;
+using App.Shared;
 
 namespace Droid
 {
@@ -64,7 +65,10 @@ namespace Droid
                         // decide what to do.
                         if ( source == MainPage )
                         {
-                            if ( buttonId == 0 )
+                            ConnectLink linkEntry = (ConnectLink)context;
+
+                            // group finder is the only connect link that doesn't use an embedded webView.
+                            if ( linkEntry.Title == ConnectStrings.Main_Connect_GroupFinder )
                             {
                                 // launch group finder (and have it auto-show the search)
                                 GroupFinder.ShowSearchOnAppear = true;
@@ -83,8 +87,7 @@ namespace Droid
                             else
                             {
                                 // launch the ConnectWebFragment.
-                                string connectUrl = (string)context;
-                                TaskWebFragment.HandleUrl( false, true, connectUrl, this, WebFragment );
+                                TaskWebFragment.HandleUrl( false, true, linkEntry.Url, this, WebFragment );
                             }
                         }
                         else if ( source == GroupFinder )

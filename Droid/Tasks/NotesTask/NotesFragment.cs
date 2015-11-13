@@ -631,6 +631,12 @@ namespace Droid
                                     {
                                         if ( string.IsNullOrEmpty( activeUrl ) == false )
                                         {
+                                            // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
+                                            if ( urlUsesRockImpersonation )
+                                            {
+                                                MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
+                                            }
+
                                             ParentTask.OnClick( this, 0, clickParams );
                                         }
                                     }

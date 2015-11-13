@@ -11,6 +11,7 @@ using App.Shared;
 using System.IO;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
+using App.Shared.Analytics;
 
 namespace iOS
 {
@@ -573,6 +574,9 @@ namespace iOS
         {
             if ( row < News.Count )
             {
+                // mark that they tapped this item.
+                NewsAnalytic.Instance.Trigger( NewsAnalytic.Read, News[ row ].News.Title );
+
                 if ( News[ row ].News.SkipDetailsPage == true && string.IsNullOrEmpty( News[ row ].News.ReferenceURL ) == false )
                 {
                     TaskWebViewController.HandleUrl( News[ row ].News.ReferenceUrlLaunchesBrowser, News[ row ].News.IncludeImpersonationToken, News[ row ].News.ReferenceURL, Task, this, false, true );

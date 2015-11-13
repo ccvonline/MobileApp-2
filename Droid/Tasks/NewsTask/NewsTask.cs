@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using App.Shared.Config;
 using App.Shared.PrivateConfig;
 using MobileApp;
+using App.Shared.Analytics;
 
 namespace Droid
 {
@@ -125,6 +126,9 @@ namespace Droid
                         // if the main page had a VALID news item clicked, go to it
                         if ( source == MainPage && buttonId < News.Count )
                         {
+                            // mark that they tapped this item.
+                            NewsAnalytic.Instance.Trigger( NewsAnalytic.Read, MainPage.News[ buttonId ].News.Title );
+
                             // either take them to the details page, or skip it and go straight to Learn More.
                             if ( MainPage.News[ buttonId ].News.SkipDetailsPage == true && string.IsNullOrEmpty( MainPage.News[ buttonId ].News.ReferenceURL ) == false )
                             {

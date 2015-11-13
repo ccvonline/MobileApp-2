@@ -23,13 +23,12 @@ namespace iOS
                 public static string Identifier = "PrimaryCell";
 
                 public UIImageView Image { get; set; }
-                public TableSource TableSource { get; set; }
                 public UILabel Title { get; set; }
-                //public UILabel BottomBanner { get; set; }
 
                 public PrimaryCell( CGSize parentSize, UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
                 {
                     BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
+                    SelectionStyle = UITableViewCellSelectionStyle.None;
 
                     Image = new UIImageView( );
                     Image.BackgroundColor = UIColor.Yellow;
@@ -52,23 +51,38 @@ namespace iOS
                     Title.Layer.AnchorPoint = CGPoint.Empty;
                     Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
                     Title.LineBreakMode = UILineBreakMode.TailTruncation;
-                    //Title.SizeToFit( );
-                    //Title.Frame = new CGRect( 5, Image.Frame.Bottom, Frame.Width - 10, Title.Frame.Height );
+                    Title.TextAlignment = UITextAlignment.Center;
+                    Title.Frame = new CGRect( 5, Image.Frame.Bottom, parentSize.Width - 10, 0 );
+                    Title.SizeToFit( );
                     AddSubview( Title );
+                }
+            }
 
+            /// <summary>
+            /// Definition for each cell in this table
+            /// </summary>
+            class SeperatorCell : UITableViewCell
+            {
+                public static string Identifier = "SeperatorCell";
 
-                    /*BottomBanner = new UILabel( );
-                    BottomBanner.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
-                    BottomBanner.Layer.AnchorPoint = new CGPoint( 0, 0 );
-                    BottomBanner.Text = ConnectStrings.Main_Connect_OtherWays;
-                    BottomBanner.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor );
-                    BottomBanner.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Table_Footer_Color );
-                    BottomBanner.TextAlignment = UITextAlignment.Center;
+                public TableSource Parent { get; set; }
+                public UILabel Title { get; set; }
 
-                    BottomBanner.SizeToFit( );
-                    BottomBanner.Bounds = new CGRect( 0, 0, parentSize.Width, BottomBanner.Bounds.Height + 10 );
-                    BottomBanner.Layer.Position = new CGPoint( 0, Title.Frame.Bottom + 5 );
-                    AddSubview( BottomBanner );*/
+                public SeperatorCell( CGSize parentSize, UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
+                {
+                    BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
+                    SelectionStyle = UITableViewCellSelectionStyle.None;
+
+                    Title = new UILabel( );
+                    Title.Text = ConnectStrings.Main_Connect_Seperator;
+                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Large_FontSize );
+                    Title.Layer.AnchorPoint = CGPoint.Empty;
+                    Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
+                    Title.LineBreakMode = UILineBreakMode.TailTruncation;
+                    Title.TextAlignment = UITextAlignment.Center;
+                    Title.Frame = new CGRect( 5, 0, parentSize.Width - 10, 0 );
+                    Title.SizeToFit( );
+                    AddSubview( Title );
                 }
             }
 
@@ -126,31 +140,31 @@ namespace iOS
             ConnectMainPageViewController Parent { get; set; }
 
             nfloat PendingPrimaryCellHeight { get; set; }
-            nfloat PendingCellHeight { get; set; }
+            nfloat PendingSeriesCellHeight { get; set; }
+            nfloat PendingSeperatorCellHeight { get; set; }
 
             PrimaryCell PrimaryTableCell { get; set; }
+            SeperatorCell SeperatorTableCell { get; set; }
 
             public TableSource ( ConnectMainPageViewController parent )
             {
                 Parent = parent;
 
+                // create the primary table cell
                 PrimaryTableCell = new PrimaryCell( parent.View.Bounds.Size, UITableViewCellStyle.Default, PrimaryCell.Identifier );
-                PrimaryTableCell.TableSource = this;
-
-                // take the parent table's width so we inherit its width constraint
                 PrimaryTableCell.Bounds = parent.View.Bounds;
+                PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom;// + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
 
-                // configure the cell colors
-                PrimaryTableCell.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
-                PrimaryTableCell.SelectionStyle = UITableViewCellSelectionStyle.None;
 
-                //PendingPrimaryCellHeight = PrimaryTableCell.BottomBanner.Frame.Bottom;
-                PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom;
+                // create the seperator table cell
+                SeperatorTableCell = new SeperatorCell( parent.View.Bounds.Size, UITableViewCellStyle.Default, SeperatorCell.Identifier );
+                SeperatorTableCell.Bounds = parent.View.Bounds;
+                PendingSeperatorCellHeight = SeperatorTableCell.Title.Frame.Bottom;// + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
             }
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                return Parent.LinkEntries.Count + 1;
+                return Parent.GetStartedEntries.Count + Parent.GetEngagedEntries.Count + 2;
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -165,55 +179,73 @@ namespace iOS
 
             nfloat GetCachedRowHeight( UITableView tableView, NSIndexPath indexPath )
             {
+                // If we don't have the cell's height yet (first render), return the table's height
+                nfloat rowHeight = tableView.Frame.Height;
+
                 // Depending on the row, we either want the primary cell's height,
                 // or a standard row's height.
-                switch ( indexPath.Row )
+                if ( indexPath.Row == 0 )
                 {
-                    case 0:
+                    if ( PendingPrimaryCellHeight > 0 )
                     {
-                        if ( PendingPrimaryCellHeight > 0 )
-                        {
-                            return PendingPrimaryCellHeight;
-                        }
-                        break;
+                        rowHeight = PendingPrimaryCellHeight;
                     }
-
-                    default:
+                }
+                else if ( ( indexPath.Row - 1 ) == Parent.GetStartedEntries.Count )
+                {
+                    if ( PendingSeperatorCellHeight > 0 )
                     {
-                        if ( PendingCellHeight > 0 )
-                        {
-                            return PendingCellHeight;
-                        }
-                        break;
+                        rowHeight = PendingSeperatorCellHeight;
+                    }
+                }
+                else
+                {
+                    if ( PendingSeriesCellHeight > 0 )
+                    {
+                        rowHeight = PendingSeriesCellHeight;
                     }
                 }
 
-                // If we don't have the cell's height yet (first render), return the table's height
-                return tableView.Frame.Height;
+                return rowHeight;
             }
 
             public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
             {
+                // if it's our top entry, make it the graphic and title
                 if ( indexPath.Row == 0 )
                 {
-                    nfloat imageAspect = PrimaryTableCell.Image.Bounds.Height / PrimaryTableCell.Image.Bounds.Width;
-                    PrimaryTableCell.Image.Frame = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * imageAspect );
-
-                    PrimaryTableCell.Title.Frame = new CGRect( 5, PrimaryTableCell.Image.Frame.Bottom, tableView.Bounds.Width - 10, 0 );
-                    PrimaryTableCell.Title.TextAlignment = UITextAlignment.Center;
-                    PrimaryTableCell.Title.SizeToFit( );
-
-                    PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
-
                     return PrimaryTableCell;
                 }
+                // otherwise, see if it should be a getStarted row or a getEngaged row.
                 else
                 {
-                    return GetStandardCell( tableView, indexPath.Row - 1 );
+                    // get the row index relative to getStarted
+                    int getStartedRowIndex = indexPath.Row - 1;
+
+                    // if it should be a get started row
+                    if ( getStartedRowIndex < Parent.GetStartedEntries.Count )
+                    {
+                        // hide the seperator if this is the last item in the GetStarted list.
+                        bool showSeperator = getStartedRowIndex == Parent.GetStartedEntries.Count - 1 ? false : true;
+
+                        return GetActivityCell( tableView, Parent.GetStartedEntries[ getStartedRowIndex ], showSeperator );
+                    }
+                    // else if it should be the seperator between GetStarted / GetEngaged
+                    else if ( getStartedRowIndex == Parent.GetStartedEntries.Count )
+                    {
+                        return SeperatorTableCell;
+                    }
+                    else
+                    {
+                        // create the row index relative to getEngaged.
+                        int getEngagedRowIndex = getStartedRowIndex - Parent.GetStartedEntries.Count - 1;
+
+                        return GetActivityCell( tableView, Parent.GetEngagedEntries[ getEngagedRowIndex ], true );
+                    }
                 }
             }
 
-            UITableViewCell GetStandardCell( UITableView tableView, int row )
+            UITableViewCell GetActivityCell( UITableView tableView, ConnectLink link, bool showSeperator )
             {
                 SeriesCell cell = tableView.DequeueReusableCell( SeriesCell.Identifier ) as SeriesCell;
 
@@ -232,7 +264,7 @@ namespace iOS
                 }
 
                 // Thumbnail Image
-                cell.Image.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + Parent.LinkEntries[ row ].ImageName );
+                cell.Image.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + link.ImageName );
                 cell.Image.SizeToFit( );
 
                 nfloat topPadding = 10;
@@ -250,10 +282,10 @@ namespace iOS
                 cell.Chevron.Layer.Position = new CGPoint( cell.Bounds.Width - cell.Chevron.Bounds.Width - 5, chevronYPos );
 
                 // Create the title
-                cell.Title.Text = Parent.LinkEntries[ row ].Title.ToUpper( );
+                cell.Title.Text = link.Title.ToUpper( );
                 cell.Title.SizeToFit( );
 
-                cell.SubTitle.Text = Parent.LinkEntries[ row ].SubTitle;
+                cell.SubTitle.Text = link.SubTitle;
                 cell.SubTitle.SizeToFit( );
 
                 // Position the Title & Date in the center to the right of the image
@@ -263,9 +295,18 @@ namespace iOS
                 cell.SubTitle.Frame = new CGRect( cell.Image.Frame.Right + 10, cell.Title.Frame.Bottom - 6, availableTextWidth - 5, cell.Title.Frame.Height );
 
                 // add the seperator to the bottom
-                cell.Seperator.Frame = new CGRect( 0, cell.Image.Frame.Bottom + 10, cell.Bounds.Width, 1 );
+                if ( showSeperator )
+                {
+                    cell.Seperator.Hidden = false;
+                    cell.Seperator.Frame = new CGRect( 0, cell.Image.Frame.Bottom + 10, cell.Bounds.Width, 1 );
 
-                PendingCellHeight = cell.Seperator.Frame.Bottom;
+                    PendingSeriesCellHeight = cell.Seperator.Frame.Bottom;
+                }
+                else
+                {
+                    cell.Seperator.Hidden = true;
+                    PendingSeriesCellHeight = cell.Image.Frame.Bottom + 10;
+                }
 
                 return cell;
             }
@@ -284,7 +325,8 @@ namespace iOS
             }
         }
 
-        public List<ConnectLink> LinkEntries { get; set; }
+        public List<ConnectLink> GetStartedEntries { get; set; }
+        public List<ConnectLink> GetEngagedEntries { get; set; }
 
 		public ConnectMainPageViewController (IntPtr handle) : base (handle)
 		{
@@ -296,14 +338,8 @@ namespace iOS
 
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BackgroundColor );
 
-            LinkEntries = ConnectLink.BuildList( );
-
-            // ensure the first link entry is always group finder.
-            ConnectLink link = new ConnectLink( );
-            link.Title = ConnectStrings.Main_Connect_GroupFinder;
-            link.SubTitle = ConnectStrings.Main_Connect_GroupFinder_SubTitle;
-            link.ImageName = PrivateConnectConfig.GroupFinder_IconImage;
-            LinkEntries.Insert( 0, link );
+            GetStartedEntries = ConnectLink.BuildGetStartedList( );
+            GetEngagedEntries = ConnectLink.BuildGetEngagedList( );
 
             ConnectTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             ConnectTableView.Source = new TableSource( this );
@@ -322,14 +358,35 @@ namespace iOS
         {
             if ( rowIndex > -1 )
             {
-                if ( rowIndex == 0 )
+                ConnectLink linkEntry = null;
+
+                // is this a getStarted row?
+                if ( rowIndex < GetStartedEntries.Count )
                 {
-                    TaskUIViewController viewController = Storyboard.InstantiateViewController( "GroupFinderViewController" ) as TaskUIViewController;
-                    Task.PerformSegue( this, viewController );
+                    linkEntry = GetStartedEntries[ rowIndex ];
                 }
-                else
+                // if it's GREATER (not greater / equal) then it's a GetEngaged. 
+                // if it were equal, then it'd be the seperator and we don't care.
+                else if ( rowIndex > GetStartedEntries.Count )
                 {
-                    TaskWebViewController.HandleUrl( false, true, LinkEntries[ rowIndex ].Url, Task, this, false, true );
+                    int getEngagedRowIndex = rowIndex - GetStartedEntries.Count - 1;
+
+                    linkEntry = GetEngagedEntries[ getEngagedRowIndex ];
+                }
+
+                // did they pick something valid?
+                if ( linkEntry != null )
+                {
+                    // GroupFinder is unique in that it doesn't use a webView.
+                    if ( linkEntry.Title == ConnectStrings.Main_Connect_GroupFinder )
+                    {
+                        TaskUIViewController viewController = Storyboard.InstantiateViewController( "GroupFinderViewController" ) as TaskUIViewController;
+                        Task.PerformSegue( this, viewController );
+                    }
+                    else
+                    {
+                        TaskWebViewController.HandleUrl( false, true, linkEntry.Url, Task, this, false, true );
+                    }
                 }
             }
         }

@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
 using Rock.Mobile.UI;
+using App.Shared.Strings;
+using App.Shared.PrivateConfig;
 
 namespace App
 {
@@ -204,13 +206,15 @@ namespace App
 
             public class ConnectConfig
             {
-                /// <summary>
-                /// These are the "other" connect options. Each one is a label, a URL to visit, and an icon to display.
-                /// </summary>
-                public static string[] WebViews = 
+                public static string[] GetStartedList = 
                     {
                         "Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
+                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png"
+                    };
+                
+                public static string[] GetEngagedList = 
+                    {
+                        ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage,
                         "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png"
                     };
                 

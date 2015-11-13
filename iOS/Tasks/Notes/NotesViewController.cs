@@ -603,6 +603,12 @@ namespace iOS
 
                         DestroyNotes( );
 
+                        // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
+                        if ( urlUsesRockImpersonation )
+                        {
+                            MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
+                        }
+
                         TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false );
                     }
                 }

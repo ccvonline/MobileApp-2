@@ -92,12 +92,27 @@ namespace App.Shared
             }
         }
 
+        public class NewsAnalytic : EventAnalytic
+        {
+            public const string Read = "Read";
+
+            protected NewsAnalytic( ) : base( )
+            {
+                Name = "News";
+
+                Categories.Add( new Category( Read, true ) );
+            }
+
+            public static NewsAnalytic Instance = new NewsAnalytic( );
+        }
+
         public class MessageAnalytic : EventAnalytic
         {
             public const string BrowseSeries = "Browse Series";
             public const string Read = "Read";
             public const string Watch = "Watch";
             public const string Listen = "Listen";
+            public const string Takeaway = "Takeaway";
 
             protected MessageAnalytic( ) : base( )
             {
@@ -107,6 +122,7 @@ namespace App.Shared
                 Categories.Add( new Category( Read, true ) );
                 Categories.Add( new Category( Watch, true ) );
                 Categories.Add( new Category( Listen, true ) );
+                Categories.Add( new Category( Takeaway, true ) );
             }
 
             public static MessageAnalytic Instance = new MessageAnalytic( );
