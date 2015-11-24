@@ -639,9 +639,9 @@ namespace Droid
                                     StatusLayer.Visibility = ViewStates.Invisible;
 
                                     // create our prayer request layouts
-                                    foreach ( Rock.Client.PrayerRequest request in prayerRequests )
+                                    for( int i = 0; i < Math.Min( prayerRequests.Count, PrivatePrayerConfig.MaxPrayers ); i++ )
                                     {
-                                        PrayerCard prayerCard = new PrayerCard( request, PrayerCardSize );
+                                        PrayerCard prayerCard = new PrayerCard( prayerRequests[ i ], PrayerCardSize );
                                         PrayerRequestCards.Add( prayerCard );
 
                                         Carousel.AddCard( prayerCard.View );

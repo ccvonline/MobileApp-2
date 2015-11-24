@@ -430,6 +430,11 @@ namespace App.Shared
             /// The size of the symbol used to representing a prayer post result.
             /// </summary>
             public const uint PostPrayer_ResultSymbolSize_Droid = 64;
+
+            /// <summary>
+            /// The max number of prayers to display
+            /// </summary>
+            public const uint MaxPrayers = 50;
         }
 
         public class PrivateConnectConfig

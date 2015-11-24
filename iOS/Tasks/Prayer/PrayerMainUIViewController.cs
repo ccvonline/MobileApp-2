@@ -487,7 +487,7 @@ namespace iOS
                                                 RetrievingPrayersView.Layer.Opacity = 0.00f;
 
                                                 // setup the card positions to be to the offscreen to the left, centered on screen, and offscreen to the right
-                                                for( int i = 0; i < Math.Min( prayerRequests.Count, 50 ); i++ )
+                                                for( int i = 0; i < Math.Min( prayerRequests.Count, PrivatePrayerConfig.MaxPrayers ); i++ )
                                                 {
                                                     PrayerCard card = new PrayerCard( prayerRequests[ i ], CardSize );
                                                     PrayerRequests.Add( card );
