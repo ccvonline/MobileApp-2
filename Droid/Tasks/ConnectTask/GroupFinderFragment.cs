@@ -669,7 +669,9 @@ namespace Droid
 
                             Android.Gms.Maps.Model.LatLngBounds bounds = builder.Build( );
 
-                            CameraUpdate camPos = CameraUpdateFactory.NewLatLngBounds( bounds, 200 );
+                            int paddingInPixels = Math.Min( View.Width, (int)(View.Height * .1f) );
+
+                            CameraUpdate camPos = CameraUpdateFactory.NewLatLngBounds( bounds, paddingInPixels );
                             Map.AnimateCamera( camPos );
 
                             // show the info window for the first (closest) group

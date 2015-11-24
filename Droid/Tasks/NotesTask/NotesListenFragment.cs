@@ -126,6 +126,15 @@ namespace Droid
 
                 UIResultView ResultView { get; set; }
 
+                bool FragmentActive { get; set; }
+
+                /// <summary>
+                /// True when OnPrepared has been called and give the media player a reference to ourselves.
+                /// If false, it potentially lost it's reference to us, and we shouldn't use it until OnPrepared is called again.
+                /// </summary>
+                /// <value><c>true</c> if media controller prepared; otherwise, <c>false</c>.</value>
+                bool MediaControllerPrepared { get; set; }
+
                 // used so that we know how to setup the UI / service
                 // when being created or resumed.
                 enum MediaPlayerState
@@ -269,11 +278,15 @@ namespace Droid
                     Activity.BindService( new Intent( Activity, typeof( AudioService )  ), AudioServiceConnection, Bind.AutoCreate );
 
                     SyncUI( );
+
+                    FragmentActive = true;
                 }
 
                 public override void OnPause()
                 {
                     base.OnPause();
+
+                    FragmentActive = false;
 
                     Rock.Mobile.Util.Debug.WriteLine( "OnPause - UNbinding audio service" );
 
@@ -323,7 +336,10 @@ namespace Droid
 
                 public override bool OnTouch( View v, MotionEvent e )
                 {
-                    MediaController.Show( );
+                    if( MediaControllerPrepared == true )
+                    {
+                        MediaController.Show( );
+                    }
 
                     return false;
                 }
@@ -339,7 +355,10 @@ namespace Droid
                             ProgressBar.Visibility = ViewStates.Visible;
                             ProgressBar.BringToFront( );
 
-                            MediaController.Hide( );
+                            if( MediaControllerPrepared == true )
+                            {
+                                MediaController.Hide( );
+                            }
                             break;
                         }
 
@@ -349,7 +368,10 @@ namespace Droid
                             // hide the progress bar
                             ProgressBar.Visibility = ViewStates.Gone;
 
-                            MediaController.Show( );
+                            if( MediaControllerPrepared == true )
+                            {
+                                MediaController.Show( );
+                            }
                             break;
                         }
                     }
@@ -361,6 +383,7 @@ namespace Droid
 
                     // now that we know the media player is read, set the controller's player
                     MediaController.SetMediaPlayer( this );
+                    MediaControllerPrepared = true;
 
                     // setup a seek listener
                     mp.SetOnSeekCompleteListener( this );
@@ -397,15 +420,24 @@ namespace Droid
                 {
                     ProgressBar.Visibility = ViewStates.Gone;
 
-                    ResultView.Show( MessagesStrings.Error_Title, 
-                        PrivateControlStylingConfig.Result_Symbol_Failed, 
-                        MessagesStrings.Error_Watch_Playback,
-                        GeneralStrings.Retry );
-                    
-                    ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    // only show the resultView if we're active.
+                    if( FragmentActive == true )
+                    {
+                        ResultView.Show( MessagesStrings.Error_Title, 
+                            PrivateControlStylingConfig.Result_Symbol_Failed, 
+                            MessagesStrings.Error_Watch_Playback,
+                            GeneralStrings.Retry );
+                        
+                        ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+                    }
 
-                    mp.Stop( );
-                    mp.Reset( );
+                    if( mp != null )
+                    {
+                        mp.Stop( );
+                        mp.Reset( );
+                    }
+
+                    MediaControllerPrepared = false;
 
                     PlayerState = MediaPlayerState.None;
 
