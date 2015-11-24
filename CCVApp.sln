@@ -46,4 +46,12 @@ Global
 		{8493BB83-6542-4BAE-BE1B-FCFE349AF1E6}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{8493BB83-6542-4BAE-BE1B-FCFE349AF1E6}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 120
+		$1.inheritsSet = VisualStudio
+		$1.inheritsScope = text/plain
+		$1.scope = text/plain
+	EndGlobalSection
 EndGlobal

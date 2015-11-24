@@ -1222,7 +1222,7 @@ namespace Droid
         public override void OnAttach(Activity activity)
         {
             base.OnAttach(activity);
-            Rock.Mobile.Util.Debug.WriteLine( "Springboard OnAtach()" );
+            Rock.Mobile.Util.Debug.WriteLine( "Springboard OnAttach()" );
         }
 
         public override void OnDetach()

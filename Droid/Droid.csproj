@@ -172,7 +172,7 @@
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
   <Import Project="..\..\..\Spark\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\..\Spark\Rock.Mobile\Rock.Mobile.projitems')" />
   <Import Project="..\..\..\Spark\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\..\Spark\Rock\Rock.Client\Rock.Client.Models.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Assets\Fonts\" />
     <Folder Include="Tasks\" />
