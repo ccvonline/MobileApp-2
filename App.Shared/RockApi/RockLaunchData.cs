@@ -318,16 +318,18 @@ namespace App
                                                     }
                                                 }
 
+                                                // jhm 11-30-15: Use the image guids, rather than news title, for the image.
+                                                // This will ensure the image updates anytime it's changed in Rock!
                                                 RockNews newsItem = new RockNews( item.Title, 
                                                                                   item.Content, 
                                                                                   detailUrl, 
-                                                    mobileAppSkipDetailsPage,
+                                                                                  mobileAppSkipDetailsPage,
                                                                                   detailUrlLaunchesBrowser,
                                                                                   includeImpersonationToken,
                                                                                   imageUrl, 
-                                                                                  item.Title.AsLegalFilename( ) + "_main.png", 
+                                                                                  featuredGuid.AsLegalFilename( ) + ".png",//item.Title.AsLegalFilename( ) + "_main.png", 
                                                                                   bannerUrl, 
-                                                                                  item.Title.AsLegalFilename( ) + "_banner.png", 
+                                                                                  bannerGuid.AsLegalFilename( ) + ".png",//item.Title.AsLegalFilename( ) + "_banner.png", 
                                                                                   campusGuids );
 
 

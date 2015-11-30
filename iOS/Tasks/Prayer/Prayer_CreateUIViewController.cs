@@ -346,14 +346,14 @@ namespace iOS
         {
             bool debugKeyEntered = false;
 
-            if ( PrayerRequest.Text.ToLower( ) == "clear cache" )
+            if ( PrayerRequest.Text.ToLower( ).Trim( ) == "clear cache" )
             {
                 debugKeyEntered = true;
 
                 FileCache.Instance.CleanUp( true );
                 SpringboardViewController.DisplayError( "Cache Cleared", "All cached items have been deleted" );
             }
-            else if ( PrayerRequest.Text.ToLower( ) == "developer" )
+            else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "developer" )
             {
                 debugKeyEntered = true;
 
@@ -361,13 +361,13 @@ namespace iOS
                 SpringboardViewController.DisplayError( "Developer Mode", 
                     string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
             }
-            else if ( PrayerRequest.Text.ToLower( ) == "version" )
+            else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "version" )
             {
                 debugKeyEntered = true;
 
                 SpringboardViewController.DisplayError( "Current Version", BuildStrings.Version );
             }
-            else if ( PrayerRequest.Text.ToLower( ) == "upload dumps" )
+            else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "upload dumps" )
             {
 #if !DEBUG
                 debugKeyEntered = true;
@@ -379,7 +379,7 @@ namespace iOS
             else
             {
                 // otherwise, see if our special UI caught it.
-                debugKeyEntered = UISpecial.Trigger( PrayerRequest.Text.ToLower( ), View, ScrollView, this, Task );
+                debugKeyEntered = UISpecial.Trigger( PrayerRequest.Text.ToLower( ).Trim( ), View, ScrollView, this, Task );
             }
 
             return debugKeyEntered;

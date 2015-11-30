@@ -267,14 +267,14 @@ namespace Droid
                 bool CheckDebug( )
                 {
                     bool debugKeyEntered = false;
-                    if ( RequestText.Text.ToLower( ) == "clear cache" )
+                    if ( RequestText.Text.ToLower( ).Trim( ) == "clear cache" )
                     {
                         debugKeyEntered = true;
 
                         FileCache.Instance.CleanUp( true );
                         Springboard.DisplayError( "Cache Cleared", "All cached items have been deleted" );
                     }
-                    else if ( RequestText.Text.ToLower( ) == "developer" )
+                    else if ( RequestText.Text.ToLower( ).Trim( ) == "developer" )
                     {
                         debugKeyEntered = true;
 
@@ -282,13 +282,13 @@ namespace Droid
                         Springboard.DisplayError( "Developer Mode", 
                             string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
                     }
-                    else if ( RequestText.Text.ToLower( ) == "version" )
+                    else if ( RequestText.Text.ToLower( ).Trim( ) == "version" )
                     {
                         debugKeyEntered = true;
 
                         Springboard.DisplayError( "Current Version", BuildStrings.Version );
                     }
-                    else if ( RequestText.Text.ToLower( ) == "upload dumps" )
+                    else if ( RequestText.Text.ToLower( ).Trim( ) == "upload dumps" )
                     {
 #if !DEBUG
                         debugKeyEntered = true;
@@ -300,7 +300,7 @@ namespace Droid
                     else
                     {
                         // otherwise, see if our special UI caught it.
-                        debugKeyEntered = UISpecial.Trigger( RequestText.Text.ToLower( ), View, this, ParentTask, null );
+                        debugKeyEntered = UISpecial.Trigger( RequestText.Text.ToLower( ).Trim( ), View, this, ParentTask, null );
                     }
 
                     return debugKeyEntered;
