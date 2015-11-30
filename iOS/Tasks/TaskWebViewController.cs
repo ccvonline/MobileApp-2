@@ -199,7 +199,7 @@ namespace iOS
 
         bool DisableIdleTimer { get; set; }
 
-        bool NavbarAlwaysVisible { get; set; }
+        bool WebviewControlsNavbar { get; set; }
 
         bool IncludeImpersonationToken { get; set; }
 
@@ -210,7 +210,7 @@ namespace iOS
         /// <summary>
         /// Handles taking a URL and either launching it externally or within a webView, with or without impersonation token info. (Showing an embedded web page OR launching Safari)
         /// </summary>
-        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool navbarAlwaysVisible )
+        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool webViewControlsNavbar )
         {
             // do we launch them out of the app?
             if ( launchExternalBrowser == true )
@@ -255,17 +255,17 @@ namespace iOS
             // they are using an embedded browser, so this is pretty simple
             else
             {
-                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, navbarAlwaysVisible );
+                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar );
                 parentTask.PerformSegue( currController, viewController );
             }
         }
 
-        protected TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool navbarAlwaysVisible ) : base ( )
+        protected TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool webviewControlsNavbar ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
             DisableIdleTimer = disableIdleTimer;
-            NavbarAlwaysVisible = navbarAlwaysVisible;
+            WebviewControlsNavbar = webviewControlsNavbar;
             IncludeImpersonationToken = includeImpersonationToken;
 		}
 
@@ -351,7 +351,7 @@ namespace iOS
 
             // not 100% sure that this is safe. If WebView sets the scrollView delegate and doesn't back ours up
             // (which it SHOULD) we won't get our calls
-            if ( NavbarAlwaysVisible == false )
+            if ( WebviewControlsNavbar == true )
             {
                 WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
             }

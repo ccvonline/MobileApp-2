@@ -385,7 +385,7 @@ namespace iOS
                     }
                     else
                     {
-                        TaskWebViewController.HandleUrl( false, true, linkEntry.Url, Task, this, false, true );
+                        TaskWebViewController.HandleUrl( false, true, linkEntry.Url, Task, this, false, false );
                     }
                 }
             }

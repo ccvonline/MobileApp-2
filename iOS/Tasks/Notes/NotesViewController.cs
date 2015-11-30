@@ -609,7 +609,7 @@ namespace iOS
                             MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
                         }
 
-                        TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false );
+                        TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, true );
                     }
                 }
             }

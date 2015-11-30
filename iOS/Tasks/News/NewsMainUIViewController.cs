@@ -579,7 +579,7 @@ namespace iOS
 
                 if ( News[ row ].News.SkipDetailsPage == true && string.IsNullOrEmpty( News[ row ].News.ReferenceURL ) == false )
                 {
-                    TaskWebViewController.HandleUrl( News[ row ].News.ReferenceUrlLaunchesBrowser, News[ row ].News.IncludeImpersonationToken, News[ row ].News.ReferenceURL, Task, this, false, true );
+                    TaskWebViewController.HandleUrl( News[ row ].News.ReferenceUrlLaunchesBrowser, News[ row ].News.IncludeImpersonationToken, News[ row ].News.ReferenceURL, Task, this, false, false );
                 }
                 else
                 {
