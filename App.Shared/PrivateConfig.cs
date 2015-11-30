@@ -435,6 +435,11 @@ namespace App.Shared
             /// The max number of prayers to display
             /// </summary>
             public const uint MaxPrayers = 50;
+
+            /// <summary>
+            /// The amount of time, from when first posted, after which a prayer expires 
+            /// </summary>
+            public static TimeSpan PrayerExpirationTime = new TimeSpan( 14, 0, 0, 0 );
         }
 
         public class PrivateConnectConfig

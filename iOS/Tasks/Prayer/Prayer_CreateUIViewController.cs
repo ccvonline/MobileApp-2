@@ -14,6 +14,7 @@ using App.Shared;
 using Rock.Mobile.IO;
 using App.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
+using App.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -274,7 +275,7 @@ namespace iOS
 
                         prayerRequest.Text = PrayerRequest.Text;
                         prayerRequest.EnteredDateTime = DateTime.Now;
-                        prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
+                        prayerRequest.ExpirationDate = DateTime.Now.Add( PrivatePrayerConfig.PrayerExpirationTime );
                         prayerRequest.CategoryId = RockGeneralData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
                         prayerRequest.IsActive = true;
                         prayerRequest.IsPublic = UIPublicSwitch.On; // use the public switch's state to determine whether it's a public prayer or not.

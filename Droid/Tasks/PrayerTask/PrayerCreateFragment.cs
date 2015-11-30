@@ -23,6 +23,7 @@ using App.Shared;
 using Rock.Mobile.IO;
 using App.Shared.UI;
 using Droid.Tasks.Notes;
+using App.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -214,7 +215,7 @@ namespace Droid
 
                             prayerRequest.Text = RequestText.Text;
                             prayerRequest.EnteredDateTime = DateTime.Now;
-                            prayerRequest.ExpirationDate = DateTime.Now.AddYears( 1 );
+                            prayerRequest.ExpirationDate = DateTime.Now.Add( PrivatePrayerConfig.PrayerExpirationTime );
                             prayerRequest.CategoryId = App.Shared.Network.RockGeneralData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
                             prayerRequest.IsActive = true;
                             prayerRequest.Guid = Guid.NewGuid( );
