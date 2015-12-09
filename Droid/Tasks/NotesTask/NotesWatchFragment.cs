@@ -26,10 +26,6 @@ namespace Droid
     {
         namespace Notes
         {
-            //todo:
-            // either split the videoView and mediaPlayer out, and use this same class for audio or video.
-            // alternatively, create a seperate NotesListenFragment, and use a mediaPlayer as service and more basic UI
-
             public class NotesWatchFragment : TaskFragment, Android.Media.MediaPlayer.IOnPreparedListener, Android.Media.MediaPlayer.IOnErrorListener, Android.Media.MediaPlayer.IOnSeekCompleteListener
             {
                 VideoView VideoPlayer { get; set; }
