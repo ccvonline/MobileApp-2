@@ -68,6 +68,18 @@ namespace iOS
             }
         }
 
+        public override bool OnBackPressed( )
+        {
+            // if we're displaying a taskViewController, let it handle back.
+            TaskWebViewController webViewController = ActiveViewController as TaskWebViewController;
+            if( webViewController != null )
+            {
+                return webViewController.OnBackPressed( );
+            }
+
+            return false;
+        }
+
         public override void OnActivated( )
         {
             base.OnActivated( );

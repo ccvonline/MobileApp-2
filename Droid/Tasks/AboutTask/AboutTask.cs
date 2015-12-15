@@ -38,6 +38,15 @@ namespace Droid
                             MainPage );
                     }
                 }
+
+                public override bool OnBackPressed( )
+                {
+                    if ( MainPage.IsVisible == true )
+                    {
+                        return MainPage.OnBackPressed( );
+                    }
+                    return false;
+                }
             }
         }
     }

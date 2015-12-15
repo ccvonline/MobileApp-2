@@ -50,6 +50,15 @@ namespace Droid
                     return MainPage;
                 }
 
+                public override bool OnBackPressed( )
+                {
+                    if ( WebFragment.IsVisible == true )
+                    {
+                        return WebFragment.OnBackPressed( );
+                    }
+                    return false;
+                }
+
                 public override void OnUp( MotionEvent e )
                 {
                     base.OnUp( e );

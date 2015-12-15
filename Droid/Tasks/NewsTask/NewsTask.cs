@@ -118,6 +118,15 @@ namespace Droid
                     }
                 }
 
+                public override bool OnBackPressed( )
+                {
+                    if ( WebFragment.IsVisible == true )
+                    {
+                        return WebFragment.OnBackPressed( );
+                    }
+                    return false;
+                }
+
                 public override void OnClick(Android.App.Fragment source, int buttonId, object context = null )
                 {
                     // only handle input if the springboard is closed

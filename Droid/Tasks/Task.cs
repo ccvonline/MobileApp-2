@@ -96,9 +96,19 @@ namespace Droid
                 ft.Commit( );
             }
 
-            public virtual bool CanContainerPan()
+            public virtual bool CanContainerPan( )
             {
                 return true;
+            }
+
+            /// <summary>
+            /// Called by the Springboard, this gives the Task the chance to suppress
+            /// the back button. Return true if you consume this and do not want 
+            /// the default back behavior.
+            /// </summary>
+            public virtual bool OnBackPressed( )
+            {
+                return false;
             }
 
             public virtual void SpringboardDidAnimate( bool springboardRevealed )
