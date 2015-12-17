@@ -195,7 +195,8 @@ namespace App.Shared
             public const string GroupFinder_ClosestTag = "(Closest group to you)";
             public const string GroupFinder_ContactForTime = "Contact for Meeting Time";
 
-            public const string GroupFinder_Neighborhood = "Your neighborhood is:  ";
+            //public const string GroupFinder_Neighborhood = "Your neighborhood is:  ";
+            public const string GroupFinder_Neighborhood = "Groups Nearest You";
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
 

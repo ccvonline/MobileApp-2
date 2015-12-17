@@ -702,7 +702,7 @@ namespace iOS
                     bool imageExists = TryLoadImage( ref entry.mBillboard, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
                     if ( imageExists == false )
                     {
-                        FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), 
+                        FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), null,
                             delegate
                             {
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
@@ -719,7 +719,8 @@ namespace iOS
                 bool thumbExists = TryLoadImage( ref entry.mThumbnail, NotesTask.FormatThumbImageName( entry.Series.Name ) );
                 if ( thumbExists == false )
                 {
-                    FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), delegate
+                    FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), null,
+                        delegate
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
                                 if( IsVisible == true )

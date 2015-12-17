@@ -670,7 +670,7 @@ namespace Droid
                             {
                                 // if not, download it
                                 string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                                FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL + widthParam, newsEntry.News.HeaderImageName, 
+                                FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL + widthParam, newsEntry.News.HeaderImageName, null,
                                     delegate
                                     {
                                         // and THEN load it
@@ -686,7 +686,7 @@ namespace Droid
                             {
                                 // if not, download it
                                 string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                                FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, 
+                                FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, null,
                                     delegate
                                     {
                                         // and THEN load it

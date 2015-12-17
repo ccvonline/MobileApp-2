@@ -97,17 +97,12 @@ namespace iOS
 
             switch ( action )
             {
+                // whether we're changing campuses or explicitely reloading news,
+                // reload the news.
+                case PrivateGeneralConfig.TaskAction_CampusChanged:
                 case PrivateGeneralConfig.TaskAction_NewsReload:
                 {
                     ReloadNews( );
-                    break;
-                }
-
-                case PrivateGeneralConfig.TaskAction_CampusChanged:
-                {
-                    // since we changed campuses, go ahead and update the displayed news.
-                    ReloadNews( );
-
 
                     MainPageVC.UpdateNews( News );
 

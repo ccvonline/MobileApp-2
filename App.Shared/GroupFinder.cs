@@ -7,6 +7,7 @@ using App.Shared.Strings;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.Network;
 using MobileApp;
+using System.Linq;
 
 namespace App.Shared
 {
@@ -112,7 +113,13 @@ namespace App.Shared
                                                 entry.Latitude = location.Latitude.Value;
                                                 entry.Longitude = location.Longitude.Value;
 
-                                                groupEntries.Add( entry );
+                                                // make sure the group hasn't already been added.
+                                                GroupEntry duplicateGroup = groupEntries.Where( g => g.Id == entry.Id ).SingleOrDefault( );
+
+                                                if( duplicateGroup == null )
+                                                {
+                                                    groupEntries.Add( entry );
+                                                }
                                             }
                                         }
                                     }

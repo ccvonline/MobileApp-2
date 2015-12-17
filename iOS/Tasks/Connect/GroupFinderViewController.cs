@@ -561,7 +561,7 @@ namespace iOS
             if ( GroupEntries.Count > 0 )
             {
                 SearchResultsPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
-                SearchResultsNeighborhood.Text = GroupEntries[ 0 ].NeighborhoodArea;
+                //SearchResultsNeighborhood.Text = GroupEntries[ 0 ].NeighborhoodArea;
 
                 // add an annotation for each position found in the group
                 List<IMKAnnotation> annotations = new List<IMKAnnotation>();

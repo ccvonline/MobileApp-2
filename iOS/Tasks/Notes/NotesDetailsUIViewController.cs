@@ -552,7 +552,7 @@ namespace iOS
                 SeriesBillboard = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.NotesMainPlaceholder );
 
                 // request!
-                FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), 
+                FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), null,
                     delegate
                     {
                         Rock.Mobile.Threading.Util.PerformOnUIThread( 

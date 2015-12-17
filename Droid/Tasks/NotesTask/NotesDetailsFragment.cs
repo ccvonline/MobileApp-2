@@ -521,7 +521,8 @@ namespace Droid
                         //string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
 
                         // use the placeholder and request the image download
-                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), delegate
+                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), null,
+                            delegate
                             {
                                 TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
                             } );

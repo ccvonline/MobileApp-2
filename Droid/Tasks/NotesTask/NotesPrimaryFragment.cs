@@ -776,7 +776,8 @@ namespace Droid
                             bool imageExists = TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
                             if ( imageExists == false )
                             {
-                                FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), delegate
+                                FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), null,
+                                    delegate
                                     {
                                         TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
                                     } );
@@ -787,7 +788,8 @@ namespace Droid
                         bool thumbExists = TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.Name ) );
                         if ( thumbExists == false )
                         {
-                            FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), delegate
+                            FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), null,
+                                delegate
                                 {
                                     TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.Name ) );
                                 } );

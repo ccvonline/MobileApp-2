@@ -99,20 +99,14 @@ namespace Droid
 
                     switch ( action )
                     {
+                        case PrivateGeneralConfig.TaskAction_CampusChanged:
                         case PrivateGeneralConfig.TaskAction_NewsReload:
                         {
-                            // for this action, we want to reload our news,
+                            // for either action, we want to reload our news,
+                            // and then update the page
                             ReloadNews( );
-
-                            break;
-                        }
-
-                        case PrivateGeneralConfig.TaskAction_CampusChanged:
-                        {
-                            ReloadNews( );
-
-                            // let the page have the latest news
                             MainPage.UpdateNews( News );
+
                             break;
                         }
                     }

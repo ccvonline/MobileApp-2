@@ -678,9 +678,10 @@ namespace Droid
                             MarkerList[ 1 ].ShowInfoWindow( );
 
                             SearchResultPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
-                            SearchResultNeighborhood.Text = GroupEntries[ 0 ].NeighborhoodArea;
+                            //SearchResultPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
+                            //SearchResultNeighborhood.Text = GroupEntries[ 0 ].NeighborhoodArea;
 
-                            // record an analytic that they searched
+                            // record an analytic that they searched999
                             GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Location, address );
                             GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Neighborhood, GroupEntries[ 0 ].NeighborhoodArea );
 
