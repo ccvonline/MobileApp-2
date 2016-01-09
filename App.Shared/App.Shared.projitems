@@ -53,5 +53,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PrivateConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\MobileAppApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UISpecial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupInfo.cs" />
   </ItemGroup>
 </Project>

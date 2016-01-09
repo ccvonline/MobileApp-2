@@ -229,9 +229,8 @@ namespace App.Shared.UI
             float buttonWidth = Rock.Mobile.Graphics.Util.UnitToPx( 122 );
 
             GroupTitle.Frame = new RectangleF( 0, 0, View.Frame.Width, GroupTitle.Frame.Height );
-
-            //GroupDetailsLayer.Frame = new RectangleF( 0, GroupTitle.Frame.Bottom, View.Frame.Width, Rock.Mobile.Graphics.Util.UnitToPx( 62 ) );
             GroupDetails.Frame = new RectangleF( 0, GroupTitle.Frame.Bottom, View.Frame.Width, Rock.Mobile.Graphics.Util.UnitToPx( 60 ) );
+            //GroupDetailsLayer.Frame = new RectangleF( 0, GroupTitle.Frame.Bottom, View.Frame.Width, Rock.Mobile.Graphics.Util.UnitToPx( 62 ) );
 
             // Name Info
             FirstNameLayer.Frame = new RectangleF( 0, GroupDetails.Frame.Bottom + sectionSpacing, View.Frame.Width, layerHeight );

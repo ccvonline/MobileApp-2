@@ -625,23 +625,11 @@ namespace iOS
 
         public void RowButtonClicked( int row )
         {
-            // create the view controller
-            GroupFinderJoinViewController joinController = new GroupFinderJoinViewController();
-
-            // set the group info
-            GroupFinder.GroupEntry currGroup = GroupEntries[ row ];
-            joinController.GroupTitle = currGroup.Title;
-            joinController.MeetingTime = string.IsNullOrEmpty( currGroup.MeetingTime ) == false ? currGroup.MeetingTime : ConnectStrings.GroupFinder_ContactForTime;
-            joinController.GroupID = currGroup.Id;
-
-            joinController.Distance = string.Format( "{0:##.0} {1}", currGroup.Distance, ConnectStrings.GroupFinder_MilesSuffix );
-            if ( row == 0 )
-            {
-                joinController.Distance += " " + ConnectStrings.GroupFinder_ClosestTag;
-            }
+            GroupInfoViewController groupInfoVC = new GroupInfoViewController( );
+            groupInfoVC.GroupEntry = GroupEntries[ row ];
 
             // launch the view
-            Task.PerformSegue( this, joinController );
+            Task.PerformSegue( this, groupInfoVC );
         }
 
         public void RowClicked( int row )

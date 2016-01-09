@@ -212,6 +212,12 @@ namespace App.Shared
             public const string JoinGroup_CellPhonePlaceholder = "Cell Phone";
             public const string JoinGroup_JoinButtonLabel = "Join Group";
 
+            public const string GroupInfo_Failed = "Small Issue";
+            public const string GroupInfoResult_Failed = "Looks like there was a problem viewing this group. Make sure you're connected to the internet and try again.";
+            public const string GroupInfo_AboutLeader = "About This Leader";
+            public const string GroupInfo_AboutGroup = "About This Group";
+            public const string GroupInfo_AboutChildcare = "About Childcare";
+
             public const string JoinGroup_RegisterSuccess = "You're registered with {0}. Expect to be contacted in the next few days.";
             public const string JoinGroup_RegisterFailed = "There was a problem registering for {0}. Check your network settings and try again.";
         }

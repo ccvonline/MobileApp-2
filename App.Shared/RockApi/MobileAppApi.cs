@@ -69,6 +69,54 @@ namespace MobileApp
             RockApi.Get_Groups_ByLocation( geoFenceGroupTypeId, groupTypeId, locationId, oDataFilter, resultHandler );
         }
 
+        const int GroupMemberRole_Leader = 50;
+        public delegate void OnGroupSummaryResult( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream );
+        public static void GetGroupSummary( int groupId, OnGroupSummaryResult resultHandler )
+        {
+            // first, get the group itself
+            string queryData = string.Format( "/{0}?LoadAttributes=simple", groupId );
+            RockApi.Get_Groups<Rock.Client.Group>( queryData, delegate(HttpStatusCode statusCode, string statusDescription, Rock.Client.Group model ) 
+                {
+                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
+                    {
+                        // next, get the group leader
+                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, GroupMemberRole_Leader ),
+                            delegate(HttpStatusCode gmCode, string gmDescription, List<Rock.Client.GroupMember> groupMembers ) 
+                            {
+                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( gmCode ) == true && groupMembers != null && groupMembers.Count > 0 )
+                                {
+                                    // finally, get the person's image (just use the first person available)
+
+                                    // get an image size appropriate for the device.
+                                    uint imageRes = (uint)Rock.Mobile.Graphics.Util.UnitToPx( 256 );
+                                    RockApi.Get_GetImage( groupMembers[ 0 ].Person.PhotoId.ToString( ), imageRes, null,
+                                        delegate(HttpStatusCode imageCode, string imageDescription, System.IO.MemoryStream imageStream ) 
+                                        {
+                                            // if the image didn't return successfully, just null it out.
+                                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( imageCode ) == false )
+                                            {
+                                                imageStream = null;
+                                            }
+
+                                            // return ok whether they have an image or not (since it's not required)
+                                            resultHandler( model, imageStream );
+                                        });
+                                }
+                                // GROUP MEMBER FAIL
+                                else
+                                {
+                                    resultHandler( null, null );
+                                }
+                            });
+                    }
+                    // GROUP FAIL
+                    else
+                    {
+                        resultHandler( null, null );
+                    }
+                });
+        }
+
         const int GroupRegistrationValueId = 52;
         public static void JoinGroup( Rock.Client.Person person, string firstName, string lastName, string spouseName, string email, string phone, int groupId, string groupName, HttpRequest.RequestResult resultHandler )
         {

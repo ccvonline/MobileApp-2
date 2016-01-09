@@ -109,6 +109,7 @@
     <Compile Include="UserManagement\OOBEFragment.cs" />
     <Compile Include="Tasks\TaskWebFragment.cs" />
     <Compile Include="UserManagement\SplashFragment.cs" />
+    <Compile Include="Tasks\ConnectTask\GroupInfoFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -168,6 +169,7 @@
     <AndroidResource Include="..\Assets\splash_combo_android_xxhdpi.png">
       <Link>Resources\drawable-xxhdpi\splash_combo_android.png</Link>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\GroupInfo.axml" />
   </ItemGroup>
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
   <Import Project="..\..\..\Spark\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\..\Spark\Rock.Mobile\Rock.Mobile.projitems')" />
