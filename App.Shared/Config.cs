@@ -209,14 +209,23 @@ namespace App
                 public static string[] GetStartedList = 
                     {
                         "Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png"
-                    };
-                
-                public static string[] GetEngagedList = 
-                    {
+                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
+                        "Worship", "One church in many locations", AboutConfig.Url, "starting_point_thumb.png",
                         ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage,
-                        "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png"
+                        "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png",
+                        "Give", "Trust God with your finances", "external:" + GiveConfig.GiveUrl, "starting_point_thumb.png"
                     };
+
+                // no more separating them...
+                public static string[] GetEngagedList = 
+                {
+                    /*"Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
+                    "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
+                    "Worship", "One church in many locations. Link To Campus Page details.", AboutConfig.Url, "starting_point_thumb.png",
+                    ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage,
+                    "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png",
+                    "Give", "Trust God with your finances", "external:" + GiveConfig.GiveUrl, "starting_point_thumb.png"*/
+                };
                 
                 /// <summary>
                 /// The default latitude the group finder map will be positioned to before a search is performed.

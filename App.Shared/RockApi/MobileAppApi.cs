@@ -63,10 +63,10 @@ namespace MobileApp
             RockApi.Get_Categories_GetChildren_1( resultHandler );
         }
 
-        public static void GetPublicGroupsByLocation( int geoFenceGroupTypeId, int groupTypeId, int locationId, HttpRequest.RequestResult< List<Rock.Client.Group> > resultHandler )
+        public static void GetPublicGroupsByLocation( int groupTypeId, int locationId, int skip, int top, HttpRequest.RequestResult< List<Rock.Client.Group> > resultHandler )
         {
-            string oDataFilter = "?$filter=IsPublic eq true";
-            RockApi.Get_Groups_ByLocation( geoFenceGroupTypeId, groupTypeId, locationId, oDataFilter, resultHandler );
+            string oDataFilter = string.Format( "?locationId={0}&groupTypeId={1}&sortByDistance=true&$skip={2}&$top={3}&$filter=IsPublic eq true", locationId, groupTypeId, skip, top );
+            RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
         }
 
         const int GroupMemberRole_Leader = 50;

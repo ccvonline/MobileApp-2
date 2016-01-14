@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.0.5 (Build 0)";
+                    return "Version 2.0.6 (Build 0)";
                 }
             }
         }
@@ -200,9 +200,9 @@ namespace App.Shared
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
 
-            public const string Main_Connect_Header = "GET STARTED";
+            public const string Main_Connect_Header = "NEXT STEPS";
             public const string Main_Connect_Seperator = "GET ENGAGED";
-            public const string Main_Connect_GroupFinder = "Group Finder";
+            public const string Main_Connect_GroupFinder = "Connect";
             public const string Main_Connect_GroupFinder_SubTitle = "Find a group near you";
 
             public const string JoinGroup_FirstNamePlaceholder = "First Name";

@@ -45,7 +45,19 @@ namespace Droid
 
                 public override int Count 
                 {
-                    get { return ParentFragment.GroupEntries.Count; }
+                    get 
+                    { 
+                        // if we have any groups, return the count AND an additional, for the
+                        // "get 10 more"
+                        if( ParentFragment.GroupEntries.Count > 0 )
+                        {
+                            return ParentFragment.GroupEntries.Count + 1; 
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
                 }
 
                 public override Java.Lang.Object GetItem (int position) 
@@ -81,24 +93,36 @@ namespace Droid
                     messageItem.ParentAdapter = this;
                     messageItem.Position = position;
 
-                    messageItem.Title.Text = ParentFragment.GroupEntries[ position ].Title;
-
-                    // if there's a meeting time set, display it. Otherwise we won't display that row
-                    messageItem.MeetingTime.Visibility = ViewStates.Visible;
-                    if ( string.IsNullOrEmpty( ParentFragment.GroupEntries[ position ].MeetingTime ) == false )
+                    // if the row should display a group
+                    if( position < ParentFragment.GroupEntries.Count )
                     {
-                        messageItem.MeetingTime.Text = ParentFragment.GroupEntries[ position ].MeetingTime;
+                        messageItem.Title.Text = ParentFragment.GroupEntries[ position ].Title;
+
+                        // if there's a meeting time set, display it. Otherwise we won't display that row
+                        messageItem.MeetingTime.Visibility = ViewStates.Visible;
+                        if ( string.IsNullOrEmpty( ParentFragment.GroupEntries[ position ].MeetingTime ) == false )
+                        {
+                            messageItem.MeetingTime.Text = ParentFragment.GroupEntries[ position ].MeetingTime;
+                        }
+                        else
+                        {
+                            messageItem.MeetingTime.Text = ConnectStrings.GroupFinder_ContactForTime;
+                        }
+
+                        // if this is the nearest group, add a label saying so
+                        messageItem.Distance.Text = string.Format( "{0:##.0} {1}", ParentFragment.GroupEntries[ position ].Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                        if ( position == 0 )
+                        {
+                            messageItem.Distance.Text += " " + ConnectStrings.GroupFinder_ClosestTag;
+                        }
                     }
+                    // otherwise it's the "10 more" row
                     else
                     {
-                        messageItem.MeetingTime.Text = ConnectStrings.GroupFinder_ContactForTime;
-                    }
-
-                    // if this is the nearest group, add a label saying so
-                    messageItem.Distance.Text = string.Format( "{0:##.0} {1}", ParentFragment.GroupEntries[ position ].Distance, ConnectStrings.GroupFinder_MilesSuffix );
-                    if ( position == 0 )
-                    {
-                        messageItem.Distance.Text += " " + ConnectStrings.GroupFinder_ClosestTag;
+                        messageItem.Title.Text = "Tap for 10 More";
+                        messageItem.Distance.Text = string.Empty;
+                        messageItem.JoinButton.Visibility = ViewStates.Gone;
+                        messageItem.MeetingTime.Text = string.Empty;
                     }
 
                     return messageItem;
@@ -111,12 +135,16 @@ namespace Droid
 
                 public void SetSelectedRow( int position )
                 {
-                    // set the selection index
-                    SelectedIndex = position;
+                    // set the selection index IF it's a row with a group.
+                    // don't allow selecting the "10 more" entry.
+                    if( position < ParentFragment.GroupEntries.Count )
+                    {
+                        SelectedIndex = position;
 
-                    // and, inefficiently, force the whole dumb list to redraw.
-                    // It's either this or manage all the list view items myself. Just..no.
-                    NotifyDataSetChanged( );
+                        // and, inefficiently, force the whole dumb list to redraw.
+                        // It's either this or manage all the list view items myself. Just..no.
+                        NotifyDataSetChanged( );
+                    }
                 }
             }
 
@@ -291,6 +319,8 @@ namespace Droid
                         Rock.Mobile.Util.Debug.WriteLine( "GOOGLE MAPS: Unable to create. Verify you have a valid API KEY." );
                     }
 
+                    NumRequestedGroups = 10;
+
 
                     SearchAddressButton = new Button( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     SearchAddressButton.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
@@ -365,7 +395,7 @@ namespace Droid
                         delegate
                         {
                             SearchPage.Hide( true );
-                            GetGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                            GetInitialGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                         } );
                     SearchPage.SetTitle( ConnectStrings.GroupFinder_SearchPageHeader, ConnectStrings.GroupFinder_SearchPageDetails );
                     SearchPage.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
@@ -580,36 +610,47 @@ namespace Droid
 
                 public void OnClick( int position, int buttonIndex )
                 {
-                    if ( buttonIndex == 0 )
+                    if( position < GroupEntries.Count )
                     {
-                        // select the row
-                        ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( position );
-
-                        // scroll it into view
-                        ListView.SmoothScrollToPosition( position );
-
-                        // hide all other marker windows (if showing)
-                        // go thru each marker and find the match, and then return it
-                        foreach ( Android.Gms.Maps.Model.Marker currMarker in MarkerList )
+                        if ( buttonIndex == 0 )
                         {
-                            currMarker.HideInfoWindow( );
+                            // select the row
+                            ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( position );
+
+                            // scroll it into view
+                            ListView.SmoothScrollToPosition( position );
+
+                            // hide all other marker windows (if showing)
+                            // go thru each marker and find the match, and then return it
+                            foreach ( Android.Gms.Maps.Model.Marker currMarker in MarkerList )
+                            {
+                                currMarker.HideInfoWindow( );
+                            }
+
+                            // validate the map because Google Play can error
+                            if ( Map != null )
+                            {
+                                // center that map marker
+                                Android.Gms.Maps.Model.Marker marker = RowToMapMarker( position );
+                                marker.ShowInfoWindow( );
+
+                                Android.Gms.Maps.Model.LatLng centerMarker = new Android.Gms.Maps.Model.LatLng( marker.Position.Latitude, marker.Position.Longitude );
+
+                                CameraUpdate camPos = CameraUpdateFactory.NewLatLngZoom( centerMarker, Map.CameraPosition.Zoom );
+                                Map.AnimateCamera( camPos, 250, null );
+                            }
                         }
-
-                        // center that map marker
-                        Android.Gms.Maps.Model.Marker marker = RowToMapMarker( position );
-                        marker.ShowInfoWindow( );
-
-                        Android.Gms.Maps.Model.LatLng centerMarker = new Android.Gms.Maps.Model.LatLng( marker.Position.Latitude, marker.Position.Longitude );
-
-                        CameraUpdate camPos = CameraUpdateFactory.NewLatLngZoom( centerMarker, Map.CameraPosition.Zoom );
-                        Map.AnimateCamera( camPos, 250, null );
+                        else if ( buttonIndex == 1 )
+                        {
+                            // Ok! notify the parent they tapped Join, and it will launch the
+                            // join group fragment! It's MARCH, FRIDAY THE 13th!!!! OH NOOOO!!!!
+                            ParentTask.OnClick( this, position, GroupEntries[ position ] );
+                            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Join neighborhood group in row {0}", position ) );
+                        }
                     }
-                    else if ( buttonIndex == 1 )
+                    else
                     {
-                        // Ok! notify the parent they tapped Join, and it will launch the
-                        // join group fragment! It's MARCH, FRIDAY THE 13th!!!! OH NOOOO!!!!
-                        ParentTask.OnClick( this, position, GroupEntries[ position ] );
-                        Rock.Mobile.Util.Debug.WriteLine( string.Format( "Join neighborhood group in row {0}", position ) );
+                        GetAdditionalGroups( );
                     }
                 }
 
@@ -630,16 +671,19 @@ namespace Droid
 
                 void UpdateMap( bool result )
                 {
-                    // sanity checks in case loading the map fails (Google Play can error)
-                    if ( Map != null )
+                    if ( GroupEntries.Count > 0 )
                     {
-                        Map.Clear( );
-                        MarkerList.Clear( );
+                        // update our list and display
+                        SearchResultPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
 
-                        string address = SearchPage.Street.Text + " " + SearchPage.City.Text + ", " + SearchPage.State.Text + ", " + SearchPage.ZipCode.Text;
+                        ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( 0 );
 
-                        if ( GroupEntries.Count > 0 )
+                        // for the map, ensure it's valid, because Google Play can fail
+                        if( Map != null )
                         {
+                            Map.Clear( );
+                            MarkerList.Clear( );
+                        
                             Android.Gms.Maps.Model.LatLngBounds.Builder builder = new Android.Gms.Maps.Model.LatLngBounds.Builder();
 
                             // add the source position
@@ -676,80 +720,122 @@ namespace Droid
 
                             // show the info window for the first (closest) group
                             MarkerList[ 1 ].ShowInfoWindow( );
-
-                            SearchResultPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
-                            //SearchResultPrefix.Text = ConnectStrings.GroupFinder_Neighborhood;
-                            //SearchResultNeighborhood.Text = GroupEntries[ 0 ].NeighborhoodArea;
-
-                            // record an analytic that they searched999
-                            GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Location, address );
-                            GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Neighborhood, GroupEntries[ 0 ].NeighborhoodArea );
-
-                            ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( 0 );
                         }
-                        else
+                    }
+                    else
+                    {
+                        if ( result == true )
                         {
-                            if ( result == true )
-                            {
-                                SearchResultPrefix.Text = ConnectStrings.GroupFinder_NoGroupsFound;
-                                SearchResultNeighborhood.Text = string.Empty;
+                            // send the analytic and update our list
+                            SearchResultPrefix.Text = ConnectStrings.GroupFinder_NoGroupsFound;
+                            SearchResultNeighborhood.Text = string.Empty;
 
+                            ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( -1 );
+
+                            // validate the map before using. Google Play can error
+                            if ( Map != null )
+                            {
                                 // no groups found, so move the camera to the default position
                                 Android.Gms.Maps.Model.LatLng defaultPos = new Android.Gms.Maps.Model.LatLng( ConnectConfig.GroupFinder_DefaultLatitude, ConnectConfig.GroupFinder_DefaultLongitude );
                                 CameraUpdate camPos = CameraUpdateFactory.NewLatLngZoom( defaultPos, ConnectConfig.GroupFinder_DefaultScale_Android );
                                 Map.AnimateCamera( camPos );
-
-                                // record that this address failed
-                                GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.OutOfBounds, address );
-
-                                ( ListView.Adapter as GroupArrayAdapter ).SetSelectedRow( -1 );
                             }
-                            else
-                            {
-                                // there was actually an error. Let them know.
-                                SearchResultPrefix.Text = ConnectStrings.GroupFinder_NetworkError;
-                                SearchResultNeighborhood.Text = string.Empty;
-                            }
+                        }
+                        else
+                        {
+                            // there was actually an error. Let them know.
+                            SearchResultPrefix.Text = ConnectStrings.GroupFinder_NetworkError;
+                            SearchResultNeighborhood.Text = string.Empty;
                         }
                     }
                 }
 
                 bool RetrievingGroups { get; set; }
+                int CurrGroupIndex { get; set; }
+                int NumRequestedGroups { get; set; }
 
-                void GetGroups( string streetValue, string cityValue, string stateValue, string zipValue )
+                void GetInitialGroups( string streetValue, string cityValue, string stateValue, string zipValue )
                 {
                     if ( RetrievingGroups == false )
                     {
-                        if ( string.IsNullOrEmpty( streetValue ) == false &&
-                             string.IsNullOrEmpty( cityValue ) == false &&
-                             string.IsNullOrEmpty( stateValue ) == false &&
-                             string.IsNullOrEmpty( zipValue) == false )
-                        {
-                            BlockerView.Show( delegate
-                                {
-                                    RetrievingGroups = true;
+                        // since this is the first search for the new address, get initial values
+                        // so that if they leave the page and return, we can re-populate them.
+                        StreetValue = SearchPage.Street.Text;
+                        CityValue = SearchPage.City.Text;
+                        StateValue = SearchPage.State.Text;
+                        ZipValue = SearchPage.ZipCode.Text;
 
-                                    App.Shared.GroupFinder.GetGroups( streetValue, cityValue, stateValue, zipValue, 
-                                        delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
-                                        {
-                                            BlockerView.Hide( delegate
+                        RetrievingGroups = true;
+
+                        BlockerView.Show( delegate
+                            {
+                                CurrGroupIndex = 0;
+
+                                App.Shared.GroupFinder.GetGroups( streetValue, cityValue, stateValue, zipValue, CurrGroupIndex, NumRequestedGroups,
+                                    delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                                    {
+                                        BlockerView.Hide( delegate
+                                            {
+                                                RetrievingGroups = false;
+
+                                                SourceLocation = sourceLocation;
+
+                                                GroupEntries = groupEntries;
+
+                                                UpdateMap( result );
+
+                                                // if the result was valid
+                                                string address = StreetValue + " " + CityValue + ", " + StateValue + ", " + ZipValue;
+                                                if ( result )
                                                 {
-                                                    SourceLocation = sourceLocation;
+                                                    // take the lesser of the two. The number we requested, or the amount returned, because 
+                                                    // it's possible there weren't as many as we requested.
+                                                    CurrGroupIndex = Math.Min( NumRequestedGroups, groupEntries.Count );
+                                                    
+                                                    // record an analytic that they searched
+                                                    GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Location, address );
+                                                    //GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Neighborhood, GroupEntries[ 0 ].NeighborhoodArea );
+                                                }
+                                                else
+                                                {
+                                                    // record an analytic that this address failed
+                                                    GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.OutOfBounds, address );
+                                                }
+                                            });
+                                    } );
+                            } );
+                    }
+                }
 
-                                                    groupEntries.Sort( delegate(GroupFinder.GroupEntry x, GroupFinder.GroupEntry y )
-                                                        {
-                                                            return x.Distance < y.Distance ? -1 : 1;
-                                                        } );
+                void GetAdditionalGroups( )
+                {
+                    if ( RetrievingGroups == false )
+                    {
+                        RetrievingGroups = true;
 
-                                                    GroupEntries = groupEntries;
+                        BlockerView.Show( delegate
+                            {
+                                GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                                    delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                                    {
+                                        BlockerView.Hide( delegate
+                                            {
+                                                RetrievingGroups = false;
 
-                                                    UpdateMap( result );
+                                                // for additional groups, only take action if we got something back.
+                                                if( result )
+                                                {
+                                                    // increment our index to the next set, or the end of the list, whichever is less
+                                                    // this will ensure when we hit the end of the list, CurrGroupIndex reflects that.
+                                                    CurrGroupIndex += Math.Min( groupEntries.Count, NumRequestedGroups );
 
-                                                    RetrievingGroups = false;
-                                                });
-                                        } );
-                                } );
-                        }
+                                                    GroupEntries.AddRange( groupEntries );
+
+                                                    UpdateMap( true );
+                                                }
+                                            });
+                                    });
+                            });
                     }
                 }
             }

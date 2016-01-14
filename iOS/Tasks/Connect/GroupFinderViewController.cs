@@ -102,7 +102,16 @@ namespace iOS
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                return Parent.GroupEntries.Count + 1;
+                // if there are valid groups, then create rows
+                if( Parent.GroupEntries.Count > 0 )
+                {
+                    return Parent.GroupEntries.Count + 2;
+                }
+                else
+                {
+                    // otherwise let the list be blank
+                    return 0;
+                }
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -198,6 +207,38 @@ namespace iOS
 
                     return cell;
                 }
+                else if ( indexPath.Row == Parent.GroupEntries.Count )
+                {
+                    // the last row should act as a "get more groups" button
+                    // simply create a dummy cell that acts as padding
+                    UITableViewCell cell = tableView.DequeueReusableCell( "10_more" ) as GroupCell;
+
+                    // if there are no cells to reuse, create a new one
+                    if (cell == null)
+                    {
+                        cell = new UITableViewCell( UITableViewCellStyle.Default, "10_more" );
+
+                        UILabel textLabel = new UILabel( );
+                        textLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
+                        textLabel.Layer.AnchorPoint = CGPoint.Empty;
+                        textLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
+                        textLabel.BackgroundColor = UIColor.Clear;
+                        textLabel.LineBreakMode = UILineBreakMode.TailTruncation;
+                        textLabel.Text = "Tap for 10 More Groups";
+                        textLabel.TextAlignment = UITextAlignment.Center;
+                        cell.AddSubview( textLabel );
+
+                        // take the parent table's width so we inherit its width constraint
+                        cell.Bounds = new CGRect( cell.Bounds.X, cell.Bounds.Y, tableView.Bounds.Width, 44 );
+                        textLabel.Bounds = cell.Bounds;
+
+                        // remove the selection highlight
+                        cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+                        cell.BackgroundColor = UIColor.Clear;
+                    }
+
+                    return cell;
+                }
                 else
                 {
                     // simply create a dummy cell that acts as padding
@@ -234,6 +275,12 @@ namespace iOS
 
                     // notify the parent
                     Parent.RowClicked( indexPath.Row );
+                }
+                // if they clicked the "Get 10 more", notify the parent, but don't select the row.
+                else if ( indexPath.Row == Parent.GroupEntries.Count )
+                {
+                    // treat the entire bottom row that says "Get 10 more" like a button
+                    Parent.RowButtonClicked( indexPath.Row );
                 }
             }
 
@@ -299,6 +346,9 @@ namespace iOS
         string CityValue { get; set; }
         string StateValue { get; set; }
         string ZipValue { get; set; }
+
+        int CurrGroupIndex { get; set; }
+        int NumRequestedGroups { get; set; }
 
         UIScrollViewWrapper ScrollView { get; set; }
         KeyboardAdjustManager KeyboardAdjustManager { get; set; }
@@ -428,6 +478,9 @@ namespace iOS
             MapView = new MKMapView( );
             ScrollView.AddSubview( MapView );
 
+            CurrGroupIndex = 0;
+            NumRequestedGroups = 10;
+
             // set the default position for the map to whatever specified area.
             MKCoordinateRegion region = MKCoordinateRegion.FromDistance( new CLLocationCoordinate2D( 
                 ConnectConfig.GroupFinder_DefaultLatitude, 
@@ -486,7 +539,7 @@ namespace iOS
                 delegate
                 {
                     SearchPage.Hide( true );
-                    GetGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    GetInitialGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                     Task.NavToolbar.Reveal( true );
                 } );
             SearchPage.SetTitle( ConnectStrings.GroupFinder_SearchPageHeader, ConnectStrings.GroupFinder_SearchPageDetails );
@@ -625,17 +678,24 @@ namespace iOS
 
         public void RowButtonClicked( int row )
         {
-            GroupInfoViewController groupInfoVC = new GroupInfoViewController( );
-            groupInfoVC.GroupEntry = GroupEntries[ row ];
+            if( row < GroupEntries.Count )
+            {
+                GroupInfoViewController groupInfoVC = new GroupInfoViewController( );
+                groupInfoVC.GroupEntry = GroupEntries[ row ];
 
-            // launch the view
-            Task.PerformSegue( this, groupInfoVC );
+                // launch the view
+                Task.PerformSegue( this, groupInfoVC );
+            }
+            else
+            {
+                GetAdditionalGroups( );
+            }
         }
 
         public void RowClicked( int row )
         {
             // if they selected a group in the list, center it on the map.
-            if ( MapView.Annotations.Length > 0 )
+            if ( row < GroupEntries.Count && MapView.Annotations.Length > 0 )
             {
                 // use the row index to get the matching annotation in the map
                 IMKAnnotation marker = TableRowToMapAnnotation( row );
@@ -720,12 +780,6 @@ namespace iOS
             base.ViewWillDisappear(animated);
 
             KeyboardAdjustManager.Deactivate( );
-
-            // store the values they type in so that if they leave the page and return, we can re-populate them.
-            StreetValue = SearchPage.Street.Text;
-            CityValue = SearchPage.City.Text;
-            StateValue = SearchPage.State.Text;
-            ZipValue = SearchPage.ZipCode.Text;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -758,66 +812,116 @@ namespace iOS
             }
         }
 
-        void GetGroups( string street, string city, string state, string zip )
+        void GetInitialGroups( string street, string city, string state, string zip )
         {
-            if ( string.IsNullOrEmpty( street ) == false &&
-                 string.IsNullOrEmpty( city ) == false &&
-                 string.IsNullOrEmpty( state ) == false &&
-                 string.IsNullOrEmpty( zip ) == false )
+            if ( Searching == false )
             {
-                if ( Searching == false )
-                {
-                    Searching = true;
+                // since this is the first search for the new address, get initial values
+                // so that if they leave the page and return, we can re-populate them.
+                StreetValue = SearchPage.Street.Text;
+                CityValue = SearchPage.City.Text;
+                StateValue = SearchPage.State.Text;
+                ZipValue = SearchPage.ZipCode.Text;
 
-                    BlockerView.Show( delegate
-                        {
-                            GroupFinder.GetGroups( street, city, state, zip, 
-                                delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
-                                {
-                                    BlockerView.Hide( delegate
+                Searching = true;
+
+                BlockerView.Show( delegate
+                    {
+                        // set the group index we'll begin with
+                        CurrGroupIndex = 0;
+
+                        // request groups from CurrGroupIndex thru CurrGroupIndex + NumRequestedGroups
+                        GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                            delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                            {
+                                BlockerView.Hide( delegate
+                                    {
+                                        Searching = false;
+
+                                        // store the source location
+                                        SourceLocation = sourceLocation;
+
+                                        // take the initial group entries
+                                        GroupEntries = groupEntries;
+
+                                        // update the map
+                                        UpdateMap( result );
+
+                                        // reload the table.
+                                        GroupFinderTableView.ReloadData( );
+
+                                        // flag that our group list was updated so that
+                                        // on the region updated callback from the map, we 
+                                        // can select the appropriate group
+                                        GroupListUpdated = true;
+
+                                        // and record an analytic for the neighborhood that this location was apart of. This helps us know
+                                        // which neighborhoods get the most hits.
+                                        string address = StreetValue + " " + CityValue + ", " + StateValue + ", " + ZipValue;
+
+                                        // send an analytic if the request went thru ok
+                                        if( result )
                                         {
-                                            Searching = false;
+                                            if ( groupEntries.Count > 0 )
+                                            {
+                                                // increment our index to the next set, or the final amount available, whichever is less.
+                                                // this will ensure when we hit the end of the list, CurrGroupIndex reflects that.
+                                                CurrGroupIndex = CurrGroupIndex + Math.Min( groupEntries.Count, NumRequestedGroups );
 
-                                            groupEntries.Sort( delegate(GroupFinder.GroupEntry x, GroupFinder.GroupEntry y )
-                                                {
-                                                    return x.Distance < y.Distance ? -1 : 1;
-                                                } );
+                                                // record an analytic that they searched
+                                                GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Location, address );
+                                                //GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Neighborhood, groupEntries[ 0 ].NeighborhoodArea );
+                                            }
+                                            else
+                                            {
+                                                // record that this address failed
+                                                GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.OutOfBounds, address );
+                                            }
+                                        }
+                                    } );
+                            } );
+                    } );
+            }
+        }
 
-                                            SourceLocation = sourceLocation;
-                                            GroupEntries = groupEntries;
+        void GetAdditionalGroups( )
+        {
+            if ( Searching == false )
+            {
+                Searching = true;
+
+                BlockerView.Show( delegate
+                    {
+                        GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                            delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                            {
+                                BlockerView.Hide( delegate
+                                    {
+                                        Searching = false;
+
+                                        if( result )
+                                        {
+                                            // increment our index to the next set, or the end of the list, whichever is less
+                                            // this will ensure when we hit the end of the list, CurrGroupIndex reflects that.
+                                            CurrGroupIndex += Math.Min( groupEntries.Count, NumRequestedGroups );
+
+                                            // add in the new results
+                                            GroupEntries.AddRange( groupEntries );
+
+                                            // update the map
                                             UpdateMap( result );
+
+                                            // and reload the table
                                             GroupFinderTableView.ReloadData( );
 
-                                            // flag that our group list was updated so that
-                                            // on the region updated callback from the map, we 
-                                            // can select the appropriate group
-                                            GroupListUpdated = true;
-
-                                            // and record an analytic for the neighborhood that this location was apart of. This helps us know
-                                            // which neighborhoods get the most hits.
-                                            string address = street + " " + city + ", " + state + ", " + zip;
-
-                                            // send an analytic if the request went thru ok
-                                            if( result )
-                                            {
-                                                if ( groupEntries.Count > 0 )
-                                                {
-                                                    // record an analytic that they searched
-                                                    GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Location, address );
-
-                                                    GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.Neighborhood, groupEntries[ 0 ].NeighborhoodArea );
-                                                }
-                                                else
-                                                {
-                                                    // record that this address failed
-                                                    GroupFinderAnalytic.Instance.Trigger( GroupFinderAnalytic.OutOfBounds, address );
-                                                }
-                                            }
-                                        } );
-                                } );
-                        } );
+                                            // since we're only loading additional groups, don't flag the 
+                                            // list as updated. We don't want it to reset to the top.
+                                            GroupListUpdated = false;
+                                        }
+                                    });
+                            } );
+                    } );
                 }
-            }
         }
 	}
 }
