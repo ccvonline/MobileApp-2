@@ -121,7 +121,8 @@ namespace Droid
                     {
                         // use the placeholder and request the image download
                         string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                        FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, delegate
+                        FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, null,
+                            delegate
                             {
                                 TryLoadBanner( NewsItem.HeaderImageName );
                             } );

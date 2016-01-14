@@ -216,6 +216,15 @@ namespace Droid
                 }
             }
 
+            public bool OnBackPressed( )
+            {
+                if ( WebLayout != null )
+                {
+                    return WebLayout.OnBackPressed( );
+                }
+                return false;
+            }
+
             public override void OnResume()
             {
                 base.OnResume();

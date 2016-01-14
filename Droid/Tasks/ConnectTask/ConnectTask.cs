@@ -14,6 +14,7 @@ namespace Droid
             {
                 ConnectPrimaryFragment MainPage { get; set; }
                 GroupFinderFragment GroupFinder { get; set; }
+                GroupInfoFragment GroupInfo { get; set; }
                 JoinGroupFragment JoinGroup { get; set; }
                 TaskWebFragment WebFragment { get; set; }
 
@@ -34,6 +35,13 @@ namespace Droid
                     }
                     GroupFinder.ParentTask = this;
 
+                    GroupInfo = navFragment.FragmentManager.FindFragmentByTag( "Droid.GroupInfoFragment" ) as GroupInfoFragment;
+                    if ( GroupInfo == null )
+                    {
+                        GroupInfo = new GroupInfoFragment();
+                    }
+                    GroupInfo.ParentTask = this;
+
                     JoinGroup = navFragment.FragmentManager.FindFragmentByTag( "Droid.JoinGroupFragment" ) as JoinGroupFragment;
                     if ( JoinGroup == null )
                     {
@@ -48,6 +56,15 @@ namespace Droid
                 public override TaskFragment StartingFragment()
                 {
                     return MainPage;
+                }
+
+                public override bool OnBackPressed( )
+                {
+                    if ( WebFragment.IsVisible == true )
+                    {
+                        return WebFragment.OnBackPressed( );
+                    }
+                    return false;
                 }
 
                 public override void OnUp( MotionEvent e )
@@ -95,6 +112,14 @@ namespace Droid
                             // turn off auto-show search so that if the user presses 'back', we don't pop it up again.
                             GroupFinder.ShowSearchOnAppear = false;
                             
+                            App.Shared.GroupFinder.GroupEntry entry = (App.Shared.GroupFinder.GroupEntry)context;
+
+                            GroupInfo.GroupEntry = entry;
+
+                            PresentFragment( GroupInfo, true );
+                        }
+                        else if ( source == GroupInfo )
+                        {
                             App.Shared.GroupFinder.GroupEntry entry = (App.Shared.GroupFinder.GroupEntry)context;
 
                             JoinGroup.GroupTitle = entry.Title;

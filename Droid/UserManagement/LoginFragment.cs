@@ -340,7 +340,6 @@ namespace Droid
         {
             base.OnStop();
 
-            SpringboardParent.EnableBack = true;
             SpringboardParent.ModalFragmentDone( null );
 
             // remove the webview if it was left open
@@ -436,10 +435,6 @@ namespace Droid
                                 // when the timer fires, notify the springboard we're done.
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                     {
-                                        // now ok to go back again. (if this failed at any point, moving to the LogOut state
-                                        // will also re-enable the back button.
-                                        SpringboardParent.EnableBack = true;
-
                                         SpringboardParent.ModalFragmentDone( null );
                                     } );
                             };
@@ -491,9 +486,6 @@ namespace Droid
             {
                 case LoginState.Out:
                 {
-                    // allow back when logged out
-                    SpringboardParent.EnableBack = true;
-
                     //LoginActivityIndicator.Visibility = ViewStates.Gone;
                     UsernameField.Enabled = true;
                     PasswordField.Enabled = true;
@@ -508,9 +500,6 @@ namespace Droid
 
                 case LoginState.Trying:
                 {
-                    // while trying a login, don't allow back
-                    SpringboardParent.EnableBack = false;
-
                     FadeLoginResult( false );
 
                     BlockerView.Show( );

@@ -113,6 +113,16 @@ namespace iOS
             return true;
         }
 
+        /// <summary>
+        /// Called by the parent Navigation Controller when the user taps the
+        /// Nav's "Back" button. This gives the task a chance to override the default
+        /// behavior. Useful for things like embedded webView navigation.
+        /// </summary>
+        public virtual bool OnBackPressed( )
+        {
+            return false;
+        }
+
         // if a given task wants all or some of its view controllers to support landscape, it should return true here.
         public virtual bool SupportsLandscape( )
         {

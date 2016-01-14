@@ -95,6 +95,15 @@ namespace Droid
                     }
                 }
 
+                public override bool OnBackPressed( )
+                {
+                    if ( WebViewPage.IsVisible == true )
+                    {
+                        return WebViewPage.OnBackPressed( );
+                    }
+                    return false;
+                }
+
                 public override TaskFragment StartingFragment()
                 {
                     return MainPage;

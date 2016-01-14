@@ -7,6 +7,7 @@ using App.Shared.Strings;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.Network;
 using MobileApp;
+using System.Linq;
 
 namespace App.Shared
 {
@@ -36,7 +37,7 @@ namespace App.Shared
         }
 
         public delegate void GetGroupsComplete( GroupEntry sourceLocation, List<GroupEntry> groupEntry, bool result );
-        public static void GetGroups( string street, string city, string state, string zip, GetGroupsComplete onCompletion )
+        public static void GetGroups( string street, string city, string state, string zip, int skip, int top, GetGroupsComplete onCompletion )
         {
             List<GroupEntry> groupEntries = new List<GroupEntry>();
             GroupEntry sourceLocation = new GroupEntry( );
@@ -56,7 +57,7 @@ namespace App.Shared
                         sourceLocation.Longitude = model.Longitude.Value;
 
                         // now get the groups
-                        MobileAppApi.GetPublicGroupsByLocation( PrivateGeneralConfig.NeighborhoodGroupGeoFenceValueId, PrivateGeneralConfig.NeighborhoodGroupValueId, model.Id,
+                        MobileAppApi.GetPublicGroupsByLocation( PrivateGeneralConfig.NeighborhoodGroupValueId, model.Id, skip, top,
                             delegate(System.Net.HttpStatusCode groupStatusCode, string groupStatusDescription, List<Rock.Client.Group> rockGroupList )
                             {
                                 bool result = false;
@@ -65,53 +66,40 @@ namespace App.Shared
                                 {
                                     result = true;
 
-                                    // first thing we receive is the "area" group(s)
-                                    foreach ( Rock.Client.Group areaGroup in rockGroupList )
+                                    // go through each small group
+                                    foreach ( Rock.Client.Group smallGroup in rockGroupList )
                                     {
-                                        // in each area, there's an actual small group
-                                        foreach ( Rock.Client.Group smallGroup in areaGroup.Groups )
+                                        // only take public groups
+                                        if ( smallGroup.IsPublic == true )
                                         {
-                                            // only take small groups
-                                            if ( smallGroup.IsPublic == true )
+                                            // get the group location out of the small group enumerator
+                                            IEnumerator enumerator = smallGroup.GroupLocations.GetEnumerator( );
+                                            enumerator.MoveNext( );
+                                            Rock.Client.Location location = ( (Rock.Client.GroupLocation)enumerator.Current ).Location;
+
+                                            // and of course, each group has a location
+                                            GroupEntry entry = new GroupEntry();
+                                            entry.Title = smallGroup.Name;
+                                            entry.Address = location.Street1 + "\n" + location.City + ", " + location.State + " " + location.PostalCode.Substring( 0, Math.Max( 0, location.PostalCode.IndexOf( '-' ) ) );
+                                            entry.NeighborhoodArea = smallGroup.Name;
+                                            entry.Id = smallGroup.Id;
+
+                                            // get the distance 
+                                            entry.Distance = location.Distance;
+                                            entry.Latitude = location.Latitude.Value;
+                                            entry.Longitude = location.Longitude.Value;
+
+                                            // get the meeting schedule if it's available
+                                            if ( smallGroup.Schedule != null )
                                             {
-                                                // get the group location out of the small group enumerator
-                                                IEnumerator enumerator = smallGroup.GroupLocations.GetEnumerator( );
-                                                enumerator.MoveNext( );
-                                                Rock.Client.Location location = ( (Rock.Client.GroupLocation)enumerator.Current ).Location;
+                                                entry.MeetingTime = smallGroup.Schedule.FriendlyScheduleText;
+                                            }
 
-                                                // and of course, each group has a location
-                                                GroupEntry entry = new GroupEntry();
-                                                entry.Title = smallGroup.Name;
-                                                entry.Address = location.Street1 + "\n" + location.City + ", " + location.State + " " + location.PostalCode.Substring( 0, Math.Max( 0, location.PostalCode.IndexOf( '-' ) ) );
-                                                entry.NeighborhoodArea = areaGroup.Name;
-                                                entry.Id = smallGroup.Id;
+                                            // make sure the group hasn't already been added.
+                                            GroupEntry duplicateGroup = groupEntries.Where( g => g.Id == entry.Id ).SingleOrDefault( );
 
-                                                // get the distance 
-                                                entry.Distance = location.Distance;
-
-                                                // get the meeting schedule if it's available
-                                                if ( smallGroup.Schedule != null )
-                                                {
-                                                    entry.MeetingTime = smallGroup.Schedule.FriendlyScheduleText;
-                                                    // get the day of week
-                                                    /*if( smallGroup.Schedule.WeeklyDayOfWeek.HasValue == true )
-                                                    {
-                                                        entry.Day = GeneralStrings.Days[ smallGroup.Schedule.WeeklyDayOfWeek.Value ];
-                                                    }
-
-                                                    // get the meeting time, if set.
-                                                    if( smallGroup.Schedule.WeeklyTimeOfDay.HasValue == true )
-                                                    {
-                                                        DateTime time_24 = ParseMilitaryTime( string.Format( "{0:D2}:{1:D2}:{2:D2}", smallGroup.Schedule.WeeklyTimeOfDay.Value.Hours, 
-                                                                                                                                     smallGroup.Schedule.WeeklyTimeOfDay.Value.Minutes,
-                                                                                                                                     smallGroup.Schedule.WeeklyTimeOfDay.Value.Seconds) );
-                                                        entry.Time = time_24.ToString( "t" );
-                                                    }*/
-                                                }
-
-                                                entry.Latitude = location.Latitude.Value;
-                                                entry.Longitude = location.Longitude.Value;
-
+                                            if( duplicateGroup == null )
+                                            {
                                                 groupEntries.Add( entry );
                                             }
                                         }

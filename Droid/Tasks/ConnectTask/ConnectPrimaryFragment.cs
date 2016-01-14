@@ -41,7 +41,24 @@ namespace Droid
 
                 public override int Count 
                 {
-                    get { return ParentFragment.GetStartedEntries.Count + ParentFragment.GetEngagedEntries.Count + 2; }
+                    get 
+                    { 
+                        int totalRows = 1;
+
+                        // if there are get started entries, add them
+                        if( ParentFragment.GetStartedEntries.Count != 0 )
+                        {
+                            totalRows += ParentFragment.GetStartedEntries.Count;
+                        }
+
+                        // if there are get engaged entries, add them AS WELL as an additional row
+                        // for the seperator
+                        if( ParentFragment.GetEngagedEntries.Count != 0 )
+                        {
+                            totalRows += ParentFragment.GetEngagedEntries.Count + 1;
+                        }
+                        return totalRows; 
+                    }
                 }
 
                 public override View GetView(int position, View convertView, ViewGroup parent)

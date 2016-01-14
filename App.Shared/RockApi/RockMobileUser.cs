@@ -721,7 +721,7 @@ namespace App
                         {
                             if ( Person.PhotoId != null )
                             {
-                                RockApi.Get_GetImage( Person.PhotoId.ToString( ), dimensionSize, 
+                                RockApi.Get_GetImage( Person.PhotoId.ToString( ), dimensionSize, dimensionSize, 
                                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription, MemoryStream imageStream )
                                     {
                                         if ( Util.StatusInSuccessRange( statusCode ) == true )

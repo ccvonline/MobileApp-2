@@ -297,6 +297,17 @@ namespace iOS
             WebView.LoadHtmlString( BlackHtml, null );
         }
 
+        public bool OnBackPressed( )
+        {
+            if ( WebView.CanGoBack )
+            {
+                WebView.GoBack( );
+                return true;
+            }
+
+            return false;
+        }
+
         void PerformRequest( )
         {
             // do we need an impersonation token?

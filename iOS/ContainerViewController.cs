@@ -147,8 +147,12 @@ namespace iOS
                     // don't allow multiple back presses at once
                     if( TaskControllerAnimating == false )
                     {
-                        TaskControllerAnimating = true;
-                        SubNavigationController.PopViewController( true );
+                        // if there IS a task that DOES NOT want to process BackPressed, do our default behavior.
+                        if( CurrentTask != null && CurrentTask.OnBackPressed( ) == false )
+                        {
+                            TaskControllerAnimating = true;
+                            SubNavigationController.PopViewController( true );   
+                        }
                     }
                 });
 

@@ -164,7 +164,21 @@ namespace iOS
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                return Parent.GetStartedEntries.Count + Parent.GetEngagedEntries.Count + 2;
+                int totalRows = 1;
+
+                // if there are get started entries, add them
+                if( Parent.GetStartedEntries.Count != 0 )
+                {
+                    totalRows += Parent.GetStartedEntries.Count;
+                }
+
+                // if there are get engaged entries, add them AS WELL as an additional row
+                // for the seperator
+                if( Parent.GetEngagedEntries.Count != 0 )
+                {
+                    totalRows += Parent.GetEngagedEntries.Count + 1;
+                }
+                return totalRows; 
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

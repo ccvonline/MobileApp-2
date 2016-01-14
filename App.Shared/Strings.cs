@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.0.4 (Build 2)";
+                    return "Version 2.0.6 (Build 0)";
                 }
             }
         }
@@ -195,13 +195,14 @@ namespace App.Shared
             public const string GroupFinder_ClosestTag = "(Closest group to you)";
             public const string GroupFinder_ContactForTime = "Contact for Meeting Time";
 
-            public const string GroupFinder_Neighborhood = "Your neighborhood is:  ";
+            //public const string GroupFinder_Neighborhood = "Your neighborhood is:  ";
+            public const string GroupFinder_Neighborhood = "Groups Nearest You";
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
 
-            public const string Main_Connect_Header = "GET STARTED";
+            public const string Main_Connect_Header = "NEXT STEPS";
             public const string Main_Connect_Seperator = "GET ENGAGED";
-            public const string Main_Connect_GroupFinder = "Group Finder";
+            public const string Main_Connect_GroupFinder = "Connect";
             public const string Main_Connect_GroupFinder_SubTitle = "Find a group near you";
 
             public const string JoinGroup_FirstNamePlaceholder = "First Name";
@@ -210,6 +211,12 @@ namespace App.Shared
             public const string JoinGroup_EmailPlaceholder = "Email";
             public const string JoinGroup_CellPhonePlaceholder = "Cell Phone";
             public const string JoinGroup_JoinButtonLabel = "Join Group";
+
+            public const string GroupInfo_Failed = "Small Issue";
+            public const string GroupInfoResult_Failed = "Looks like there was a problem viewing this group. Make sure you're connected to the internet and try again.";
+            public const string GroupInfo_AboutLeader = "About This Leader";
+            public const string GroupInfo_AboutGroup = "About This Group";
+            public const string GroupInfo_AboutChildcare = "About Childcare";
 
             public const string JoinGroup_RegisterSuccess = "You're registered with {0}. Expect to be contacted in the next few days.";
             public const string JoinGroup_RegisterFailed = "There was a problem registering for {0}. Check your network settings and try again.";

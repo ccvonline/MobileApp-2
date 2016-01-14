@@ -173,12 +173,6 @@ namespace Droid
         bool SeriesInfoDownloaded { get; set; }
 
         /// <summary>
-        /// Allows fragments to control whether the device back button will work or not.
-        /// </summary>
-        /// <value><c>true</c> if enable back; otherwise, <c>false</c>.</value>
-        public bool EnableBack { get; set; }
-
-        /// <summary>
         /// True if we've run the splash intro.
         /// </summary>
         bool IsSplashDone { get; set; }
@@ -186,8 +180,6 @@ namespace Droid
         public override void OnCreate( Bundle savedInstanceState )
         {
             base.OnCreate( savedInstanceState );
-
-            EnableBack = true;
 
             RetainInstance = true;
 
@@ -653,11 +645,18 @@ namespace Droid
                         return true;
                     }
                 }
+                // there is a stack of fragments, so let the current fragment decide.
                 else
                 {
-                    // otherwise, let it be up to the discretion of
-                    // the current fragment, which can toggle this.
-                    return EnableBack;
+                    // if there's a task and it DID NOT consume the Back action, allow it.
+                    if( NavbarFragment.ActiveTask != null && NavbarFragment.ActiveTask.OnBackPressed( ) == false )
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
         }

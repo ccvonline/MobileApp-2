@@ -105,7 +105,8 @@ namespace App
                         {
                             Rock.Mobile.Util.Debug.WriteLine( "NO CACHED NOTES. DOWNLOADING THEM." );
 
-                            FileCache.Instance.DownloadFileToCache( noteUrl, noteFileName, delegate
+                            FileCache.Instance.DownloadFileToCache( noteUrl, noteFileName, null,
+                                delegate
                                 {
                                     // good, now get the style sheet
                                     noteData = (MemoryStream)FileCache.Instance.LoadFile( noteFileName );
@@ -117,7 +118,8 @@ namespace App
                                         string styleSheetUrl = Note.GetStyleSheetUrl( body, styleSheetDefaultHostDomain );
                                         string styleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
 
-                                        FileCache.Instance.DownloadFileToCache( styleSheetUrl, styleFileName, delegate
+                                        FileCache.Instance.DownloadFileToCache( styleSheetUrl, styleFileName, null,
+                                            delegate
                                             {
                                                 // now we can create the notes
                                                 complete( true );

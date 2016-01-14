@@ -97,17 +97,12 @@ namespace iOS
 
             switch ( action )
             {
+                // whether we're changing campuses or explicitely reloading news,
+                // reload the news.
+                case PrivateGeneralConfig.TaskAction_CampusChanged:
                 case PrivateGeneralConfig.TaskAction_NewsReload:
                 {
                     ReloadNews( );
-                    break;
-                }
-
-                case PrivateGeneralConfig.TaskAction_CampusChanged:
-                {
-                    // since we changed campuses, go ahead and update the displayed news.
-                    ReloadNews( );
-
 
                     MainPageVC.UpdateNews( News );
 
@@ -116,6 +111,18 @@ namespace iOS
                     break;
                 }
             }
+        }
+
+        public override bool OnBackPressed( )
+        {
+            // if we're displaying a taskViewController, let it handle back.
+            TaskWebViewController webViewController = ActiveViewController as TaskWebViewController;
+            if( webViewController != null )
+            {
+                return webViewController.OnBackPressed( );
+            }
+
+            return false;
         }
 
         public override void TouchesEnded(TaskUIViewController taskUIViewController, NSSet touches, UIEvent evt)
