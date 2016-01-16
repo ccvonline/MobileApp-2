@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Rock.Mobile;
 using App.Shared.Network;
 using App.Shared.PrivateConfig;
+using System.Linq;
 
 namespace MobileApp
 {
@@ -181,6 +182,48 @@ namespace MobileApp
 
                     // notify the caller
                     resultHandler( statusCode, statusDescription, family, familyAddress );
+                });
+        }
+
+        /// <summary>
+        /// Returns the groups the person is part of, and THEIR groupMembers only.
+        /// </summary>
+        public static void GetPersonGroupsAndMembers( Rock.Client.Person person, Rock.Mobile.Network.ApplicationApi.GroupsForPersonDelegate onResult )
+        {
+            // first get all the groups for this person
+            ApplicationApi.GetGroupsForPerson( person, 
+                delegate( List<Rock.Client.Group> groupList ) 
+                {
+                    if ( groupList != null )
+                    {
+                        // now get the group members that are THIS PERSON
+                        ApplicationApi.GetGroupMembersForPerson( person, 
+                            delegate(List<Rock.Client.GroupMember> groupMemberList) 
+                            {
+                                if( groupMemberList != null )             
+                                {
+                                    // now place each groupMember in their respective group
+                                    foreach( Rock.Client.GroupMember gm in groupMemberList )
+                                    {
+                                        // find this groupMember's group
+                                        Rock.Client.Group targetGroup = groupList.Where( g => g.Id == gm.GroupId ).SingleOrDefault( );
+                                        if( targetGroup != null )
+                                        {
+                                            if ( targetGroup.Members != null )
+                                            {
+                                                targetGroup.Members.Add( gm );
+                                            }
+                                        }
+                                    }
+                                }
+
+                                onResult( groupList );
+                            });
+                    }
+                    else
+                    {
+                        onResult( null );
+                    }
                 });
         }
 

@@ -281,6 +281,29 @@ namespace Droid
             }
         }
 
+        public override void OnStop()
+        {
+            base.OnStop();
+
+            SpringboardParent.ModalFragmentDone( null );
+
+            // remove the webview if it was left open
+            if ( WebLayout.Parent != null )
+            {
+                ( View as RelativeLayout ).RemoveView( WebLayout );
+            }
+
+            // we can safely flag facebook binding as false, because the callback will be ignored.
+            BindingFacebook = false;
+        }
+
+        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+        }
+
         public void LoginComplete( System.Net.HttpStatusCode statusCode, string statusDescription )
         {
             switch( statusCode )
@@ -288,7 +311,14 @@ namespace Droid
                 // if we received No Content, we're logged in
                 case System.Net.HttpStatusCode.NoContent:
                 {
-                    RockMobileUser.Instance.GetProfileAndCellPhone( ProfileComplete );
+                    RockMobileUser.Instance.GetProfileAndCellPhone(
+                        delegate(System.Net.HttpStatusCode code, string desc)
+                        {
+                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                {
+                                    UIThread_ProfileComplete( code, desc );
+                                } );
+                        });
                     break;
                 }
 
@@ -336,44 +366,20 @@ namespace Droid
             }
         }
 
-        public override void OnStop()
+        void UIThread_ProfileComplete(System.Net.HttpStatusCode statusCode, string statusDesc)
         {
-            base.OnStop();
-
-            SpringboardParent.ModalFragmentDone( null );
-
-            // remove the webview if it was left open
-            if ( WebLayout.Parent != null )
-            {
-                ( View as RelativeLayout ).RemoveView( WebLayout );
-            }
-
-            // we can safely flag facebook binding as false, because the callback will be ignored.
-            BindingFacebook = false;
-        }
-
-        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
-        {
-            base.OnConfigurationChanged(newConfig);
-
-            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
-        }
-
-        public void ProfileComplete(System.Net.HttpStatusCode code, string desc)
-        {
-            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                {
-                    UIThread_ProfileComplete( code, desc );
-                } );
-        }
-
-        void UIThread_ProfileComplete(System.Net.HttpStatusCode code, string desc)
-        {
-            switch( code )
+            switch( statusCode )
             {
                 case System.Net.HttpStatusCode.OK:
                 {
-                    RockMobileUser.Instance.GetFamilyAndAddress( AddressComplete );
+                    RockMobileUser.Instance.GetGroups( 
+                        delegate( System.Net.HttpStatusCode code, string desc )
+                        {
+                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                {
+                                    UIThread_GroupsComplete( code, desc );
+                                } );
+                        });
 
                     break;
                 }
@@ -395,12 +401,39 @@ namespace Droid
             }
         }
 
-        public void AddressComplete( System.Net.HttpStatusCode code, string desc )
+        void UIThread_GroupsComplete(System.Net.HttpStatusCode statusCode, string statusDesc)
         {
-            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+            switch( statusCode )
+            {
+            case System.Net.HttpStatusCode.OK:
                 {
-                        UIThread_AddressComplete( code, desc );
-                } );
+                    RockMobileUser.Instance.GetFamilyAndAddress( 
+                        delegate( System.Net.HttpStatusCode code, string desc )
+                        {
+                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                                {
+                                    UIThread_AddressComplete( code, desc );
+                                } );
+                        });
+
+                    break;
+                }
+
+            default:
+                {
+                    BlockerView.Hide( delegate
+                        {
+                            SetUIState( LoginState.Out );
+
+                            // if we couldn't get their profile, that should still count as a failed login.
+                            FadeLoginResult( true );
+                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
+
+                            RockMobileUser.Instance.LogoutAndUnbind( );
+                        } );
+                    break;
+                }
+            }
         }
 
         void UIThread_AddressComplete( System.Net.HttpStatusCode code, string desc ) 

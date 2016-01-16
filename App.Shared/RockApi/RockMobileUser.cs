@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
+using System.Linq;
 
 namespace App
 {
@@ -106,6 +107,11 @@ namespace App
                 /// </summary>
                 public Rock.Client.GroupLocation PrimaryAddress;
 
+                /// <summary>
+                /// List of the groups that this person is a member of. It also includes their member object
+                /// </summary>
+                public List<Rock.Client.Group> Groups { get; set; }
+
                 // This will return either their HOME campus if they're logged in, or their
                 // VIEWING campus if they're not.
                 // JHM 10-7: seems like this confuses people more. It now just returns the viewing campus.
@@ -192,6 +198,27 @@ namespace App
                 }
 
                 /// <summary>
+                /// Returns the groupID of the nextSteps group this person is the coach of, if they are.
+                /// </summary>
+                const int GroupType_NextSteps = 78;
+                const int GroupTypeRole_Coach = 114;
+                public int IsNextStepsCoach( )
+                {
+                    // look thru the groups and see if this person is a 'coach' member of a NS group.
+                    Rock.Client.Group nsGroup = Groups.Where( g => g.GroupTypeId == GroupType_NextSteps ).SingleOrDefault( );
+                    if( nsGroup != null )
+                    {
+                        Rock.Client.GroupMember groupMember = nsGroup.Members.Where( m => m.GroupRoleId == GroupTypeRole_Coach ).SingleOrDefault( );
+                        if( groupMember != null )
+                        {
+                            return nsGroup.Id;
+                        }
+                    }
+
+                    return -1;
+                }
+
+                /// <summary>
                 /// The URL of the last media streamed, used so we can know whether
                 /// to resume it or not.
                 /// </summary>
@@ -273,6 +300,8 @@ namespace App
                     Person = new Person();
 
                     PrimaryFamily = new Group();
+
+                    Groups = new List<Group>( );
 
                     PrimaryAddress = new GroupLocation();
                     PrimaryAddress.GroupLocationTypeValueId = PrivateGeneralConfig.GroupLocationTypeHomeValueId;
@@ -588,6 +617,27 @@ namespace App
                                 addressResult( statusCode, statusDescription );
                             }
                         } );
+                }
+
+                public void GetGroups( HttpRequest.RequestResult result )
+                {
+                    // get all the groups that this person is a member of. This will be useful for knowing
+                    // where they're at in their next steps
+                    MobileAppApi.GetPersonGroupsAndMembers( Person, 
+                        delegate(List<Rock.Client.Group> groupList) 
+                        {
+                            if( groupList != null )
+                            {
+                                // hurray we got groups.
+                                Groups = groupList;
+
+                                result( System.Net.HttpStatusCode.OK, "" );
+                            }
+                            else
+                            {
+                                result( System.Net.HttpStatusCode.BadRequest, "" );
+                            }
+                        });
                 }
 
                 public void UpdateHomeCampus( HttpRequest.RequestResult result )
@@ -917,13 +967,9 @@ namespace App
                                     RockMobileUser loadedInstance = JsonConvert.DeserializeObject<RockMobileUser>( json ) as RockMobileUser;
                                     if( _Instance.Version == loadedInstance.Version )
                                     {
-                                        // hack to fix old data that used a null cell phone number. We can remove on the next build.
-                                        if( loadedInstance._CellPhoneNumber == null )
-                                        {
-                                            loadedInstance._CellPhoneNumber = new PhoneNumber( );
-                                            SetPhoneNumberDigits( "" );
-                                        }
-
+                                        // as long as the versions match, we can take this.
+                                        // We really don't want to bump up the version unless we HAVE to,
+                                        // because it'll force them to re-sign in.
                                         _Instance = loadedInstance;
                                     }
                                 }

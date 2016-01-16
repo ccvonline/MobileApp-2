@@ -279,9 +279,9 @@ namespace App
                         textStyle.mBorderColor = 0;
                         textStyle.mBorderRadius = 0;
                         textStyle.mBorderWidth = 0;
-                        textStyle.mFont.mColor = NoteConfig.CitationUrl_IconColor;
+                        textStyle.mFont.mColor = mStyle.mFont.mColor.Value;
                         textStyle.mFont.mName = PrivateControlStylingConfig.Icon_Font_Secondary;
-                        textStyle.mFont.mSize = PrivateNoteConfig.CitationUrl_IconSize;
+                        textStyle.mFont.mSize = mStyle.mFont.mSize ?? ControlStyles.mText.mFont.mSize;
                         textStyle.mAlignment = Alignment.Right;
 
                         NoteText wordLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );

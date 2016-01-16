@@ -58,13 +58,17 @@ namespace App
                                                     // get the address, which is certainly part
                                                     RockMobileUser.Instance.GetFamilyAndAddress( delegate 
                                                         {
-                                                            // and hey, why not their profile picture too
-                                                            // if they have a profile picture, grab it.
-                                                            RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, delegate 
+                                                            // get the groups
+                                                            RockMobileUser.Instance.GetGroups( delegate
                                                                 {
-                                                                    // failure or not, server syncing is finished, so let's go ahead and 
-                                                                    // get launch data.
-                                                                    RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
+                                                                    // and hey, why not their profile picture too
+                                                                    // if they have a profile picture, grab it.
+                                                                    RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, delegate 
+                                                                        {
+                                                                            // failure or not, server syncing is finished, so let's go ahead and 
+                                                                            // get launch data.
+                                                                            RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
+                                                                        });
                                                                 });
                                                         });
                                                 });
