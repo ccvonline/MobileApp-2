@@ -54,5 +54,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\MobileAppApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UISpecial.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engagement.cs" />
   </ItemGroup>
 </Project>

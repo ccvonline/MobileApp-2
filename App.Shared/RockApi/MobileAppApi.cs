@@ -70,7 +70,7 @@ namespace MobileApp
             RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
         }
 
-        const int GroupMemberRole_Leader = 50;
+        public const int GroupMemberRole_Leader = 50;
         public delegate void OnGroupSummaryResult( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream );
         public static void GetGroupSummary( int groupId, OnGroupSummaryResult resultHandler )
         {

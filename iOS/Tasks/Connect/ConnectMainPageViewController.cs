@@ -61,34 +61,6 @@ namespace iOS
             /// <summary>
             /// Definition for each cell in this table
             /// </summary>
-            class SeperatorCell : UITableViewCell
-            {
-                public static string Identifier = "SeperatorCell";
-
-                public TableSource Parent { get; set; }
-                public UILabel Title { get; set; }
-
-                public SeperatorCell( CGSize parentSize, UITableViewCellStyle style, string cellIdentifier ) : base( style, cellIdentifier )
-                {
-                    BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
-                    SelectionStyle = UITableViewCellSelectionStyle.None;
-
-                    Title = new UILabel( );
-                    Title.Text = ConnectStrings.Main_Connect_Seperator;
-                    Title.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Large_FontSize );
-                    Title.Layer.AnchorPoint = CGPoint.Empty;
-                    Title.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
-                    Title.LineBreakMode = UILineBreakMode.TailTruncation;
-                    Title.TextAlignment = UITextAlignment.Center;
-                    Title.Frame = new CGRect( 5, 0, parentSize.Width - 10, 0 );
-                    Title.SizeToFit( );
-                    AddSubview( Title );
-                }
-            }
-
-            /// <summary>
-            /// Definition for each cell in this table
-            /// </summary>
             class SeriesCell : UITableViewCell
             {
                 public static string Identifier = "SeriesCell";
@@ -144,7 +116,6 @@ namespace iOS
             nfloat PendingSeperatorCellHeight { get; set; }
 
             PrimaryCell PrimaryTableCell { get; set; }
-            SeperatorCell SeperatorTableCell { get; set; }
 
             public TableSource ( ConnectMainPageViewController parent )
             {
@@ -154,31 +125,11 @@ namespace iOS
                 PrimaryTableCell = new PrimaryCell( parent.View.Bounds.Size, UITableViewCellStyle.Default, PrimaryCell.Identifier );
                 PrimaryTableCell.Bounds = parent.View.Bounds;
                 PendingPrimaryCellHeight = PrimaryTableCell.Title.Frame.Bottom;// + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
-
-
-                // create the seperator table cell
-                SeperatorTableCell = new SeperatorCell( parent.View.Bounds.Size, UITableViewCellStyle.Default, SeperatorCell.Identifier );
-                SeperatorTableCell.Bounds = parent.View.Bounds;
-                PendingSeperatorCellHeight = SeperatorTableCell.Title.Frame.Bottom;// + Rock.Mobile.Graphics.Util.UnitToPx( 2 );
             }
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                int totalRows = 1;
-
-                // if there are get started entries, add them
-                if( Parent.GetStartedEntries.Count != 0 )
-                {
-                    totalRows += Parent.GetStartedEntries.Count;
-                }
-
-                // if there are get engaged entries, add them AS WELL as an additional row
-                // for the seperator
-                if( Parent.GetEngagedEntries.Count != 0 )
-                {
-                    totalRows += Parent.GetEngagedEntries.Count + 1;
-                }
-                return totalRows; 
+                return Parent.GetEngagedEntries.Count + 1; 
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -205,19 +156,9 @@ namespace iOS
                         rowHeight = PendingPrimaryCellHeight;
                     }
                 }
-                else if ( ( indexPath.Row - 1 ) == Parent.GetStartedEntries.Count )
-                {
-                    if ( PendingSeperatorCellHeight > 0 )
-                    {
-                        rowHeight = PendingSeperatorCellHeight;
-                    }
-                }
                 else
                 {
-                    if ( PendingSeriesCellHeight > 0 )
-                    {
-                        rowHeight = PendingSeriesCellHeight;
-                    }
+                    rowHeight = PendingSeriesCellHeight;
                 }
 
                 return rowHeight;
@@ -230,32 +171,13 @@ namespace iOS
                 {
                     return PrimaryTableCell;
                 }
-                // otherwise, see if it should be a getStarted row or a getEngaged row.
+                // otherwise, see if it should be a getEngaged row
                 else
                 {
-                    // get the row index relative to getStarted
-                    int getStartedRowIndex = indexPath.Row - 1;
+                    // get the row index relative to getEngaged
+                    int getEngagedRowIndex = indexPath.Row - 1;
 
-                    // if it should be a get started row
-                    if ( getStartedRowIndex < Parent.GetStartedEntries.Count )
-                    {
-                        // hide the seperator if this is the last item in the GetStarted list.
-                        bool showSeperator = getStartedRowIndex == Parent.GetStartedEntries.Count - 1 ? false : true;
-
-                        return GetActivityCell( tableView, Parent.GetStartedEntries[ getStartedRowIndex ], showSeperator );
-                    }
-                    // else if it should be the seperator between GetStarted / GetEngaged
-                    else if ( getStartedRowIndex == Parent.GetStartedEntries.Count )
-                    {
-                        return SeperatorTableCell;
-                    }
-                    else
-                    {
-                        // create the row index relative to getEngaged.
-                        int getEngagedRowIndex = getStartedRowIndex - Parent.GetStartedEntries.Count - 1;
-
-                        return GetActivityCell( tableView, Parent.GetEngagedEntries[ getEngagedRowIndex ], true );
-                    }
+                    return GetActivityCell( tableView, Parent.GetEngagedEntries[ getEngagedRowIndex ], true );
                 }
             }
 
@@ -339,7 +261,6 @@ namespace iOS
             }
         }
 
-        public List<ConnectLink> GetStartedEntries { get; set; }
         public List<ConnectLink> GetEngagedEntries { get; set; }
 
 		public ConnectMainPageViewController (IntPtr handle) : base (handle)
@@ -352,11 +273,15 @@ namespace iOS
 
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BackgroundColor );
 
-            GetStartedEntries = ConnectLink.BuildGetStartedList( );
-            GetEngagedEntries = ConnectLink.BuildGetEngagedList( );
-
             ConnectTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             ConnectTableView.Source = new TableSource( this );
+        }
+
+        public override void ViewWillAppear (bool animated)
+        {
+            base.ViewWillAppear( animated );
+
+            GetEngagedEntries = ConnectLink.BuildGetEngagedList( );
         }
 
         public override void LayoutChanged( )
@@ -374,18 +299,10 @@ namespace iOS
             {
                 ConnectLink linkEntry = null;
 
-                // is this a getStarted row?
-                if ( rowIndex < GetStartedEntries.Count )
+                // is this a getEngaged row?
+                if ( rowIndex < GetEngagedEntries.Count )
                 {
-                    linkEntry = GetStartedEntries[ rowIndex ];
-                }
-                // if it's GREATER (not greater / equal) then it's a GetEngaged. 
-                // if it were equal, then it'd be the seperator and we don't care.
-                else if ( rowIndex > GetStartedEntries.Count )
-                {
-                    int getEngagedRowIndex = rowIndex - GetStartedEntries.Count - 1;
-
-                    linkEntry = GetEngagedEntries[ getEngagedRowIndex ];
+                    linkEntry = GetEngagedEntries[ rowIndex ];
                 }
 
                 // did they pick something valid?

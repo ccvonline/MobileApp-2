@@ -437,6 +437,18 @@
     <BundleResource Include="..\Assets\pony.png">
       <Link>Resources\pony.png</Link>
     </BundleResource>
+    <BundleResource Include="..\Assets\give_thumb.png">
+      <Link>Resources\give_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\worship_thumb.png">
+      <Link>Resources\worship_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\coach_thumb.png">
+      <Link>Resources\coach_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\share_thumb.png">
+      <Link>Resources\share_thumb.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

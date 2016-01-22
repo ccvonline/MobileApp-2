@@ -43,21 +43,7 @@ namespace Droid
                 {
                     get 
                     { 
-                        int totalRows = 1;
-
-                        // if there are get started entries, add them
-                        if( ParentFragment.GetStartedEntries.Count != 0 )
-                        {
-                            totalRows += ParentFragment.GetStartedEntries.Count;
-                        }
-
-                        // if there are get engaged entries, add them AS WELL as an additional row
-                        // for the seperator
-                        if( ParentFragment.GetEngagedEntries.Count != 0 )
-                        {
-                            totalRows += ParentFragment.GetEngagedEntries.Count + 1;
-                        }
-                        return totalRows; 
+                        return ParentFragment.GetEngagedEntries.Count + 1;
                     }
                 }
 
@@ -72,43 +58,16 @@ namespace Droid
                     }
                     else
                     {
-                        // otherwise, see if this is an item in the 'GetStarted' list
-                        int getStartedRowIndex = position - 1;
-                        if ( getStartedRowIndex < ParentFragment.GetStartedEntries.Count )
-                        {
-                            // toggle the seperator depending on whether this is the last of the GetStared entries or not.
-                            bool showSeperator = getStartedRowIndex == ParentFragment.GetStartedEntries.Count - 1 ? false : true;
-
-                            returnedView = GetStandardView( ParentFragment.GetStartedEntries, 
-                                                            ParentFragment.GetStartedBillboards,
-                                                            getStartedRowIndex,
-                                                            convertView, 
-                                                            parent, 
-                                                            showSeperator );
-                        }
-                        // is it the seperator between lists?
-                        else if ( getStartedRowIndex == ParentFragment.GetStartedEntries.Count )
-                        {
-                            SeperatorListItem seperatorItem = convertView as SeperatorListItem;
-                            if ( seperatorItem == null )
-                            {
-                                seperatorItem = new SeperatorListItem( Rock.Mobile.PlatformSpecific.Android.Core.Context );
-                            }
-
-                            returnedView = seperatorItem;
-                        }
-                        // then it must be a GetEngaged item.
-                        else
-                        {
-                            int getEngagedRowIndex = getStartedRowIndex - ParentFragment.GetStartedEntries.Count - 1;
+                        // otherwise, see if this is an item in the 'GetEngaged' list
+                        int getEngagedRowIndex = position - 1;
                             
-                            returnedView = GetStandardView( ParentFragment.GetEngagedEntries, 
-                                                            ParentFragment.GetEngagedBillboards,
-                                                            getEngagedRowIndex,
-                                                            convertView, 
-                                                            parent, 
-                                                            true );
-                        }
+                        returnedView = GetStandardView( ParentFragment.GetEngagedEntries, 
+                                                        ParentFragment.GetEngagedBillboards,
+                                                        getEngagedRowIndex,
+                                                        convertView, 
+                                                        parent, 
+                                                        true );
+                        
                     }
 
                     // guard against not creating a row item
@@ -371,10 +330,8 @@ namespace Droid
 
                 public Bitmap Billboard { get; set; }
 
-                public List<ConnectLink> GetStartedEntries { get; set; }
                 public List<ConnectLink> GetEngagedEntries { get; set; }
 
-                public Bitmap [] GetStartedBillboards { get; set; }
                 public Bitmap [] GetEngagedBillboards { get; set; }
 
                 public ConnectPrimaryFragment( ) : base( )
@@ -393,10 +350,8 @@ namespace Droid
                     view.SetOnTouchListener( this );
 
 
-                    GetStartedEntries = ConnectLink.BuildGetStartedList( );
                     GetEngagedEntries = ConnectLink.BuildGetEngagedList( );
 
-                    GetStartedBillboards = new Bitmap[ GetStartedEntries.Count ];
                     GetEngagedBillboards = new Bitmap[ GetEngagedEntries.Count ];
 
                     ListView = view.FindViewById<ListView>( Resource.Id.connect_primary_list );
@@ -406,23 +361,12 @@ namespace Droid
                             // ignore clicks to the top banner
                             if( e.Position > 0 )
                             {
-                                // get the row index relative to getStarted
-                                int getStartedRowIndex = e.Position - 1;
+                                // get the row index relative to getEngaged
+                                int getEngagedRowIndex = e.Position - 1;
 
-                                // if it should be a get started row
-                                if ( getStartedRowIndex < GetStartedEntries.Count )
-                                {
-                                    // if they clicked a non-groupfinder row, get the link they want to visit
-                                    ParentTask.OnClick( this, getStartedRowIndex, GetStartedEntries[ getStartedRowIndex ] );
-                                }
-                                else if( getStartedRowIndex > GetStartedEntries.Count )
-                                {
-                                    // create the row index relative to getEngaged.
-                                    int getEngagedRowIndex = getStartedRowIndex - GetStartedEntries.Count - 1;
-
-                                    // if they clicked a non-groupfinder row, get the link they want to visit
-                                    ParentTask.OnClick( this, getEngagedRowIndex, GetEngagedEntries[ getEngagedRowIndex ] );
-                                }
+                                // if they clicked a non-groupfinder row, get the link they want to visit
+                                ParentTask.OnClick( this, getEngagedRowIndex, GetEngagedEntries[ getEngagedRowIndex ] );
+                                
                             }
                         };
                     ListView.SetOnTouchListener( this );
@@ -461,24 +405,6 @@ namespace Droid
 
 
                     // load the thumbnails
-                    for( int i = 0; i < GetStartedEntries.Count; i++ )
-                    {
-                        int imageIndex = i;
-
-                        AsyncLoader.LoadImage( GetStartedEntries[ i ].ImageName, true, false,
-                            delegate( Bitmap imageBmp )
-                            {
-                                if( FragmentActive == true && imageBmp != null )
-                                {
-                                    GetStartedBillboards[ imageIndex ] = imageBmp;
-
-                                    ((ListAdapter)ListView.Adapter).NotifyDataSetChanged( );   
-                                    return true;
-                                }
-                                return false;
-                            } );
-                    }
-
                     for( int i = 0; i < GetEngagedEntries.Count; i++ )
                     {
                         int imageIndex = i;
@@ -543,14 +469,6 @@ namespace Droid
                     {
                         Billboard.Dispose( );
                         Billboard = null;
-                    }
-
-                    foreach ( Bitmap image in GetStartedBillboards )
-                    {
-                        if ( image != null )
-                        {
-                            image.Dispose( );
-                        }
                     }
 
                     foreach ( Bitmap image in GetEngagedBillboards )

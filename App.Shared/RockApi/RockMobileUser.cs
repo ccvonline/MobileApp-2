@@ -198,27 +198,6 @@ namespace App
                 }
 
                 /// <summary>
-                /// Returns the groupID of the nextSteps group this person is the coach of, if they are.
-                /// </summary>
-                const int GroupType_NextSteps = 78;
-                const int GroupTypeRole_Coach = 114;
-                public int IsNextStepsCoach( )
-                {
-                    // look thru the groups and see if this person is a 'coach' member of a NS group.
-                    Rock.Client.Group nsGroup = Groups.Where( g => g.GroupTypeId == GroupType_NextSteps ).SingleOrDefault( );
-                    if( nsGroup != null )
-                    {
-                        Rock.Client.GroupMember groupMember = nsGroup.Members.Where( m => m.GroupRoleId == GroupTypeRole_Coach ).SingleOrDefault( );
-                        if( groupMember != null )
-                        {
-                            return nsGroup.Id;
-                        }
-                    }
-
-                    return -1;
-                }
-
-                /// <summary>
                 /// The URL of the last media streamed, used so we can know whether
                 /// to resume it or not.
                 /// </summary>

@@ -279,7 +279,7 @@ namespace App
                         textStyle.mBorderColor = 0;
                         textStyle.mBorderRadius = 0;
                         textStyle.mBorderWidth = 0;
-                        textStyle.mFont.mColor = mStyle.mFont.mColor.Value;
+                        textStyle.mFont.mColor = mStyle.mFont.mColor ?? ControlStyles.mText.mFont.mColor;
                         textStyle.mFont.mName = PrivateControlStylingConfig.Icon_Font_Secondary;
                         textStyle.mFont.mSize = mStyle.mFont.mSize ?? ControlStyles.mText.mFont.mSize;
                         textStyle.mAlignment = Alignment.Right;

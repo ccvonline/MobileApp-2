@@ -206,25 +206,18 @@ namespace App
 
             public class ConnectConfig
             {
-                public static string[] GetStartedList = 
-                    {
-                        "Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                        "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
-                        "Worship", "One church in many locations", AboutConfig.Url, "starting_point_thumb.png",
-                        ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage,
-                        "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png",
-                        "Give", "Trust God with your finances", "external:" + GiveConfig.GiveUrl, "starting_point_thumb.png"
-                    };
-
-                // no more separating them...
-                public static string[] GetEngagedList = 
+                // Allocate each Engagement object in the order we want them displayed.
+                // Engagement objects are defined in Engagement.cs
+                public static IEngagement[] GetEngagedList = 
                 {
-                    /*"Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png",
-                    "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png",
-                    "Worship", "One church in many locations. Link To Campus Page details.", AboutConfig.Url, "starting_point_thumb.png",
-                    ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage,
-                    "Serve", "Give back by volunteering", "http://ccv.church/ma-serve", "serve_thumb.png",
-                    "Give", "Trust God with your finances", "external:" + GiveConfig.GiveUrl, "starting_point_thumb.png"*/
+                    new StartingPoint_Engagement( ),
+                    new Baptism_Engagement( ),
+                    new Worship_Engagement( ),
+                    new Connect_Engagement( ),
+                    new Serve_Engagement( ),
+                    new Give_Engagement( ),
+                    new Share_Engagement( ),
+                    new Coach_Engagement( )
                 };
                 
                 /// <summary>

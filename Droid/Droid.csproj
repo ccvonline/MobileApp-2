@@ -403,6 +403,15 @@
     <AndroidAsset Include="..\Assets\pony.png">
       <Link>Assets\pony.png</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\coach_thumb.png">
+      <Link>Assets\coach_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\give_thumb.png">
+      <Link>Assets\give_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\worship_thumb.png">
+      <Link>Assets\worship_thumb.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

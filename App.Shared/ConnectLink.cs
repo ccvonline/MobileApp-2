@@ -14,37 +14,23 @@ namespace App.Shared
         {
         }
 
-        public static List<ConnectLink> BuildGetStartedList( )
-        {
-            List<ConnectLink> linkEntries = new List<ConnectLink>();
-
-            // parse the config and see how many additional links we need.
-            for ( int i = 0; i < App.Shared.Config.ConnectConfig.GetStartedList.Length; i += 4 )
-            {
-                ConnectLink link = new ConnectLink();
-                linkEntries.Add( link );
-                link.Title = App.Shared.Config.ConnectConfig.GetStartedList[ i ];
-                link.SubTitle = App.Shared.Config.ConnectConfig.GetStartedList[ i + 1 ];
-                link.Url = App.Shared.Config.ConnectConfig.GetStartedList[ i + 2 ];
-                link.ImageName = App.Shared.Config.ConnectConfig.GetStartedList[ i + 3 ];
-            }
-
-            return linkEntries;
-        }
-
         public static List<ConnectLink> BuildGetEngagedList( )
         {
             List<ConnectLink> linkEntries = new List<ConnectLink>();
 
             // parse the config and see how many additional links we need.
-            for ( int i = 0; i < App.Shared.Config.ConnectConfig.GetEngagedList.Length; i += 4 )
+            for ( int i = 0; i < App.Shared.Config.ConnectConfig.GetEngagedList.Length; i++ )
             {
                 ConnectLink link = new ConnectLink();
                 linkEntries.Add( link );
-                link.Title = App.Shared.Config.ConnectConfig.GetEngagedList[ i ];
-                link.SubTitle = App.Shared.Config.ConnectConfig.GetEngagedList[ i + 1 ];
-                link.Url = App.Shared.Config.ConnectConfig.GetEngagedList[ i + 2 ];
-                link.ImageName = App.Shared.Config.ConnectConfig.GetEngagedList[ i + 3 ];
+
+                string[] engagedEntry = App.Shared.Config.ConnectConfig.GetEngagedList[ i ].GetEntry( App.Shared.Network.RockMobileUser.Instance.Groups );
+
+                // use the "positive" list, which has the data for them BEING in the group.
+                link.Title = engagedEntry[ 0 ];
+                link.SubTitle = engagedEntry[ 1 ];
+                link.Url = engagedEntry[ 2 ];
+                link.ImageName = engagedEntry[ 3 ];
             }
 
             return linkEntries;
