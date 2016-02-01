@@ -73,7 +73,7 @@ namespace App.Shared
 
     public class Give_Engagement : IEngagement
     {
-        string [] Give_Entry = { "Give", "Financially trust God", "external:" + GiveConfig.GiveUrl, "give_thumb.png" };
+        string [] Give_Entry = { "Give", "Trust God financially", "external:" + GiveConfig.GiveUrl, "give_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {

@@ -412,6 +412,9 @@
     <AndroidAsset Include="..\Assets\worship_thumb.png">
       <Link>Assets\worship_thumb.png</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\share_thumb.png">
+      <Link>Assets\share_thumb.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">
