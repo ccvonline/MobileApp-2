@@ -552,7 +552,9 @@ namespace Droid
                 var ft = FragmentManager.BeginTransaction( );
                 ft.SetTransition( FragmentTransit.FragmentFade );
 
-                ft.Replace( Resource.Id.fullscreen, fragment );
+                // set this as the active visible fragment in the task frame.
+                string typestr = fragment.GetType( ).ToString( );
+                ft.Replace( Resource.Id.fullscreen, fragment, typestr );
 
                 ft.Commit( );
             }

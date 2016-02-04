@@ -21,28 +21,28 @@ namespace Droid
                 public ConnectTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.ConnectPrimaryFragment" ) as ConnectPrimaryFragment;
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Connect.ConnectPrimaryFragment" ) as ConnectPrimaryFragment;
                     if ( MainPage == null )
                     {
                         MainPage = new ConnectPrimaryFragment();
                     }
                     MainPage.ParentTask = this;
 
-                    GroupFinder = navFragment.FragmentManager.FindFragmentByTag( "Droid.GroupFinderFragment" ) as GroupFinderFragment;
+                    GroupFinder = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Connect.GroupFinderFragment" ) as GroupFinderFragment;
                     if ( GroupFinder == null )
                     {
                         GroupFinder = new GroupFinderFragment();
                     }
                     GroupFinder.ParentTask = this;
 
-                    GroupInfo = navFragment.FragmentManager.FindFragmentByTag( "Droid.GroupInfoFragment" ) as GroupInfoFragment;
+                    GroupInfo = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Connect.GroupInfoFragment" ) as GroupInfoFragment;
                     if ( GroupInfo == null )
                     {
                         GroupInfo = new GroupInfoFragment();
                     }
                     GroupInfo.ParentTask = this;
 
-                    JoinGroup = navFragment.FragmentManager.FindFragmentByTag( "Droid.JoinGroupFragment" ) as JoinGroupFragment;
+                    JoinGroup = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Connect.JoinGroupFragment" ) as JoinGroupFragment;
                     if ( JoinGroup == null )
                     {
                         JoinGroup = new JoinGroupFragment();

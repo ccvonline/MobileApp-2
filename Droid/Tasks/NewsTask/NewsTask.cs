@@ -26,14 +26,14 @@ namespace Droid
                 public NewsTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NewsPrimaryFragment" ) as NewsPrimaryFragment;
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.News.NewsPrimaryFragment" ) as NewsPrimaryFragment;
                     if ( MainPage == null )
                     {
                         MainPage = new NewsPrimaryFragment();
                     }
                     MainPage.ParentTask = this;
 
-                    DetailsPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NewsDetailsFragment" ) as NewsDetailsFragment;
+                    DetailsPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.News.NewsDetailsFragment" ) as NewsDetailsFragment;
                     if ( DetailsPage == null )
                     {
                         DetailsPage = new NewsDetailsFragment();
@@ -52,7 +52,7 @@ namespace Droid
                     base.Activate( forResume );
 
                     if ( forResume == false )
-                    {
+                    {                            
                         ReloadNews( );
 
                         // let the page have the latest news
@@ -143,7 +143,16 @@ namespace Droid
                             }
                             else
                             {
-                                DetailsPage.NewsItem = MainPage.News[ buttonId ].News;
+                                // store the news index they chose so we can manage the 'tap details' page.
+                                DetailsPage.SetNewsInfo( MainPage.News[ buttonId ].News.Title,
+                                                         MainPage.News[ buttonId ].News.Description,
+                                                         MainPage.News[ buttonId ].News.GetDeveloperInfo( ),
+                                                         MainPage.News[ buttonId ].News.ReferenceURL,
+                                                         MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser,
+                                                         MainPage.News[ buttonId ].News.IncludeImpersonationToken,
+                                                         MainPage.News[ buttonId ].News.HeaderImageName,
+                                                         MainPage.News[ buttonId ].News.HeaderImageURL );
+
                                 PresentFragment( DetailsPage, true );
                             }
                         }
@@ -152,9 +161,9 @@ namespace Droid
                             // otherwise visit the reference URL
                             if ( buttonId == Resource.Id.news_details_launch_url )
                             {
-                                TaskWebFragment.HandleUrl( DetailsPage.NewsItem.ReferenceUrlLaunchesBrowser, 
-                                                           DetailsPage.NewsItem.IncludeImpersonationToken, 
-                                                           DetailsPage.NewsItem.ReferenceURL,
+                                TaskWebFragment.HandleUrl( DetailsPage.ReferenceURLLaunchesBrowser, 
+                                                           DetailsPage.IncludeImpersonationToken, 
+                                                           DetailsPage.ReferenceURL,
                                                            this, 
                                                            WebFragment );
                             }

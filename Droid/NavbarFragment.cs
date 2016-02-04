@@ -326,9 +326,8 @@ namespace Droid
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            if (container == null)
+            if( container == null )
             {
-                // Currently in a layout without a container, so no reason to create our view.
                 return null;
             }
 
@@ -516,6 +515,7 @@ namespace Droid
             }
         }
 
+        ValueAnimator XPosAnimator { get; set; }
         public void RevealSpringboard( bool wantReveal )
         {
             if( !Animating )
@@ -525,12 +525,12 @@ namespace Droid
                 int xOffset = wantReveal ? (int) Springboard.GetSpringboardDisplayWidth( ) : 0;
 
                 // setup an animation from our current mask scale to the new one.
-                ValueAnimator xPosAnimator = ValueAnimator.OfInt((int)View.GetX( ) , xOffset);
+                XPosAnimator = ValueAnimator.OfInt((int)View.GetX( ) , xOffset);
 
-                xPosAnimator.AddUpdateListener( this );
-                xPosAnimator.AddListener( new NavbarAnimationListener( ) { NavbarFragment = this } );
-                xPosAnimator.SetDuration( (int) (PrivatePrimaryContainerConfig.SlideRate * 1000.0f) );
-                xPosAnimator.Start();
+                XPosAnimator.AddUpdateListener( this );
+                XPosAnimator.AddListener( new NavbarAnimationListener( ) { NavbarFragment = this } );
+                XPosAnimator.SetDuration( (int) (PrivatePrimaryContainerConfig.SlideRate * 1000.0f) );
+                XPosAnimator.Start();
             }
         }
 
@@ -847,6 +847,12 @@ namespace Droid
             }
 
             IsFragmentActive = false;
+
+            // force the animation to end, because we're out of time.
+            if( XPosAnimator != null )
+            {
+                XPosAnimator.End( );
+            }
         }
 
         public override void OnResume( )

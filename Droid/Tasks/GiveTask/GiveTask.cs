@@ -17,7 +17,7 @@ namespace Droid
                 public GiveTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.GivePrimaryFragment" ) as GivePrimaryFragment;
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Give.GivePrimaryFragment" ) as GivePrimaryFragment;
                     if ( MainPage == null )
                     {
                         MainPage = new GivePrimaryFragment();

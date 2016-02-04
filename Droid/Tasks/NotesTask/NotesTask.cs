@@ -23,35 +23,35 @@ namespace Droid
                 public NotesTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
-                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NotesPrimaryFragment" ) as NotesPrimaryFragment;
+                    MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesPrimaryFragment" ) as NotesPrimaryFragment;
                     if ( MainPage == null )
                     {
                         MainPage = new NotesPrimaryFragment();
                     }
                     MainPage.ParentTask = this;
 
-                    DetailsPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NotesDetailsFragment" ) as NotesDetailsFragment;
+                    DetailsPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesDetailsFragment" ) as NotesDetailsFragment;
                     if ( DetailsPage == null )
                     {
                         DetailsPage = new NotesDetailsFragment();
                     }
                     DetailsPage.ParentTask = this;
 
-                    NotesPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NotesFragment" ) as NotesFragment;
+                    NotesPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesFragment" ) as NotesFragment;
                     if ( NotesPage == null )
                     {
                         NotesPage = new NotesFragment( );
                     }
                     NotesPage.ParentTask = this;
 
-                    WatchPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NotesWatchFragment" ) as NotesWatchFragment;
+                    WatchPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesWatchFragment" ) as NotesWatchFragment;
                     if ( WatchPage == null )
                     {
                         WatchPage = new NotesWatchFragment();
                     }
                     WatchPage.ParentTask = this;
 
-                    ListenPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.NotesListenFragment" ) as NotesListenFragment;
+                    ListenPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesListenFragment" ) as NotesListenFragment;
                     if ( ListenPage == null )
                     {
                         ListenPage = new NotesListenFragment();

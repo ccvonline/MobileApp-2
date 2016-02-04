@@ -35,7 +35,29 @@ namespace Droid
             {
                 bool IsFragmentActive { get; set; }
 
-                public App.Shared.Network.RockNews NewsItem { get; set; }
+                string Title { get; set; }
+                string Description { get; set; }
+                string DeveloperInfo { get; set; }
+
+                public string ReferenceURL { get; protected set; }
+                public bool ReferenceURLLaunchesBrowser { get; protected set; }
+                public bool IncludeImpersonationToken { get; protected set; }
+
+                string HeaderImageName { get; set; }
+                string HeaderImageURL { get; set; }
+
+                public void SetNewsInfo( string title, string description, string developerInfo, string referenceURL, bool referenceURLLaunchesBrowser, bool includeImpersonationToken, string headerImageName, string headerImageURL )
+                {
+                    // this will be called by either our parent task, or the ourselves if we have a valid bundle.
+                    Title = title;
+                    Description = description;
+                    DeveloperInfo = developerInfo;
+                    ReferenceURL = referenceURL;
+                    ReferenceURLLaunchesBrowser = referenceURLLaunchesBrowser;
+                    IncludeImpersonationToken = includeImpersonationToken;
+                    HeaderImageName = headerImageName;
+                    HeaderImageURL = headerImageURL;
+                }
 
                 Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView ImageBanner { get; set; }
                 Bitmap HeaderImage { get; set; }
@@ -43,6 +65,19 @@ namespace Droid
                 public override void OnCreate( Bundle savedInstanceState )
                 {
                     base.OnCreate( savedInstanceState );
+
+                    // if we're being restored by Android, get the detail values from our state bundle
+                    if ( savedInstanceState != null )
+                    {
+                        SetNewsInfo( savedInstanceState.GetString( "Title" ),
+                                     savedInstanceState.GetString( "Description" ),
+                                     savedInstanceState.GetString( "DeveloperInfo" ),
+                                     savedInstanceState.GetString( "ReferenceURL" ),
+                                     savedInstanceState.GetBoolean( "ReferenceURLLaunchesBrowser" ),
+                                     savedInstanceState.GetBoolean( "IncludeImpersonationToken" ),
+                                     savedInstanceState.GetString( "HeaderImageName" ),
+                                     savedInstanceState.GetString( "HeaderImageURL" ) );
+                    }
                 }
 
                 public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -52,6 +87,8 @@ namespace Droid
                         // Currently in a layout without a container, so no reason to create our view.
                         return null;
                     }
+
+                    // at this point our properties should be set.
 
                     View view = inflater.Inflate(Resource.Layout.News_Details, container, false);
                     view.SetOnTouchListener( this );
@@ -66,7 +103,7 @@ namespace Droid
                     ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( width, height );
 
                     TextView title = view.FindViewById<TextView>( Resource.Id.news_details_title );
-                    title.Text = NewsItem.Title.ToUpper( );
+                    title.Text = Title.ToUpper( );
                     title.SetSingleLine( );
                     title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                     title.SetMaxLines( 1 );
@@ -75,7 +112,7 @@ namespace Droid
 
                     // set the description
                     TextView description = view.FindViewById<TextView>( Resource.Id.news_details_details );
-                    description.Text = NewsItem.Description;
+                    description.Text = Description;
                     description.MovementMethod = new ScrollingMovementMethod();
                     ControlStyling.StyleUILabel( description, ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
 
@@ -85,7 +122,7 @@ namespace Droid
                         // if we're in developer mode, add the start / end times for this promotion
                         if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
                         {
-                            description.Text += NewsItem.GetDeveloperInfo( );
+                            description.Text += DeveloperInfo;
                         }
                     }
 
@@ -98,7 +135,7 @@ namespace Droid
                     ControlStyling.StyleButton( launchUrlButton, NewsStrings.LearnMore, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
 
                     // hide the button if there's no reference URL.
-                    if ( string.IsNullOrEmpty( NewsItem.ReferenceURL ) == true )
+                    if ( string.IsNullOrEmpty( ReferenceURL ) == true )
                     {
                         launchUrlButton.Visibility = ViewStates.Gone;
                     }
@@ -116,15 +153,15 @@ namespace Droid
                     // attempt to load the image from cache. If that doesn't work, use a placeholder
                     HeaderImage = null;
 
-                    bool imageExists = TryLoadBanner( NewsItem.HeaderImageName );
+                    bool imageExists = TryLoadBanner( HeaderImageName );
                     if ( imageExists == false )
                     {
                         // use the placeholder and request the image download
                         string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                        FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, null,
+                        FileCache.Instance.DownloadFileToCache( HeaderImageURL + widthParam, HeaderImageName, null,
                             delegate
                             {
-                                TryLoadBanner( NewsItem.HeaderImageName );
+                                TryLoadBanner( HeaderImageName );
                             } );
 
 
@@ -237,6 +274,21 @@ namespace Droid
                         ImageBanner.Drawable.Dispose( );
                         ImageBanner.SetImageBitmap( null );
                     }
+                }
+
+                public override void OnSaveInstanceState (Bundle outState)
+                {
+                    base.OnSaveInstanceState (outState);
+
+                    // save the news detail values
+                    outState.PutString( "Title", Title );
+                    outState.PutString( "Description", Description );
+                    outState.PutString( "DeveloperInfo", DeveloperInfo );
+                    outState.PutString( "ReferenceURL", ReferenceURL );
+                    outState.PutBoolean( "ReferenceURLLaunchesBrowser", ReferenceURLLaunchesBrowser );
+                    outState.PutBoolean( "IncludeImpersonationToken", IncludeImpersonationToken );
+                    outState.PutString( "HeaderImageName", HeaderImageName );
+                    outState.PutString( "HeaderImageURL", HeaderImageURL );
                 }
 
                 public override void OnPause()
