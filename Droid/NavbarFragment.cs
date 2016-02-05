@@ -308,11 +308,10 @@ namespace Droid
 
             RetainInstance = true;
 
-            NavToolbar = FragmentManager.FindFragmentById(Resource.Id.navtoolbar) as NavToolbarFragment;
-            if (NavToolbar == null)
-            {
-                NavToolbar = new NavToolbarFragment();
-            }
+            // always re-reate this, because we're going to replace the old one Android restores
+            // with this new one. If we don't, it will be destroyed, because android
+            // fragment manager will see we're replacing ourself and delete us.
+            NavToolbar = new NavToolbarFragment();
 
             // Execute a transaction, replacing any existing
             // fragment with this one inside the frame.

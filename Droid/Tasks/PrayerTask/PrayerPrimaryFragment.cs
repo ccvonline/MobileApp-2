@@ -674,7 +674,10 @@ namespace Droid
                 public override bool OnScrollGesture(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
                 {
                     // let the center prayer scroll
-                    PrayerRequestCards[ Carousel.CenterCardIndex ].Scroll( distanceY );
+                    if( PrayerRequestCards.Count > 0 )
+                    {
+                        PrayerRequestCards[ Carousel.CenterCardIndex ].Scroll( distanceY );
+                    }
 
                     //Rock.Mobile.Util.Debug.WriteLine( "OnScrollGesture" );
                     return ( (DroidCardCarousel)Carousel ).OnScroll( e1, e2, distanceX, distanceY );
