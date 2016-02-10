@@ -21,6 +21,10 @@ using Android.Telephony;
 using Rock.Mobile.Util.Strings;
 using Java.Lang.Reflect;
 using App.Shared.Analytics;
+using App.Shared.UI;
+using System.Drawing;
+using App.Shared.PrivateConfig;
+using Rock.Mobile.PlatformSpecific.Android.UI;
 
 namespace Droid
 {
@@ -51,6 +55,10 @@ namespace Droid
 
         bool Dirty { get; set; }
 
+        LockableScrollView ScrollView { get; set; }
+
+        UIBlockerView BlockerView { get; set; }
+        UIResultView ResultView { get; set; }
 
         public override void OnCreate( Bundle savedInstanceState )
         {
@@ -237,7 +245,6 @@ namespace Droid
                     builder.Show( );
                 };
 
-
             // Done buttons
             DoneButton = view.FindViewById<Button>( Resource.Id.doneButton );
             ControlStyling.StyleButton( DoneButton, ProfileStrings.DoneButtonTitle, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
@@ -312,7 +319,37 @@ namespace Droid
                     builder.Show( );
                 };
 
+            // blocker and result views
+            ScrollView = view.FindViewById<LockableScrollView>( Resource.Id.scroll_view );
+            ScrollView.ScrollEnabled = false;
+
+            // scroll to the top
+            ScrollView.Post( new Action( delegate
+                {
+                    ScrollView.ForceScrollTo( 0, 0 );
+                }));
+
+            RelativeLayout parentLayout = view.FindViewById<RelativeLayout>( Resource.Id.relative_layout );
+
+            RectangleF bounds = new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels );
+            BlockerView = new UIBlockerView( parentLayout, bounds );
+            BlockerView.Hide( );
+
+            ResultView = new UIResultView( parentLayout, bounds, delegate 
+                {
+                    SpringboardParent.ModalFragmentDone( null );
+                });
+            ResultView.Hide( );
+
             return view;
+        }
+
+        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            BlockerView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
+            ResultView.SetBounds( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
         }
 
         bool ValidateInput( )
@@ -349,6 +386,43 @@ namespace Droid
             // logged in sanity check.
             if( RockMobileUser.Instance.LoggedIn == false ) throw new Exception("A user must be logged in before viewing a profile. How did you do this?" );
 
+            SpringboardParent.ModalFragmentOpened( this );
+
+            ResultView.Hide( );
+            BlockerView.BringToFront( );
+
+            BlockerView.Show( 
+                delegate
+                {
+                    RockMobileUser.Instance.GetPersonData( delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                        {
+                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ) 
+                            {
+                                ScrollView.ScrollEnabled = true;
+
+                                // show the latest profile info
+                                ModelToUI( );
+                            }
+                            else
+                            {
+                                // show failure prompt
+                                ResultView.Show( ProfileStrings.ProfileErrorTitle, PrivateControlStylingConfig.Result_Symbol_Failed, ProfileStrings.ProfileErrorDesc, GeneralStrings.Ok );
+
+                                // if the result is "Not Found", then that means their login is no longer valid. Force a logout.
+                                if ( statusCode == System.Net.HttpStatusCode.NotFound )
+                                {
+                                    // then log them out.
+                                    RockMobileUser.Instance.LogoutAndUnbind( );
+                                }
+                            }
+
+                            BlockerView.Hide( null );
+                        });
+                });
+        }
+
+        void ModelToUI( )
+        {
             NickNameField.Text = RockMobileUser.Instance.Person.NickName;
             LastNameField.Text = RockMobileUser.Instance.Person.LastName;
 
@@ -396,8 +470,6 @@ namespace Droid
             // clear the dirty flag AFTER setting all values so the initial setup
             // doesn't get flagged as dirty
             Dirty = false;
-
-            SpringboardParent.ModalFragmentOpened( this );
         }
 
         public override void OnStop()

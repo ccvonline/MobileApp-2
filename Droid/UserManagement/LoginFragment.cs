@@ -311,12 +311,12 @@ namespace Droid
                 // if we received No Content, we're logged in
                 case System.Net.HttpStatusCode.NoContent:
                 {
-                    RockMobileUser.Instance.GetProfileAndCellPhone(
+                    RockMobileUser.Instance.GetPersonData(
                         delegate(System.Net.HttpStatusCode code, string desc)
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
-                                    UIThread_ProfileComplete( code, desc );
+                                    UIThread_LoginComplete( code, desc );
                                 } );
                         });
                     break;
@@ -366,77 +366,7 @@ namespace Droid
             }
         }
 
-        void UIThread_ProfileComplete(System.Net.HttpStatusCode statusCode, string statusDesc)
-        {
-            switch( statusCode )
-            {
-                case System.Net.HttpStatusCode.OK:
-                {
-                    RockMobileUser.Instance.GetGroups( 
-                        delegate( System.Net.HttpStatusCode code, string desc )
-                        {
-                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                                {
-                                    UIThread_GroupsComplete( code, desc );
-                                } );
-                        });
-
-                    break;
-                }
-
-                default:
-                {
-                    BlockerView.Hide( delegate
-                        {
-                            SetUIState( LoginState.Out );
-
-                            // if we couldn't get their profile, that should still count as a failed login.
-                            FadeLoginResult( true );
-                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
-
-                            RockMobileUser.Instance.LogoutAndUnbind( );
-                        } );
-                    break;
-                }
-            }
-        }
-
-        void UIThread_GroupsComplete(System.Net.HttpStatusCode statusCode, string statusDesc)
-        {
-            switch( statusCode )
-            {
-            case System.Net.HttpStatusCode.OK:
-                {
-                    RockMobileUser.Instance.GetFamilyAndAddress( 
-                        delegate( System.Net.HttpStatusCode code, string desc )
-                        {
-                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                                {
-                                    UIThread_AddressComplete( code, desc );
-                                } );
-                        });
-
-                    break;
-                }
-
-            default:
-                {
-                    BlockerView.Hide( delegate
-                        {
-                            SetUIState( LoginState.Out );
-
-                            // if we couldn't get their profile, that should still count as a failed login.
-                            FadeLoginResult( true );
-                            LoginResultLabel.Text = LoginStrings.Error_Unknown;
-
-                            RockMobileUser.Instance.LogoutAndUnbind( );
-                        } );
-                    break;
-                }
-            }
-        }
-
-        void UIThread_AddressComplete( System.Net.HttpStatusCode code, string desc ) 
+        void UIThread_LoginComplete( System.Net.HttpStatusCode code, string desc ) 
         {
             BlockerView.Hide( delegate
                 {

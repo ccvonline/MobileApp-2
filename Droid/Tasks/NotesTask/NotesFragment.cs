@@ -25,6 +25,7 @@ using Rock.Mobile.Animation;
 using Android.Graphics;
 using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
+using Rock.Mobile.PlatformSpecific.Android.UI;
 
 namespace Droid
 {
@@ -32,67 +33,6 @@ namespace Droid
     {
         namespace Notes
         {
-            /// <summary>
-            /// Subclass of Android's ScrollView to allow us to disable scrolling.
-            /// </summary>
-            public class LockableScrollView : ScrollView
-            {
-                /// <summary>
-                /// The Notes Fragment, so we can notify on input
-                /// </summary>
-                /// <value>The notes.</value>
-                public NotesFragment Notes { get; set; }
-
-                /// <summary>
-                /// True when the scroll view can scroll. False when it cannot.
-                /// </summary>
-                public bool ScrollEnabled { get; set; }
-
-                public LockableScrollView( Context c ) : base( c )
-                {
-                    ScrollEnabled = true;
-                }
-
-                //This is a total hack but it works perfectly.
-                //For some reason, when focus is changed to a text element, the
-                //RelativeView gets focus first. Since it's at 0, 0,
-                //The scrollView wants to scroll to the TOP, then when the editText
-                //gets focus, it jumps back down to its position.
-                // This is not an acceptable long term solution, but I really need to move on right now.
-                public override void ScrollTo(int x, int y)
-                {
-                    //base.ScrollTo(x, y);
-                }
-
-                public override void ScrollBy(int x, int y)
-                {
-                    //base.ScrollBy(x, y);
-                }
-
-                public void ForceScrollTo(int x, int y)
-                {
-                    base.ScrollTo(x, y);
-                }
-
-                public override bool OnInterceptTouchEvent(MotionEvent ev)
-                {
-                    // verify from our parent we can scroll, and that scrolling is enabled
-                    if( Notes.OnInterceptTouchEvent( ev ) && ScrollEnabled == true )
-                    {
-                        return base.OnInterceptTouchEvent(ev);
-                    }
-
-                    return false;
-                }
-
-                protected override void OnScrollChanged(int l, int t, int oldl, int oldt)
-                {
-                    base.OnScrollChanged(l, t, oldl, oldt);
-
-                    Notes.OnScrollChanged( t - oldt );
-                }
-            }
-                       
             public class NotesFragment : TaskFragment
             {
                 /// <summary>
@@ -315,7 +255,8 @@ namespace Droid
                     ScrollView.OverScrollMode = OverScrollMode.Always;
                     ScrollView.VerticalScrollbarPosition = ScrollbarPosition.Default;
                     ScrollView.LayoutParameters = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
-                    ScrollView.Notes = this;
+                    ScrollView.OnTouchIntercept = OnInterceptTouchEvent;
+                    ScrollView.OnChangedScroll = OnScrollChanged;
                     ((RelativeLayout.LayoutParams)ScrollView.LayoutParameters).AddRule(LayoutRules.CenterHorizontal);
                     ((RelativeLayout.LayoutParams)ScrollView.LayoutParameters).AddRule(LayoutRules.Below, Resource.Id.refreshButton);
 

@@ -132,6 +132,9 @@ namespace App.Shared
 
         public class ProfileStrings
         {
+            public const string ProfileErrorTitle = "Profile";
+            public const string ProfileErrorDesc = "There was a problem downloading your profile. Check your network settings and try again.";
+            
             public const string SubmitChangesTitle = "Submit Changes?";
             public const string LogoutTitle = "Log Out?";
 

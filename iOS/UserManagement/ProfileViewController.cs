@@ -15,6 +15,7 @@ using Rock.Mobile.PlatformSpecific.iOS.UI;
 using Rock.Mobile.PlatformSpecific.Util;
 using App.Shared.Analytics;
 using App.Shared.PrivateConfig;
+using App.Shared.UI;
 
 namespace iOS
 {
@@ -68,6 +69,8 @@ namespace iOS
         UIButton LogoutButton { get; set; }
 
         UIScrollViewWrapper ScrollView { get; set; }
+        UIBlockerView BlockerView { get; set; }
+        UIResultView ResultView { get; set; }
 
 		public ProfileViewController ( ) : base ( )
 		{
@@ -105,11 +108,12 @@ namespace iOS
             LogoView.Layer.AnchorPoint = CGPoint.Empty;
             HeaderView.AddSubview( LogoView );
 
-
             ScrollView = new UIScrollViewWrapper();
 
             View.AddSubview( ScrollView );
             ScrollView.Parent = this;
+
+            BlockerView = new UIBlockerView( ScrollView, View.Bounds.ToRectF( ) );
 
             //setup styles
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
@@ -422,6 +426,12 @@ namespace iOS
                     }
                 };
 
+            ResultView = new UIResultView( ScrollView, View.Bounds.ToRectF( ), 
+                delegate 
+                {
+                    Springboard.ResignModelViewController( this, null );    
+                });
+
             Dirty = false;
 
             // logged in sanity check.
@@ -431,6 +441,9 @@ namespace iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
+
+            BlockerView.SetBounds( View.Bounds.ToRectF( ) );
+            ResultView.SetBounds( View.Bounds.ToRectF( ) );
 
             HeaderView.Frame = new CGRect( View.Frame.Left, View.Frame.Top, View.Frame.Width, StyledTextField.StyledFieldHeight );
             ScrollView.Frame = new CGRect( View.Frame.Left, HeaderView.Frame.Bottom, View.Frame.Width, View.Frame.Height - HeaderView.Frame.Height );
@@ -478,6 +491,39 @@ namespace iOS
 
             ScrollView.ContentOffset = CGPoint.Empty;
 
+            ResultView.Hide( );
+            BlockerView.BringToFront( );
+
+            BlockerView.Show( 
+                delegate
+                {
+                    RockMobileUser.Instance.GetPersonData( delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                        {
+                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ) 
+                            {
+                                // show the latest profile info
+                                ModelToUI( );
+                            }
+                            else
+                            {
+                                // show failure prompt
+                                ResultView.Show( ProfileStrings.ProfileErrorTitle, PrivateControlStylingConfig.Result_Symbol_Failed, ProfileStrings.ProfileErrorDesc, GeneralStrings.Ok );
+
+                                // if the result is "Not Found", then that means their login is no longer valid. Force a logout.
+                                if ( statusCode == System.Net.HttpStatusCode.NotFound )
+                                {
+                                    // then log them out.
+                                    RockMobileUser.Instance.LogoutAndUnbind( );
+                                }
+                            }
+
+                            BlockerView.Hide( null );
+                        });
+                });
+        }
+
+        void ModelToUI( )
+        {
             // set values
             NickName.Field.Text = RockMobileUser.Instance.Person.NickName;
             LastName.Field.Text = RockMobileUser.Instance.Person.LastName;

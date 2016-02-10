@@ -35,52 +35,27 @@ namespace App
                     // have the launch data request the series before it does anything else.
                     RockLaunchData.Instance.GetNoteDB( delegate
                         {
-                            seriesCallback( );
+                            if( seriesCallback != null )
+                            {
+                                seriesCallback( );
+                            }
 
                             // if we're logged in, sync any changes we've made with the server.
                             if( RockMobileUser.Instance.LoggedIn == true )
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Logged in. Syncing out-of-sync data." );
 
-                                //( this includes notes, profile changes, etc.)
-                                RockMobileUser.Instance.TrySyncDirtyObjects( 
-                                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                                // now get their profile. This will download
+                                // their latest profile. That way if someone made a change directly in Rock, it'll be reflected here.
+                                RockMobileUser.Instance.GetPersonData( delegate 
                                     {
-                                        // IF THERE WAS A PROBLEM SYNCING, DO NOT PULL DOWN THE LATEST PROFILE.
-                                        // That would cause pending changes to be lost.
-                                        if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                                        {
-                                            Rock.Mobile.Util.Debug.WriteLine( "Syncing with server worked. Pulling down latest data." );
-                                            // now get their profile. Assuming there weren't any profile changes, this will download
-                                            // their latest profile. That way if someone made a change directly in Rock, it'll be reflected here.
-                                            RockMobileUser.Instance.GetProfileAndCellPhone( delegate 
-                                                {
-                                                    // get the address, which is certainly part
-                                                    RockMobileUser.Instance.GetFamilyAndAddress( delegate 
-                                                        {
-                                                            // get the groups
-                                                            RockMobileUser.Instance.GetGroups( delegate
-                                                                {
-                                                                    // and hey, why not their profile picture too
-                                                                    // if they have a profile picture, grab it.
-                                                                    RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, delegate 
-                                                                        {
-                                                                            // failure or not, server syncing is finished, so let's go ahead and 
-                                                                            // get launch data.
-                                                                            RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
-                                                                        });
-                                                                });
-                                                        });
-                                                });
-                                        }
-                                        else
-                                        {
-                                            Rock.Mobile.Util.Debug.WriteLine( "Syncing with server FAILED. Skipping profile download to protect dirty data." );
-
-                                            // failure or not, server syncing is finished, so let's go ahead and 
-                                            // get launch data.
-                                            RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
-                                        }
+                                        // if they have a profile picture, grab it.
+                                        RockMobileUser.Instance.TryDownloadProfilePicture( PrivateGeneralConfig.ProfileImageSize, delegate 
+                                            {
+                                                // failure or not, server syncing is finished, so let's go ahead and 
+                                                // get launch data.
+                                                RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
+                                            });
                                     });
                             }
                             else
@@ -116,7 +91,10 @@ namespace App
                 void GeneralDataReceived(System.Net.HttpStatusCode statusCode, string statusDescription)
                 {
                     // New general data received. Save it, update fields, etc.
-                    ResultCallback( statusCode, statusDescription );
+                    if ( ResultCallback != null )
+                    {
+                        ResultCallback( statusCode, statusDescription );
+                    }
                 }
 
                 public void SaveObjectsToDevice( )
