@@ -1313,14 +1313,9 @@ namespace iOS
         {
             NavViewController.OnActivated( );
 
-            // if it's been longer than N hours, resync rock.
-            // JHM 4-27-15: Now we will always sync on resume. We do this to avoid issues like Christopher had,
-            // where he ran the app early Saturday, and then didn't see the sermon notes Saturday evening.
-            //if ( DateTime.Now.Subtract( LastRockSync ).TotalHours > SpringboardConfig.SyncRockHoursFrequency )
-            {
-                OnActivated_SyncRockData( );
-                UpdateLoginState( );
-            }
+            // resync data
+            OnActivated_SyncRockData( );
+            UpdateLoginState( );
         }
 
         public void WillEnterForeground( )

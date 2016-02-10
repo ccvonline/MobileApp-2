@@ -72,6 +72,9 @@ namespace iOS
         UIBlockerView BlockerView { get; set; }
         UIResultView ResultView { get; set; }
 
+        bool RefreshingProfile { get; set; }
+        System.Timers.Timer RefreshProfileTimer { get; set; }
+
 		public ProfileViewController ( ) : base ( )
 		{
 		}
@@ -95,6 +98,18 @@ namespace iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            RefreshProfileTimer = new System.Timers.Timer();
+            RefreshProfileTimer.AutoReset = true;
+            RefreshProfileTimer.Interval = 300 * 1000; // every 5 minutes
+            RefreshProfileTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+                {
+                    Rock.Mobile.Threading.Util.PerformOnUIThread( 
+                        delegate 
+                        {
+                            RefreshProfile( );
+                        });
+                };
 
             // setup the fake header
             HeaderView = new UIView( );
@@ -337,92 +352,100 @@ namespace iOS
             // If submit is pressed with dirty changes, prompt the user to save them.
             DoneButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false)
+                    // dont' allow changes while the profile is refreshing.
+                    if( RefreshingProfile == false )
                     {
-                        if( Dirty == true )
+                        if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false )
                         {
-                            // make sure the input is valid before asking them what they want to do.
-                            if ( ValidateInput( ) )
+                            if( Dirty == true )
                             {
-                                // if there were changes, create an action sheet for them to confirm.
-                                UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.SubmitChangesTitle, 
-                                    null, 
-                                    UIAlertControllerStyle.ActionSheet );
-
-                                if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                                // make sure the input is valid before asking them what they want to do.
+                                if ( ValidateInput( ) )
                                 {
-                                    actionSheet.PopoverPresentationController.SourceView = DoneButton;
-                                    actionSheet.PopoverPresentationController.SourceRect = DoneButton.Bounds;
+                                    // if there were changes, create an action sheet for them to confirm.
+                                    UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.SubmitChangesTitle, 
+                                        null, 
+                                        UIAlertControllerStyle.ActionSheet );
+
+                                    if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                                    {
+                                        actionSheet.PopoverPresentationController.SourceView = DoneButton;
+                                        actionSheet.PopoverPresentationController.SourceRect = DoneButton.Bounds;
+                                    }
+
+                                    UIAlertAction submitAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Default, delegate
+                                        {
+                                            Dirty = false; SubmitChanges( ); Springboard.ResignModelViewController( this, null );
+                                        });
+                                    actionSheet.AddAction( submitAction );
+
+                                    UIAlertAction noSubmitAction = UIAlertAction.Create( GeneralStrings.No, UIAlertActionStyle.Destructive, delegate
+                                        {
+                                            Dirty = false; Springboard.ResignModelViewController( this, null );
+                                        });
+                                    actionSheet.AddAction( noSubmitAction );
+
+                                    // let them cancel, too
+                                    UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+                                    actionSheet.AddAction( cancelAction );
+
+                                    PresentViewController( actionSheet, true, null );
                                 }
-
-                                UIAlertAction submitAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Default, delegate
-                                    {
-                                        Dirty = false; SubmitChanges( ); Springboard.ResignModelViewController( this, null );
-                                    });
-                                actionSheet.AddAction( submitAction );
-
-                                UIAlertAction noSubmitAction = UIAlertAction.Create( GeneralStrings.No, UIAlertActionStyle.Destructive, delegate
-                                    {
-                                        Dirty = false; Springboard.ResignModelViewController( this, null );
-                                    });
-                                actionSheet.AddAction( noSubmitAction );
-
-                                // let them cancel, too
-                                UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
-                                actionSheet.AddAction( cancelAction );
-
-                                PresentViewController( actionSheet, true, null );
+                            }
+                            else
+                            {
+                                Springboard.ResignModelViewController( this, null );
                             }
                         }
                         else
                         {
-                            Springboard.ResignModelViewController( this, null );
+                            GenderPicker.TogglePicker( false );
+                            BirthdatePicker.TogglePicker( false );
+                            Dirty = true;
                         }
-                    }
-                    else
-                    {
-                        GenderPicker.TogglePicker( false );
-                        BirthdatePicker.TogglePicker( false );
-                        Dirty = true;
                     }
                 };
 
             // On logout, make sure the user really wants to log out.
             LogoutButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false)
+                    // don't allow changes while the profile is refreshing
+                    if( RefreshingProfile == false )
                     {
-                        // if they tap logout, and confirm it
-                        UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.LogoutTitle, 
-                            null, 
-                            UIAlertControllerStyle.ActionSheet );
-
-                        if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
+                        if( GenderPicker.Revealed == false && BirthdatePicker.Revealed == false )
                         {
-                            actionSheet.PopoverPresentationController.SourceView = LogoutButton;
-                            actionSheet.PopoverPresentationController.SourceRect = LogoutButton.Bounds;
-                        }
-                        
-                        UIAlertAction logoutAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
+                            // if they tap logout, and confirm it
+                            UIAlertController actionSheet = UIAlertController.Create( ProfileStrings.LogoutTitle, 
+                                null, 
+                                UIAlertControllerStyle.ActionSheet );
+
+                            if( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad )
                             {
-                                // then log them out.
-                                RockMobileUser.Instance.LogoutAndUnbind( );
+                                actionSheet.PopoverPresentationController.SourceView = LogoutButton;
+                                actionSheet.PopoverPresentationController.SourceRect = LogoutButton.Bounds;
+                            }
+                            
+                            UIAlertAction logoutAction = UIAlertAction.Create( GeneralStrings.Yes, UIAlertActionStyle.Destructive, delegate
+                                {
+                                    // then log them out.
+                                    RockMobileUser.Instance.LogoutAndUnbind( );
 
-                                Springboard.ResignModelViewController( this, null );
-                            });
-                        actionSheet.AddAction( logoutAction );
+                                    Springboard.ResignModelViewController( this, null );
+                                });
+                            actionSheet.AddAction( logoutAction );
 
-                        // let them cancel, too
-                        UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
-                        actionSheet.AddAction( cancelAction );
+                            // let them cancel, too
+                            UIAlertAction cancelAction = UIAlertAction.Create( GeneralStrings.Cancel, UIAlertActionStyle.Cancel, delegate { });
+                            actionSheet.AddAction( cancelAction );
 
-                        PresentViewController( actionSheet, true, null );
-                    }
-                    else
-                    {
-                        GenderPicker.TogglePicker( false );
-                        BirthdatePicker.TogglePicker( false );
-                        Dirty = true;
+                            PresentViewController( actionSheet, true, null );
+                        }
+                        else
+                        {
+                            GenderPicker.TogglePicker( false );
+                            BirthdatePicker.TogglePicker( false );
+                            Dirty = true;
+                        }
                     }
                 };
 
@@ -491,35 +514,64 @@ namespace iOS
 
             ScrollView.ContentOffset = CGPoint.Empty;
 
-            ResultView.Hide( );
-            BlockerView.BringToFront( );
+            // do an immediate profile refresh
+            RefreshProfile( );
 
-            BlockerView.Show( 
-                delegate
-                {
-                    RockMobileUser.Instance.GetPersonData( delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
-                        {
-                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ) 
-                            {
-                                // show the latest profile info
-                                ModelToUI( );
-                            }
-                            else
-                            {
-                                // show failure prompt
-                                ResultView.Show( ProfileStrings.ProfileErrorTitle, PrivateControlStylingConfig.Result_Symbol_Failed, ProfileStrings.ProfileErrorDesc, GeneralStrings.Ok );
+            // also kick off our timer, so that if thye stay on this screen, the profile will continue to refresh
+            RefreshProfileTimer.Start( );
+        }
 
-                                // if the result is "Not Found", then that means their login is no longer valid. Force a logout.
-                                if ( statusCode == System.Net.HttpStatusCode.NotFound )
+        public override void ViewWillDisappear (bool animated)
+        {
+            base.ViewWillDisappear (animated);
+
+            RefreshProfileTimer.Stop( );
+        }
+
+        public override void ViewWillUnload ()
+        {
+            base.ViewWillUnload ();
+        }
+
+        void RefreshProfile( )
+        {
+            // don't allow a double refresh, obviously.
+            if( RefreshingProfile == false )
+            {
+                RefreshingProfile = true;
+
+                ResultView.Hide( );
+                BlockerView.BringToFront( );
+
+                BlockerView.Show( 
+                    delegate
+                    {
+                        RockMobileUser.Instance.GetPersonData( delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                            {
+                                RefreshingProfile = false;
+
+                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ) 
                                 {
-                                    // then log them out.
-                                    RockMobileUser.Instance.LogoutAndUnbind( );
+                                    // show the latest profile info
+                                    ModelToUI( );
                                 }
-                            }
+                                else
+                                {
+                                    // show failure prompt
+                                    ResultView.Show( ProfileStrings.ProfileErrorTitle, PrivateControlStylingConfig.Result_Symbol_Failed, ProfileStrings.ProfileErrorDesc, GeneralStrings.Ok );
 
-                            BlockerView.Hide( null );
-                        });
-                });
+                                    // if the result is "Not Found", then that means their login is no longer valid. Force a logout.
+                                    if ( statusCode == System.Net.HttpStatusCode.NotFound )
+                                    {
+                                        // then log them out.
+                                        RockMobileUser.Instance.LogoutAndUnbind( );
+                                    }
+                                }
+
+                                BlockerView.Hide( null );
+                            });
+                    });
+            }
         }
 
         void ModelToUI( )
