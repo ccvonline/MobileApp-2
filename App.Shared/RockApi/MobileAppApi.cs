@@ -121,26 +121,10 @@ namespace MobileApp
         const int GroupRegistrationValueId = 52;
         public static void JoinGroup( Rock.Client.Person person, string firstName, string lastName, string spouseName, string email, string phone, int groupId, string groupName, HttpRequest.RequestResult resultHandler )
         {
-            if ( person.PrimaryAliasId.HasValue && person.PrimaryAliasId.Value != 0 )
-            {
-                // resolve the alias ID
-                ApplicationApi.ResolvePersonAliasId( person, 
-                    delegate(int personId )
-                    {
-                        string oDataFilter = string.Format( "/{0}?PersonAliasId={1}&FirstName={2}&LastName={3}&SpouseName={4}&Email={5}&MobilePhone={6}&GroupId={7}&GroupName={8}", 
-                            GroupRegistrationValueId, personId, firstName, lastName, spouseName, email, phone, groupId, groupName );
+            string oDataFilter = string.Format( "/{0}?PersonAliasId={1}&FirstName={2}&LastName={3}&SpouseName={4}&Email={5}&MobilePhone={6}&GroupId={7}&GroupName={8}", 
+            GroupRegistrationValueId, person.Id, firstName, lastName, spouseName, email, phone, groupId, groupName );
 
-                        RockApi.Post_Workflows_WorkflowEntry( oDataFilter, resultHandler );
-                    } );
-            }
-            else
-            {
-                // no ID, so just send the info
-                string oDataFilter = string.Format( "/{0}?PersonAliasId={1}&FirstName={2}&LastName={3}&SpouseName={4}&Email={5}&MobilePhone={6}&GroupId={7}&GroupName={8}", 
-                    GroupRegistrationValueId, 0, firstName, lastName, spouseName, email, phone, groupId, groupName );
-
-                RockApi.Post_Workflows_WorkflowEntry( oDataFilter, resultHandler );
-            }
+            RockApi.Post_Workflows_WorkflowEntry( oDataFilter, resultHandler );
         }
 
         public delegate void OnFamilyAndAddressResult( System.Net.HttpStatusCode code, string desc, Rock.Client.Group family, Rock.Client.GroupLocation familyAddress );
@@ -344,7 +328,7 @@ namespace MobileApp
             if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
             {
                 // make the request
-                ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.Value, 
+                ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.Id, 
                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription, string impersonationToken )
                     {
                         // whether it succeeded or not, hand them the response
