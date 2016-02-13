@@ -178,7 +178,7 @@ namespace App
                     bool generalDataReceived = true;
 
                     // now get our campuses.
-                    RockApi.Get_Campuses( 
+                    RockApi.Get_Campuses( null,
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Campus> campusList )
                         {
                             // check for failure, and although we'll keep going (for code simplicity),

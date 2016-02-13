@@ -12,6 +12,7 @@ using App.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
 using Com.Localytics.Android;
+using DroidLocationServices;
 
 namespace Droid
 {
@@ -260,6 +261,61 @@ namespace Droid
             {
                 base.OnBackPressed( );
             }
+        }
+    }
+}
+
+namespace DroidLocationServices
+{
+    namespace ApplicationSpecific
+    {
+        [Service(Label="BackgroundHandler")]
+        public class BackgroundHandler : Service
+        {
+            [Obsolete]
+            public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
+            {
+                if ( intent.Data != null )
+                {
+                    HandleBackgroundLocationEvent( intent.Data.Scheme, intent.Data.SchemeSpecificPart, intent.Data.Fragment );
+                }
+
+                return StartCommandResult.NotSticky;
+            }
+
+            void HandleBackgroundLocationEvent( string eventStr, string major, string minor )
+            {
+                switch ( eventStr )
+                {
+                case LocationManagerService.LocationEvent_EnteredRegion:
+                    {
+                        Console.WriteLine( string.Format( "ApplicationSpecificHandler: Entered Region {0}", major ) );
+
+                        break;
+                    }
+
+                case LocationManagerService.LocationEvent_ExitedRegion:
+                    {
+                        Console.WriteLine( string.Format( "ApplicationSpecificHandler: Exited Region {0} (Outside all regions: {1}", major, minor ) );
+
+                        break;
+                    }
+
+                case LocationManagerService.LocationEvent_LandmarkChanged:
+                    {
+                        if ( string.IsNullOrEmpty( major) == false )
+                        {
+                        }
+                        break;
+                    }
+                }
+            }
+
+            public override IBinder OnBind(Intent intent)
+            {
+                return null;
+            }
+
         }
     }
 }
