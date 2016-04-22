@@ -97,9 +97,6 @@ namespace App.Shared
     public class Coach_Engagement : IEngagement
     {
         // Next Steps Coach
-        const int GroupType_NextSteps = 78;
-        const int GroupTypeRole_Coach = 114;
-        const int GroupTypeRole_AsstCoach = 118;
         string[] Coach_Entry = { "Coach", "Access your toolbox", "http://ccv.church/ma-my-groups", "coach_thumb.png" };
 
         // Not Coach 
@@ -108,28 +105,36 @@ namespace App.Shared
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
             // first, are they a Next Steps Coach?
-            int groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, GroupType_NextSteps, GroupTypeRole_Coach );
+            int groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, 
+                                                                                PrivateGeneralConfig.GroupType_NextStepsGroupId, 
+                                                                                PrivateGeneralConfig.GroupTypeRole_NSGroup_CoachId );
             if( groupId > -1 )
             {
                 return Coach_Entry;
             }
 
             // second, are they a Next Steps Assistant Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup(groups, GroupType_NextSteps, GroupTypeRole_AsstCoach);
+            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, 
+                                                                            PrivateGeneralConfig.GroupType_NextStepsGroupId, 
+                                                                            PrivateGeneralConfig.GroupTypeRole_NSGroup_AsstCoachId );
             if (groupId > -1)
             {
                 return Coach_Entry;
             }
 
             // then are they a Neighborhood Group Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.NeighborhoodGroupValueId, MobileAppApi.GroupMemberRole_Leader );
+            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, 
+                                                                            PrivateGeneralConfig.GroupType_NeighborhoodGroupId, 
+                                                                            PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId );
             if( groupId > -1 )
             {
                 return Coach_Entry;
             }
 
             // or... are they a Neighborhood Group Asst Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup(groups, PrivateGeneralConfig.NeighborhoodGroupValueId, MobileAppApi.GroupMemberRole_AsstLeader);
+            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, 
+                                                                            PrivateGeneralConfig.GroupType_NeighborhoodGroupId, 
+                                                                            PrivateGeneralConfig.GroupTypeRole_NHGroup_AsstCoachId );
             if (groupId > -1)
             {
                 return Coach_Entry;

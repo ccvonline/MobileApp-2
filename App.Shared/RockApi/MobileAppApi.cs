@@ -70,8 +70,6 @@ namespace MobileApp
             RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
         }
 
-        public const int GroupMemberRole_Leader = 50;
-        public const int GroupMemberRole_AsstLeader = 51;
         public delegate void OnGroupSummaryResult( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream );
         public static void GetGroupSummary( int groupId, OnGroupSummaryResult resultHandler )
         {
@@ -82,7 +80,7 @@ namespace MobileApp
                     if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
                     {
                         // next, get the group leader
-                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, GroupMemberRole_Leader ),
+                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId ),
                             delegate(HttpStatusCode gmCode, string gmDescription, List<Rock.Client.GroupMember> groupMembers ) 
                             {
                                 if( Rock.Mobile.Network.Util.StatusInSuccessRange( gmCode ) == true && groupMembers != null && groupMembers.Count > 0 )
@@ -344,7 +342,6 @@ namespace MobileApp
         }
 
         const string RegisterResult_BadLogin = "CreateLoginError";
-        const int UserLoginEntityTypeId = 27;
         public static void RegisterNewUser( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, string username, string password, HttpRequest.RequestResult resultHandler )
         {
             //JHM 3-11-15 ALMOST FRIDAY THE 13th SIX YEARS LATER YAAAHH!!!!!
@@ -370,7 +367,7 @@ namespace MobileApp
                                 if ( Rock.Mobile.Network.Util.StatusInSuccessRange( personStatusCode ) )
                                 {
                                     // it worked. now put their login info.
-                                    RockApi.Post_UserLogins( createdPerson.Id, username, password, UserLoginEntityTypeId,
+                                    RockApi.Post_UserLogins( createdPerson.Id, username, password, PrivateGeneralConfig.EntityType_UserLoginId,
                                         delegate(System.Net.HttpStatusCode loginStatusCode, string loginStatusDescription) 
                                         {
                                             // if this worked, we are home free

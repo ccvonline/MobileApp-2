@@ -57,7 +57,7 @@ namespace App.Shared
                         sourceLocation.Longitude = model.Longitude.Value;
 
                         // now get the groups
-                        MobileAppApi.GetPublicGroupsByLocation( PrivateGeneralConfig.NeighborhoodGroupValueId, model.Id, skip, top,
+                        MobileAppApi.GetPublicGroupsByLocation( PrivateGeneralConfig.GroupType_NeighborhoodGroupId, model.Id, skip, top,
                             delegate(System.Net.HttpStatusCode groupStatusCode, string groupStatusDescription, List<Rock.Client.Group> rockGroupList )
                             {
                                 bool result = false;
