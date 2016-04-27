@@ -42,6 +42,7 @@ namespace App.Shared
             // group types
             public const int GroupType_NeighborhoodGroupId = 49;
             public const int GroupType_NextStepsGroupId = 78;
+            public const int GroupType_NextGenGroupId = 94;
 
             // group type roles
             public const int GroupTypeRole_AppGroup_MemberId = 59;
@@ -49,6 +50,9 @@ namespace App.Shared
             public const int GroupTypeRole_NSGroup_AsstCoachId = 118;
             public const int GroupTypeRole_NHGroup_CoachId = 50;
             public const int GroupTypeRole_NHGroup_AsstCoachId = 51;
+            public const int GroupTypeRole_NGGroup_CoachId = 133;
+            public const int GroupTypeRole_NGGroup_AsstCoachId = 134;
+
 
             /// <summary>
             /// The URL parameter we add to websites that need to know what campus the user visits
