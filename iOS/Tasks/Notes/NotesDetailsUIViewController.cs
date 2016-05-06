@@ -327,7 +327,7 @@ namespace iOS
                 cell.Image.Frame = new CGRect( 0, 0, cell.Bounds.Width, cell.Bounds.Width * imageAspect );
 
                 // Title
-                cell.Title.Text = Series.Name;
+                cell.Title.Text = Series.SeriesName;
                 if ( Series.Private == true )
                 {
                     cell.Title.Text += " (Private)";
@@ -531,7 +531,7 @@ namespace iOS
             SeriesTable.Delegate = new TableViewDelegate( source, Task.NavToolbar );
 
             // log the series they tapped on.
-            MessageAnalytic.Instance.Trigger( MessageAnalytic.BrowseSeries, Series.Name );
+            MessageAnalytic.Instance.Trigger( MessageAnalytic.BrowseSeries, Series.SeriesName );
 
 
             IsVisible = true;
@@ -546,13 +546,13 @@ namespace iOS
 
 
             // do we have the real image?
-            if( TryLoadImage( NotesTask.FormatBillboardImageName( Series.Name ) ) == false )
+            if( TryLoadImage( NotesTask.FormatBillboardImageName( Series.SeriesName ) ) == false )
             {
                 // no, so use a placeholder and request the actual image
                 SeriesBillboard = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateNoteConfig.NotesMainPlaceholder );
 
                 // request!
-                FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), null,
+                FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.SeriesName ), null,
                     delegate
                     {
                         Rock.Mobile.Threading.Util.PerformOnUIThread( 
@@ -560,7 +560,7 @@ namespace iOS
                             {
                                 if( IsVisible == true )
                                 {
-                                    TryLoadImage( NotesTask.FormatBillboardImageName( Series.Name ) );
+                                    TryLoadImage( NotesTask.FormatBillboardImageName( Series.SeriesName ) );
                                 }
                             });
                     } );

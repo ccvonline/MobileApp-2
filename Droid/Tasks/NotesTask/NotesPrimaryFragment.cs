@@ -182,7 +182,7 @@ namespace Droid
                             seriesItem.Thumbnail.SetImageBitmap( null );
                         }
 
-                        seriesItem.Title.Text = ParentFragment.SeriesEntries[ position ].Series.Name;
+                        seriesItem.Title.Text = ParentFragment.SeriesEntries[ position ].Series.SeriesName;
                         if ( ParentFragment.SeriesEntries[ position ].Series.Private == true )
                         {
                             seriesItem.Title.Text += " (Private)";    
@@ -773,25 +773,25 @@ namespace Droid
                         // for billboards, we ONLY CARE about loading the first series' billboard.
                         if ( i == 0 )
                         {
-                            bool imageExists = TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
+                            bool imageExists = TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ) );
                             if ( imageExists == false )
                             {
-                                FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), null,
+                                FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ), null,
                                     delegate
                                     {
-                                        TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
+                                        TryLoadBillboardImage( entry, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ) );
                                     } );
                             }
                         }
 
                         // for everything, we care about the thumbnails
-                        bool thumbExists = TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.Name ) );
+                        bool thumbExists = TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.SeriesName ) );
                         if ( thumbExists == false )
                         {
-                            FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), null,
+                            FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.SeriesName ), null,
                                 delegate
                                 {
-                                    TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.Name ) );
+                                    TryLoadThumbImage( entry, NotesTask.FormatThumbImageName( entry.Series.SeriesName ) );
                                 } );
                         }
                     }

@@ -281,7 +281,8 @@ namespace App.Shared
             [JsonConstructor]
             public Series( string name, string description, string billboardUrl, string thumbnailUrl, string dateRanges, List<Message> messages )
             {
-                Name = name;
+                //Name = name;
+                SeriesName = name;
                 Description = description;
                 BillboardUrl = billboardUrl;
                 ThumbnailUrl = thumbnailUrl;
@@ -306,7 +307,7 @@ namespace App.Shared
             /// <summary>
             /// Name of the series
             /// </summary>
-            string _Name;
+            /*string _Name;
             public string Name
             {
                 get
@@ -317,6 +318,23 @@ namespace App.Shared
                 protected set
                 {
                     _Name = value == null ? "" : value.Trim( TrimChars );
+                }
+            }*/
+
+            /// <summary>
+            /// Name of the series
+            /// </summary>
+            string _SeriesName;
+            public string SeriesName
+            {
+                get
+                {
+                    return _SeriesName;
+                }
+
+                protected set
+                {
+                    _SeriesName = value == null ? "" : value.Trim( TrimChars );
                 }
             }
 
