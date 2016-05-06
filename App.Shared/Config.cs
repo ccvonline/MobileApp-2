@@ -53,7 +53,7 @@ namespace App
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
                 #if DEBUG
-                public const string RockBaseUrl = "http://ccvdev.ccvonline.com/";
+                public const string RockBaseUrl = "http://dev.ccv.church/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif
@@ -394,7 +394,7 @@ namespace App
                 /// <summary>
                 /// The page to navigate to in the About's embedded webview.
                 /// </summary>
-                public const string Url = "http://ccv.church/ma-more";
+                public const string Url = Config.GeneralConfig.RockBaseUrl + "ma-more";
             }
         }
     }

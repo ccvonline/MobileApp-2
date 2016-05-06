@@ -23,7 +23,7 @@ namespace App.Shared
 
     public class StartingPoint_Engagement : IEngagement
     {
-        string [] StartingPoint_Entry = { "Starting Point", "Begin your journey at CCV", "http://ccv.church/ma-startingpoint", "starting_point_thumb.png" };
+        string [] StartingPoint_Entry = { "Starting Point", "Begin your journey at CCV", Config.GeneralConfig.RockBaseUrl + "ma-startingpoint", "starting_point_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -33,7 +33,7 @@ namespace App.Shared
 
     public class Baptism_Engagement : IEngagement
     {
-        string [] Baptism_Entry = { "Baptisms", "Make your faith public", "http://ccv.church/ma-baptism", "baptism_thumb.png" };
+        string [] Baptism_Entry = { "Baptisms", "Make your faith public", Config.GeneralConfig.RockBaseUrl + "ma-baptism", "baptism_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -63,7 +63,7 @@ namespace App.Shared
 
     public class Serve_Engagement : IEngagement
     {
-        string [] Serve_Entry = { "Serve", "Impact lives by serving", "http://ccv.church/ma-serve", "serve_thumb.png" };
+        string [] Serve_Entry = { "Serve", "Impact lives by serving", Config.GeneralConfig.RockBaseUrl + "ma-serve", "serve_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -83,7 +83,7 @@ namespace App.Shared
 
     public class Share_Engagement : IEngagement
     {
-        string [] Share_Entry = { "Share", "Share your story", "http://ccv.church/mystory", "share_thumb.png" };
+        string [] Share_Entry = { "Share", "Share your story", Config.GeneralConfig.RockBaseUrl + "mystory", "share_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -97,61 +97,29 @@ namespace App.Shared
     public class Coach_Engagement : IEngagement
     {
         // Next Steps Coach
-        const int GroupType_NextSteps = 78;
-        const int GroupTypeRole_Coach = 114;
-        const int GroupTypeRole_AsstCoach = 118;
-        string [] NextStepsCoach_Entry = { "Coach", "Access your toolbox", "http://ccv.church/page/985?GroupId={0}", "coach_thumb.png" };
-
-        // Neighborhood Group Coach
-        string [] GroupCoach_Entry = { "Coach", "Access your toolbox", "http://ccv.church/page/490?GroupId={0}", "coach_thumb.png" };
+        string[] Coach_Entry = { "Coach", "Access your toolbox", Config.GeneralConfig.RockBaseUrl + "ma-my-groups", "coach_thumb.png" };
 
         // Not Coach 
-        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", "http://ccv.church/ma-request-coach", "coach_thumb.png" };
+        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", Config.GeneralConfig.RockBaseUrl + "ma-request-coach", "coach_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
-            // first, are they a Next Steps Coach?
-            int groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, GroupType_NextSteps, GroupTypeRole_Coach );
-            if( groupId > -1 )
+            // NEXT STEPS COACH / ASST COACH
+            int nsCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextStepsGroupId, PrivateGeneralConfig.GroupTypeRole_NSGroup_CoachId );
+            int nsAsstCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextStepsGroupId, PrivateGeneralConfig.GroupTypeRole_NSGroup_AsstCoachId );
+
+            // NEIGHBORHOOD COACH / ASST COACH
+            int nhCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodGroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId );
+            int nhAsstCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodGroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_AsstCoachId );
+
+            // NEXTGEN COACH / ASST COACH
+            int ngCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId );
+            int ngAsstCoachgroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_AsstCoachId );
+
+            // if any of these are > -1, they're some type of coach
+            if ( nsCoachGroupId > -1 || nsAsstCoachGroupId > -1 || nhCoachGroupId > -1 || nhAsstCoachGroupId > -1 || ngCoachGroupId > -1 || ngAsstCoachgroupId > -1 )
             {
-                // update the entry with the groupId
-                NextStepsCoach_Entry[ 2 ] = string.Format( NextStepsCoach_Entry[ 2 ], groupId );
-
-                // yup.
-                return NextStepsCoach_Entry;
-            }
-
-            // second, are they a Next Steps Assistant Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup(groups, GroupType_NextSteps, GroupTypeRole_AsstCoach);
-            if (groupId > -1)
-            {
-                // update the entry with the groupId
-                NextStepsCoach_Entry[2] = string.Format(NextStepsCoach_Entry[2], groupId);
-
-                // yup.
-                return NextStepsCoach_Entry;
-            }
-
-            // then are they a Neighborhood Group Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.NeighborhoodGroupValueId, MobileAppApi.GroupMemberRole_Leader );
-            if( groupId > -1 )
-            {
-                // update the entry with the groupId
-                GroupCoach_Entry[ 2 ] = string.Format( GroupCoach_Entry[ 2 ], groupId );
-
-                // yup.
-                return GroupCoach_Entry;
-            }
-
-            // or... are they a Neighborhood Group Asst Coach?
-            groupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup(groups, PrivateGeneralConfig.NeighborhoodGroupValueId, MobileAppApi.GroupMemberRole_AsstLeader);
-            if (groupId > -1)
-            {
-                // update the entry with the groupId
-                GroupCoach_Entry[2] = string.Format(GroupCoach_Entry[2], groupId);
-
-                // yup.
-                return GroupCoach_Entry;
+                return Coach_Entry;
             }
 
             // they aren't either, so return the "you should do this!!!1one"

@@ -99,7 +99,7 @@ namespace Droid
                         messageItem.Thumbnail.SetScaleType( ImageView.ScaleType.CenterCrop );
                     }
 
-                    messageItem.Title.Text = ParentFragment.Series.Name;
+                    messageItem.Title.Text = ParentFragment.Series.SeriesName;
                     if ( ParentFragment.Series.Private == true )
                     {
                         messageItem.Title.Text += " (Private)";
@@ -515,16 +515,16 @@ namespace Droid
                     // load the placeholder and series image
                     SeriesBillboard = null;
 
-                    bool imageExists = TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
+                    bool imageExists = TryLoadBanner( NotesTask.FormatBillboardImageName( Series.SeriesName ) );
                     if ( imageExists == false )
                     {
                         //string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
 
                         // use the placeholder and request the image download
-                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.Name ), null,
+                        FileCache.Instance.DownloadFileToCache( Series.BillboardUrl, NotesTask.FormatBillboardImageName( Series.SeriesName ), null,
                             delegate
                             {
-                                TryLoadBanner( NotesTask.FormatBillboardImageName( Series.Name ) );
+                                TryLoadBanner( NotesTask.FormatBillboardImageName( Series.SeriesName ) );
                             } );
 
 
@@ -557,7 +557,7 @@ namespace Droid
                     ParentTask.NavbarFragment.NavToolbar.Reveal( false );
 
                     // log the series they tapped on.
-                    MessageAnalytic.Instance.Trigger( MessageAnalytic.BrowseSeries, Series.Name );
+                    MessageAnalytic.Instance.Trigger( MessageAnalytic.BrowseSeries, Series.SeriesName );
 
                     if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
                     {

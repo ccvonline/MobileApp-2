@@ -28,16 +28,31 @@ namespace App.Shared
             /// </summary>
             public const int CellPhoneValueId = 12;
             public const int NeighborhoodGroupGeoFenceValueId = 48;
-            public const int NeighborhoodGroupValueId = 49;
             public const int GroupLocationTypeHomeValueId = 19;
             public const Rock.Client.Enums.GroupMemberStatus GroupMemberStatus_Pending_ValueId = Rock.Client.Enums.GroupMemberStatus.Pending;
             public const int ApplicationGroup_PhotoRequest_ValueId = 1207885;
-            public const int GroupMemberRole_Member_ValueId = 59;
             public const int GeneralDataTimeValueId = 2623;
-            public const int UserLoginEntityTypeId = 27;
             public const int GroupRegistrationValueId = 52;
             public const int PersonConnectionStatusValueId = 146;
             public const int PersonRecordStatusValueId = 5;
+
+            // entity types
+            public const int EntityType_UserLoginId = 27;
+
+            // group types
+            public const int GroupType_NeighborhoodGroupId = 49;
+            public const int GroupType_NextStepsGroupId = 78;
+            public const int GroupType_NextGenGroupId = 94;
+
+            // group type roles
+            public const int GroupTypeRole_AppGroup_MemberId = 59;
+            public const int GroupTypeRole_NSGroup_CoachId = 114;
+            public const int GroupTypeRole_NSGroup_AsstCoachId = 118;
+            public const int GroupTypeRole_NHGroup_CoachId = 50;
+            public const int GroupTypeRole_NHGroup_AsstCoachId = 51;
+            public const int GroupTypeRole_NGGroup_CoachId = 133;
+            public const int GroupTypeRole_NGGroup_AsstCoachId = 134;
+
 
             /// <summary>
             /// The URL parameter we add to websites that need to know what campus the user visits

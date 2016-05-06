@@ -473,7 +473,7 @@ namespace iOS
                 cell.Chevron.Layer.Position = new CGPoint( cell.Bounds.Width - (cell.Chevron.Bounds.Width / 2) - 5, (PrivateNoteConfig.Series_Main_CellHeight) / 2 );
 
                 // Create the title
-                cell.Title.Text = SeriesEntries[ row ].Series.Name;
+                cell.Title.Text = SeriesEntries[ row ].Series.SeriesName;
                 if ( SeriesEntries[ row ].Series.Private == true )
                 {
                     cell.Title.Text += " (Private)";    
@@ -699,16 +699,16 @@ namespace iOS
                 // for billboards, we ONLY CARE about loading the first series' billboard.
                 if ( i == 0 )
                 {
-                    bool imageExists = TryLoadImage( ref entry.mBillboard, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
+                    bool imageExists = TryLoadImage( ref entry.mBillboard, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ) );
                     if ( imageExists == false )
                     {
-                        FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.Name ), null,
+                        FileCache.Instance.DownloadFileToCache( entry.Series.BillboardUrl, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ), null,
                             delegate
                             {
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
                                     if( IsVisible == true )
                                     {
-                                        TryLoadImage( ref entry.mBillboard, NotesTask.FormatBillboardImageName( entry.Series.Name ) );
+                                        TryLoadImage( ref entry.mBillboard, NotesTask.FormatBillboardImageName( entry.Series.SeriesName ) );
                                     }
                                 });
                             } );
@@ -716,16 +716,16 @@ namespace iOS
                 }
 
                 // for everything, we care about the thumbnails
-                bool thumbExists = TryLoadImage( ref entry.mThumbnail, NotesTask.FormatThumbImageName( entry.Series.Name ) );
+                bool thumbExists = TryLoadImage( ref entry.mThumbnail, NotesTask.FormatThumbImageName( entry.Series.SeriesName ) );
                 if ( thumbExists == false )
                 {
-                    FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.Name ), null,
+                    FileCache.Instance.DownloadFileToCache( entry.Series.ThumbnailUrl, NotesTask.FormatThumbImageName( entry.Series.SeriesName ), null,
                         delegate
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
                                 if( IsVisible == true )
                                 {
-                                    TryLoadImage( ref entry.mThumbnail, NotesTask.FormatThumbImageName( entry.Series.Name ) );
+                                    TryLoadImage( ref entry.mThumbnail, NotesTask.FormatThumbImageName( entry.Series.SeriesName ) );
                                 }
                             });
                         } );
