@@ -83,7 +83,7 @@ namespace App.Shared
 
     public class Share_Engagement : IEngagement
     {
-        string [] Share_Entry = { "Share", "Share your story", Config.GeneralConfig.RockBaseUrl + "mystory", "share_thumb.png" };
+        string [] Share_Entry = { "Share", "Share your story", Config.GeneralConfig.RockBaseUrl + "ma-mystory", "share_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
