@@ -398,7 +398,7 @@ namespace App
                     RestRequest restRequest = new RestRequest( Method.GET );
                     restRequest.RequestFormat = DataFormat.Xml;
 
-                    request.ExecuteAsync<NoteDB>( GeneralConfig.NoteBaseURL + "note_db.xml", restRequest, 
+                    request.ExecuteAsync<NoteDB>( GeneralConfig.NoteBaseURL, restRequest, 
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, NoteDB noteModel )
                         {
                             if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && noteModel != null && noteModel.SeriesList.Count > 0 )

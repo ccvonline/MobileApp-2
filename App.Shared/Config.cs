@@ -65,9 +65,9 @@ namespace App
                 public const string RockMobileAppAuthorizationKey = "hWTaZ7buziBcJQH31KCm3Pzz";
 
                 /// <summary>
-                /// The base URL to look for Notes.
+                /// The base URL to look for Notes. (We hardcode the production URL so that we can test notes on the production server)
                 /// </summary>
-                public const string NoteBaseURL = "http://ccv.church/content/mobileapp/";
+                public const string NoteBaseURL = "http://rock.ccv.church/api/Podcast/Category/0/mobile_app/0?NumSeries=12";
 
                 /// <summary>
                 /// Set to true if you wish to use Analytics

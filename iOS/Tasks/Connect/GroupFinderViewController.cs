@@ -349,6 +349,7 @@ namespace iOS
 
         int CurrGroupIndex { get; set; }
         int NumRequestedGroups { get; set; }
+        int GroupTypeId { get; set; }
 
         UIScrollViewWrapper ScrollView { get; set; }
         KeyboardAdjustManager KeyboardAdjustManager { get; set; }
@@ -527,8 +528,7 @@ namespace iOS
             GroupTableSource = new GroupFinderViewController.TableSource( this );
 
             // add the table view and source
-            GroupFinderTableView.BackgroundColor = UIColor.Clear;//Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.Table_Footer_Color );
-            //GroupFinderTableView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BG_Layer_Color );
+            GroupFinderTableView.BackgroundColor = UIColor.Clear;
             GroupFinderTableView.Source = GroupTableSource;
             GroupFinderTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
@@ -536,12 +536,27 @@ namespace iOS
 
             SearchPage = new UIGroupFinderSearch();
             SearchPage.Create( ScrollView, ScrollView.Frame.ToRectF( ), 
+                // Search Neighborhood Groups
                 delegate
                 {
                     SearchPage.Hide( true );
-                    GetInitialGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    GetInitialGroups( PrivateGeneralConfig.GroupType_NeighborhoodGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                     Task.NavToolbar.Reveal( true );
-                } );
+                },
+                // Search NextGen Groups
+                delegate
+                {
+                    SearchPage.Hide( true );
+                    GetInitialGroups( PrivateGeneralConfig.GroupType_NextGenGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    Task.NavToolbar.Reveal( true );
+                },
+                // Search Young Adults Groups
+                delegate
+                {
+                    SearchPage.Hide( true );
+                    GetInitialGroups( PrivateGeneralConfig.GroupType_YoungAdultsGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    Task.NavToolbar.Reveal( true );
+                });
             SearchPage.SetTitle( ConnectStrings.GroupFinder_SearchPageHeader, ConnectStrings.GroupFinder_SearchPageDetails );
             SearchPage.Hide( false );
 
@@ -812,7 +827,7 @@ namespace iOS
             }
         }
 
-        void GetInitialGroups( string street, string city, string state, string zip )
+        void GetInitialGroups( int groupTypeId, string street, string city, string state, string zip )
         {
             if ( Searching == false )
             {
@@ -829,9 +844,10 @@ namespace iOS
                     {
                         // set the group index we'll begin with
                         CurrGroupIndex = 0;
+                        GroupTypeId = groupTypeId;
 
                         // request groups from CurrGroupIndex thru CurrGroupIndex + NumRequestedGroups
-                        GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                        GroupFinder.GetGroups( groupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
                             delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
                             {
                                 BlockerView.Hide( delegate
@@ -892,7 +908,7 @@ namespace iOS
 
                 BlockerView.Show( delegate
                     {
-                        GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                        GroupFinder.GetGroups( GroupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
                             delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
                             {
                                 BlockerView.Hide( delegate

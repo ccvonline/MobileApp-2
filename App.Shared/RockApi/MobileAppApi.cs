@@ -71,8 +71,17 @@ namespace MobileApp
         }
 
         public delegate void OnGroupSummaryResult( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream );
-        public static void GetGroupSummary( int groupId, OnGroupSummaryResult resultHandler )
+        public static void GetGroupSummary( int groupId, int groupTypeId, OnGroupSummaryResult resultHandler )
         {
+            // first, take the groupTypeId and get the appropriate leader ID from that.
+            int groupCoachId = 0;
+            switch( groupTypeId )
+            {
+                case PrivateGeneralConfig.GroupType_NeighborhoodGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId; break;
+                case PrivateGeneralConfig.GroupType_NextGenGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId; break;
+                case PrivateGeneralConfig.GroupType_YoungAdultsGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachId; break;
+            }
+            
             // first, get the group itself
             string queryData = string.Format( "/{0}?LoadAttributes=simple", groupId );
             RockApi.Get_Groups<Rock.Client.Group>( queryData, delegate(HttpStatusCode statusCode, string statusDescription, Rock.Client.Group model ) 
@@ -80,7 +89,7 @@ namespace MobileApp
                     if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
                     {
                         // next, get the group leader
-                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId ),
+                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, groupCoachId ),
                             delegate(HttpStatusCode gmCode, string gmDescription, List<Rock.Client.GroupMember> groupMembers ) 
                             {
                                 if( Rock.Mobile.Network.Util.StatusInSuccessRange( gmCode ) == true && groupMembers != null && groupMembers.Count > 0 )

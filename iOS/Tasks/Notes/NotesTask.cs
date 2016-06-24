@@ -223,11 +223,12 @@ namespace iOS
             return false;
         }
 
-        public override bool ShouldForceBackButtonEnabled( )
+        public override bool WantOverrideBackButton( ref bool enabled )
         {
             // otherwise, the one exception is if the webview is open
             if ( ( ActiveViewController as TaskWebViewController ) != null )
             {
+                enabled = true;
                 return true;
             }
 

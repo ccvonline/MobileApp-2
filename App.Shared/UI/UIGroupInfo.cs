@@ -196,7 +196,7 @@ namespace App.Shared.UI
 
             BlockerView.Show( delegate 
                 {
-                    MobileAppApi.GetGroupSummary( GroupEntry.Id, 
+                    MobileAppApi.GetGroupSummary( GroupEntry.Id, GroupEntry.GroupTypeId,
                         delegate( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream ) 
                         {
                             try
@@ -222,13 +222,22 @@ namespace App.Shared.UI
 
                                 // set the details for the group (distance, meeting time, etc)
                                 string currKey = "GroupDescription";
-                                GroupDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
+                                {
+                                    GroupDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                }
 
                                 currKey = "LeaderInformation";
-                                LeaderDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
+                                {
+                                    LeaderDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                }
 
                                 currKey = "Children";
-                                ChildDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
+                                {
+                                    ChildDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
+                                }
 
                                 if( string.IsNullOrEmpty( GroupEntry.MeetingTime ) == false )
                                 {

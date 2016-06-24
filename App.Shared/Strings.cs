@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.0.9 (Build 0)";
+                    return "Version 2.1.0 (Build 0)";
                 }
             }
         }
@@ -182,6 +182,10 @@ namespace App.Shared
             public const string GroupFinder_StatePlaceholder = "State";
             public const string GroupFinder_ZipPlaceholder = "Zip";
 
+            public const string GroupFinder_Search_NeighborhoodGroups = "Search Neighborhood Groups";
+            public const string GroupFinder_Search_NextGenGroups = "Search Student Groups";
+            public const string GroupFinder_Search_YoungAdultGroups = "Search Young Adult Groups";
+
             public const string GroupFinder_DefaultState = "AZ";
 
             public const string GroupFinder_GroupsFound = "Groups Nearest Your Location";
@@ -191,14 +195,13 @@ namespace App.Shared
             public const string GroupFinder_SearchButtonLabel = "Touch to Search an Address";
 
             public const string GroupFinder_SearchPageHeader = "Group Finder";
-            public const string GroupFinder_SearchPageDetails = "Enter an address to find nearby neighborhood groups";
+            public const string GroupFinder_SearchPageDetails = "Enter an address to find nearby groups";
 
             public const string GroupFinder_MeetingTime = "Meets on {0} at {1}";
             public const string GroupFinder_MilesSuffix = "Miles";
             public const string GroupFinder_ClosestTag = "(Closest group to you)";
             public const string GroupFinder_ContactForTime = "Contact for Meeting Time";
 
-            //public const string GroupFinder_Neighborhood = "Your neighborhood is:  ";
             public const string GroupFinder_Neighborhood = "Groups Nearest You";
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";

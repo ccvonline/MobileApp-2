@@ -392,11 +392,26 @@ namespace Droid
 
                     SearchPage = new UIGroupFinderSearch();
                     SearchPage.Create( view, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+                        // Search Neighborhood Groups
                         delegate
                         {
                             SearchPage.Hide( true );
-                            GetInitialGroups( SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
-                        } );
+                            GetInitialGroups( PrivateGeneralConfig.GroupType_NeighborhoodGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                        },
+
+                        // Search Next Gen Groups
+                        delegate
+                        {
+                            SearchPage.Hide( true );
+                            GetInitialGroups( PrivateGeneralConfig.GroupType_NextGenGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                        },
+                                     
+                        // Search Young Adult Groups
+                        delegate
+                        {
+                            SearchPage.Hide( true );
+                            GetInitialGroups( PrivateGeneralConfig.GroupType_YoungAdultsGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                        });
                     SearchPage.SetTitle( ConnectStrings.GroupFinder_SearchPageHeader, ConnectStrings.GroupFinder_SearchPageDetails );
                     SearchPage.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetCurrentContainerDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
                     SearchPage.Hide( false );
@@ -751,10 +766,11 @@ namespace Droid
                 }
 
                 bool RetrievingGroups { get; set; }
+                int GroupTypeId { get; set; }
                 int CurrGroupIndex { get; set; }
                 int NumRequestedGroups { get; set; }
 
-                void GetInitialGroups( string streetValue, string cityValue, string stateValue, string zipValue )
+                void GetInitialGroups( int groupTypeId, string streetValue, string cityValue, string stateValue, string zipValue )
                 {
                     if ( RetrievingGroups == false )
                     {
@@ -769,9 +785,10 @@ namespace Droid
 
                         BlockerView.Show( delegate
                             {
+                                GroupTypeId = groupTypeId;
                                 CurrGroupIndex = 0;
 
-                                App.Shared.GroupFinder.GetGroups( streetValue, cityValue, stateValue, zipValue, CurrGroupIndex, NumRequestedGroups,
+                                GroupFinder.GetGroups( groupTypeId, streetValue, cityValue, stateValue, zipValue, CurrGroupIndex, NumRequestedGroups,
                                     delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
                                     {
                                         BlockerView.Hide( delegate
@@ -815,7 +832,7 @@ namespace Droid
 
                         BlockerView.Show( delegate
                             {
-                                GroupFinder.GetGroups( StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
+                                GroupFinder.GetGroups( GroupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
                                     delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
                                     {
                                         BlockerView.Hide( delegate

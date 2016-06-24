@@ -200,6 +200,7 @@ namespace iOS
         bool DisableIdleTimer { get; set; }
 
         bool WebviewControlsNavbar { get; set; }
+        bool WebviewHidesNavbarOnScroll { get; set; }
 
         bool IncludeImpersonationToken { get; set; }
 
@@ -210,7 +211,7 @@ namespace iOS
         /// <summary>
         /// Handles taking a URL and either launching it externally or within a webView, with or without impersonation token info. (Showing an embedded web page OR launching Safari)
         /// </summary>
-        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool webViewControlsNavbar )
+        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool webViewControlsNavbar, bool webviewHidesNavbarOnScroll )
         {
             // do we launch them out of the app?
             if ( launchExternalBrowser == true )
@@ -255,17 +256,18 @@ namespace iOS
             // they are using an embedded browser, so this is pretty simple
             else
             {
-                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar );
+                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar, webviewHidesNavbarOnScroll );
                 parentTask.PerformSegue( currController, viewController );
             }
         }
 
-        protected TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool webviewControlsNavbar ) : base ( )
+        protected TaskWebViewController ( string displayUrl, Task parentTask, bool includeImpersonationToken, bool disableIdleTimer, bool webviewControlsNavbar, bool webviewHidesNavbarOnScroll ) : base ( )
 		{
             DisplayUrl = displayUrl;
             Task = parentTask;
             DisableIdleTimer = disableIdleTimer;
             WebviewControlsNavbar = webviewControlsNavbar;
+            WebviewHidesNavbarOnScroll = webviewHidesNavbarOnScroll;
             IncludeImpersonationToken = includeImpersonationToken;
 		}
 
@@ -360,11 +362,19 @@ namespace iOS
 
             WebView.LoadRequest( new NSUrlRequest( encodedUrl ) );
 
-            // not 100% sure that this is safe. If WebView sets the scrollView delegate and doesn't back ours up
-            // (which it SHOULD) we won't get our calls
-            if ( WebviewControlsNavbar == true )
+            // if the webview controls the navbar
+            if ( WebviewControlsNavbar == true  )
             {
-                WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
+                // then if we want hiding on scroll, change our delegate so we can do just that.
+                if ( WebviewHidesNavbarOnScroll == true )
+                {
+                    WebView.ScrollView.Delegate = new WebScrollDelegate( WebView, Task.NavToolbar );
+                }
+                else
+                {
+                    // otherwise force the nav toolbar to show up, and we'll leave it up
+                    Task.NavToolbar.Reveal( true );
+                }
             }
         }
 
@@ -405,6 +415,13 @@ namespace iOS
             else
             {
                 ActivityIndicator.Hidden = true;
+
+                // if we control the nav toolbar, we enable the back button only when
+                // there's something to go "back" to.
+                if( WebviewControlsNavbar == true )
+                {
+                    Task.NavToolbar.SetBackButtonEnabled( WebView.CanGoBack );
+                }
             }
         }
 

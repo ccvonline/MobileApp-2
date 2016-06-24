@@ -202,10 +202,11 @@ namespace iOS
 
         /// <summary>
         /// 99% of the time, the main container can decide if the back button should be enabled.
-        /// Every now and then, a task might need to force it on. (Like the notes webview)
+        /// Every now and then, a task might need to override that. (Like the notes webview)
         /// </summary>
-        public virtual bool ShouldForceBackButtonEnabled( )
+        public virtual bool WantOverrideBackButton( ref bool enabled )
         {
+            // return false to not override. Return true and SET THE REF if you want it.
             return false;
         }
     }

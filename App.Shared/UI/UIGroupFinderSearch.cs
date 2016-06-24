@@ -33,18 +33,25 @@ namespace App.Shared.UI
         public PlatformTextField ZipCode { get; set; }
         PlatformView ZipCodeLayer { get; set; }
 
-        PlatformButton SearchButton { get; set; }
+        PlatformButton SearchNeighborhoodsButton { get; set; }
+        Rock.Mobile.UI.PlatformButton.OnClick SearchNeighborhoodsClicked { get; set; }
 
-        Rock.Mobile.UI.PlatformButton.OnClick SearchClicked { get; set; }
+        PlatformButton SearchNextGenButton { get; set; }
+        Rock.Mobile.UI.PlatformButton.OnClick SearchNextGenClicked { get; set; }
+
+        PlatformButton SearchYoungAdultsButton { get; set; }
+        Rock.Mobile.UI.PlatformButton.OnClick SearchYoungAdultsClicked { get; set; }
 
         public UIGroupFinderSearch( )
         {
         }
 
         static float sBackerOpacity = .45f;
-        static float sModalOffset = 15;
+        static float sModalOffset = 0;//15;
 
-        public void Create( object masterView, RectangleF frame, Rock.Mobile.UI.PlatformButton.OnClick searchClicked )
+        public void Create( object masterView, RectangleF frame, Rock.Mobile.UI.PlatformButton.OnClick searchNeighborhoodsClicked, 
+                                                                 Rock.Mobile.UI.PlatformButton.OnClick searchNextGenClicked, 
+                                                                 Rock.Mobile.UI.PlatformButton.OnClick searchYoungAdultsClicked )
         {
             Backer = PlatformView.Create( );
             Backer.BackgroundColor = 0x000000FF;
@@ -55,10 +62,7 @@ namespace App.Shared.UI
             View = PlatformView.Create( );
             View.BackgroundColor = ControlStylingConfig.BackgroundColor;
             View.AddAsSubview( masterView );
-            View.Frame = new RectangleF( frame.Left + sModalOffset, 
-                frame.Top + sModalOffset, 
-                frame.Width - (sModalOffset * 2), 
-                frame.Height - (sModalOffset * 2));
+            View.Frame = frame;
 
             Title = PlatformLabel.Create( );
             Title.AddAsSubview( View.PlatformNativeObject );
@@ -68,7 +72,7 @@ namespace App.Shared.UI
 
             Details = PlatformLabel.Create( );
             Details.AddAsSubview( View.PlatformNativeObject );
-            Details.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
+            Details.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
             Details.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
 
 
@@ -140,38 +144,80 @@ namespace App.Shared.UI
             ZipCode.AutoCorrectionType = AutoCorrectionType.No;
 
 
-            // Search Button
-            SearchClicked = searchClicked;
-            SearchButton = PlatformButton.Create( );
-            SearchButton.AddAsSubview( View.PlatformNativeObject );
-            SearchButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
-            SearchButton.TextColor = ControlStylingConfig.Button_TextColor;
-            SearchButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
-            SearchButton.Text = GeneralStrings.Search;
-            SearchButton.SizeToFit( );
-            SearchButton.ClickEvent = ( PlatformButton b ) =>
+            // Search Neighborhoods Button
+            SearchNeighborhoodsClicked = searchNeighborhoodsClicked;
+            SearchNeighborhoodsButton = PlatformButton.Create( );
+            SearchNeighborhoodsButton.AddAsSubview( View.PlatformNativeObject );
+            SearchNeighborhoodsButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
+            SearchNeighborhoodsButton.TextColor = ControlStylingConfig.Button_TextColor;
+            SearchNeighborhoodsButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
+            SearchNeighborhoodsButton.Text = ConnectStrings.GroupFinder_Search_NeighborhoodGroups;
+            SearchNeighborhoodsButton.SizeToFit( );
+            SearchNeighborhoodsButton.ClickEvent = ( PlatformButton b ) =>
                 {
                     // treat the search button as if Return was pressed
-                    ShouldReturn( );
+                    if ( ShouldReturn( ) )
+                    {
+                        SearchNeighborhoodsClicked( null );
+                    }
                 };
+
+
+            // Search NextGen Button
+            SearchNextGenClicked = searchNextGenClicked;
+            SearchNextGenButton = PlatformButton.Create( );
+            SearchNextGenButton.AddAsSubview( View.PlatformNativeObject );
+            SearchNextGenButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
+            SearchNextGenButton.TextColor = ControlStylingConfig.Button_TextColor;
+            SearchNextGenButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
+            SearchNextGenButton.Text = ConnectStrings.GroupFinder_Search_NextGenGroups;
+            SearchNextGenButton.SizeToFit( );
+            SearchNextGenButton.ClickEvent = ( PlatformButton b ) =>
+            {
+                // treat the search button as if Return was pressed
+                if ( ShouldReturn( ) )
+                {
+                    SearchNextGenClicked( null );
+                }
+            };
+
+            // Search Young Adults Button
+            SearchYoungAdultsClicked = searchYoungAdultsClicked;
+            SearchYoungAdultsButton = PlatformButton.Create( );
+            SearchYoungAdultsButton.AddAsSubview( View.PlatformNativeObject );
+            SearchYoungAdultsButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
+            SearchYoungAdultsButton.TextColor = ControlStylingConfig.Button_TextColor;
+            SearchYoungAdultsButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
+            SearchYoungAdultsButton.Text = ConnectStrings.GroupFinder_Search_YoungAdultGroups;
+            SearchYoungAdultsButton.SizeToFit( );
+            SearchYoungAdultsButton.ClickEvent = ( PlatformButton b ) =>
+            {
+                // treat the search button as if Return was pressed
+                if ( ShouldReturn( ) )
+                {
+                    SearchYoungAdultsClicked( null );
+                }
+            };
 
             LayoutChanged( frame );
         }
 
-        public void ShouldReturn( )
+        public bool ShouldReturn( )
         {
             if( ValidateInput( ) )
             {
                 // ensure the keyboard hides
                 TouchesEnded( );
 
-                SearchClicked( null );
+                return true;
             }
+
+            return false;
         }
 
         public float GetControlBottom( )
         {
-            return SearchButton.Frame.Bottom;
+            return SearchYoungAdultsButton.Frame.Bottom;
         }
 
         public void SetTitle( string title, string details )
@@ -247,18 +293,18 @@ namespace App.Shared.UI
                 containerBounds.Width - (sModalOffset * 2), 
                 containerBounds.Height - (sModalOffset * 2));
             
-            float sectionSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 12 );
-            float layerHeight = Rock.Mobile.Graphics.Util.UnitToPx( 44 );
-            float textFieldHeight = Rock.Mobile.Graphics.Util.UnitToPx( 40 );
+            float layerHeight = Rock.Mobile.Graphics.Util.UnitToPx( 40 );
+            float textFieldHeight = Rock.Mobile.Graphics.Util.UnitToPx( 36 );
             float textLeftInset = Rock.Mobile.Graphics.Util.UnitToPx( 10 );
             float textTopInset = Rock.Mobile.Graphics.Util.UnitToPx( 2 );
 
-            float buttonWidth = Rock.Mobile.Graphics.Util.UnitToPx( 122 );
+            float controlSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 12 );
+            float buttonWidth = Rock.Mobile.Graphics.Util.UnitToPx( 244 );
 
-            Title.Frame = new RectangleF( 0, containerBounds.Height * .05f, View.Frame.Width, Title.Frame.Height );
-            Details.Frame = new RectangleF( 0, Title.Frame.Bottom, View.Frame.Width, Rock.Mobile.Graphics.Util.UnitToPx( 60 ) );
+            Title.Frame = new RectangleF( 0, controlSpacing, View.Frame.Width, Title.Frame.Height );
+            Details.Frame = new RectangleF( 0, Title.Frame.Bottom, View.Frame.Width, Details.Frame.Height );
 
-            StreetLayer.Frame = new RectangleF( 0, Details.Frame.Bottom + sectionSpacing, View.Frame.Width, layerHeight );
+            StreetLayer.Frame = new RectangleF( 0, Details.Frame.Bottom + controlSpacing, View.Frame.Width, layerHeight );
             Street.Frame = new RectangleF( textLeftInset, StreetLayer.Frame.Top + textTopInset, View.Frame.Width, textFieldHeight );
 
             CityLayer.Frame = new RectangleF( 0, StreetLayer.Frame.Bottom, View.Frame.Width, layerHeight );
@@ -270,8 +316,10 @@ namespace App.Shared.UI
             ZipCodeLayer.Frame = new RectangleF( 0, StateLayer.Frame.Bottom, View.Frame.Width, layerHeight );
             ZipCode.Frame = new RectangleF( textLeftInset, ZipCodeLayer.Frame.Top + textTopInset, View.Frame.Width, textFieldHeight );
 
-            // Search Button
-            SearchButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, ZipCodeLayer.Frame.Bottom + sectionSpacing, buttonWidth, layerHeight );
+            // Search Buttons
+            SearchNeighborhoodsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, ZipCodeLayer.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            SearchNextGenButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNextGenButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
         }
 
         bool ValidateInput( )

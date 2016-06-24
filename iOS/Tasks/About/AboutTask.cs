@@ -26,17 +26,24 @@ namespace iOS
             parentViewController.PushViewController(MainPageVC, false);
 
             // and immediately handle the URL
-            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, false );
+            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, true, false );
+        }
+
+        public override bool WantOverrideBackButton (ref bool enabled)
+        {
+            enabled = false;
+            return true;
         }
 
         public override void WillShowViewController(TaskUIViewController viewController)
         {
             base.WillShowViewController( viewController );
 
-            // turn off the share & create buttons
+            // turn off the back, share & create buttons
+            NavToolbar.SetBackButtonEnabled( false );
             NavToolbar.SetShareButtonEnabled( false, null );
             NavToolbar.SetCreateButtonEnabled( false, null );
-            NavToolbar.Reveal( false );
+            NavToolbar.Reveal( true );
         }
 
         public override bool OnBackPressed( )
@@ -45,10 +52,11 @@ namespace iOS
             TaskWebViewController webViewController = ActiveViewController as TaskWebViewController;
             if( webViewController != null )
             {
-                return webViewController.OnBackPressed( );
+                webViewController.OnBackPressed( );
             }
 
-            return false;
+            // let the container know we're handling it, so that it doesn't need to.
+            return true;
         }
 
         public override void TouchesEnded(TaskUIViewController taskUIViewController, NSSet touches, UIEvent evt)

@@ -34,10 +34,11 @@ namespace App.Shared
             public double Longitude { get; set; }
 
             public int Id { get; set; }
+            public int GroupTypeId { get; set; }
         }
 
         public delegate void GetGroupsComplete( GroupEntry sourceLocation, List<GroupEntry> groupEntry, bool result );
-        public static void GetGroups( string street, string city, string state, string zip, int skip, int top, GetGroupsComplete onCompletion )
+        public static void GetGroups( int groupTypeId, string street, string city, string state, string zip, int skip, int top, GetGroupsComplete onCompletion )
         {
             List<GroupEntry> groupEntries = new List<GroupEntry>();
             GroupEntry sourceLocation = new GroupEntry( );
@@ -57,7 +58,7 @@ namespace App.Shared
                         sourceLocation.Longitude = model.Longitude.Value;
 
                         // now get the groups
-                        MobileAppApi.GetPublicGroupsByLocation( PrivateGeneralConfig.GroupType_NeighborhoodGroupId, model.Id, skip, top,
+                        MobileAppApi.GetPublicGroupsByLocation( groupTypeId, model.Id, skip, top,
                             delegate(System.Net.HttpStatusCode groupStatusCode, string groupStatusDescription, List<Rock.Client.Group> rockGroupList )
                             {
                                 bool result = false;
@@ -83,6 +84,7 @@ namespace App.Shared
                                             entry.Address = location.Street1 + "\n" + location.City + ", " + location.State + " " + location.PostalCode.Substring( 0, Math.Max( 0, location.PostalCode.IndexOf( '-' ) ) );
                                             entry.NeighborhoodArea = smallGroup.Name;
                                             entry.Id = smallGroup.Id;
+                                            entry.GroupTypeId = groupTypeId;
 
                                             // get the distance 
                                             entry.Distance = location.Distance;

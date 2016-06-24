@@ -951,7 +951,7 @@ namespace iOS
                 // trigger the Give analytic
                 GiveAnalytic.Instance.Trigger( GiveAnalytic.Give );
 
-                TaskWebViewController.HandleUrl( true, true, GiveConfig.GiveUrl, null, null, false, false );
+                TaskWebViewController.HandleUrl( true, true, GiveConfig.GiveUrl, null, null, false, false, false );
             }
             else
             {

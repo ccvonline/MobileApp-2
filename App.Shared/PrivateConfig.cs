@@ -43,15 +43,20 @@ namespace App.Shared
             public const int GroupType_NeighborhoodGroupId = 49;
             public const int GroupType_NextStepsGroupId = 78;
             public const int GroupType_NextGenGroupId = 94;
+            public const int GroupType_YoungAdultsGroupId = 98;
 
             // group type roles
             public const int GroupTypeRole_AppGroup_MemberId = 59;
+
             public const int GroupTypeRole_NSGroup_CoachId = 114;
             public const int GroupTypeRole_NSGroup_AsstCoachId = 118;
+
             public const int GroupTypeRole_NHGroup_CoachId = 50;
             public const int GroupTypeRole_NHGroup_AsstCoachId = 51;
+
             public const int GroupTypeRole_NGGroup_CoachId = 133;
             public const int GroupTypeRole_NGGroup_AsstCoachId = 134;
+            public const int GroupTypeRole_YAGroup_CoachId = 139;
 
 
             /// <summary>

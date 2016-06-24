@@ -227,9 +227,11 @@ namespace iOS
                 // OR, if there's a current task, ask it if there should be an override
                 if ( CurrentTask != null )
                 {
-                    if ( CurrentTask.ShouldForceBackButtonEnabled( ) )
+                    // if they return true, read their override result.
+                    bool overrideBackResult = false;
+                    if ( CurrentTask.WantOverrideBackButton( ref overrideBackResult ) )
                     {
-                        allowBack = true;
+                        allowBack = overrideBackResult;
                     }
                 }
                 SubNavToolbar.SetBackButtonEnabled( allowBack );
