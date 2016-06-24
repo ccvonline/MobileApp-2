@@ -191,7 +191,7 @@ namespace iOS
                     cell.Distance.SizeToFit( );
 
                     // Position the Title & Address in the center to the right of the image
-                    cell.Title.Frame = new CGRect( 10, 5, cell.Frame.Width - 5, cell.Title.Frame.Height );
+                    cell.Title.Frame = new CGRect( 10, 5, cell.Frame.Width - 55, cell.Title.Frame.Height );
                     cell.MeetingTime.Frame = new CGRect( 10, cell.Title.Frame.Bottom, cell.Frame.Width - 5, cell.MeetingTime.Frame.Height + 5 );
                     cell.Distance.Frame = new CGRect( 10, cell.MeetingTime.Frame.Bottom - 6, cell.Frame.Width - 5, cell.Distance.Frame.Height + 5 );
 
