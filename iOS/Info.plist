@@ -62,9 +62,9 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>CFBundleVersion</key>
-	<string>0</string>
 	<key>CFBundleName</key>
 	<string>CCV Mobile</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 </dict>
 </plist>

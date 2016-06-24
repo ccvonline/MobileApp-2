@@ -108,24 +108,31 @@ namespace App
                             FileCache.Instance.DownloadFileToCache( noteUrl, noteFileName, null,
                                 delegate
                                 {
-                                    // good, now get the style sheet
-                                    noteData = (MemoryStream)FileCache.Instance.LoadFile( noteFileName );
-                                    if ( noteData != null )
+                                    try
                                     {
-                                        string body = Encoding.UTF8.GetString( noteData.ToArray( ), 0, (int)noteData.Length );
-                                        noteData.Dispose( );
+                                        // good, now get the style sheet
+                                        noteData = (MemoryStream)FileCache.Instance.LoadFile( noteFileName );
+                                        if ( noteData != null )
+                                        {
+                                            string body = Encoding.UTF8.GetString( noteData.ToArray( ), 0, (int)noteData.Length );
+                                            noteData.Dispose( );
 
-                                        string styleSheetUrl = Note.GetStyleSheetUrl( body, styleSheetDefaultHostDomain );
-                                        string styleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
+                                            string styleSheetUrl = Note.GetStyleSheetUrl( body, styleSheetDefaultHostDomain );
+                                            string styleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
 
-                                        FileCache.Instance.DownloadFileToCache( styleSheetUrl, styleFileName, null,
-                                            delegate
-                                            {
-                                                // now we can create the notes
-                                                complete( true );
-                                            } );
+                                            FileCache.Instance.DownloadFileToCache( styleSheetUrl, styleFileName, null,
+                                                delegate
+                                                {
+                                                    // now we can create the notes
+                                                    complete( true );
+                                                } );
+                                        }
+                                        else
+                                        {
+                                            complete( false );
+                                        }
                                     }
-                                    else
+                                    catch( Exception )
                                     {
                                         complete( false );
                                     }
