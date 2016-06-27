@@ -389,6 +389,11 @@ namespace iOS
             View.Layer.AnchorPoint = CGPoint.Empty;
             View.Bounds = new CGRect( View.Bounds.Left, View.Bounds.Top, TraitSize.Width, TraitSize.Height );
 
+            // load our objects from disk
+            Rock.Mobile.Util.Debug.WriteLine( "Loading objects from device." );
+            RockNetworkManager.Instance.LoadObjectsFromDevice( );
+            Rock.Mobile.Util.Debug.WriteLine( "Loading objects done." );
+
             // create the login controller / profile view controllers
             LoginViewController = new LoginViewController( );
             LoginViewController.Springboard = this;
@@ -563,11 +568,6 @@ namespace iOS
                         }
                     }
                 };
-
-            // load our objects from disk
-            Rock.Mobile.Util.Debug.WriteLine( "Loading objects from device." );
-            RockNetworkManager.Instance.LoadObjectsFromDevice( );
-            Rock.Mobile.Util.Debug.WriteLine( "Loading objects done." );
 
             // set the viewing campus now that their profile has loaded (if they have already done the OOBE)
             CampusSelectionText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );

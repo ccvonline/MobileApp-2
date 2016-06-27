@@ -200,6 +200,9 @@ namespace App.Shared.UI
             };
 
             LayoutChanged( frame );
+
+            SearchNextGenButton.Hidden = true;
+            SearchYoungAdultsButton.Hidden = true;
         }
 
         public bool ShouldReturn( )

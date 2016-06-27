@@ -225,12 +225,23 @@ namespace App.Shared.UI
                 float currYPos = welcomeFinalBottom + Rock.Mobile.Graphics.Util.UnitToPx( 0 );
                 CampusHeader.Position = new PointF( ( ( View.Frame.Width - CampusHeader.Frame.Width ) / 2 ), currYPos );
 
+                // if this is a compact screen size (like, iPhone 4s or smaller), reduce the spacing
+                float buttonSpacing = 0;
+                if( View.Frame.Height > Rock.Mobile.Graphics.Util.UnitToPx( 480 ) )
+                {
+                    buttonSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 16 );
+                }
+                else
+                {
+                    buttonSpacing = Rock.Mobile.Graphics.Util.UnitToPx( 8 );
+                }
+
                 // for the campus buttons, we want to center them within the available space below "Welcome".
                 // so figure out that screen space, and the total height of all the campus buttons (with their padding)
                 float totalCampusButtonHeight = 0;
                 foreach ( PlatformButton campusButton in CampusButtons )
                 {
-                    totalCampusButtonHeight += campusButton.Frame.Height + Rock.Mobile.Graphics.Util.UnitToPx( 16 );
+                    totalCampusButtonHeight += campusButton.Frame.Height + buttonSpacing;
                 }
 
                 // now lay them out evenly
@@ -239,7 +250,7 @@ namespace App.Shared.UI
                 {
                     campusButton.Position = new PointF( ( ( View.Frame.Width - campusButton.Frame.Width ) / 2 ), currYPos );
 
-                    currYPos = campusButton.Frame.Bottom + Rock.Mobile.Graphics.Util.UnitToPx( 16 );
+                    currYPos = campusButton.Frame.Bottom + buttonSpacing;
                 }
             }
             else

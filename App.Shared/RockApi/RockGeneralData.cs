@@ -45,6 +45,10 @@ namespace App
                         Campuses.Add( new Rock.Client.Campus( ) { Name = "Anthem", Id = 8 } );
                         Campuses.Add( new Rock.Client.Campus( ) { Name = "Avondale", Id = 9 } );
 
+                        //todo jhm: enable this when we launch midtown. We shouldn't need this, because we ought to download campuses before running,
+                        // but since we're going to redesign this stuff anyways, we'll just handle it manually.
+                        //Campuses.Add( new Rock.Client.Campus( ) { Name = "Midtown Phoenix", Id = 10 } ); 
+
                         Genders = new List<string>( );
                         Genders.Add( "Unknown" );
                         Genders.Add( "Male" );
@@ -177,8 +181,8 @@ namespace App
                     // assume we're going to get everything
                     bool generalDataReceived = true;
 
-                    // now get our campuses.
-                    RockApi.Get_Campuses( null,
+                    // now get our campuses. (ONLY ACTIVE CAMPUSES)
+                    RockApi.Get_Campuses( "?$filter=IsActive eq true",
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Campus> campusList )
                         {
                             // check for failure, and although we'll keep going (for code simplicity),
