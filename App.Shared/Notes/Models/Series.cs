@@ -304,6 +304,48 @@ namespace App.Shared
                 }
             }
 
+            public Series.Message GetLatestMessage( )
+            {
+                if( Messages.Count > 0 )
+                {
+                    // we consider the "latest message" to be the next upcoming message (as in today or later) WITH a note.
+                    // if we can't find that, we'll take the newest series we can find WITH a note.
+                    // and if we can't find ANYTHING with a note? Take the first message in the list.
+                    Series.Message latestMessageWithNote = Messages[ 0 ];
+
+                    // the list is sorted by date, with the newest message at [0], and the one furthest in the past at [count - 1]
+
+                    // since we want the next upcoming note, go backwards until we find one with a message that's on or after today.
+                    int i;
+                    for( i = Messages.Count - 1; i >= 0; i-- )
+                    {
+                        // does this note have a message?
+                        if( string.IsNullOrEmpty( Messages[ i ].NoteUrl ) == false  )
+                        {
+                            // if it's for today or in the future, we're done, use it.
+                            if( DateTime.Parse( Messages[ i ].Date ) >= new DateTime( DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day ) )
+                            {
+                                return Messages[ i ];
+                            }
+                            else
+                            {
+                                // otherwise, take it as the latest with a note, so that we at least return something valid, if possible.
+                                latestMessageWithNote = Messages[ i ];
+                            }
+                        }
+                    }
+
+                    // so there was no message for today / in the future that also had a note.
+                    // we'll either be returning the most recent with a note, or just the first message in the list.
+                    return latestMessageWithNote;
+                }
+                else
+                {
+                    // this should NEVER happen, but better than crashing.
+                    return new Message( );
+                }
+            }
+
             /// <summary>
             /// Name of the series
             /// </summary>

@@ -105,18 +105,19 @@ namespace Droid
                         // verify there are messages to show
                         if ( ParentFragment.SeriesEntries[ 0 ].Series.Messages.Count > 0 )
                         {
-                            primaryItem.Title.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
-                            if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || 
-                                ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Private == true )
+                            Series.Message latestMessage = ParentFragment.SeriesEntries[ 0 ].Series.GetLatestMessage( );
+
+                            primaryItem.Title.Text = latestMessage.Name;
+                            if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || latestMessage.Private == true )
                             {
                                 primaryItem.Title.Text += " (Private)";
                             }
 
-                            primaryItem.Speaker.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Speaker;
-                            primaryItem.Date.Text = ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].Date;
+                            primaryItem.Speaker.Text = latestMessage.Speaker;
+                            primaryItem.Date.Text = latestMessage.Date;
 
                             // toggle the Take Notes button
-                            if ( string.IsNullOrEmpty( ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].NoteUrl ) == false )
+                            if ( string.IsNullOrEmpty( latestMessage.NoteUrl ) == false )
                             {
                                 primaryItem.ToggleTakeNotesButton( true );
                             }
@@ -126,7 +127,7 @@ namespace Droid
                             }
 
                             // toggle the Watch button
-                            if ( string.IsNullOrEmpty( ParentFragment.SeriesEntries[ 0 ].Series.Messages[ 0 ].WatchUrl ) == false )
+                            if ( string.IsNullOrEmpty( latestMessage.WatchUrl ) == false )
                             {
                                 primaryItem.ToggleWatchButton( true );
                             }

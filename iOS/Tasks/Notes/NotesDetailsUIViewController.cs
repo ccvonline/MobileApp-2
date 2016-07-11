@@ -466,7 +466,7 @@ namespace iOS
                     }
 
                     // disable the button if there's no note URL
-                    if ( string.IsNullOrEmpty( Series.Messages[ 0 ].NoteUrl ) )
+                    if ( string.IsNullOrEmpty( Series.Messages[ row ].NoteUrl ) )
                     {
                         cell.ToggleTakeNotesButton( false );
                     }

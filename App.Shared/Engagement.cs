@@ -43,7 +43,7 @@ namespace App.Shared
 
     public class Worship_Engagement : IEngagement
     {
-        string [] Worship_Entry = { "Worship", "Worship God with others", AboutConfig.Url, "worship_thumb.png" };
+        string [] Worship_Entry = { "Worship", "Worship God with others", Config.GeneralConfig.RockBaseUrl + "ma-worship", "worship_thumb.png" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {

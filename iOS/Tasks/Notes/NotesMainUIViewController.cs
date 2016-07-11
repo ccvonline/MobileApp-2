@@ -357,9 +357,11 @@ namespace iOS
                     // Create the title
                     if ( SeriesEntries[ 0 ].Series.Messages.Count > 0 )
                     {
-                        cell.Title.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
+                        Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
+                        
+                        cell.Title.Text = latestMessage.Name;
                         if( SeriesEntries[ 0 ].Series.Private == true || 
-                            SeriesEntries[ 0 ].Series.Messages[ 0 ].Private == true )
+                            latestMessage.Private == true )
                         {
                             cell.Title.Text += " (Private)";
                         }
@@ -368,14 +370,14 @@ namespace iOS
 
 
                         // Date & Speaker
-                        cell.Date.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Date;
+                        cell.Date.Text = latestMessage.Date;
                         cell.Date.SizeToFit( );
                         cell.Date.Frame = new CGRect( 10, 
                                                       cell.Title.Frame.Bottom - 7, 
                                                       cell.Date.Bounds.Width, 
                                                       cell.Date.Bounds.Height );
 
-                        cell.Speaker.Text = SeriesEntries[ 0 ].Series.Messages[ 0 ].Speaker;
+                        cell.Speaker.Text = latestMessage.Speaker;
                         cell.Speaker.SizeToFit( );
                         cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 10, 
                                                          cell.Title.Frame.Bottom - 7, 
@@ -407,7 +409,7 @@ namespace iOS
 
                         // Watch Button & Labels
                         // disable the button if there's no watch URL
-                        if ( string.IsNullOrEmpty( SeriesEntries[ 0 ].Series.Messages[ 0 ].WatchUrl ) )
+                        if ( string.IsNullOrEmpty( latestMessage.WatchUrl ) )
                         {
                             cell.ToggleWatchButton( false );
                         }
@@ -419,7 +421,7 @@ namespace iOS
 
                         // Take Notes Button & Labels
                         // disable the button if there's no note URL
-                        if ( string.IsNullOrEmpty( SeriesEntries[ 0 ].Series.Messages[ 0 ].NoteUrl ) )
+                        if ( string.IsNullOrEmpty( latestMessage.NoteUrl ) )
                         {
                             cell.ToggleTakeNotesButton( false );
                         }
@@ -757,9 +759,12 @@ namespace iOS
         public void WatchButtonClicked( )
         {
             NotesWatchUIViewController viewController = new NotesWatchUIViewController( );
-            viewController.MediaUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].WatchUrl;
-            viewController.ShareUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].ShareUrl;
-            viewController.Name = SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
+
+            Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
+
+            viewController.MediaUrl = latestMessage.WatchUrl;
+            viewController.ShareUrl = latestMessage.ShareUrl;
+            viewController.Name = latestMessage.Name;
             viewController.AudioOnly = false;
 
             Task.PerformSegue( this, viewController );
@@ -775,8 +780,10 @@ namespace iOS
             NotesTask noteTask = Task as NotesTask;
             if ( noteTask != null )
             {
-                noteTask.NoteController.NoteName = SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
-                noteTask.NoteController.NoteUrl = SeriesEntries[ 0 ].Series.Messages[ 0 ].NoteUrl;
+                Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
+
+                noteTask.NoteController.NoteName = latestMessage.Name;
+                noteTask.NoteController.NoteUrl = latestMessage.NoteUrl;
                 noteTask.NoteController.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
                 Task.PerformSegue( this, noteTask.NoteController );
