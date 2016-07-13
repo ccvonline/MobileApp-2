@@ -199,6 +199,10 @@ namespace App.Shared.UI
                 }
             };
 
+
+            SearchNextGenButton.Hidden = true;
+            SearchYoungAdultsButton.Hidden = true;
+
             LayoutChanged( frame );
         }
 
