@@ -292,9 +292,23 @@ namespace App.Shared.UI
                 containerBounds.Top + sModalOffset, 
                 containerBounds.Width - (sModalOffset * 2), 
                 containerBounds.Height - (sModalOffset * 2));
-            
-            float layerHeight = Rock.Mobile.Graphics.Util.UnitToPx( 40 );
-            float textFieldHeight = Rock.Mobile.Graphics.Util.UnitToPx( 36 );
+
+            // if this is a compact screen size (like, iPhone 4s or smaller), reduce the spacing
+            float layerHeightUnits = 0;
+            float textFieldHeightUnits = 0;
+            if( View.Frame.Height < Rock.Mobile.Graphics.Util.UnitToPx( 480 ) )
+            {
+                layerHeightUnits = 40;
+                textFieldHeightUnits = 36;
+            }
+            else
+            {
+                layerHeightUnits = 44;
+                textFieldHeightUnits = 40;
+            }
+
+            float layerHeight = Rock.Mobile.Graphics.Util.UnitToPx( layerHeightUnits );
+            float textFieldHeight = Rock.Mobile.Graphics.Util.UnitToPx( textFieldHeightUnits );
             float textLeftInset = Rock.Mobile.Graphics.Util.UnitToPx( 10 );
             float textTopInset = Rock.Mobile.Graphics.Util.UnitToPx( 2 );
 
