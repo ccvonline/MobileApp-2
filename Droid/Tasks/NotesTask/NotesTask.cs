@@ -62,21 +62,34 @@ namespace Droid
                     WebViewPage.ParentTask = this;
                 }
 
-                public override void PerformTaskAction( string action )
+                public override string Command_Keyword ()
                 {
-                    base.PerformTaskAction( action );
+                    return PrivateGeneralConfig.App_URL_Task_Notes;
+                }
 
-                    switch ( action )
+                public override void PerformAction( string command, string[] arguments )
+                {
+                    base.PerformAction( command, arguments );
+
+                    switch ( command )
                     {
-                        case PrivateGeneralConfig.TaskAction_NotesRead:
+                        case PrivateGeneralConfig.App_URL_Commands_Goto:
                         {
-                            if ( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
+                            // make sure the argument is for us (and it wants more than just our root page)
+                            if( arguments[ 0 ] == Command_Keyword( ) && arguments.Length > 1 )
                             {
-                                NotesPage.NoteName = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].Name;
-                                NotesPage.NoteUrl = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl;
-                                NotesPage.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
+                                // if they want a "read" page, we support that.
+                                if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Read )
+                                {
+                                    if ( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
+                                    {
+                                        NotesPage.NoteName = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].Name;
+                                        NotesPage.NoteUrl = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl;
+                                        NotesPage.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
-                                PresentFragment( NotesPage, true );
+                                        PresentFragment( NotesPage, true );
+                                    }
+                                }
                             }
                             break;
                         }

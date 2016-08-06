@@ -27,6 +27,11 @@ namespace iOS
             News = new List<RockNews>( );
         }
 
+        public override string Command_Keyword( )
+        {
+            return PrivateGeneralConfig.App_URL_Task_News;
+        }
+
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )
         {
             base.MakeActive( parentViewController, navToolbar, containerBounds );
@@ -91,23 +96,30 @@ namespace iOS
             }
         }
 
-        public override void PerformAction(string action)
+        public override void PerformAction( string command, string[] arguments )
         {
-            base.PerformAction(action);
+            base.PerformAction( command, arguments );
 
-            switch ( action )
+            switch ( command )
             {
-                // whether we're changing campuses or explicitely reloading news,
-                // reload the news.
-                case PrivateGeneralConfig.TaskAction_CampusChanged:
-                case PrivateGeneralConfig.TaskAction_NewsReload:
+                case PrivateGeneralConfig.App_URL_Commands_Execute:
                 {
-                    ReloadNews( );
+                    // is this for us?
+                    if( arguments[ 0 ] == Command_Keyword( ) )
+                    {
+                        // whether we're changing campuses or explicitely reloading news,
+                        // reload the news.
+                        if ( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Execute_CampusChanged || 
+                             arguments[ 1 ] == PrivateGeneralConfig.App_URL_Execute_ReloadNews )
+                        {
+                            ReloadNews( );
 
-                    MainPageVC.UpdateNews( News );
+                            MainPageVC.UpdateNews( News );
 
-                    MainPageVC.LoadAndDownloadImages( );
-                    MainPageVC.LayoutChanged( );
+                            MainPageVC.LoadAndDownloadImages( );
+                            MainPageVC.LayoutChanged( );
+                        }
+                    }
                     break;
                 }
             }

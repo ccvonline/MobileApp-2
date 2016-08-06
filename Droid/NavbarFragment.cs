@@ -172,6 +172,11 @@ namespace Droid
             }
         }
 
+        public void HandleAppURL( string appUrl )
+        {
+            SpringboardParent.HandleAppURL( appUrl );
+        }
+
         /// <summary>
         /// Returns true if the active task should accept input from the user.
         /// This will basically be false anytime the springboard is open or animating

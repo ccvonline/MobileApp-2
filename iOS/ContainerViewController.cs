@@ -163,6 +163,11 @@ namespace iOS
             View.AddSubview( SubNavigationController.View );
         }
 
+        public void HandleAppURL( string appUrl )
+        {
+            (ParentViewController as MainUINavigationController).ParentSpringboard.HandleAppURL( appUrl );
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();

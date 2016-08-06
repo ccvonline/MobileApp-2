@@ -24,6 +24,11 @@ namespace iOS
             NoteController.Task = this;
         }
 
+        public override string Command_Keyword( )
+        {
+            return PrivateGeneralConfig.App_URL_Task_Notes;
+        }
+
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )
         {
             base.MakeActive( parentViewController, navToolbar, containerBounds );
@@ -34,25 +39,33 @@ namespace iOS
             parentViewController.PushViewController( MainViewController, false );
         }
 
-        public override void PerformAction( string action )
+        public override void PerformAction( string command, string[] arguments )
         {
-            base.PerformAction( action );
+            base.PerformAction( command, arguments );
 
-            switch( action )
+            switch( command )
             {
-                case PrivateGeneralConfig.TaskAction_NotesRead:
+                case PrivateGeneralConfig.App_URL_Commands_Goto:
                 {
-                    if ( App.Shared.Network.RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
+                    // make sure the argument is for us (and it wants more than just our root page)
+                    if( arguments[ 0 ] == Command_Keyword( ) && arguments.Length > 1 )
                     {
-                        // since we're switching to the read notes VC, pop to the main page root and 
-                        // remove it, because we dont' want back history (where would they go back to?)
-                        ParentViewController.ClearViewControllerStack( );
+                        // if they want a "read" page, we support that.
+                        if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Read )
+                        {
+                            if ( App.Shared.Network.RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
+                            {
+                                // since we're switching to the read notes VC, pop to the main page root and 
+                                // remove it, because we dont' want back history (where would they go back to?)
+                                ParentViewController.ClearViewControllerStack( );
 
-                        NoteController.NoteName = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].Name;
-                        NoteController.NoteUrl = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl;
-                        NoteController.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
+                                NoteController.NoteName = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].Name;
+                                NoteController.NoteUrl = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl;
+                                NoteController.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
-                        ParentViewController.PushViewController( NoteController, false );
+                                ParentViewController.PushViewController( NoteController, false );
+                            }
+                        }
                     }
                     break;
                 }

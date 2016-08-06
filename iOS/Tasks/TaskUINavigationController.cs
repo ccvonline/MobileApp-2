@@ -8,6 +8,11 @@ namespace iOS
     /// </summary>
     public class TaskUINavigationController : UINavigationController
     {
+        public void HandleAppURL( string appUrl )
+        {
+            ((ContainerViewController)ParentViewController).HandleAppURL( appUrl );
+        }
+
         public void ClearViewControllerStack( )
         {
             // This function basically removes everything in the Container View Controller,

@@ -32,7 +32,14 @@ namespace Droid
                 NavbarFragment = navFragment;
             }
 
+            public void HandleAppURL( string appUrl )
+            {
+                NavbarFragment.HandleAppURL( appUrl );
+            }
+
             public abstract TaskFragment StartingFragment( );
+
+            public abstract string Command_Keyword( );
 
             public virtual void Activate( bool forResume )
             {
@@ -67,7 +74,14 @@ namespace Droid
                 TaskReadyForFragmentDisplay = false;
             }
 
-            public virtual void PerformTaskAction( string action )
+            /// <summary>
+            /// This acts as a sort of "event" based system
+            /// The command is the action we'll take. Like goto, or execute.
+            /// The arguments are contextual based on the command.
+            /// Example: Command = "goto", arguments might be "messages/read"
+            /// This would mean its for the "Messages" task, and to go to the 'read' page.
+            /// </summary>
+            public virtual void PerformAction( string command, string[] arguments )
             {
             }
 

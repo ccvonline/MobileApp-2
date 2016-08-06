@@ -91,6 +91,29 @@ namespace App.Shared
             public const string TaskAction_NewsReload = "News.Reload";
             public const string TaskAction_CampusChanged = "CampusChanged";
             public const string TaskAction_NotesRead = "Page.Read";
+
+            public const string App_URL_Scheme = "app://";
+
+            public const string App_URL_Commands_Goto = "goto";
+            public const string App_URL_Commands_Execute = "execute";
+
+            // define the core task string keywords
+            public const string App_URL_Task_News = "news";
+            public const string App_URL_Task_Notes = "messages";
+            public const string App_URL_Task_Give = "give";
+            public const string App_URL_Task_Connect = "nextsteps";
+            public const string App_URL_Task_Prayer = "prayer";
+            public const string App_URL_Task_About = "more";
+
+            // define the core page string keywords (the tasks use these to know which page within the task)
+            // Ex: news/read would be the news details page. 
+            // ex: messages/read would be the ReadNotes page.
+            public const string App_URL_Page_GroupFinder = "connect";
+            public const string App_URL_Page_Read = "read";
+            public const string App_URL_Page_Toolbox = "toolbox";
+
+            public const string App_URL_Execute_CampusChanged = "campusChanged";
+            public const string App_URL_Execute_ReloadNews = "reloadNews";
         }
 
         public class PrivateSpringboardConfig

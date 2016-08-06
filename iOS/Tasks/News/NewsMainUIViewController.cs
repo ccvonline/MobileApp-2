@@ -579,7 +579,15 @@ namespace iOS
 
                 if ( News[ row ].News.SkipDetailsPage == true && string.IsNullOrEmpty( News[ row ].News.ReferenceURL ) == false )
                 {
-                    TaskWebViewController.HandleUrl( News[ row ].News.ReferenceUrlLaunchesBrowser, News[ row ].News.IncludeImpersonationToken, News[ row ].News.ReferenceURL, Task, this, false, false, false );
+                    // if this is an app-url, then let the task (which forwards it to the springboard) handle it.
+                    if( SpringboardViewController.IsAppURL( News[ row ].News.ReferenceURL ) == true )
+                    {
+                        Task.HandleAppURL( News[ row ].News.ReferenceURL );
+                    }
+                    else
+                    {
+                        TaskWebViewController.HandleUrl( News[ row ].News.ReferenceUrlLaunchesBrowser, News[ row ].News.IncludeImpersonationToken, News[ row ].News.ReferenceURL, Task, this, false, false, false );
+                    }
                 }
                 else
                 {

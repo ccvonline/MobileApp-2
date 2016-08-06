@@ -9,6 +9,7 @@ namespace App.Shared
         public string SubTitle { get; set; }
         public string Url { get; set; }
         public string ImageName { get; set; }
+        public string Command_Keyword { get; set; }
 
         public ConnectLink( )
         {
@@ -31,6 +32,7 @@ namespace App.Shared
                 link.SubTitle = engagedEntry[ 1 ];
                 link.Url = engagedEntry[ 2 ];
                 link.ImageName = engagedEntry[ 3 ];
+                link.Command_Keyword = engagedEntry[ 4 ];
             }
 
             return linkEntries;

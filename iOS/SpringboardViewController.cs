@@ -21,6 +21,7 @@ using App.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.PlatformSpecific.Util;
+using System.Linq;
 
 namespace iOS
 {
@@ -588,15 +589,12 @@ namespace iOS
                                 ControlStylingConfig.Springboard_Element_SelectedColor, 
                 delegate 
                 {
-                    // find the Notes task, activate it, and tell it to jump to the read page.
-                    foreach( SpringboardElement element in Elements )
-                    {
-                        if ( element.Task as NotesTask != null )
-                        {
-                            ActivateElement( element, true );
-                            PerformTaskAction( PrivateGeneralConfig.TaskAction_NotesRead );
-                        }
-                    }
+                    // tell the app to launch notes
+                    HandleAppURL( PrivateGeneralConfig.App_URL_Scheme +
+                                  PrivateGeneralConfig.App_URL_Commands_Goto + "/" + 
+                                  PrivateGeneralConfig.App_URL_Task_Notes + "/" + 
+                                  PrivateGeneralConfig.App_URL_Page_Read );
+                    return true;
                 } 
             );
 
@@ -766,19 +764,71 @@ namespace iOS
                     {
                         // Allow the news to update, and begin downloading all
                         // news and note images we need.
-                        PerformTaskAction( PrivateGeneralConfig.TaskAction_NewsReload );
+                        PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, new string[] { PrivateGeneralConfig.App_URL_Task_News, PrivateGeneralConfig.App_URL_Execute_ReloadNews } );
 
                         View.SetNeedsLayout( );
                     }
                 });
         }
 
-        void PerformTaskAction( string action )
+        public static bool IsAppURL( string url )
+        {
+            // make sure the host is for the app. If not, it's not an App Url
+            if( url.Substring( 0, PrivateGeneralConfig.App_URL_Scheme.Length ) == PrivateGeneralConfig.App_URL_Scheme )
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void HandleAppURL( string url )
+        {
+            if( IsAppURL( url ) )
+            {
+                // skip past the scheme
+                url = url.Substring( PrivateGeneralConfig.App_URL_Scheme.Length );
+
+                // GOTO COMMAND
+                if( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Goto, StringComparison.InvariantCultureIgnoreCase ) == true )
+                {
+                    // strip the command off
+                    url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Goto.Length + 1 );
+
+                    string[] arguments = url.Split( '/' );
+
+                    foreach( SpringboardElement element in Elements )
+                    {
+                        if( element.Task.Command_Keyword( ) == arguments[ 0 ] )
+                        {
+                            ActivateElement( element, true );
+                        }
+                    }
+
+                    // provide the full argument URL so that only the task that cares about this will use it.
+                    // (it's possible two tasks might have a "read" argument, so by sending "messages/read" all other tasks will know to ignore it) 
+                    PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Goto, arguments );
+                }
+                // EXECUTE COMMAND
+                else if ( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Execute, StringComparison.InvariantCultureIgnoreCase ) )
+                {
+                    // strip the command off
+                    url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Execute.Length + 1 );
+
+                    string[] arguments = url.Split( '/' );
+
+                    // and handle it
+                    PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, arguments );
+                }
+            }
+        }
+
+        void PerformTaskAction( string command, string[] arguments )
         {
             // notify all elements
             foreach ( SpringboardElement element in Elements )
             {
-                element.Task.PerformAction( action );
+                element.Task.PerformAction( command, arguments );
             }
         }
 
@@ -1010,7 +1060,7 @@ namespace iOS
                 UpdateCampusViews( );
 
                 // notify the system the campus changed
-                PerformTaskAction( PrivateGeneralConfig.TaskAction_CampusChanged );
+                PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, new string[] { PrivateGeneralConfig.App_URL_Task_News, PrivateGeneralConfig.App_URL_Execute_CampusChanged } );
             }
         }
 

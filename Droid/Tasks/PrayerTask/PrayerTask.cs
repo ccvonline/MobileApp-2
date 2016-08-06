@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Views;
 using Droid.Tasks.Notes;
 using App.Shared.UI;
+using App.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -62,6 +63,11 @@ namespace Droid
                 public override TaskFragment StartingFragment()
                 {
                     return MainPage;
+                }
+
+                public override string Command_Keyword ()
+                {
+                    return PrivateGeneralConfig.App_URL_Task_Prayer; 
                 }
 
                 public override void OnClick(Android.App.Fragment source, int buttonId, object context = null)

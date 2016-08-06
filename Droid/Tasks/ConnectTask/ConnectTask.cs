@@ -3,6 +3,9 @@ using Android.App;
 using Android.Views;
 using App.Shared.Strings;
 using App.Shared;
+using App.Shared.PrivateConfig;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Droid
 {
@@ -58,6 +61,11 @@ namespace Droid
                     return MainPage;
                 }
 
+                public override string Command_Keyword ()
+                {
+                    return PrivateGeneralConfig.App_URL_Task_Connect; 
+                }
+
                 public override bool OnBackPressed( )
                 {
                     if ( WebFragment.IsVisible == true )
@@ -70,6 +78,40 @@ namespace Droid
                 public override void OnUp( MotionEvent e )
                 {
                     base.OnUp( e );
+                }
+
+                public override void PerformAction( string command, string[] arguments )
+                {
+                    base.PerformAction( command, arguments );
+
+                    switch( command )
+                    {
+                        // is this a goto command?
+                        case PrivateGeneralConfig.App_URL_Commands_Goto:
+                        {
+                            // make sure the argument is for us
+                            if( arguments[ 0 ] == Command_Keyword( ) && arguments.Length > 1 )
+                            {
+                                // check for groupfinder, because we support that one.
+                                if( PrivateGeneralConfig.App_URL_Page_GroupFinder == arguments[ 1 ] )
+                                {
+                                    PresentFragment( GroupFinder, true );
+                                }
+                                else
+                                {
+                                    List<ConnectLink> engagedEntries = ConnectLink.BuildGetEngagedList( );
+
+                                    ConnectLink connectLink = engagedEntries.Where( e => e.Command_Keyword == arguments[ 1 ] ).SingleOrDefault( );
+                                    if( connectLink != null )
+                                    {
+                                        // now go to the requested URL
+                                        TaskWebFragment.HandleUrl( false, true, connectLink.Url, this, WebFragment );
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
                 }
 
                 public override void OnClick(Fragment source, int buttonId, object context)

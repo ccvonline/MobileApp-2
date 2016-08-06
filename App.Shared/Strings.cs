@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.1.1 (Build 1)";
+                    return "Version 2.1.2 (Build 0)";
                 }
             }
         }

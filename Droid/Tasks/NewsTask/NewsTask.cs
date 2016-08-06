@@ -93,19 +93,33 @@ namespace Droid
                     return MainPage;
                 }
 
-                public override void PerformTaskAction(string action)
+                public override string Command_Keyword ()
                 {
-                    base.PerformTaskAction(action);
+                    return PrivateGeneralConfig.App_URL_Task_News;
+                }
 
-                    switch ( action )
+                public override void PerformAction( string command, string[] arguments )
+                {
+                    base.PerformAction( command, arguments );
+
+                    switch ( command )
                     {
-                        case PrivateGeneralConfig.TaskAction_CampusChanged:
-                        case PrivateGeneralConfig.TaskAction_NewsReload:
+                        case PrivateGeneralConfig.App_URL_Commands_Execute:
                         {
-                            // for either action, we want to reload our news,
-                            // and then update the page
-                            ReloadNews( );
-                            MainPage.UpdateNews( News );
+                            // is this for us?
+                            if( arguments[ 0 ] == Command_Keyword( ) )
+                            {
+                                // whether we're changing campuses or explicitely reloading news,
+                                // reload the news.
+                                if ( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Execute_CampusChanged || 
+                                     arguments[ 1 ] == PrivateGeneralConfig.App_URL_Execute_ReloadNews )
+                                {
+                                    // for either action, we want to reload our news,
+                                    // and then update the page
+                                    ReloadNews( );
+                                    MainPage.UpdateNews( News );
+                                }
+                            }
 
                             break;
                         }
@@ -135,11 +149,18 @@ namespace Droid
                             // either take them to the details page, or skip it and go straight to Learn More.
                             if ( MainPage.News[ buttonId ].News.SkipDetailsPage == true && string.IsNullOrEmpty( MainPage.News[ buttonId ].News.ReferenceURL ) == false )
                             {
-                                TaskWebFragment.HandleUrl( MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser, 
-                                    MainPage.News[ buttonId ].News.IncludeImpersonationToken, 
-                                    MainPage.News[ buttonId ].News.ReferenceURL,
-                                    this, 
-                                    WebFragment );
+                                if( Springboard.IsAppURL( MainPage.News[ buttonId ].News.ReferenceURL ) == true )
+                                {
+                                    NavbarFragment.HandleAppURL( MainPage.News[ buttonId ].News.ReferenceURL );
+                                }
+                                else
+                                {
+                                    TaskWebFragment.HandleUrl( MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser, 
+                                        MainPage.News[ buttonId ].News.IncludeImpersonationToken, 
+                                        MainPage.News[ buttonId ].News.ReferenceURL,
+                                        this, 
+                                        WebFragment );
+                                }
                             }
                             else
                             {
@@ -161,11 +182,19 @@ namespace Droid
                             // otherwise visit the reference URL
                             if ( buttonId == Resource.Id.news_details_launch_url )
                             {
-                                TaskWebFragment.HandleUrl( DetailsPage.ReferenceURLLaunchesBrowser, 
-                                                           DetailsPage.IncludeImpersonationToken, 
-                                                           DetailsPage.ReferenceURL,
-                                                           this, 
-                                                           WebFragment );
+                                // if this is an app url, handle it internally
+                                if( Springboard.IsAppURL( MainPage.News[ buttonId ].News.ReferenceURL ) == true )
+                                {
+                                    NavbarFragment.HandleAppURL( MainPage.News[ buttonId ].News.ReferenceURL );
+                                }
+                                else
+                                {
+                                    TaskWebFragment.HandleUrl( DetailsPage.ReferenceURLLaunchesBrowser, 
+                                                               DetailsPage.IncludeImpersonationToken, 
+                                                               DetailsPage.ReferenceURL,
+                                                               this, 
+                                                               WebFragment );
+                                }
                             }
                         }
                     }

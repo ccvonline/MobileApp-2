@@ -106,7 +106,15 @@ namespace iOS
             View.AddSubview( LearnMoreButton );
             LearnMoreButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this, false, false, false );
+                    // if this is an app-url, then let the task (which forwards it to the springboard) handle it.
+                    if( SpringboardViewController.IsAppURL( NewsItem.ReferenceURL ) == true )
+                    {
+                        Task.HandleAppURL( NewsItem.ReferenceURL );
+                    }
+                    else
+                    {
+                        TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this, false, false, false );
+                    }
                 };
 
             // if there's no URL associated with this news item, hide the learn more button.

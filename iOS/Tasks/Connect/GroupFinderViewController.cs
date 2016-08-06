@@ -794,14 +794,20 @@ namespace iOS
         {
             base.ViewWillDisappear(animated);
 
-            KeyboardAdjustManager.Deactivate( );
+            if( KeyboardAdjustManager != null )
+            {
+                KeyboardAdjustManager.Deactivate( );
+            }
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
 
-            KeyboardAdjustManager.Activate( );
+            if( KeyboardAdjustManager != null )
+            {
+                KeyboardAdjustManager.Activate( );
+            }
 
             // see if there's an address for this person that we can automatically use.
             if ( RockMobileUser.Instance.HasFullAddress( ) == true )

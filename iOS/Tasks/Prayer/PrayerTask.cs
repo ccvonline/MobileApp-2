@@ -2,6 +2,7 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Foundation;
+using App.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -15,6 +16,11 @@ namespace iOS
             MainPage.Task = this;
 
             ActiveViewController = MainPage;
+        }
+
+        public override string Command_Keyword( )
+        {
+            return PrivateGeneralConfig.App_URL_Task_Prayer;
         }
 
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )

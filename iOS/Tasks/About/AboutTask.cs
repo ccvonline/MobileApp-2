@@ -3,6 +3,7 @@ using UIKit;
 using CoreGraphics;
 using Foundation;
 using App.Shared.Config;
+using App.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -12,6 +13,11 @@ namespace iOS
 
         public AboutTask( string storyboardName ) : base( storyboardName )
         {
+        }
+
+        public override string Command_Keyword( )
+        {
+            return PrivateGeneralConfig.App_URL_Task_About;
         }
 
         public override void MakeActive( TaskUINavigationController parentViewController, NavToolbar navToolbar, CGRect containerBounds )

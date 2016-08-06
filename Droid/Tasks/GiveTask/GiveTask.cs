@@ -3,6 +3,7 @@ using Android.App;
 using Android.Views;
 using App.Shared.Config;
 using App.Shared.Analytics;
+using App.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -23,6 +24,11 @@ namespace Droid
                         MainPage = new GivePrimaryFragment();
                     }
                     MainPage.ParentTask = this;
+                }
+
+                public override string Command_Keyword ()
+                {
+                    return PrivateGeneralConfig.App_URL_Task_Give;
                 }
 
                 public override TaskFragment StartingFragment()

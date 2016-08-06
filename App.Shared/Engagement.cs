@@ -23,7 +23,7 @@ namespace App.Shared
 
     public class StartingPoint_Engagement : IEngagement
     {
-        string [] StartingPoint_Entry = { "Starting Point", "Begin your journey at CCV", Config.GeneralConfig.RockBaseUrl + "ma-startingpoint", "starting_point_thumb.png" };
+        string [] StartingPoint_Entry = { "Starting Point", "Begin your journey at CCV", Config.GeneralConfig.RockBaseUrl + "ma-startingpoint", "starting_point_thumb.png", "startingpoint" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -33,7 +33,7 @@ namespace App.Shared
 
     public class Baptism_Engagement : IEngagement
     {
-        string [] Baptism_Entry = { "Baptisms", "Make your faith public", Config.GeneralConfig.RockBaseUrl + "ma-baptism", "baptism_thumb.png" };
+        string [] Baptism_Entry = { "Baptisms", "Make your faith public", Config.GeneralConfig.RockBaseUrl + "ma-baptism", "baptism_thumb.png", "baptism" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -43,7 +43,7 @@ namespace App.Shared
 
     public class Worship_Engagement : IEngagement
     {
-        string [] Worship_Entry = { "Worship", "Worship God with others", Config.GeneralConfig.RockBaseUrl + "ma-worship", "worship_thumb.png" };
+        string [] Worship_Entry = { "Worship", "Worship God with others", Config.GeneralConfig.RockBaseUrl + "ma-worship", "worship_thumb.png", "worship" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -53,7 +53,7 @@ namespace App.Shared
 
     public class Connect_Engagement : IEngagement
     {
-        string [] Connect_Entry = { ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage };
+        string [] Connect_Entry = { ConnectStrings.Main_Connect_GroupFinder, ConnectStrings.Main_Connect_GroupFinder_SubTitle, "", PrivateConnectConfig.GroupFinder_IconImage, "" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -63,7 +63,7 @@ namespace App.Shared
 
     public class Serve_Engagement : IEngagement
     {
-        string [] Serve_Entry = { "Serve", "Impact lives by serving", Config.GeneralConfig.RockBaseUrl + "ma-serve", "serve_thumb.png" };
+        string [] Serve_Entry = { "Serve", "Impact lives by serving", Config.GeneralConfig.RockBaseUrl + "ma-serve", "serve_thumb.png", "serve" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -73,7 +73,7 @@ namespace App.Shared
 
     public class Give_Engagement : IEngagement
     {
-        string [] Give_Entry = { "Give", "Trust God financially", "external:" + GiveConfig.GiveUrl, "give_thumb.png" };
+        string [] Give_Entry = { "Give", "Trust God financially", "external:" + GiveConfig.GiveUrl, "give_thumb.png", "give" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -83,7 +83,7 @@ namespace App.Shared
 
     public class Share_Engagement : IEngagement
     {
-        string [] Share_Entry = { "Share", "Share your story", Config.GeneralConfig.RockBaseUrl + "ma-mystory", "share_thumb.png" };
+        string [] Share_Entry = { "Share", "Share your story", Config.GeneralConfig.RockBaseUrl + "ma-mystory", "share_thumb.png", "share" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
@@ -97,10 +97,10 @@ namespace App.Shared
     public class Coach_Engagement : IEngagement
     {
         // Next Steps Coach
-        string[] Coach_Entry = { "Coach", "Access your toolbox", Config.GeneralConfig.RockBaseUrl + "ma-my-groups", "coach_thumb.png" };
+        string[] Coach_Entry = { "Coach", "Access your toolbox", Config.GeneralConfig.RockBaseUrl + "ma-my-groups", "coach_thumb.png", "coach" };
 
         // Not Coach 
-        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", Config.GeneralConfig.RockBaseUrl + "ma-request-coach", "coach_thumb.png" };
+        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", Config.GeneralConfig.RockBaseUrl + "ma-request-coach", "coach_thumb.png", "coach" };
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {

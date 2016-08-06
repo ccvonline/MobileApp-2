@@ -5,7 +5,7 @@ using Foundation;
 
 namespace iOS
 {
-    public class Task
+    public abstract class Task
     {
         public CGRect ContainerBounds { get; set; }
         protected TaskUINavigationController ParentViewController { get; set; }
@@ -21,6 +21,17 @@ namespace iOS
                 Storyboard = UIStoryboard.FromName( storyboardName, null );
             }
         }
+
+        public void HandleAppURL( string appUrl )
+        {
+            ParentViewController.HandleAppURL( appUrl );
+        }
+
+        /// <summary>
+        /// Implements support for the Command system. The command system
+        /// uses keywords in a URL format to send instructions to interested tasks.
+        /// </summary>
+        public abstract string Command_Keyword( );
 
         /// <summary>
         /// The root function to call when changing view controllers within a task. If changing in code,
@@ -59,13 +70,13 @@ namespace iOS
         }
 
         /// <summary>
-        /// This acts as a sort of "event" based system, where actions can be performed on tasks
-        /// without the caller knowing specifically what task is running.
-        /// The primary example would be the "Take Notes" billboard launching the Notes
-        /// Task and presenting the sermon notes VC.
+        /// This acts as a sort of "event" based system
+        /// The command is the action we'll take. Like goto, or execute.
+        /// The arguments are contextual based on the command.
+        /// Example: Command = "goto", arguments might be "messages/read"
+        /// This would mean its for the "Messages" task, and to go to the 'read' page.
         /// </summary>
-        /// <param name="action">Action.</param>
-        public virtual void PerformAction( string action )
+        public virtual void PerformAction( string command, string[] arguments )
         {
         }
 

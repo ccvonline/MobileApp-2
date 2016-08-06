@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.1.1" android:versionCode="2111">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.1.2" android:versionCode="2120">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<application android:name="com.ccvonline.CCVMobileApp" android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
 		<!---Get your API Key for Google Maps at console.developers.google.com-->
