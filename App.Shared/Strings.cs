@@ -12,7 +12,7 @@ namespace App.Shared
             {
                 get
                 {
-                    return "Version 2.1.2 (Build 0)";
+                    return "Version 2.1.2 (Build 1)";
                 }
             }
         }
@@ -182,9 +182,9 @@ namespace App.Shared
             public const string GroupFinder_StatePlaceholder = "State";
             public const string GroupFinder_ZipPlaceholder = "Zip";
 
-            public const string GroupFinder_Search_NeighborhoodGroups = "Neighborhood Groups";
-            public const string GroupFinder_Search_NextGenGroups = "Student Groups";
-            public const string GroupFinder_Search_YoungAdultGroups = "Young Adult Groups";
+            public const string GroupFinder_Search_NeighborhoodGroups = "Neighborhoods (All Ages)";
+            public const string GroupFinder_Search_NextGenGroups = "Students (Grades 7th - 12th)";
+            public const string GroupFinder_Search_YoungAdultGroups = "Young Adults (Ages 18 - 26)";
 
             public const string GroupFinder_DefaultState = "AZ";
 

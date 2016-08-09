@@ -152,6 +152,7 @@ namespace App.Shared.UI
             SearchNeighborhoodsButton.TextColor = ControlStylingConfig.Button_TextColor;
             SearchNeighborhoodsButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
             SearchNeighborhoodsButton.Text = ConnectStrings.GroupFinder_Search_NeighborhoodGroups;
+            SearchNeighborhoodsButton.SetFont( ControlStylingConfig.Font_Regular, 14 );
             SearchNeighborhoodsButton.SizeToFit( );
             SearchNeighborhoodsButton.ClickEvent = ( PlatformButton b ) =>
                 {
@@ -171,6 +172,7 @@ namespace App.Shared.UI
             SearchNextGenButton.TextColor = ControlStylingConfig.Button_TextColor;
             SearchNextGenButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
             SearchNextGenButton.Text = ConnectStrings.GroupFinder_Search_NextGenGroups;
+            SearchNextGenButton.SetFont( ControlStylingConfig.Font_Regular, 14 );
             SearchNextGenButton.SizeToFit( );
             SearchNextGenButton.ClickEvent = ( PlatformButton b ) =>
             {
@@ -189,6 +191,7 @@ namespace App.Shared.UI
             SearchYoungAdultsButton.TextColor = ControlStylingConfig.Button_TextColor;
             SearchYoungAdultsButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
             SearchYoungAdultsButton.Text = ConnectStrings.GroupFinder_Search_YoungAdultGroups;
+            SearchYoungAdultsButton.SetFont( ControlStylingConfig.Font_Regular, 14 );
             SearchYoungAdultsButton.SizeToFit( );
             SearchYoungAdultsButton.ClickEvent = ( PlatformButton b ) =>
             {
