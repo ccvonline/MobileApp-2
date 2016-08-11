@@ -183,9 +183,9 @@ namespace Droid
                             if ( buttonId == Resource.Id.news_details_launch_url )
                             {
                                 // if this is an app url, handle it internally
-                                if( Springboard.IsAppURL( MainPage.News[ buttonId ].News.ReferenceURL ) == true )
+                                if( Springboard.IsAppURL( DetailsPage.ReferenceURL ) == true )
                                 {
-                                    NavbarFragment.HandleAppURL( MainPage.News[ buttonId ].News.ReferenceURL );
+                                    NavbarFragment.HandleAppURL( DetailsPage.ReferenceURL );
                                 }
                                 else
                                 {
