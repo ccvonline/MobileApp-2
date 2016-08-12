@@ -56,7 +56,7 @@ namespace Droid
             public static void HandleUrl( bool launchesExternalBrowser, bool usesImpersonationToken, string url, Task currTask, TaskWebFragment webFragment )
             {
                 // guard against malformed URLs
-                if( url.StartsWith( "http://", StringComparison.InvariantCultureIgnoreCase ) == true )
+                if( url.StartsWith( "http", StringComparison.InvariantCultureIgnoreCase ) == true )
                 {
                     // are we launching a seperate browser?
                     if ( launchesExternalBrowser == true )
