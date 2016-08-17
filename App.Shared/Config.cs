@@ -15,6 +15,8 @@ namespace App
         {
             public class GeneralConfig
             {
+                public const int Version = 2140;
+
                 /// <summary>
                 /// The full name of your organization
                 /// </summary>
@@ -120,61 +122,23 @@ namespace App
             public class NewsConfig
             {
                 /// <summary>
-                ///  These are default news items that will show anytime server news is unavailable.
+                ///  This will show if the user needs to update the app.
                 /// </summary>
-                public static string [] DefaultNews_A =
+                public static string [] UpgradeNews =
                     {
                         //Title
-                        "Baptisms", 
+                        "Time to Upgrade", 
 
                         // Description
-                        "Baptism is one of the most important events in the life of a Christian. If you've made a commitment to Christ, " + 
-                        "it's time to take the next step and make your decision known. Baptism is the best way to express your faith and " + 
-                        "reflect your life change. Find out more about baptism through Starting Point, register online or contact your neighborhood pastor.",
+                        string.Empty,
 
                         // Reference URL
-                        "http://ccv.church/ma-baptism",
+                        "http://ccv.church/apps",
 
                         // Image Names
-                        "default_news_a_main",
+                        "upgrade_news_main",
 
-                        "default_news_a_header"
-                    };
-
-                public static string [] DefaultNews_B =
-                    {
-                        //Title
-                        "Starting Point", 
-
-                        // Description
-                        "If you’re asking yourself, “Where do I begin at CCV?” — the answer is Starting Point. " +
-                        "In Starting Point you’ll find out what CCV is all about, take a deep look at the Christian " + 
-                        "faith, and learn how you can get involved. Childcare is available for attending parents.",
-
-                        // Reference URL
-                        "http://ccv.church/ma-startingpoint",
-
-                        // Image Names
-                        "default_news_b_main",
-
-                        "default_news_b_header"
-                    };
-
-                public static string [] DefaultNews_C =
-                    {
-                        //Title
-                        "Learn More", 
-
-                        // Description
-                        "Wondering what else CCV is about? Check out our website.",
-
-                        // Reference URL
-                        "http://ccv.church/ma-more",
-
-                        // Image Names
-                        "default_news_c_main",
-
-                        "default_news_c_header"
+                        "upgrade_news_header",
                     };
             }
 

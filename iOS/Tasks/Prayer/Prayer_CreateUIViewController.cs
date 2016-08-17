@@ -276,7 +276,7 @@ namespace iOS
                         prayerRequest.Text = PrayerRequest.Text;
                         prayerRequest.EnteredDateTime = DateTime.Now;
                         prayerRequest.ExpirationDate = DateTime.Now.Add( PrivatePrayerConfig.PrayerExpirationTime );
-                        prayerRequest.CategoryId = RockGeneralData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
+                        prayerRequest.CategoryId = RockLaunchData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
                         prayerRequest.IsActive = true;
                         prayerRequest.IsPublic = UIPublicSwitch.On; // use the public switch's state to determine whether it's a public prayer or not.
                         prayerRequest.Guid = Guid.NewGuid( );
@@ -329,7 +329,7 @@ namespace iOS
 
 
             // update the category
-            int categoryId = RockGeneralData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
+            int categoryId = RockLaunchData.Instance.Data.PrayerCategoryToId( CategoryButton.Title( UIControlState.Normal ) );
 
             uint targetCategoryColor = ControlStylingConfig.BG_Layer_Color;
             if ( categoryId == -1 )
@@ -357,15 +357,15 @@ namespace iOS
             {
                 debugKeyEntered = true;
 
-                App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
                 SpringboardViewController.DisplayError( "Developer Mode", 
-                    string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+                    string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
             }
             else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "version" )
             {
                 debugKeyEntered = true;
 
-                SpringboardViewController.DisplayError( "Current Version", BuildStrings.Version );
+                SpringboardViewController.DisplayError( "Current Version", GeneralConfig.Version.ToString( ) );
             }
             else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "upload dumps" )
             {
@@ -412,7 +412,7 @@ namespace iOS
         {
             // set the category's text to be the item they selected. Note that we now change the color to Active from the original Placeholder
             CategoryButton.SetTitleColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ), UIControlState.Normal );
-            CategoryButton.SetTitle( RockGeneralData.Instance.Data.PrayerCategories[ row ].Name, UIControlState.Normal );
+            CategoryButton.SetTitle( RockLaunchData.Instance.Data.PrayerCategories[ row ].Key, UIControlState.Normal );
 
             //PickerAdjustManager.TogglePicker( false );
         }
@@ -431,12 +431,12 @@ namespace iOS
 
             public override nint GetRowsInComponent(UIPickerView picker, nint component)
             {
-                return RockGeneralData.Instance.Data.PrayerCategories.Count;
+                return RockLaunchData.Instance.Data.PrayerCategories.Count;
             }
 
             public override string GetTitle(UIPickerView picker, nint row, nint component)
             {
-                return RockGeneralData.Instance.Data.PrayerCategories[ (int)row ].Name;
+                return RockLaunchData.Instance.Data.PrayerCategories[ (int)row ].Key;
             }
 
             public override void Selected(UIPickerView picker, nint row, nint component)
@@ -451,7 +451,7 @@ namespace iOS
                 {
                     label = new UILabel();
                     label.TextColor = UIColor.White;
-                    label.Text = RockGeneralData.Instance.Data.PrayerCategories[ (int)row ].Name;
+                    label.Text = RockLaunchData.Instance.Data.PrayerCategories[ (int)row ].Key;
                     label.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
                     label.SizeToFit( );
                 }

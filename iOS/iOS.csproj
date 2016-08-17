@@ -317,60 +317,6 @@
     <BundleResource Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
       <Link>Resources\Fonts\DINOffc-CondBlack.ttf</Link>
     </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_header.png">
-      <Link>Resources\default_news_a_header.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_header%402x.png">
-      <Link>Resources\default_news_a_header%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_header%403x.png">
-      <Link>Resources\default_news_a_header%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_main.png">
-      <Link>Resources\default_news_a_main.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_main%402x.png">
-      <Link>Resources\default_news_a_main%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_a_main%403x.png">
-      <Link>Resources\default_news_a_main%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_header.png">
-      <Link>Resources\default_news_b_header.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_header%402x.png">
-      <Link>Resources\default_news_b_header%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_header%403x.png">
-      <Link>Resources\default_news_b_header%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_main.png">
-      <Link>Resources\default_news_b_main.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_main%402x.png">
-      <Link>Resources\default_news_b_main%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_b_main%403x.png">
-      <Link>Resources\default_news_b_main%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_header.png">
-      <Link>Resources\default_news_c_header.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_header%402x.png">
-      <Link>Resources\default_news_c_header%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_header%403x.png">
-      <Link>Resources\default_news_c_header%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_main.png">
-      <Link>Resources\default_news_c_main.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_main%402x.png">
-      <Link>Resources\default_news_c_main%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\default_news_c_main%403x.png">
-      <Link>Resources\default_news_c_main%403x.png</Link>
-    </BundleResource>
     <BundleResource Include="..\Assets\splash_logo_ipad_landscape.png">
       <Link>Resources\splash_logo_ipad_landscape.png</Link>
     </BundleResource>
@@ -448,6 +394,24 @@
     </BundleResource>
     <BundleResource Include="..\Assets\share_thumb.png">
       <Link>Resources\share_thumb.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_main.png">
+      <Link>Resources\upgrade_news_main.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_main%402x.png">
+      <Link>Resources\upgrade_news_main%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_main%403x.png">
+      <Link>Resources\upgrade_news_main%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_header.png">
+      <Link>Resources\upgrade_news_header.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_header%402x.png">
+      <Link>Resources\upgrade_news_header%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\upgrade_news_header%403x.png">
+      <Link>Resources\upgrade_news_header%403x.png</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>

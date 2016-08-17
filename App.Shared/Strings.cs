@@ -6,19 +6,11 @@ namespace App.Shared
 {
     namespace Strings
     {
-        public class BuildStrings
-        {
-            public static string Version
-            {
-                get
-                {
-                    return "Version 2.1.3 (Build 1)";
-                }
-            }
-        }
-
         public class OOBEStrings
         {
+            public const string NetworkError = "Sorry, there was a problem connecting\n to the Internet";
+            public const string NetworRetry = "Tap to Retry";
+
             public const string Welcome = "WELCOME";
             public const string HaveAccount = "I have a {0} Account";
             public const string WantAccount = "Create a {0} Account";

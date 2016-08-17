@@ -285,7 +285,7 @@ namespace App
                     _CellPhoneNumber = new PhoneNumber( );
                     SetPhoneNumberDigits( "" );
 
-                    ViewingCampus = RockGeneralData.Instance.Data.Campuses[ 0 ].Id;
+                    ViewingCampus = 0;
 
                     // for the address location, default the country to the built in country code.
                     PrimaryAddress.Location = new Rock.Client.Location();

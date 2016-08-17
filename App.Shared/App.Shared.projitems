@@ -33,7 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\UserNote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Models\MobileNote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockGeneralData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockNews.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockLaunchData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockNetworkManager.cs" />

@@ -119,7 +119,7 @@ namespace Droid
                             Category.SetSingleLine( );
                             Category.SetHorizontallyScrolling( true );
                             Category.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
-                            Category.Text = prayer.CategoryId.HasValue ? RockGeneralData.Instance.Data.PrayerIdToCategory( prayer.CategoryId.Value ) : RockGeneralData.Instance.Data.PrayerCategories[ 0 ].Name;
+                            Category.Text = prayer.CategoryId.HasValue ? RockLaunchData.Instance.Data.PrayerIdToCategory( prayer.CategoryId.Value ) : RockLaunchData.Instance.Data.PrayerCategories[ 0 ].Key;
                             CategoryLayout.AddView( Category );
 
 

@@ -84,22 +84,20 @@ namespace Droid
             {
                 DidLaunch = true;
 
-                System.Timers.Timer timer = new System.Timers.Timer();
-                timer.Interval = 750;
-                timer.AutoReset = false;
-                timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
-                {
-                    Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
-                        {
-                            OOBEView.PerformStartup( );
-                        } );
-                };
-                timer.Start( );
-
                 SpringboardParent.ModalFragmentOpened( this );
 
                 OOBEView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ) );
             }
+        }
+
+        public void HandleNetworkFixed( )
+        {
+            OOBEView.HandleNetworkFixed( );
+        }
+
+        public void PerformStartup( bool networkSuccess )
+        {
+            OOBEView.PerformStartup( networkSuccess );
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)

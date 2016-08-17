@@ -364,24 +364,6 @@
     <AndroidAsset Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
       <Link>Assets\Fonts\DINOffc-CondBlack.ttf</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_a_header%402x.png">
-      <Link>Assets\default_news_a_header.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_a_main%402x.png">
-      <Link>Assets\default_news_a_main.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_b_header%402x.png">
-      <Link>Assets\default_news_b_header.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_b_main%402x.png">
-      <Link>Assets\default_news_b_main.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_c_header%402x.png">
-      <Link>Assets\default_news_c_header.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\default_news_c_main%402x.png">
-      <Link>Assets\default_news_c_main.png</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Assets\splash_logo_android.png">
       <Link>Assets\splash_logo_android.png</Link>
     </AndroidAsset>
@@ -414,6 +396,12 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\share_thumb.png">
       <Link>Assets\share_thumb.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\upgrade_news_header%403x.png">
+      <Link>Assets\upgrade_news_header.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\upgrade_news_main%403x.png">
+      <Link>Assets\upgrade_news_main.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

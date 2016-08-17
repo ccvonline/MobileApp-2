@@ -174,9 +174,9 @@ namespace Droid
                     Spinner.Adapter = adapter;
 
                     // populate the category
-                    foreach ( Rock.Client.Category category in App.Shared.Network.RockGeneralData.Instance.Data.PrayerCategories )
+                    foreach ( KeyValuePair<string, int> category in App.Shared.Network.RockLaunchData.Instance.Data.PrayerCategories )
                     {
-                        adapter.Add( category.Name );
+                        adapter.Add( category.Key );
                     }
 
                     Button submitButton = (Button)view.FindViewById<Button>( Resource.Id.prayer_create_submitButton );
@@ -216,7 +216,7 @@ namespace Droid
                             prayerRequest.Text = RequestText.Text;
                             prayerRequest.EnteredDateTime = DateTime.Now;
                             prayerRequest.ExpirationDate = DateTime.Now.Add( PrivatePrayerConfig.PrayerExpirationTime );
-                            prayerRequest.CategoryId = App.Shared.Network.RockGeneralData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
+                            prayerRequest.CategoryId = App.Shared.Network.RockLaunchData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
                             prayerRequest.IsActive = true;
                             prayerRequest.Guid = Guid.NewGuid( );
                             prayerRequest.IsPublic = PublicSwitch.Checked;
@@ -278,15 +278,15 @@ namespace Droid
                     {
                         debugKeyEntered = true;
 
-                        App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled;
+                        App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
                         Springboard.DisplayError( "Developer Mode", 
-                            string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+                            string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
                     }
                     else if ( RequestText.Text.ToLower( ).Trim( ) == "version" )
                     {
                         debugKeyEntered = true;
 
-                        Springboard.DisplayError( "Current Version", BuildStrings.Version );
+                        Springboard.DisplayError( "Current Version", GeneralConfig.Version.ToString( ) );
                     }
                     else if ( RequestText.Text.ToLower( ).Trim( ) == "upload dumps" )
                     {

@@ -138,7 +138,7 @@ namespace App
                     {
                         foreach ( Guid campusGuid in CampusGuids )
                         {
-                            campuses += "\n" + App.Shared.Network.RockGeneralData.Instance.Data.CampusGuidToName( campusGuid );
+                            campuses += "\n" + App.Shared.Network.RockLaunchData.Instance.Data.CampusGuidToName( campusGuid );
                         }
                         developerInfo += string.Format( "\n\nCampuses:{0}", campuses );
                     }

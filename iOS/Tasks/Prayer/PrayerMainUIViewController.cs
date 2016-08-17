@@ -247,7 +247,7 @@ namespace iOS
             // set the text for the name, size it so we get the height, then
             // restrict its bounds to the card itself
             Name.Text = prayer.FirstName.ToUpper( );
-            Category.Text = PrayerRequest.CategoryId.HasValue ? RockGeneralData.Instance.Data.PrayerIdToCategory( PrayerRequest.CategoryId.Value ) : RockGeneralData.Instance.Data.PrayerCategories[ 0 ].Name;
+            Category.Text = PrayerRequest.CategoryId.HasValue ? RockLaunchData.Instance.Data.PrayerIdToCategory( PrayerRequest.CategoryId.Value ) : RockLaunchData.Instance.Data.PrayerCategories[ 0 ].Key;
             Date.Text = string.Format( "{0:MM/dd/yy}", PrayerRequest.EnteredDateTime );
             PrayerText.Text = prayer.Text;
 

@@ -281,7 +281,7 @@ namespace Droid
                     };
 
                     // if the refresh button isn't enabled, hide it
-                    if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == false )
+                    if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == false )
                     {
                         RefreshButton.Visibility = ViewStates.Gone;
                     }
@@ -845,7 +845,7 @@ namespace Droid
                                     errorMsg += e.Message;
                                 }
 
-                                if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                                if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                                 {
                                     Springboard.DisplayError( "Note Error", errorMsg );
                                 }

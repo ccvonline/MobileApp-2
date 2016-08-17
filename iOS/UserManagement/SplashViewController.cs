@@ -81,11 +81,17 @@ namespace iOS
             return imageName;
         }
 
+        public void PerformStartup( )
+        {
+            // force a quick layout update
+            ViewDidLayoutSubviews( );
+
+            SplashView.PerformStartup( );
+        }
+
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-
-            SplashView.PerformStartup( );
         }
 
         public override void ViewDidLayoutSubviews()

@@ -67,7 +67,7 @@ namespace Droid
                 {
                     Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                         {
-                            Rock.Client.Campus campus = RockGeneralData.Instance.Data.CampusFromId( RockMobileUser.Instance.ViewingCampus );
+                            Rock.Client.Campus campus = RockLaunchData.Instance.Data.CampusFromId( RockMobileUser.Instance.ViewingCampus );
                             Guid viewingCampusGuid = campus != null ? campus.Guid : Guid.Empty;
 
                             // provide the news to the viewer by COPYING it.
@@ -79,11 +79,17 @@ namespace Droid
                                 {
                                     // Limit the amount of news to display to MaxNews so we don't show so many we
                                     // run out of memory. If DEVELOPER MODE is on, show them all.
-                                    if( News.Count < PrivateNewsConfig.MaxNews || App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                                    if( News.Count < PrivateNewsConfig.MaxNews || App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                                     {
                                         News.Add( new RockNews( newsItem ) );
                                     }
                                 }
+                            }
+
+                            // if they need to upgrade, push that news item to the top
+                            if( RockLaunchData.Instance.Data.NeedsUpgrade )
+                            {
+                                News.Insert( 0, RockLaunchData.Instance.Data.UpgradeNewsItem );
                             }
                         } );
                 }

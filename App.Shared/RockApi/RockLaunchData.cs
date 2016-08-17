@@ -33,73 +33,44 @@ namespace App
                     public LaunchData( )
                     {
                         //ALWAYS INCREMENT THIS IF UPDATING THE MODEL
-                        ClientModelVersion = 1;
+                        ClientModelVersion = 2;
                         //
 
-                        GeneralDataServerTime = DateTime.MinValue;
+                        Campuses = new List<Rock.Client.Campus>( );
+                        PrayerCategories = new List< KeyValuePair<string, int> >( );
+
+                        Genders = new List<string>( );
+                        Genders.Add( "Unknown" );
+                        Genders.Add( "Male" );
+                        Genders.Add( "Female" );
+
+                        // in debug builds, turn developer mode on by default
+                        #if DEBUG
+                        DeveloperModeEnabled = true;
+                        #endif
 
                         News = new List<RockNews>( );
                         NoteDB = new NoteDB( );
 
                         // for the hardcoded news, leave OFF the image extensions, so that we can add them with scaling for iOS.
-                        DefaultNews = new List<RockNews>( );
-                        DefaultNews.Add( new RockNews( 
-                            NewsConfig.DefaultNews_A[ 0 ], 
+                        UpgradeNewsItem = new RockNews( 
+                            NewsConfig.UpgradeNews[ 0 ], 
 
-                            NewsConfig.DefaultNews_A[ 1 ],
+                            NewsConfig.UpgradeNews[ 1 ],
 
-                            NewsConfig.DefaultNews_A[ 2 ],
+                            NewsConfig.UpgradeNews[ 2 ],
 
-                            false,
-                            false,
-                            false,
-
-                            "",
-                            NewsConfig.DefaultNews_A[ 3 ],
-
-                            "",
-                            NewsConfig.DefaultNews_A[ 4 ],
-
-                            new List<System.Guid>( ) ) );
-
-                        DefaultNews.Add( new RockNews( 
-                            NewsConfig.DefaultNews_B[ 0 ], 
-
-                            NewsConfig.DefaultNews_B[ 1 ],
-
-                            NewsConfig.DefaultNews_B[ 2 ],
-
-                            false,
+                            true,
                             false,
                             false,
 
                             "",
-                            NewsConfig.DefaultNews_B[ 3 ],
+                            NewsConfig.UpgradeNews[ 3 ],
 
                             "",
-                            NewsConfig.DefaultNews_B[ 4 ],
+                            NewsConfig.UpgradeNews[ 4 ],
 
-                            new List<System.Guid>( ) ) );
-
-
-                        DefaultNews.Add( new RockNews( 
-                            NewsConfig.DefaultNews_C[ 0 ], 
-
-                            NewsConfig.DefaultNews_C[ 1 ],
-
-                            NewsConfig.DefaultNews_C[ 2 ],
-
-                            false,
-                            false,
-                            false,
-
-                            "",
-                            NewsConfig.DefaultNews_C[ 3 ],
-
-                            "",
-                            NewsConfig.DefaultNews_C[ 4 ],
-
-                            new List<System.Guid>( ) ) );
+                            new List<System.Guid>( ) );
                     }
 
                     /// <summary>
@@ -107,55 +78,103 @@ namespace App
                     /// so that there is SOMETHING for the user to see. Should only be done
                     /// if there is no news available after getting launch data.
                     /// </summary>
-                    public void CopyDefaultNews( )
+                    public void PrepareUpgradeNews( )
                     {
-                        // COPY the general items into our own new list.
-                        foreach ( RockNews newsItem in DefaultNews )
+                        // cache the compiled in main and header images so the News system can get them transparently
+                        #if __IOS__
+                        string mainImageName;
+                        string headerImageName;
+                        if( UIKit.UIScreen.MainScreen.Scale > 1 )
                         {
-                            RockNews copiedNews = new RockNews( newsItem );
-                            News.Add( copiedNews );
-
-                            // also cache the compiled in main and header images so the News system can get them transparently
-                            #if __IOS__
-                            string mainImageName;
-                            string headerImageName;
-                            if( UIKit.UIScreen.MainScreen.Scale > 1 )
-                            {
-                                mainImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, copiedNews.ImageName, UIKit.UIScreen.MainScreen.Scale );
-                                headerImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, copiedNews.HeaderImageName, UIKit.UIScreen.MainScreen.Scale );
-                            }
-                            else
-                            {
-                                mainImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, copiedNews.ImageName, UIKit.UIScreen.MainScreen.Scale );
-                                headerImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, copiedNews.HeaderImageName, UIKit.UIScreen.MainScreen.Scale );
-                            }
-
-                            #elif __ANDROID__
-                            string mainImageName = copiedNews.ImageName + ".png";
-                            string headerImageName = copiedNews.HeaderImageName + ".png";
-                            #endif
-
-                            // cache the main image
-                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
-                            stream.Position = 0;
-                            FileCache.Instance.SaveFile( stream, copiedNews.ImageName, FileCache.CacheFileNoExpiration );
-                            stream.Dispose( );
-
-                            // cache the header image
-                            stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
-                            stream.Position = 0;
-                            FileCache.Instance.SaveFile( stream, copiedNews.HeaderImageName, FileCache.CacheFileNoExpiration );
-                            stream.Dispose( );
+                            mainImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.ImageName, UIKit.UIScreen.MainScreen.Scale );
+                            headerImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.HeaderImageName, UIKit.UIScreen.MainScreen.Scale );
                         }
+                        else
+                        {
+                            mainImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.ImageName );
+                            headerImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.HeaderImageName );
+                        }
+
+                        #elif __ANDROID__
+                        string mainImageName = UpgradeNewsItem.ImageName + ".png";
+                        string headerImageName = UpgradeNewsItem.HeaderImageName + ".png";
+                        #endif
+
+                        // cache the main image
+                        MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
+                        stream.Position = 0;
+                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
+                        stream.Dispose( );
+
+                        // cache the header image
+                        stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
+                        stream.Position = 0;
+                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
+                        stream.Dispose( );
                     }
 
                     /// <summary>
-                    /// The last time that GeneralData was updated by the server. Each time we run,
-                    /// we'll check with the server to see if there's a newer server time. If there is,
-                    /// we need to download GeneralData again.
+                    /// Private to the client, this should be updated if the model
+                    /// changes at all, so that we don't attempt to load an older one when upgrading the app.
                     /// </summary>
-                    /// <value>The version.</value>
-                    public DateTime GeneralDataServerTime { get; set; }
+                    [JsonProperty]
+                    public int ClientModelVersion { get; protected set; }
+
+                    public Rock.Client.Campus CampusFromId( int campusId )
+                    {
+                        return Campuses.Find( c => c.Id == campusId );
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a campus' id to its name
+                    /// </summary>
+                    /// <returns>The identifier to name.</returns>
+                    public string CampusIdToName( int campusId )
+                    {
+                        // guard against old, bad values.
+                        Rock.Client.Campus campusObj = Campuses.Find( c => c.Id == campusId );
+                        return campusObj != null ? campusObj.Name : "";
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a campus' guid to its name
+                    /// </summary>
+                    /// <returns>The identifier to name.</returns>
+                    public string CampusGuidToName( Guid campusGuid )
+                    {
+                        // guard against old, bad values.
+                        Rock.Client.Campus campusObj = Campuses.Find( c => c.Guid == campusGuid );
+                        return campusObj != null ? campusObj.Name : "";
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a campus' name to its ID
+                    /// </summary>
+                    /// <returns>The name to identifier.</returns>
+                    public int CampusNameToId( string campusName )
+                    {
+                        Rock.Client.Campus campusObj = Campuses.Find( c => c.Name == campusName );
+                        return campusObj != null ? campusObj.Id : 0;
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a prayer category ID to its name
+                    /// </summary>
+                    public string PrayerIdToCategory( int categoryId )
+                    {
+                        // guard against old, bad values.
+                        KeyValuePair<string, int> categoryObj = PrayerCategories.Find( c => c.Value == categoryId );
+                        return string.IsNullOrWhiteSpace( categoryObj.Key ) == false ? categoryObj.Key : string.Empty;
+                    }
+
+                    /// <summary>
+                    /// Helper method for converting a prayer category name to its ID
+                    /// </summary>
+                    public int PrayerCategoryToId( string categoryName )
+                    {
+                        KeyValuePair<string, int> categoryObj = PrayerCategories.Find( c => c.Key == categoryName );
+                        return string.IsNullOrWhiteSpace( categoryObj.Key ) == false ? categoryObj.Value : -1;
+                    }
 
                     /// <summary>
                     /// Default news to display when there's no connection available
@@ -175,18 +194,37 @@ namespace App
                     public DateTime NoteDBTimeStamp { get; set; }
 
                     /// <summary>
-                    /// Used on the app's first run, or there's no network connection
-                    /// and no valid downloaded news to use.
+                    // The "Please Upgrade" news item we'll show if they're out of date.
                     /// </summary>
-                    /// <value>The default news.</value>
-                    List<RockNews> DefaultNews { get; set; }
+                    public RockNews UpgradeNewsItem { get; set; }
 
                     /// <summary>
-                    /// Private to the client, this should be updated if the model
-                    /// changes at all, so that we don't attempt to load an older one when upgrading the app.
+                    /// List of all available campuses to choose from.
                     /// </summary>
-                    [JsonProperty]
-                    public int ClientModelVersion { get; protected set; }
+                    /// <value>The campuses.</value>
+                    public List<Rock.Client.Campus> Campuses { get; set; }
+
+                    /// <summary>
+                    /// List of genders
+                    /// </summary>
+                    /// <value>The genders.</value>
+                    public List<string> Genders { get; set; }
+
+                    /// <summary>
+                    /// Default list of prayer categories supported
+                    /// </summary>
+                    public List<KeyValuePair<string, int>> PrayerCategories { get; set; }
+
+                    /// <summary>
+                    /// True if this version of the app is out-of-date. We can know this
+                    /// by comparing what we get in LaunchData with the version that's harded coded in the app. Yeeeah!
+                    /// </summary>
+                    public bool NeedsUpgrade { get; set; }
+
+                    /// <summary>
+                    /// Enables debug features like note refreshing.
+                    /// </summary>
+                    public bool DeveloperModeEnabled { get; set; }
                 }
                 public LaunchData Data { get; set; }
 
@@ -209,46 +247,58 @@ namespace App
                 public NewsItemsDownloaded NewsItemsDownloadedCallback { get; set; }
 
                 /// <summary>
-                /// Wrapper function for getting the basic things we need at launch (news, notes, etc.)
+                /// Wrapper function for getting the basic things we need at launch (campuses, prayer categories, news, notes, etc.)
                 /// If for some reason one of these fails, they will be called independantly by the appropriate systems
                 /// (So if NoteDB fails, GetNoteDB will be called by Messages when the user taps on it)
                 /// </summary>
-                /// <param name="launchDataResult">Launch data result.</param>
                 public void GetLaunchData( HttpRequest.RequestResult launchDataResult )
                 {
                     Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData" );
 
-                    // first get the general data server time, so that we know whether we should update the
-                    // general data or not.
-                    MobileAppApi.GetGeneralDataTime( 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, DateTime generalDataTime )
+                    MobileAppApi.Get_LaunchData( 
+                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, MobileAppApi.LaunchData launchData )
+                        {
+                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && launchData != null )
                             {
-                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
+                                Data.Campuses = launchData.Campuses;
+                                Data.PrayerCategories = launchData.PrayerCategories;
+                                
+                                // is our version up-to-date? 
+                                if( GeneralConfig.Version < launchData.MobileAppVersion )
                                 {
-                                    if( generalDataTime != DateTime.MinValue )
-                                    {
-                                        Data.GeneralDataServerTime = generalDataTime;
-                                    }
+                                    // nope, so flag that and we can remind people to upgrade.
+                                    Data.NeedsUpgrade = true;
                                 }
                                 else
                                 {
-                                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "GeneralDateTime request failed with status {0}. Using existing.", statusDescription ) );
+                                    Data.NeedsUpgrade = false;
                                 }
 
                                 // now get the news.
                                 GetNews( delegate 
-                                    {
-                                        // chain any other required launch data actions here.
-                                        Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData DONE" );
+                                {
+                                    // chain any other required launch data actions here.
+                                    Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData DONE" );
 
-                                        // notify the caller now that we're done
-                                        if( launchDataResult != null )
-                                        {
-                                            // send OK, because whether we failed or not, the caller doessn't need to care.
-                                            launchDataResult( System.Net.HttpStatusCode.OK, "" );
-                                        }
-                                    });
-                            } );
+                                    // notify the caller now that we're done
+                                    if( launchDataResult != null )
+                                    {
+                                        // send OK, because whether we failed or not, the caller doessn't need to care.
+                                        launchDataResult( System.Net.HttpStatusCode.OK, "" );
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                // notify the caller now that we're done
+                                if( launchDataResult != null )
+                                {
+                                    // send failed, and we are not gonna move on.
+                                    launchDataResult( System.Net.HttpStatusCode.BadGateway, "" );
+                                }
+                            }
+                        });
+                    
                 }
 
                 void GetNews( HttpRequest.RequestResult resultCallback )
@@ -318,7 +368,7 @@ namespace App
                                                     }
                                                 }
 
-                                                // jhm 11-30-15: Use the image guids, rather than news title, for the image.
+                                                // Use the image guids, rather than news title, for the image.
                                                 // This will ensure the image updates anytime it's changed in Rock!
                                                 RockNews newsItem = new RockNews( item.Title, 
                                                                                   item.Content, 
@@ -327,9 +377,9 @@ namespace App
                                                                                   detailUrlLaunchesBrowser,
                                                                                   includeImpersonationToken,
                                                                                   imageUrl, 
-                                                                                  featuredGuid.AsLegalFilename( ) + ".png",//item.Title.AsLegalFilename( ) + "_main.png", 
+                                                                                  featuredGuid.AsLegalFilename( ) + ".png",
                                                                                   bannerUrl, 
-                                                                                  bannerGuid.AsLegalFilename( ) + ".png",//item.Title.AsLegalFilename( ) + "_banner.png", 
+                                                                                  bannerGuid.AsLegalFilename( ) + ".png",
                                                                                   campusGuids );
 
 
@@ -405,7 +455,7 @@ namespace App
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Got NoteDB info." );
                                 Data.NoteDB = noteModel;
-                                Data.NoteDB.ProcessPrivateNotes( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled );
+                                Data.NoteDB.ProcessPrivateNotes( Instance.Data.DeveloperModeEnabled );
                                 Data.NoteDB.MakeURLsAbsolute( );
                                 Data.NoteDBTimeStamp = DateTime.Now;
 
@@ -531,11 +581,11 @@ namespace App
                         }
                     }
 
-                    // we HAVE to have news. So, if there isn't any after loading,
-                    // take the general data's news.
+                    // if there's no news after loading, this is our first run, so
+                    // prepare the 'you should upgrade' news item
                     if ( Data.News.Count == 0 )
                     {
-                        Data.CopyDefaultNews( );
+                        Data.PrepareUpgradeNews( );
                     }
                 }
             }

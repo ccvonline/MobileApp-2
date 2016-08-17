@@ -271,7 +271,7 @@ namespace Droid
         {
             SeriesInfoDownloaded = false;
 
-            App.Shared.Network.RockNetworkManager.Instance.SyncRockData(
+            RockNetworkManager.Instance.SyncRockData(
                 delegate
                 {
                     // here we know whether the initial handshake with Rock went ok or not
@@ -458,7 +458,7 @@ namespace Droid
             settingsIcon.Text = PrivateSpringboardConfig.CampusSelectSymbol;
 
             // set the campus text to whatever their profile has set for viewing.
-            CampusText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
+            CampusText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
 
             // setup the campus selection button.
             Button campusSelectionButton = CampusContainer.FindViewById<Button>( Resource.Id.campus_selection_button );
@@ -543,10 +543,10 @@ namespace Droid
         {
             // build an alert dialog containing all the campus choices
             AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
-            Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockGeneralData.Instance.Data.Campuses.Count ];
-            for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+            Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockLaunchData.Instance.Data.Campuses.Count ];
+            for( int i = 0; i < RockLaunchData.Instance.Data.Campuses.Count; i++ )
             {
-                campusStrings[ i ] = new Java.Lang.String( App.Shared.Network.RockGeneralData.Instance.Data.Campuses[ i ].Name );
+                campusStrings[ i ] = new Java.Lang.String( App.Shared.Network.RockLaunchData.Instance.Data.Campuses[ i ].Name );
             }
 
             builder.SetTitle( new Java.Lang.String( SpringboardStrings.SelectCampus_SourceTitle ) );
@@ -558,7 +558,7 @@ namespace Droid
                         {
                             // get the ID for the campus they selected
                             string campusTitle = campusStrings[ clickArgs.Which ].ToString( );
-                            RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( campusTitle );
+                            RockMobileUser.Instance.ViewingCampus = RockLaunchData.Instance.Data.CampusNameToId( campusTitle );
 
                             // build a label showing what they picked
                             RefreshCampusSelection( );
@@ -571,7 +571,7 @@ namespace Droid
         void RefreshCampusSelection( bool forceRefresh = false )
         {
             string newCampusText = string.Format( SpringboardStrings.Viewing_Campus, 
-                RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
+                RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
 
             if ( CampusText.Text != newCampusText || forceRefresh == true )
             {
@@ -908,8 +908,6 @@ namespace Droid
 
             Rock.Mobile.Util.Debug.WriteLine( "Springboard OnResume()" );
 
-            OnActivated_SyncRockData( );
-
             // refresh the viewing campus
             RefreshCampusSelection( );
 
@@ -936,7 +934,7 @@ namespace Droid
 
             // only do the OOBE if the user hasn't seen it yet
             if ( RockMobileUser.Instance.OOBEComplete == false && IsOOBERunning == false )
-            //if( oobeRan == false && IsOOBERunning == false )
+                //if( oobeRan == false && IsOOBERunning == false )
             {
                 //oobeRan = true;
 
@@ -944,10 +942,20 @@ namespace Droid
                 // This will force them to be logged out so they experience the OOBE properly.
                 RockMobileUser.Instance.LogoutAndUnbind( );
 
-                // flag the splash as complete as wel, so we don't launch it the next time OnResume is called
+                // flag the splash as complete as well, so we don't launch it the next time OnResume is called
+                // show the OOBE, but we won't advance it until the network callback gets called
                 IsSplashDone = true;
                 IsOOBERunning = true;
                 StartModalFragment( OOBEFragment, true );
+
+                // it is, so we want to WAIT to advance the app until after we download initial data
+                RockNetworkManager.Instance.SyncRockData( null,
+                                                          delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                {
+                    // for the OOBE we very much care if syncing worked, and can't let them continue if it didn't.
+                    bool success = Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true;
+                    OOBEFragment.PerformStartup( success );
+                });
             }
             // otherwise if the splash hasn't been shown, show it.
             else if ( IsSplashDone == false )
@@ -955,7 +963,11 @@ namespace Droid
                 IsSplashDone = true;
                 SplashFragment.ContainerView = FullScreenLayout;
                 StartModalFragment( SplashFragment, true );
+
+                // we'll sync normally below
             }
+
+            OnActivated_SyncRockData( );
         }
 
         public void SplashComplete( )
@@ -965,8 +977,19 @@ namespace Droid
 
         public void OOBEUserClick( int index, bool isCampusSelection )
         {
+            if( -1 == index )
+            {
+                // before we do anything else, force a rock sync. Then we can trust we have good solid launch data.
+                RockNetworkManager.Instance.SyncRockData( null, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                {
+                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
+                    {
+                        OOBEFragment.HandleNetworkFixed( );
+                    }
+                });
+            }
             // if they picked their campus, update their viewing campus immediately.
-            if ( isCampusSelection )
+            else if ( isCampusSelection )
             {
                 App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
             }

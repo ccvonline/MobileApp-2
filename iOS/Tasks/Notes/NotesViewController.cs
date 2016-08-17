@@ -237,7 +237,7 @@ namespace iOS
 
                 //note: the frame height of the nav bar is what it CURRENTLY is, not what it WILL be after we rotate. So, when we go from Portrait to Landscape,
                 // it says 40, but it's gonna be 32. Conversely, going back, we use 32 and it's actually 40, which causes us to start this view 8px too high.
-                if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                 {
                     // add the refresh button if necessary
                     if ( RefreshButton.Superview == null )
@@ -893,7 +893,7 @@ namespace iOS
                             errorMsg += "\n" + e.Message;
                         }
 
-                        if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+                        if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                         {
                             // explain that we couldn't generate notes
                             UIAlertView alert = new UIAlertView( );

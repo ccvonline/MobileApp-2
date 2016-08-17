@@ -195,15 +195,15 @@ namespace Droid
                     AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
                     Java.Lang.ICharSequence [] strings = new Java.Lang.ICharSequence[]
                         {
-                            new Java.Lang.String( RockGeneralData.Instance.Data.Genders[ 1 ] ),
-                            new Java.Lang.String( RockGeneralData.Instance.Data.Genders[ 2 ] ),
+                            new Java.Lang.String( RockLaunchData.Instance.Data.Genders[ 1 ] ),
+                            new Java.Lang.String( RockLaunchData.Instance.Data.Genders[ 2 ] ),
                         };
 
                     builder.SetItems( strings, delegate(object s, DialogClickEventArgs clickArgs) 
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
-                                    GenderField.Text = RockGeneralData.Instance.Data.Genders[ clickArgs.Which + 1 ];
+                                    GenderField.Text = RockLaunchData.Instance.Data.Genders[ clickArgs.Which + 1 ];
                                     Dirty = true;
                                 });
                         });
@@ -225,10 +225,10 @@ namespace Droid
                     // build an alert dialog containing all the campus choices
                     AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
                     builder.SetTitle( ProfileStrings.SelectCampus_SourceTitle );
-                    Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockGeneralData.Instance.Data.Campuses.Count ];
-                    for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+                    Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockLaunchData.Instance.Data.Campuses.Count ];
+                    for( int i = 0; i < RockLaunchData.Instance.Data.Campuses.Count; i++ )
                     {
-                        campusStrings[ i ] = new Java.Lang.String( RockGeneralData.Instance.Data.Campuses[ i ].Name );
+                        campusStrings[ i ] = new Java.Lang.String( RockLaunchData.Instance.Data.Campuses[ i ].Name );
                     }
 
                     // launch the dialog, and on selection, update the viewing campus text.
@@ -237,7 +237,7 @@ namespace Droid
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
                                     int campusIndex = clickArgs.Which;
-                                    CampusField.Text = RockGeneralData.Instance.Data.Campuses[ campusIndex ].Name;
+                                    CampusField.Text = RockLaunchData.Instance.Data.Campuses[ campusIndex ].Name;
                                     Dirty = true;
                                 });
                         });
@@ -440,7 +440,7 @@ namespace Droid
             // gender
             if ( RockMobileUser.Instance.Person.Gender > 0 )
             {
-                GenderField.Text = RockGeneralData.Instance.Data.Genders[ (int)RockMobileUser.Instance.Person.Gender ];
+                GenderField.Text = RockLaunchData.Instance.Data.Genders[ (int)RockMobileUser.Instance.Person.Gender ];
             }
             else
             {
@@ -460,7 +460,7 @@ namespace Droid
             // campus
             if ( RockMobileUser.Instance.PrimaryFamily.CampusId.HasValue == true )
             {
-                CampusField.Text = RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.PrimaryFamily.CampusId.Value );
+                CampusField.Text = RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.PrimaryFamily.CampusId.Value );
             }
             else
             {
@@ -496,7 +496,7 @@ namespace Droid
             // Gender
             if ( string.IsNullOrEmpty( GenderField.Text ) == false )
             {
-                RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockGeneralData.Instance.Data.Genders.IndexOf( GenderField.Text );
+                RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockLaunchData.Instance.Data.Genders.IndexOf( GenderField.Text );
             }
 
             // Birthdate
@@ -508,7 +508,7 @@ namespace Droid
             // Campus
             if ( string.IsNullOrEmpty( CampusField.Text ) == false )
             {
-                RockMobileUser.Instance.PrimaryFamily.CampusId = RockGeneralData.Instance.Data.CampusNameToId( CampusField.Text );
+                RockMobileUser.Instance.PrimaryFamily.CampusId = RockLaunchData.Instance.Data.CampusNameToId( CampusField.Text );
                 RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
             }
 

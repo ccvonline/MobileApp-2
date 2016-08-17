@@ -53,7 +53,7 @@ namespace iOS
                         // if they want a "read" page, we support that.
                         if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Read )
                         {
-                            if ( App.Shared.Network.RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
+                            if ( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
                             {
                                 // since we're switching to the read notes VC, pop to the main page root and 
                                 // remove it, because we dont' want back history (where would they go back to?)

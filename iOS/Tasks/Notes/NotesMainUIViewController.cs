@@ -643,7 +643,7 @@ namespace iOS
         void WaitAsync( )
         {
             // while we're still requesting the series, simply wait
-            while ( App.Shared.Network.RockLaunchData.Instance.RequestingNoteDB == true );
+            while ( RockLaunchData.Instance.RequestingNoteDB == true );
 
             // now that tis' finished, update the notes.
             SeriesReady( );
@@ -676,7 +676,7 @@ namespace iOS
                         // jhm hack : Show our stupid error message
                         ResultView.Show( MessagesStrings.Series_Error_Title, 
                                          PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                         MessagesStrings.Series_Error_Message + "\n" + App.Shared.Network.RockLaunchData.HackNotesErrorCheck, 
+                                         MessagesStrings.Series_Error_Message + "\n" + RockLaunchData.HackNotesErrorCheck, 
                                          GeneralStrings.Retry );
                     }
                 });

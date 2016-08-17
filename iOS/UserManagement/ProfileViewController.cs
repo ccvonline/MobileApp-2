@@ -220,7 +220,7 @@ namespace iOS
                         // if they have a gender selected, default to that.
                         if( string.IsNullOrEmpty( Gender.Field.Text ) == false )
                         {
-                            ((UIPickerView)GenderPicker.Picker).Select( RockGeneralData.Instance.Data.Genders.IndexOf( Gender.Field.Text ) - 1, 0, false );
+                            ((UIPickerView)GenderPicker.Picker).Select( RockLaunchData.Instance.Data.Genders.IndexOf( Gender.Field.Text ) - 1, 0, false );
                         }
 
                         GenderPicker.TogglePicker( true );
@@ -282,9 +282,9 @@ namespace iOS
 
                     // for each campus, create an entry in the action sheet, and its callback will assign
                     // that campus index to the user's viewing preference
-                    for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+                    for( int i = 0; i < RockLaunchData.Instance.Data.Campuses.Count; i++ )
                     {
-                        UIAlertAction campusAction = UIAlertAction.Create( RockGeneralData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
+                        UIAlertAction campusAction = UIAlertAction.Create( RockLaunchData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
                             {
                                 // update the home campus text and flag as dirty
                                 HomeCampus.Field.Text = obj.Title;
@@ -595,7 +595,7 @@ namespace iOS
             // gender
             if ( RockMobileUser.Instance.Person.Gender > 0 )
             {
-                Gender.Field.Text = RockGeneralData.Instance.Data.Genders[ (int)RockMobileUser.Instance.Person.Gender ];
+                Gender.Field.Text = RockLaunchData.Instance.Data.Genders[ (int)RockMobileUser.Instance.Person.Gender ];
             }
             else
             {
@@ -613,7 +613,7 @@ namespace iOS
 
             if ( RockMobileUser.Instance.PrimaryFamily.CampusId.HasValue )
             {
-                HomeCampus.Field.Text = RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.PrimaryFamily.CampusId.Value );
+                HomeCampus.Field.Text = RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.PrimaryFamily.CampusId.Value );
             }
             else
             {
@@ -681,7 +681,7 @@ namespace iOS
             // Gender
             if ( string.IsNullOrEmpty( Gender.Field.Text ) == false )
             {
-                RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockGeneralData.Instance.Data.Genders.IndexOf( Gender.Field.Text );
+                RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockLaunchData.Instance.Data.Genders.IndexOf( Gender.Field.Text );
             }
 
             // Birthdate
@@ -693,7 +693,7 @@ namespace iOS
             // Campus
             if ( string.IsNullOrEmpty( HomeCampus.Field.Text ) == false )
             {
-                RockMobileUser.Instance.PrimaryFamily.CampusId = RockGeneralData.Instance.Data.CampusNameToId( HomeCampus.Field.Text );
+                RockMobileUser.Instance.PrimaryFamily.CampusId = RockLaunchData.Instance.Data.CampusNameToId( HomeCampus.Field.Text );
                 RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
             }
 
@@ -766,7 +766,7 @@ namespace iOS
         public void PickerSelected( int row, int component )
         {
             // set the button's text to be the item they selected. Note that we now change the color to Active from the original Placeholder
-            Gender.Field.Text = RockGeneralData.Instance.Data.Genders[ row ];
+            Gender.Field.Text = RockLaunchData.Instance.Data.Genders[ row ];
             Gender.Field.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
         }
 
@@ -784,12 +784,12 @@ namespace iOS
 
             public override nint GetRowsInComponent(UIPickerView picker, nint component)
             {
-                return RockGeneralData.Instance.Data.Genders.Count - 1;
+                return RockLaunchData.Instance.Data.Genders.Count - 1;
             }
 
             public override string GetTitle(UIPickerView picker, nint row, nint component)
             {
-                return RockGeneralData.Instance.Data.Genders[ (int) (row + 1) ];
+                return RockLaunchData.Instance.Data.Genders[ (int) (row + 1) ];
             }
 
             public override void Selected(UIPickerView picker, nint row, nint component)
@@ -804,7 +804,7 @@ namespace iOS
                 {
                     label = new UILabel();
                     label.TextColor = UIColor.White;
-                    label.Text = RockGeneralData.Instance.Data.Genders[ (int) (row + 1) ];
+                    label.Text = RockLaunchData.Instance.Data.Genders[ (int) (row + 1) ];
                     label.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
                     label.SizeToFit( );
                 }

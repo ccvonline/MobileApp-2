@@ -227,13 +227,6 @@ namespace iOS
         /// </summary>
         bool SeriesInfoDownloaded { get; set; }
 
-        /// <summary>
-        /// Stores the time of the last rock sync.
-        /// If the user has left our app running > 24 hours we'll redownload
-        /// </summary>
-        /// <value>The last rock sync.</value>
-        DateTime LastRockSync { get; set; }
-
 		public SpringboardViewController ( ) : base()
 		{
             NavViewController = new MainUINavigationController();
@@ -571,11 +564,8 @@ namespace iOS
                 };
 
             // set the viewing campus now that their profile has loaded (if they have already done the OOBE)
-            CampusSelectionText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
+            CampusSelectionText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
             CampusSelectionText.SizeToFit( );
-
-            // seed the last sync time with now, so that when OnActivated gets called we don't do it again.
-            LastRockSync = DateTime.Now;
 
             // setup the Notification Banner for Taking Notes
             Billboard = new NotificationBillboard( View.Bounds.Width, View.Bounds.Height );
@@ -600,10 +590,9 @@ namespace iOS
 
             Billboard.Layer.Position = new CGPoint( Billboard.Layer.Position.X, NavViewController.NavigationBar.Frame.Height );
 
-
             // only do the OOBE if the user hasn't seen it yet
             if ( RockMobileUser.Instance.OOBEComplete == false )
-            //if( RanOOBE == false )
+                //if( RanOOBE == false )
             {
                 // sanity check for testers that didn't listen to me and delete / reinstall.
                 // This will force them to be logged out so they experience the OOBE properly.
@@ -613,12 +602,24 @@ namespace iOS
                 IsOOBERunning = true;
                 AddChildViewController( OOBEViewController );
                 View.AddSubview( OOBEViewController.View );
+
+                // before we do anything else, force a rock sync. Then we can trust we have good solid launch data.
+                RockNetworkManager.Instance.SyncRockData( null, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                {
+                    // for the OOBE we very much care if syncing worked, and can't let them continue if it didn't.
+                    bool success = Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true;
+                    OOBEViewController.PerformStartup( success );
+                });
             }
             else
             {
-                // kick off the splash screen animation
+                // prepare the splash screen animation
                 AddChildViewController( SplashViewController );
                 View.AddSubview( SplashViewController.View );
+                SplashViewController.PerformStartup( );
+
+                // now let the normal activation go
+                OnActivated_SyncRockData( );
             }
         }
         //static bool RanOOBE { get; set; }
@@ -638,12 +639,12 @@ namespace iOS
 
             // for each campus, create an entry in the action sheet, and its callback will assign
             // that campus index to the user's viewing preference
-            for( int i = 0; i < RockGeneralData.Instance.Data.Campuses.Count; i++ )
+            for( int i = 0; i < RockLaunchData.Instance.Data.Campuses.Count; i++ )
             {
-                UIAlertAction campusAction = UIAlertAction.Create( RockGeneralData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
+                UIAlertAction campusAction = UIAlertAction.Create( RockLaunchData.Instance.Data.Campuses[ i ].Name, UIAlertActionStyle.Default, delegate(UIAlertAction obj) 
                     {
                         //get the index of the campus based on the selection's title, and then set that campus title as the string
-                        RockMobileUser.Instance.ViewingCampus = RockGeneralData.Instance.Data.CampusNameToId( obj.Title );
+                        RockMobileUser.Instance.ViewingCampus = RockLaunchData.Instance.Data.CampusNameToId( obj.Title );
 
                         RefreshCampusSelection( );
                     } );
@@ -676,7 +677,19 @@ namespace iOS
         //static bool RanOOBE = false;
         public void OOBEOnClick( int index, bool isCampusSelection )
         {
-            if ( isCampusSelection )
+            // -1 means retry because the network connection failed, so we didn't get launch data
+            if( -1 == index )
+            {
+                // before we do anything else, force a rock sync. Then we can trust we have good solid launch data.
+                RockNetworkManager.Instance.SyncRockData( null, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                {
+                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
+                    {
+                        OOBEViewController.HandleNetworkFixed( );
+                    }
+                });
+            }
+            else if ( isCampusSelection )
             {
                 App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
             }
@@ -746,7 +759,7 @@ namespace iOS
         {
             SeriesInfoDownloaded = false;
 
-            App.Shared.Network.RockNetworkManager.Instance.SyncRockData( 
+            RockNetworkManager.Instance.SyncRockData( 
                 // first delegate is for completion of the series download. At that point we can show the notification billboard.
                 delegate 
                 {
@@ -756,9 +769,6 @@ namespace iOS
                 },
                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
                 {
-                    // here we know whether the initial handshake with Rock went ok or not
-                    LastRockSync = DateTime.Now;
-
                     //If the OOBE isn't running
                     if( IsOOBERunning == false )
                     {
@@ -1051,7 +1061,7 @@ namespace iOS
         void RefreshCampusSelection( bool forceRefresh = false )
         {
             string newCampusText = string.Format( SpringboardStrings.Viewing_Campus, 
-                RockGeneralData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
+                RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
 
             if ( CampusSelectionText.Text != newCampusText || forceRefresh == true )
             {

@@ -15,6 +15,9 @@ namespace App.Shared.UI
         public PlatformImageView ImageLogo { get; set; }
         public PlatformImageView ImageBG { get; set; }
 
+        public PlatformLabel NetworkErrorLabel { get; set; }
+        public PlatformButton NetworkRetryButton { get; set; }
+
         public PlatformLabel WelcomeLabel { get; set; }
 
         public PlatformLabel CampusHeader { get; set; }
@@ -26,13 +29,12 @@ namespace App.Shared.UI
         public PlatformView LoginSeperator { get; set; }
         public PlatformButton SkipButton { get; set; }
 
-        public UIOOBE( )
-        {
-        }
+        public OnButtonClick OnClick { get; set; }
 
         enum OOBE_State
         {
             Startup,
+            NetworkError,
             Welcome,
             CampusIntro,
             SelectCampus,
@@ -47,6 +49,9 @@ namespace App.Shared.UI
 
         public void Create( object masterView, string bgLayerImageName, string logoImageName, bool scaleImageLogo, RectangleF frame, OnButtonClick onClick )
         {
+            // take the handler
+            OnClick = onClick;
+
             View = PlatformView.Create( );
             View.BackgroundColor = ControlStylingConfig.OOBE_Splash_BG_Color;
             View.AddAsSubview( masterView );
@@ -64,6 +69,29 @@ namespace App.Shared.UI
                 stream.Dispose( );
             }
 
+            NetworkErrorLabel = PlatformLabel.Create( );
+            NetworkErrorLabel.SetFont( ControlStylingConfig.Font_Light, 18 );
+            NetworkErrorLabel.TextColor = 0xCCCCCCFF;
+            NetworkErrorLabel.Text = OOBEStrings.NetworkError;
+            NetworkErrorLabel.TextAlignment = TextAlignment.Center;
+            NetworkErrorLabel.Opacity = 0;
+            NetworkErrorLabel.SizeToFit( );
+            NetworkErrorLabel.AddAsSubview( View.PlatformNativeObject );
+
+
+            NetworkRetryButton = PlatformButton.Create( );
+            NetworkRetryButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
+            NetworkRetryButton.TextColor = 0xCCCCCCFF;
+            NetworkRetryButton.Text = OOBEStrings.NetworRetry;
+            NetworkRetryButton.Opacity = 0;
+            NetworkRetryButton.SizeToFit( );
+            NetworkRetryButton.ClickEvent = (PlatformButton button ) =>
+            {
+                OnClick( -1, false );
+            };
+            NetworkRetryButton.AddAsSubview( View.PlatformNativeObject );
+
+
             WelcomeLabel = PlatformLabel.Create( );
             WelcomeLabel.SetFont( ControlStylingConfig.Font_Bold, 85 );
             WelcomeLabel.TextColor = 0xCCCCCCFF;
@@ -72,10 +100,6 @@ namespace App.Shared.UI
             WelcomeLabel.SizeToFit( );
             WelcomeLabel.AddAsSubview( View.PlatformNativeObject );
 
-
-            // TODO: We need to support scrolling for the eventual day we have too many campuses for a single screen.
-            // TODO: We should be downloading these before display, but I don't want to risk that for the first release.
-            // Setup campuses
             CampusHeader = PlatformLabel.Create( );
             CampusHeader.SetFont( ControlStylingConfig.Font_Light, 18 );
             CampusHeader.TextColor = 0xCCCCCCFF;
@@ -85,31 +109,8 @@ namespace App.Shared.UI
             CampusHeader.SizeToFit( );
             CampusHeader.AddAsSubview( View.PlatformNativeObject );
 
+            // we'll wait to setup campuses until after a successful download
             CampusButtons = new List<PlatformButton>( );
-            foreach ( Rock.Client.Campus campus in App.Shared.Network.RockGeneralData.Instance.Data.Campuses )
-            {
-                PlatformButton campusButton = PlatformButton.Create( );
-                campusButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );
-                campusButton.TextColor = 0xCCCCCCFF;
-                campusButton.Text = campus.Name;
-                campusButton.Opacity = 0;
-                campusButton.SizeToFit( );
-                campusButton.ClickEvent = (PlatformButton button ) =>
-                    {
-                        // do not allow multiple campus button taps
-                        if( State == OOBE_State.WaitForCampus )
-                        {
-                            onClick( campus.Id, true );
-
-                            EnterNextState( OOBE_State.AccountChoice );
-                            PerformAccountChoice( );
-                        }
-                    };
-                campusButton.AddAsSubview( View.PlatformNativeObject );
-
-                CampusButtons.Add( campusButton );
-            }
-
 
             RegisterButton = PlatformButton.Create( );
             RegisterButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );
@@ -122,7 +123,7 @@ namespace App.Shared.UI
                     // do not allow multiple register taps
                     if( State == OOBE_State.WaitForAccountChoice )
                     {
-                        onClick( 0, false );
+                        OnClick( 0, false );
 
                         EnterNextState( OOBE_State.Done );
                     }
@@ -147,7 +148,7 @@ namespace App.Shared.UI
                     // do not allow multiple register taps
                     if( State == OOBE_State.WaitForAccountChoice )
                     {
-                        onClick( 1, false );
+                        OnClick( 1, false );
 
                         EnterNextState( OOBE_State.Done );
                     }
@@ -171,7 +172,7 @@ namespace App.Shared.UI
                     // do not allow multiple register taps
                     if( State == OOBE_State.WaitForAccountChoice )
                     {
-                        onClick( 2, false );
+                        OnClick( 2, false );
 
                         EnterNextState( OOBE_State.Done );
                     }
@@ -188,6 +189,38 @@ namespace App.Shared.UI
             stream.Dispose( );
 
             State = OOBE_State.Startup;
+        }
+
+        void CreateCampusButtons( )
+        {
+            // we wait to call this later, once we know we have campuses downloaded.
+            
+            // TODO: We need to support scrolling for the eventual day we have too many campuses for a single screen.
+            // Setup campuses
+            CampusButtons = new List<PlatformButton>( );
+            foreach ( Rock.Client.Campus campus in App.Shared.Network.RockLaunchData.Instance.Data.Campuses )
+            {
+                PlatformButton campusButton = PlatformButton.Create( );
+                campusButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );
+                campusButton.TextColor = 0xCCCCCCFF;
+                campusButton.Text = campus.Name;
+                campusButton.Opacity = 0;
+                campusButton.SizeToFit( );
+                campusButton.ClickEvent = (PlatformButton button ) =>
+                {
+                    // do not allow multiple campus button taps
+                    if( State == OOBE_State.WaitForCampus )
+                    {
+                        OnClick( campus.Id, true );
+
+                        EnterNextState( OOBE_State.AccountChoice );
+                        PerformAccountChoice( );
+                    }
+                };
+                campusButton.AddAsSubview( View.PlatformNativeObject );
+
+                CampusButtons.Add( campusButton );
+            }
         }
 
         public void Destroy( )
@@ -218,6 +251,9 @@ namespace App.Shared.UI
 
             ImageLogo.Frame = new RectangleF( ( ( View.Frame.Width - ImageLogo.Frame.Width ) / 2 ), ( ( View.Frame.Height - ImageLogo.Frame.Height ) / 2 ) + 2, ImageLogo.Frame.Width, ImageLogo.Frame.Height );
 
+            // position the network error where the Campus Header is. We'll only show one or the other.
+            NetworkErrorLabel.Position = new PointF( ( ( View.Frame.Width - NetworkErrorLabel.Frame.Width ) / 2 ), welcomeFinalBottom );
+            NetworkRetryButton.Position = new PointF( ( ( View.Frame.Width - NetworkRetryButton.Frame.Width ) / 2 ), NetworkErrorLabel.Frame.Bottom + 10 );
 
             // position the campus header just below "Welcome"
             if ( (int)State <= (int)OOBE_State.WaitForCampus )
@@ -284,7 +320,7 @@ namespace App.Shared.UI
             }
         }
 
-        public void PerformStartup( )
+        public void PerformStartup( bool networkSuccess )
         {
             // Fade in the background image
             SimpleAnimator_Float imageBGAlphaAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .25f, delegate(float percent, object value )
@@ -320,7 +356,17 @@ namespace App.Shared.UI
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
                                     View.BackgroundColor = ControlStylingConfig.BackgroundColor;
-                                    EnterNextState( OOBE_State.Welcome );
+                                    
+                                    // if the network is ok, continue.
+                                    if( networkSuccess == true )
+                                    {
+                                        EnterNextState( OOBE_State.Welcome );
+                                    }
+                                    else
+                                    {
+                                        // if not, let them know they need a network connection for their first run.
+                                        EnterNextState( OOBE_State.NetworkError );
+                                    }
                                 });
                         };
                     timer.Start( );
@@ -328,8 +374,54 @@ namespace App.Shared.UI
             imageSizeAnim.Start( );
         }
 
+        void PerformNetworkError( )
+        {
+            SimpleAnimator_Float anim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
+            {
+                NetworkErrorLabel.Opacity = (float)value;
+                NetworkRetryButton.Opacity = (float)value;
+            },
+            delegate
+            {
+                // when finished, wait
+            } );
+            anim.Start( );
+        }
+
+        public void HandleNetworkFixed( )
+        {
+            // this is called if the app retried connecting and it worked.
+            
+            // fade out the "error" and then we can continue!
+            SimpleAnimator_Float anim = new SimpleAnimator_Float( 1.00f, 0.00f, .50f, delegate(float percent, object value )
+            {
+                NetworkErrorLabel.Opacity = (float)value;
+                NetworkRetryButton.Opacity = (float)value;
+            },
+            delegate
+            {
+                // when finished, wait, then go to the next state
+                System.Timers.Timer timer = new System.Timers.Timer();
+                timer.Interval = 1000;
+                timer.AutoReset = false;
+                timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+                {
+                    // do this ON the UI thread
+                    Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+                    {
+                        //AnimateRegSeperator( );
+                        EnterNextState( OOBE_State.Welcome );
+                    });
+                };
+                timer.Start( );
+            } );
+            anim.Start( );
+        }
+
         void PerformWelcome( )
         {
+            CreateCampusButtons( );
+
             SimpleAnimator_Float anim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
                 {
                     WelcomeLabel.Opacity = (float)value;
@@ -553,9 +645,9 @@ namespace App.Shared.UI
         {
             switch( nextState )
             {
-                case OOBE_State.Startup:
+                case OOBE_State.NetworkError:
                 {
-                    PerformStartup( ); 
+                    PerformNetworkError( );
                     break;
                 }
 

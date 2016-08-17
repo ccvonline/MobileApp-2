@@ -95,7 +95,7 @@ namespace iOS
             }
 
             // if we're in developer mode, add the start / end times for this promotion
-            if ( App.Shared.Network.RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+            if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
             {
                 NewsDescription.Text += NewsItem.GetDeveloperInfo( );
             }

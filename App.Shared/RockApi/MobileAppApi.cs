@@ -14,12 +14,26 @@ namespace MobileApp
     /// </summary>
     public static class MobileAppApi
     {
+        const string EndPoint_LaunchData = "api/MobileApp/LaunchData";
+        public class LaunchData
+        {
+            public List<Rock.Client.Campus> Campuses { get; set; }
+            public List<KeyValuePair<string, int>> PrayerCategories { get; set; }
+            public int MobileAppVersion { get; set; }
+        }
+
+        public static void Get_LaunchData( HttpRequest.RequestResult<LaunchData> resultHandler )
+        {
+            // pull down launch data for the mobile app
+            RockApi.Get_CustomEndPoint<LaunchData>( RockApi.BaseUrl + EndPoint_LaunchData, resultHandler );
+        }
+
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )
         {
             string oDataFilter = "";
 
             // if they're a developer, pull down pending and future start date items as well.
-            if( RockGeneralData.Instance.Data.DeveloperModeEnabled == true )
+            if( RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
             {
                 oDataFilter = string.Format( "?$filter=ContentChannel/Guid eq guid'EAE51F3E-C27B-4E7C-B9A0-16EB68129637' and " +
                     "(Status eq '2' or Status eq '1') and " +
@@ -35,28 +49,6 @@ namespace MobileApp
             }
 
             RockApi.Get_ContentChannelItems( oDataFilter, resultHandler );
-        }
-
-        class DateTimeModel
-        {
-            public string ValueAsDateTime { get; set; }
-        }
-
-        const int GeneralDataTimeValueId = 2623;
-        public static void GetGeneralDataTime( HttpRequest.RequestResult<DateTime> resultHandler )
-        {
-            string oDataFilter = string.Format( "?$filter=AttributeId eq {0}", GeneralDataTimeValueId );
-            RockApi.Get_AttributeValues<List<DateTimeModel>>( oDataFilter,
-                delegate(HttpStatusCode statusCode, string statusDescription, List<DateTimeModel> dateTimeList) 
-                {
-                    DateTime dateTime = DateTime.MinValue;
-                    if( dateTimeList != null && dateTimeList.Count > 0 && dateTimeList[ 0 ].ValueAsDateTime != null )
-                    {
-                        dateTime = DateTime.Parse( dateTimeList[ 0 ].ValueAsDateTime );
-                    }
-
-                    resultHandler( statusCode, statusDescription, dateTime );
-                } );
         }
 
         public static void GetPrayerCategories( HttpRequest.RequestResult<List<Rock.Client.Category>> resultHandler )

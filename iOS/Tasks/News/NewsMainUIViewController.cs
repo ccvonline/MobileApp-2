@@ -121,19 +121,24 @@ namespace iOS
 
             public override nint RowsInSection (UITableView tableview, nint section)
             {
-                // start with a top row
-                int numItems = 1;
+                int numItems = 0;
 
-                // each row after will show two items
-                double remainingItems = News.Count - 1;
-                if ( remainingItems > 0 )
+                if( News.Count > 0 )
                 {
-                    // take the rows we'll need and round up
-                    double rowsNeeded = remainingItems / 2.0f;
+                    // start with a top row
+                    numItems = 1;
 
-                    rowsNeeded = Math.Ceiling( rowsNeeded );
+                    // each row after will show two items
+                    double remainingItems = News.Count - 1;
+                    if ( remainingItems > 0 )
+                    {
+                        // take the rows we'll need and round up
+                        double rowsNeeded = remainingItems / 2.0f;
 
-                    numItems += (int)rowsNeeded;
+                        rowsNeeded = Math.Ceiling( rowsNeeded );
+
+                        numItems += (int)rowsNeeded;
+                    }
                 }
 
                 return numItems;
