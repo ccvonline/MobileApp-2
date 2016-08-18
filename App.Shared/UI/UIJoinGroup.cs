@@ -325,7 +325,7 @@ namespace App.Shared.UI
 
                 BlockerView.Show( );
 
-                MobileAppApi.JoinGroup( App.Shared.Network.RockMobileUser.Instance.Person, FirstName.Text, LastName.Text, SpouseName.Text, Email.Text, CellPhone.Text.AsNumeric( ), GroupID, GroupTitle.Text,
+                MobileAppApi.JoinGroup( GroupID, FirstName.Text, LastName.Text, SpouseName.Text, Email.Text, CellPhone.Text.AsNumeric( ),
                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                     {
                         BlockerView.Hide( );

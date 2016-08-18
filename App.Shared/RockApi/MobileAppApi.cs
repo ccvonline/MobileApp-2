@@ -118,13 +118,32 @@ namespace MobileApp
                 });
         }
 
-        const int GroupRegistrationValueId = 52;
-        public static void JoinGroup( Rock.Client.Person person, string firstName, string lastName, string spouseName, string email, string phone, int groupId, string groupName, HttpRequest.RequestResult resultHandler )
+        class GroupRegModel
         {
-            string oDataFilter = string.Format( "/{0}?PersonAliasId={1}&FirstName={2}&LastName={3}&SpouseName={4}&Email={5}&MobilePhone={6}&GroupId={7}&GroupName={8}", 
-            GroupRegistrationValueId, person.Id, firstName, lastName, spouseName, email, phone, groupId, groupName );
+            public int RequestedGroupId;
 
-            RockApi.Post_Workflows_WorkflowEntry( oDataFilter, resultHandler );
+            public string FirstName;
+            public string LastName;
+            public string SpouseName;
+            public string Email;
+            public string Phone;
+        }
+
+        const string EndPoint_GroupRegistration = "api/MobileApp/GroupRegistration/";
+        public static void JoinGroup( int groupId, string firstName, string lastName, string spouseName, string email, string phone, HttpRequest.RequestResult resultHandler )
+        {
+            // build the object we'll send
+            GroupRegModel groupRegModel = new GroupRegModel( )
+            {
+                RequestedGroupId = groupId,
+                FirstName = firstName,
+                LastName = lastName,
+                SpouseName = spouseName,
+                Email = email,
+                Phone = phone
+            };
+
+            RockApi.Post_CustomEndPoint( RockApi.BaseUrl + EndPoint_GroupRegistration, groupRegModel, resultHandler );
         }
 
         public delegate void OnFamilyAndAddressResult( System.Net.HttpStatusCode code, string desc, Rock.Client.Group family, Rock.Client.GroupLocation familyAddress );
