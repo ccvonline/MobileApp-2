@@ -56,7 +56,9 @@ namespace App.Shared
 
             public const int GroupTypeRole_NGGroup_CoachId = 133;
             public const int GroupTypeRole_NGGroup_AsstCoachId = 134;
+
             public const int GroupTypeRole_YAGroup_CoachId = 139;
+            public const int GroupTypeRole_YAGroup_AsstCoachId = 140;
 
 
             /// <summary>

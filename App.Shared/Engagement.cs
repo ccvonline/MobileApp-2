@@ -116,8 +116,27 @@ namespace App.Shared
             int ngCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId );
             int ngAsstCoachgroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_AsstCoachId );
 
+            // YOUNG ADULT COACH / ASST COACH
+            int yaCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupId, PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachId );
+            int yaAsstCoachgroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupId, PrivateGeneralConfig.GroupTypeRole_YAGroup_AsstCoachId );
+
             // if any of these are > -1, they're some type of coach
-            if ( nsCoachGroupId > -1 || nsAsstCoachGroupId > -1 || nhCoachGroupId > -1 || nhAsstCoachGroupId > -1 || ngCoachGroupId > -1 || ngAsstCoachgroupId > -1 )
+                 
+                 // Next Steps
+            if ( nsCoachGroupId > -1 || 
+                 nsAsstCoachGroupId > -1 || 
+                 
+                 // Neighborhood
+                 nhCoachGroupId > -1 || 
+                 nhAsstCoachGroupId > -1 || 
+
+                 //Next Gen
+                 ngCoachGroupId > -1 || 
+                 ngAsstCoachgroupId > -1 || 
+
+                 // Young Adults
+                 yaCoachGroupId > -1 || 
+                 yaAsstCoachgroupId > -1 )
             {
                 return Coach_Entry;
             }

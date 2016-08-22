@@ -15,7 +15,7 @@ namespace App
         {
             public class GeneralConfig
             {
-                public const int Version = 2140;
+                public const int Version = 2141;
 
                 /// <summary>
                 /// The full name of your organization
