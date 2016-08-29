@@ -373,7 +373,13 @@ namespace iOS
                 else
                 {
                     // otherwise force the nav toolbar to show up, and we'll leave it up
-                    Task.NavToolbar.Reveal( true );
+
+                    // of course, make sure it's still valid. IT's possible our load request returned
+                    // AFTER they left this page.
+                    if( Task.NavToolbar != null )
+                    {
+                        Task.NavToolbar.Reveal( true );
+                    }
                 }
             }
         }
@@ -420,7 +426,12 @@ namespace iOS
                 // there's something to go "back" to.
                 if( WebviewControlsNavbar == true )
                 {
-                    Task.NavToolbar.SetBackButtonEnabled( WebView.CanGoBack );
+                    // of course, make sure it's still valid. IT's possible our load request returned
+                    // AFTER they left this page.
+                    if( Task.NavToolbar != null )
+                    {
+                        Task.NavToolbar.SetBackButtonEnabled( WebView.CanGoBack );
+                    }
                 }
             }
         }
@@ -430,7 +441,13 @@ namespace iOS
             base.ViewWillAppear(animated);
 
             // by default, show the toolbar
-            Task.NavToolbar.Reveal( true );
+
+            // of course, make sure it's still valid. IT's possible our load request returned
+            // AFTER they left this page.
+            if( Task.NavToolbar != null )
+            {
+                Task.NavToolbar.Reveal( true );
+            }
 
             UIApplication.SharedApplication.IdleTimerDisabled = DisableIdleTimer;
             Rock.Mobile.Util.Debug.WriteLine( string.Format( "Turning idle timer {0}", DisableIdleTimer == true ? "OFF " : "ON" ) );

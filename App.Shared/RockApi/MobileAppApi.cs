@@ -69,7 +69,7 @@ namespace MobileApp
             int groupCoachId = 0;
             switch( groupTypeId )
             {
-                case PrivateGeneralConfig.GroupType_NeighborhoodGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId; break;
+                case PrivateGeneralConfig.GroupType_Neighborhood_GroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId; break;
                 case PrivateGeneralConfig.GroupType_NextGenGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId; break;
                 case PrivateGeneralConfig.GroupType_YoungAdultsGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachId; break;
             }

@@ -540,7 +540,7 @@ namespace iOS
                 delegate
                 {
                     SearchPage.Hide( true );
-                    GetInitialGroups( PrivateGeneralConfig.GroupType_NeighborhoodGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    GetInitialGroups( PrivateGeneralConfig.GroupType_Neighborhood_GroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                     Task.NavToolbar.Reveal( true );
                 },
                 // Search NextGen Groups

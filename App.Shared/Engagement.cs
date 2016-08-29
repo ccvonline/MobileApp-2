@@ -104,39 +104,57 @@ namespace App.Shared
 
         public string[] GetEntry( List<Rock.Client.Group> groups )
         {
-            // NEXT STEPS COACH / ASST COACH
+            // NEXT STEPS COACH / ASST COACH / COACH LEAD
             int nsCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextStepsGroupId, PrivateGeneralConfig.GroupTypeRole_NSGroup_CoachId );
             int nsAsstCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextStepsGroupId, PrivateGeneralConfig.GroupTypeRole_NSGroup_AsstCoachId );
+            int nsCoachLeadGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextStepsGroupSubSectionId, PrivateGeneralConfig.GroupTypeRole_NSGroup_CoachLeadId );
 
-            // NEIGHBORHOOD COACH / ASST COACH
-            int nhCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodGroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId );
-            int nhAsstCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodGroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_AsstCoachId );
+            // NEIGHBORHOOD COACH / ASST COACH / COACH LEAD
+            int nhCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_Neighborhood_GroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId );
+            int nhHostGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_Neighborhood_GroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_HostId );
+            int nhAsstCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_Neighborhood_GroupId, PrivateGeneralConfig.GroupTypeRole_NHGroup_AsstCoachId );
+            int nhCoachLeadGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodSubSection_GroupId, PrivateGeneralConfig.GroupTypeRole_NHSubSection_CoachLeadId );
 
-            // NEXTGEN COACH / ASST COACH
+            // NEIGHBORHOOD AREA AP
+            int nhAssociatePastorGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NeighborhoodArea_GroupId, PrivateGeneralConfig.GroupTypeRole_NHArea_AssociatePastorId );
+
+            // NEXTGEN COACH / ASST COACH / COACH LEAD
             int ngCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId );
+            int ngHostGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_HostId );
             int ngAsstCoachgroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupId, PrivateGeneralConfig.GroupTypeRole_NGGroup_AsstCoachId );
+            int ngCoachLeadGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_NextGenGroupSectionId, PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachLeadId );
 
-            // YOUNG ADULT COACH / ASST COACH
+            // YOUNG ADULT COACH / ASST COACH / COACH LEAD
             int yaCoachGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupId, PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachId );
+            int yaHostGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupId, PrivateGeneralConfig.GroupTypeRole_YAGroup_HostId );
             int yaAsstCoachgroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupId, PrivateGeneralConfig.GroupTypeRole_YAGroup_AsstCoachId );
+            int yaCoachLeadGroupId = Rock.Mobile.Util.GroupExtensions.IsMemberTypeOfGroup( groups, PrivateGeneralConfig.GroupType_YoungAdultsGroupSectionId, PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachLeadId );
 
             // if any of these are > -1, they're some type of coach
                  
                  // Next Steps
             if ( nsCoachGroupId > -1 || 
                  nsAsstCoachGroupId > -1 || 
+                 nsCoachLeadGroupId > -1 ||
                  
                  // Neighborhood
                  nhCoachGroupId > -1 || 
+                 nhHostGroupId > -1 ||
                  nhAsstCoachGroupId > -1 || 
+                 nhAssociatePastorGroupId > -1 ||
+                 nhCoachLeadGroupId > -1 ||
 
                  //Next Gen
                  ngCoachGroupId > -1 || 
+                 ngHostGroupId > -1 ||
                  ngAsstCoachgroupId > -1 || 
+                 ngCoachLeadGroupId > -1 ||
 
                  // Young Adults
                  yaCoachGroupId > -1 || 
-                 yaAsstCoachgroupId > -1 )
+                 yaHostGroupId > -1 || 
+                 yaAsstCoachgroupId > -1 ||
+                 yaCoachLeadGroupId > -1 )
             {
                 return Coach_Entry;
             }
