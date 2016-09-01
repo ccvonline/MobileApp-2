@@ -91,6 +91,13 @@ namespace Droid
                     LayoutChanged( );
                 }
 
+                public override void OnDestroyView()
+                {
+                    base.OnDestroyView();
+
+                    GroupInfoView.Destroy( );
+                }
+
                 public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
                 {
                     base.OnConfigurationChanged(newConfig);

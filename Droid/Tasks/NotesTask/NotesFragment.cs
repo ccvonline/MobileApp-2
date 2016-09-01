@@ -459,6 +459,12 @@ namespace Droid
                     try
                     {
                         DidGestureCreateNote = Note.DidDoubleTap( new System.Drawing.PointF( e.GetX( ), e.GetY( ) ) );
+
+                        // if the gesture did create a note, flag that so we don't show the tutorial anymore.
+                        if( DidGestureCreateNote == true )
+                        {
+                            App.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
+                        }
                     }
                     catch( Exception ex )
                     {
@@ -551,34 +557,42 @@ namespace Droid
                             {
                                 if ( Note != null )
                                 {
-                                    AnimateTutorialScreen( false );
-
-                                    bool urlLaunchesExternalBrowser = false;
-                                    bool urlUsesRockImpersonation = false;
-
-                                    string activeUrl = Note.TouchesEnded( new System.Drawing.PointF( e.GetX( ), e.GetY( ) ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
-
-                                    // create a params object we can send to the parent
-                                    UrlClickParams clickParams = new UrlClickParams()
+                                    // if the tutorial is showing, we don't want to do anything but hide it.
+                                    // This prevents a URL from changing the page when the user only intended to
+                                    // hide the tutorial.
+                                    if( TutorialShowing( ) )
                                     {
-                                            UseExternalBrowser = urlLaunchesExternalBrowser,
-                                            UseImpersonationToken = urlUsesRockImpersonation,
-                                            Url = activeUrl
-                                    };
-
-                                    // again, only process this if we didn't create a note. We don't want to treat a double tap
-                                    // like a request to view a note
-                                    if ( DidGestureCreateNote == false )
+                                        AnimateTutorialScreen( false );
+                                    }
+                                    else
                                     {
-                                        if ( string.IsNullOrEmpty( activeUrl ) == false )
+                                        bool urlLaunchesExternalBrowser = false;
+                                        bool urlUsesRockImpersonation = false;
+
+                                        string activeUrl = Note.TouchesEnded( new System.Drawing.PointF( e.GetX( ), e.GetY( ) ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
+
+                                        // create a params object we can send to the parent
+                                        UrlClickParams clickParams = new UrlClickParams()
                                         {
-                                            // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
-                                            if ( urlUsesRockImpersonation )
-                                            {
-                                                MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
-                                            }
+                                                UseExternalBrowser = urlLaunchesExternalBrowser,
+                                                UseImpersonationToken = urlUsesRockImpersonation,
+                                                Url = activeUrl
+                                        };
 
-                                            ParentTask.OnClick( this, 0, clickParams );
+                                        // again, only process this if we didn't create a note. We don't want to treat a double tap
+                                        // like a request to view a note
+                                        if ( DidGestureCreateNote == false )
+                                        {
+                                            if ( string.IsNullOrEmpty( activeUrl ) == false )
+                                            {
+                                                // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
+                                                if ( urlUsesRockImpersonation )
+                                                {
+                                                    MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
+                                                }
+
+                                                ParentTask.OnClick( this, 0, clickParams );
+                                            }
                                         }
                                     }
                                 }
@@ -708,14 +722,10 @@ namespace Droid
                         // log the note they are reading.
                         MessageAnalytic.Instance.Trigger( MessageAnalytic.Read, NoteName );
 
-                        // display the tutorial
-                        // if the user has never seen it, show them the tutorial screen
-                        if( TutorialDisplayed == false && 
-                            App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
+                        // display the tutorial if it hasn't been shown this run of the app, and the user has never created their own note.
+                        if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
                         {
                             TutorialDisplayed = true;
-
-                            App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount = App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount + 1;
 
                             System.IO.Stream tutorialStream = Activity.BaseContext.Assets.Open( PrivateNoteConfig.TutorialOverlayImage );
 
@@ -778,7 +788,7 @@ namespace Droid
                             AnimatingTutorial = true;
 
                             // animate the backer
-                            SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( .80f, endVal ), .33f, delegate(float percent, object value )
+                            SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( PrivateNoteConfig.MaxTutorialAlpha, endVal ), .33f, delegate(float percent, object value )
                                 {
                                     TutorialBacker.Alpha = (float)value;
                                 }, 
@@ -808,6 +818,17 @@ namespace Droid
                             tutorialAnim.Start( );
                         }
                     }
+                }
+
+                bool TutorialShowing( )
+                {
+                    // if it's not hidden and IS opaque, then it's showing.
+                    if( TutorialBacker.Visibility == ViewStates.Visible && TutorialBacker.Alpha == PrivateNoteConfig.MaxTutorialAlpha )
+                    {
+                        return true;
+                    }
+
+                    return false;
                 }
 
                 protected void DeleteNote( )

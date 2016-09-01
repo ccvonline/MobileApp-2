@@ -284,6 +284,7 @@ namespace iOS
             WebView.Delegate = new CustomWebViewDelegate( this );
             WebView.ScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             WebView.Hidden = true;
+            WebView.ScalesPageToFit = true;
             View.AddSubview( WebView );
 
             // add an activity indicator

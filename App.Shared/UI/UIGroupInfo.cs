@@ -25,6 +25,9 @@ namespace App.Shared.UI
         PlatformImageView LeaderImage { get; set; }
         bool LeaderImageValid { get; set; }
 
+        PlatformImageView GroupImage { get; set; }
+        bool GroupImageValid { get; set; }
+
         PlatformLabel LeaderDescHeader { get; set; }
         PlatformLabel LeaderDesc { get; set; }
         PlatformView LeaderDescLayer { get; set; }
@@ -48,7 +51,7 @@ namespace App.Shared.UI
 
         bool IsDownloading { get; set; }
 
-        MobileApp.MobileAppApi.OnGroupSummaryResult GroupSummaryResult { get; set; }
+        HttpRequest.RequestResult GroupSummaryResult { get; set; }
 
         public delegate void OnButtonClick( );
         OnButtonClick OnButtonClicked { get; set; }
@@ -75,6 +78,11 @@ namespace App.Shared.UI
             LeaderImage.AddAsSubview( masterView );
             LeaderImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
             LeaderImage.BackgroundColor = 0;
+
+            GroupImage = PlatformImageView.Create( true );
+            GroupImage.AddAsSubview( masterView );
+            GroupImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+            GroupImage.BackgroundColor = 0;
 
             // Group Desc
             GroupDescLayer = PlatformView.Create( );
@@ -173,12 +181,19 @@ namespace App.Shared.UI
             BlockerView = new UIBlockerView( masterView, View.Frame );
         }
 
+        public void Destroy( )
+        {
+            // free image resources for Android's sake.
+            LeaderImage.Destroy( );
+            GroupImage.Destroy( );
+        }
+
         public float GetControlBottom( )
         {
             return JoinButton.Frame.Bottom;
         }
 
-        public void DisplayView( GroupFinder.GroupEntry groupEntry, MobileApp.MobileAppApi.OnGroupSummaryResult resultHandler )
+        public void DisplayView( GroupFinder.GroupEntry groupEntry, HttpRequest.RequestResult resultHandler )
         {
             // store the group and callback so that if it fails we can let them tap 'retry' and try again
             GroupEntry = groupEntry;
@@ -196,48 +211,51 @@ namespace App.Shared.UI
 
             BlockerView.Show( delegate 
                 {
-                    MobileAppApi.GetGroupSummary( GroupEntry.Id, GroupEntry.GroupTypeId,
-                        delegate( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream ) 
+                    MobileAppApi.GetGroupSummary( GroupEntry.Id,
+                        delegate( MobileAppApi.GroupInfo groupInfo, System.IO.MemoryStream leaderPhoto, System.IO.MemoryStream groupPhoto ) 
                         {
                             try
                             {
                                 IsDownloading = false;
-
-                                LeaderImage.Image = imageStream;
+                                
+                                // setup the leader image
+                                LeaderImage.Image = leaderPhoto;
                                 LeaderImage.SizeToFit( );
 
                                 // if we had a valid image stream, dispose of it now
-                                if( imageStream != null )
+                                if( leaderPhoto != null )
                                 {
                                     LeaderImageValid = true;
-                                    imageStream.Dispose( );
+                                    leaderPhoto.Dispose( );
                                 }
                                 else
                                 {
                                     LeaderImageValid = false;
                                 }
 
+                                // setup the group image
+                                GroupImage.Image = groupPhoto;
+                                GroupImage.SizeToFit( );
+
+                                // if we had a valid image stream, dispose of it now
+                                if( groupPhoto != null )
+                                {
+                                    GroupImageValid = true;
+                                    groupPhoto.Dispose( );
+                                }
+                                else
+                                {
+                                    GroupImageValid = false;
+                                }
+
                                 // set the group title
                                 GroupTitle.Text = GroupEntry.Title;
 
                                 // set the details for the group (distance, meeting time, etc)
-                                string currKey = "GroupDescription";
-                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
-                                {
-                                    GroupDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
-                                }
-
-                                currKey = "LeaderInformation";
-                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
-                                {
-                                    LeaderDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
-                                }
-
-                                currKey = "Children";
-                                if( resultGroup.AttributeValues.ContainsKey( currKey ) )
-                                {
-                                    ChildDesc.Text = resultGroup.AttributeValues[ currKey ].Value;
-                                }
+                                GroupDesc.Text = groupInfo.Description;
+                                LeaderDesc.Text = groupInfo.LeaderInformation;
+                                ChildDesc.Text = groupInfo.Children;
+                                
 
                                 if( string.IsNullOrEmpty( GroupEntry.MeetingTime ) == false )
                                 {
@@ -253,7 +271,7 @@ namespace App.Shared.UI
 
                                 BlockerView.Hide( );
 
-                                GroupSummaryResult( resultGroup, null );
+                                GroupSummaryResult( HttpStatusCode.OK, string.Empty );
                             }
                             catch
                             {
@@ -264,7 +282,7 @@ namespace App.Shared.UI
                                                  ConnectStrings.GroupInfoResult_Failed,
                                                  GeneralStrings.Retry );
 
-                                GroupSummaryResult( null, null );
+                                GroupSummaryResult( HttpStatusCode.NotFound, string.Empty );
                             }
                         });
                 });
@@ -359,24 +377,37 @@ namespace App.Shared.UI
                     }
                 }
 
-                // layout the group description header
-                if( string.IsNullOrEmpty( GroupDesc.Text ) == false )
+                // layout the group description header (IF there's a description or group photo)
+                if( string.IsNullOrEmpty( GroupDesc.Text ) == false || GroupImageValid == true )
                 {
+                    // display and position the header
                     GroupDescHeader.Hidden = false;
                     GroupDescHeader.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset + sectionSpacing, View.Frame.Width - textRightInset, 0 );
                     GroupDescHeader.SizeToFit( );
                     GroupDescHeader.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, GroupDescHeader.Bounds.Height );
+                    nextYPos = GroupDescHeader.Frame.Bottom;
 
-                    // layout the group description
-                    GroupDesc.Hidden = false;
-                    GroupDesc.Frame = new RectangleF( textLeftInset, GroupDescHeader.Frame.Bottom + textTopInset, View.Frame.Width - textRightInset, 0 );
-                    GroupDesc.SizeToFit( );
-                    GroupDesc.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, GroupDesc.Bounds.Height );
+                    // now try the image
+                    if( GroupImageValid == true )
+                    {
+                        GroupImage.Hidden = false;
+                        GroupImage.Position = new PointF( (View.Frame.Width - GroupImage.Frame.Width) / 2, nextYPos );
+                        nextYPos = GroupImage.Frame.Bottom + textBotInset;
+                    }
 
-                    GroupDescLayer.Hidden = false;
-                    GroupDescLayer.Frame = new RectangleF( 0, GroupDescHeader.Frame.Bottom, View.Frame.Width, GroupDesc.Frame.Height + textBotInset );
+                    // finally try to layout the group description
+                    if( string.IsNullOrEmpty( GroupDesc.Text ) == false )
+                    {
+                        GroupDesc.Hidden = false;
+                        GroupDesc.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset, View.Frame.Width - textRightInset, 0 );
+                        GroupDesc.SizeToFit( );
+                        GroupDesc.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, GroupDesc.Bounds.Height );
 
-                    nextYPos = GroupDescLayer.Frame.Bottom;
+                        GroupDescLayer.Hidden = false;
+                        GroupDescLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, GroupDesc.Frame.Height + textBotInset );
+
+                        nextYPos = GroupDescLayer.Frame.Bottom;
+                    }
                 }
 
                 // layout the child info header

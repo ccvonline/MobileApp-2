@@ -175,6 +175,11 @@ namespace Droid
 
             void ProcessUrl( )
             {
+                // build our list of URL file extension Redirects. These will be used by the WebLayout to know when to launch an
+                // intent instead of tring to process the URL. A good example is PDFs, since those aren't viewable in a WebView.
+                Dictionary<string, string> urlOverrides = new Dictionary<string, string>( );
+                urlOverrides.Add( PrivateGeneralConfig.App_URL_PDF_Ext, PrivateGeneralConfig.App_URL_PDF_Redirect_Android );
+
                 if ( string.IsNullOrEmpty( Url ) == false )
                 {
                     // do they want the impersonation token?
@@ -197,14 +202,14 @@ namespace Droid
                                 }
 
                                 Console.WriteLine( "Browsing to {0}", fullUrl );
-                                WebLayout.LoadUrl( fullUrl, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                                WebLayout.LoadUrl( fullUrl, urlOverrides, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                             });
                     }
                     else
                     {
                         // no impersonation token requested. just load.
                         Console.WriteLine( "Browsing to {0}", Url );
-                        WebLayout.LoadUrl( Url, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                        WebLayout.LoadUrl( Url, urlOverrides, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                     }
                 }
             }

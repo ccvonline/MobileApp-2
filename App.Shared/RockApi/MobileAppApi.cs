@@ -62,58 +62,72 @@ namespace MobileApp
             RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
         }
 
-        public delegate void OnGroupSummaryResult( Rock.Client.Group resultGroup, System.IO.MemoryStream imageStream );
-        public static void GetGroupSummary( int groupId, int groupTypeId, OnGroupSummaryResult resultHandler )
+        const string EndPoint_GroupInfo = "api/MobileApp/GroupInfo?groupId=";
+        public delegate void OnGroupSummaryResult( GroupInfo groupInfo, System.IO.MemoryStream leaderPhoto, System.IO.MemoryStream groupPhoto );
+        public class GroupInfo
         {
-            // first, take the groupTypeId and get the appropriate leader ID from that.
-            int groupCoachId = 0;
-            switch( groupTypeId )
-            {
-                case PrivateGeneralConfig.GroupType_Neighborhood_GroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NHGroup_CoachId; break;
-                case PrivateGeneralConfig.GroupType_NextGenGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_NGGroup_CoachId; break;
-                case PrivateGeneralConfig.GroupType_YoungAdultsGroupId: groupCoachId = PrivateGeneralConfig.GroupTypeRole_YAGroup_CoachId; break;
-            }
-            
-            // first, get the group itself
-            string queryData = string.Format( "/{0}?LoadAttributes=simple", groupId );
-            RockApi.Get_Groups<Rock.Client.Group>( queryData, delegate(HttpStatusCode statusCode, string statusDescription, Rock.Client.Group model ) 
+            public string Description { get; set; }
+            public string LeaderInformation { get; set; }
+            public string Children { get; set; }
+
+            public int CoachPhotoId { get; set; }
+            public Guid GroupPhotoGuid { get; set; }
+        }
+
+        public static void GetGroupSummary( int groupId, OnGroupSummaryResult onResultHandler )
+        {
+            System.IO.MemoryStream leaderPhoto = null;
+
+            // first, get the group info
+            RockApi.Get_CustomEndPoint<GroupInfo>( RockApi.BaseUrl + EndPoint_GroupInfo + groupId, delegate( HttpStatusCode statusCode, string statusDescription, GroupInfo model ) 
                 {
-                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
+                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                     {
-                        // next, get the group leader
-                        RockApi.Get_GroupMembers( string.Format( "?$filter=GroupId eq {0} and GroupRoleId eq {1}&$expand=Person&$select=Person/PhotoId", groupId, groupCoachId ),
-                            delegate(HttpStatusCode gmCode, string gmDescription, List<Rock.Client.GroupMember> groupMembers ) 
+                        // get an image size appropriate for the device.
+                        uint imageRes = (uint)Rock.Mobile.Graphics.Util.UnitToPx( 512 );
+                        RockApi.Get_GetImage( model.CoachPhotoId, imageRes, null, delegate(HttpStatusCode imageCode, string imageDescription, System.IO.MemoryStream imageStream ) 
                             {
-                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( gmCode ) == true && groupMembers != null && groupMembers.Count > 0 )
+                                // if the image didn't return successfully, just null it out.
+                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( imageCode ) == false )
                                 {
-                                    // finally, get the person's image (just use the first person available)
-
-                                    // get an image size appropriate for the device.
-                                    uint imageRes = (uint)Rock.Mobile.Graphics.Util.UnitToPx( 256 );
-                                    RockApi.Get_GetImage( groupMembers[ 0 ].Person.PhotoId.ToString( ), imageRes, null,
-                                        delegate(HttpStatusCode imageCode, string imageDescription, System.IO.MemoryStream imageStream ) 
-                                        {
-                                            // if the image didn't return successfully, just null it out.
-                                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( imageCode ) == false )
-                                            {
-                                                imageStream = null;
-                                            }
-
-                                            // return ok whether they have an image or not (since it's not required)
-                                            resultHandler( model, imageStream );
-                                        });
+                                    imageStream = null;
                                 }
-                                // GROUP MEMBER FAIL
                                 else
                                 {
-                                    resultHandler( null, null );
+                                    // otherwise, copy it. We must copy it because the imageStream
+                                    // will be going out of scope when we make the next Get_GetImage async call.
+                                    leaderPhoto = new System.IO.MemoryStream( );
+
+                                    imageStream.CopyTo( leaderPhoto );
+                                    leaderPhoto.Position = 0;
                                 }
+
+                                // now try for the group photo
+                                RockApi.Get_GetImage( model.GroupPhotoGuid, imageRes, null, delegate(HttpStatusCode groupImageCode, string groupImageDesc, System.IO.MemoryStream groupImageStream )
+                                    {
+                                        // if the image didn't return successfully, just null it out.
+                                        if( Rock.Mobile.Network.Util.StatusInSuccessRange( groupImageCode ) == false )
+                                        {
+                                            groupImageStream = null;
+                                        }
+
+                                        // JHM Note: Enable this to debug the image size issue that's on certain devices.
+                                        //groupImageStream.CopyTo( leaderPhoto );
+                                        //groupImageStream.Position = 0;
+                                        //leaderPhoto.Position = 0;
+
+                                        // return ok whether they have a images or not (since they're not required)
+                                        onResultHandler( model, leaderPhoto, groupImageStream );
+                                    });
+
+                                
                             });
                     }
-                    // GROUP FAIL
+                    // GROUP INFO fail
                     else
                     {
-                        resultHandler( null, null );
+                        // return ok whether they have an image or not (since it's not required)
+                        onResultHandler( null, null, null );
                     }
                 });
         }

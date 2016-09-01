@@ -80,10 +80,10 @@ namespace App
                 public Person Person;
 
                 /// <summary>
-                /// If true, they've already seen the note tutorial and don't need to see it again.
+                /// If true, the user has created a custom note and won't need to see the tutorial again.
                 /// </summary>
-                /// <value><c>true</c> if note tutorial shown; otherwise, <c>false</c>.</value>
-                public int NoteTutorialShownCount { get; set; }
+                /// <value><c>true</c> if user note created; otherwise, <c>false</c>.</value>
+                public bool UserNoteCreated { get; set; }
 
                 /// <summary>
                 /// True if this is the first time the user has run the app
@@ -281,11 +281,12 @@ namespace App
                     PrimaryAddress = new GroupLocation();
                     PrimaryAddress.GroupLocationTypeValueId = PrivateGeneralConfig.GroupLocationTypeHomeValueId;
 
-                    //_CellPhoneNumber = null;
                     _CellPhoneNumber = new PhoneNumber( );
                     SetPhoneNumberDigits( "" );
 
-                    ViewingCampus = 0;
+                    // Don't reset the viewing campus, because we force them to pick one at
+                    // first run, and don't want to lose their choice.
+                    //ViewingCampus = 0;
 
                     // for the address location, default the country to the built in country code.
                     PrimaryAddress.Location = new Rock.Client.Location();
@@ -805,7 +806,7 @@ namespace App
                         {
                             if ( Person.PhotoId != null )
                             {
-                                RockApi.Get_GetImage( Person.PhotoId.ToString( ), dimensionSize, dimensionSize, 
+                                RockApi.Get_GetImage( Person.PhotoId.Value, dimensionSize, dimensionSize, 
                                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription, MemoryStream imageStream )
                                     {
                                         if ( Util.StatusInSuccessRange( statusCode ) == true )

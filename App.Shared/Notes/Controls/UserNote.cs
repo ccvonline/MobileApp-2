@@ -54,7 +54,17 @@ namespace App
                 /// <summary>
                 /// The furthest on X a note is allowed to be moved.
                 /// </summary>
-                protected float MaxAllowedX { get; set; }
+                protected float CurrMaxAllowedX { get; set; }
+
+                /// <summary>
+                /// The furthest on X a note is allowed to be WHILE OPEN.
+                /// </summary>
+                protected float MaxAllowedX_Open { get; set; }
+
+                /// <summary>
+                /// The furtherst on X a note is allowed to be WHILE CLOSED.
+                /// </summary>
+                protected float MaxAllowedX_Closed { get; set; }
 
                 /// <summary>
                 /// The furthest on Y a note is allowed to be moved.
@@ -166,7 +176,7 @@ namespace App
                     else
                     {
                         // open up the text field WITHOUT animating
-                        // the textView
+                        // the textView or the Anchor (since we know both are ok)
                         TextView.Hidden = false;
                         AnimateNoteIcon( true );
                         AnimateUtilityView( true );
@@ -283,11 +293,18 @@ namespace App
                     MaxNoteWidth = Math.Min( ScreenWidth - MinNoteWidth, (MinNoteWidth * 6) );
 
                     // set the allowed X/Y so we don't let the user move the note off-screen.
-                    MaxAllowedX = ( ScreenWidth - MinNoteWidth - Anchor.Bounds.Width );
+
+                    // for x, we need 3 values. Open, Closed, and current
+                    MaxAllowedX_Open = ( ScreenWidth - MinNoteWidth - Anchor.Bounds.Width );
+                    MaxAllowedX_Closed = ( ScreenWidth - Anchor.Bounds.Width );
+
+                    CurrMaxAllowedX = MaxAllowedX_Open;
+
+
                     MaxAllowedY = ( parentParams.Height - Anchor.Bounds.Height );
                     MaxAllowedY *= 1.05f;
 
-                    float width = Math.Max( MinNoteWidth, Math.Min( MaxNoteWidth, MaxAllowedX - startPos.X ) );
+                    float width = Math.Max( MinNoteWidth, Math.Min( MaxNoteWidth, MaxAllowedX_Open - startPos.X ) );
                     TextView.Bounds = new RectangleF( 0, 0, width, 0 );
 
                     UtilityLayer.BackgroundColor = TextView.BackgroundColor;
@@ -409,44 +426,47 @@ namespace App
                     // is a user wanting to interact?
                     bool consumed = false;
 
-                    // if delete is enabled, see if they tapped within range of the delete button
-                    /*if( DeleteEnabled )
+                    if ( Animating == false )
                     {
-                        if( TouchInDeleteButtonRange( touch ) )
+                        // if delete is enabled, see if they tapped within range of the delete button
+                        /*if( DeleteEnabled )
+                        {
+                            if( TouchInDeleteButtonRange( touch ) )
+                            {
+                                // if they did, we consume this and bye bye note.
+                                consumed = true;
+
+                                State = TouchState.Delete;
+                            }
+                        }*/
+                        if ( DeleteButton.Hidden == false && TouchInDeleteButtonRange( touch ) )
                         {
                             // if they did, we consume this and bye bye note.
                             consumed = true;
 
                             State = TouchState.Delete;
                         }
-                    }*/
-                    if ( DeleteButton.Hidden == false && TouchInDeleteButtonRange( touch ) )
-                    {
-                        // if they did, we consume this and bye bye note.
-                        consumed = true;
-
-                        State = TouchState.Delete;
-                    }
-                    else if ( CloseButton.Hidden == false && TouchInCloseButtonRange( touch ) )
-                    {
-                        consumed = true;
-
-                        State = TouchState.Close;
-                    }
-                    // if the touch is in our region, begin tracking
-                    else if( TouchInAnchorRange( touch ) )
-                    {
-                        consumed = true;
-
-                        if( State == TouchState.None )
+                        else if ( CloseButton.Hidden == false && TouchInCloseButtonRange( touch ) )
                         {
-                            // Enter the hold state
-                            State = TouchState.Hold;
+                            consumed = true;
 
-                            // Store our starting touch and kick off our delete timer
-                            TrackingLastPos = touch;
-                            //DeleteTimer.Start();
-                            Rock.Mobile.Util.Debug.WriteLine( "UserNote Hold" );
+                            State = TouchState.Close;
+                        }
+                        // if the touch is in our region, begin tracking
+                        else if( TouchInAnchorRange( touch ) )
+                        {
+                            consumed = true;
+
+                            if( State == TouchState.None )
+                            {
+                                // Enter the hold state
+                                State = TouchState.Hold;
+
+                                // Store our starting touch and kick off our delete timer
+                                TrackingLastPos = touch;
+                                //DeleteTimer.Start();
+                                Rock.Mobile.Util.Debug.WriteLine( "UserNote Hold" );
+                            }
                         }
                     }
 
@@ -636,10 +656,10 @@ namespace App
                         // watch the left side
                         xOffset += 0 - (Anchor.Position.X + xOffset);
                     }
-                    else if( Anchor.Position.X + xOffset > MaxAllowedX )
+                    else if( Anchor.Position.X + xOffset > CurrMaxAllowedX )
                     {
                         // and the right
-                        xOffset -= (Anchor.Position.X + xOffset) - MaxAllowedX;
+                        xOffset -= (Anchor.Position.X + xOffset) - CurrMaxAllowedX;
                     }
 
                     // Check Y...
@@ -688,7 +708,7 @@ namespace App
                 void ValidateBounds()
                 {
                     // clamp X & Y movement to within margin of the screen
-                    float xPos = Math.Max( Math.Min( AnchorFrame.X, MaxAllowedX ), 0 );
+                    float xPos = Math.Max( Math.Min( AnchorFrame.X, CurrMaxAllowedX ), 0 );
 
                     float yPos = Math.Max( Math.Min( AnchorFrame.Y, MaxAllowedY ), 0 );
 
@@ -741,18 +761,62 @@ namespace App
                 }
 
                 bool Animating { get; set; }
-                bool AnimatingUtilityView { get; set; }
                 public void OpenNote( bool becomeFirstResponder )
                 {
-                    AnimateNoteIcon( true );
-                    AnimateUtilityView( true );
+                    if( Animating == false )
+                    {
+                        Animating = true;
 
-                    // open the text field
-                    TextView.AnimateOpen( becomeFirstResponder );
+                        // we allow CLOSED NOTES to be placed at the right edge of the screen.
+                        // When opened, the note cannot be closer than the width of the Utility Window.
+
+                        // first, see how far beyond the limit the note is.
+                        float xDist = MaxAllowedX_Open - AnchorFrame.X;
+
+                        // if the delta is < 0, we're beyond the limit for an Open note and need to animate.
+                        if( xDist < 0 )
+                        {
+                            // when we're done animating the note to safe bounds, its delegate
+                            // will call AnimateNoteOpen to complete the process
+                            AnimateForSafeBounds( xDist, becomeFirstResponder );
+                        }
+                        else
+                        {
+                            // since we're not outside of safe bounds, just animate the note open
+                            AnimateNoteOpen( becomeFirstResponder );
+                        }
+                    }
                 }
 
                 public void CloseNote()
                 {
+                    if( Animating == false )
+                    {
+                        Animating = true;
+
+                        AnimateNoteClosed( );
+                    }
+                }
+
+                void AnimateNoteOpen( bool becomeFirstResponder )
+                {
+                    // Update the X limit.
+                    CurrMaxAllowedX = MaxAllowedX_Open; 
+
+                    // update bounds so the note is aware of the new space
+                    ValidateBounds( );
+
+                    // animate open the remaining elements
+                    AnimateNoteIcon( true );
+                    AnimateUtilityView( true );
+                    TextView.AnimateOpen( becomeFirstResponder );
+                }
+
+                void AnimateNoteClosed( )
+                {
+                    // update the max allowed X
+                    CurrMaxAllowedX = MaxAllowedX_Closed;
+
                     AnimateNoteIcon( false );
                     AnimateUtilityView( false );
 
@@ -760,6 +824,155 @@ namespace App
                     TextView.AnimateClosed( );
 
                     TextView.ResignFirstResponder( );
+                }
+
+                void AnimateForSafeBounds( float xDist, bool becomeFirstResponder )
+                {
+                    // setup an animator that will move the Anchor & icon to the max allowed open distance.
+                    float animTime = .2f;
+
+                    // stamp the last X pos so that we can track the delta change as the animation ticks
+                    float lastXPos = 0;
+
+                    SimpleAnimator_Float floatAnimator = new SimpleAnimator_Float( 0, xDist, animTime, 
+                        delegate(float percent, object value )
+                        {
+                            // take the current animated x value
+                            float currXPos = (float)value;
+
+                            // get the delta from last tick to now
+                            float xDelta = currXPos - lastXPos;
+
+                            // stamp the new last position (for next tick)
+                            lastXPos = currXPos;
+
+                            // update both the anchor and icon by the xDelta
+                            Anchor.Position = new PointF( Anchor.Position.X + xDelta, Anchor.Position.Y );
+                            NoteIcon.Position = new PointF( NoteIcon.Position.X + xDelta, NoteIcon.Position.Y );
+
+                        }, 
+                        // On Animation Complete
+                        delegate 
+                        { 
+                            // run the normal open animation
+                            AnimateNoteOpen( becomeFirstResponder );
+                        } );
+
+                    floatAnimator.Start( );
+                }
+
+
+                void AnimateNoteIcon( bool open )
+                {
+                    SizeF startSize = NoteIcon.Bounds.Size;
+                    SizeF endSize;
+
+                    PointF startPos = NoteIcon.Position;
+                    PointF endPos = GetNoteIconPos( open );
+
+                    float startTypeSize;
+                    float endTypeSize;
+
+                    float animTime = .2f;
+
+                    // the text must always be smaller than the bounding box,
+                    // so we'll scale the typeSize anim time to be FASTER when opening 
+                    // and SLOWER when closing.
+                    float sizeAnimTimeScalar;
+
+                    // setup the target values based on whether we're opening or closing
+                    if ( open == true )
+                    {
+                        endSize = NoteIconOpenSize;
+
+                        startTypeSize = PrivateNoteConfig.UserNote_IconClosedSize;
+                        endTypeSize = PrivateNoteConfig.UserNote_IconOpenSize;
+
+                        sizeAnimTimeScalar = .95f;
+                    }
+                    else
+                    {
+                        endSize = NoteIconClosedSize;
+
+                        startTypeSize = PrivateNoteConfig.UserNote_IconOpenSize;
+                        endTypeSize = PrivateNoteConfig.UserNote_IconClosedSize;
+
+                        sizeAnimTimeScalar = 1.05f;
+                    }
+
+                    // size...
+                    SimpleAnimator_SizeF sizeAnimator = new SimpleAnimator_SizeF( startSize, endSize, animTime, 
+                                                            delegate(float percent, object value )
+                        {
+                            SizeF currSize = (SizeF)value;
+                            NoteIcon.Bounds = new RectangleF( 0, 0, currSize.Width, currSize.Height );
+                        }, null );
+
+                    sizeAnimator.Start( );
+
+                    // pos...
+                    SimpleAnimator_PointF posAnimator = new SimpleAnimator_PointF( startPos, endPos, animTime, 
+                                                            delegate(float percent, object value )
+                        {
+                            NoteIcon.Position = (PointF)value;
+                        }, null );
+                    posAnimator.Start( );
+
+                    // font typesize...
+                    SimpleAnimator_Float floatAnimator = new SimpleAnimator_Float( startTypeSize, endTypeSize, animTime * sizeAnimTimeScalar, 
+                                                             delegate(float percent, object value )
+                        {
+                            NoteIcon.SetFont( PrivateControlStylingConfig.Icon_Font_Secondary, (float)value );
+                        }, null );
+                    floatAnimator.Start( );
+                }
+
+                void AnimateUtilityView( bool open )
+                {
+                    SizeF startSize = UtilityLayer.Bounds.Size;
+                    SizeF endSize;
+
+                    float animTime = .2f;
+
+                    // setup the target values based on whether we're opening or closing
+                    if ( open == true )
+                    {
+                        UtilityLayer.Hidden = false;
+                        endSize = new SizeF( MinNoteWidth, Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) );
+                    }
+                    else
+                    {
+                        DeleteButton.Hidden = true;
+                        CloseButton.Hidden = true;
+                        endSize = new SizeF( MinNoteWidth, 0 );
+                    }
+
+                    // size...
+                    SimpleAnimator_SizeF sizeAnimator = new SimpleAnimator_SizeF( startSize, endSize, animTime, 
+                        delegate(float percent, object value )
+                        {
+                            SizeF currSize = (SizeF)value;
+                            UtilityLayer.Bounds = new RectangleF( 0, 0, currSize.Width, currSize.Height );
+                        }, 
+                        delegate
+                        { 
+                            // if we CLOSED, hide the utility layer
+                            if ( open == false )
+                            {
+                                UtilityLayer.Hidden = true;
+                            }
+                            // and if we OPENED, unhide the DELETE button
+                            else
+                            {
+                                // 
+                                DeleteButton.Hidden = false;
+                                CloseButton.Hidden = false;
+                            }
+
+                            Animating = false; 
+                        } );
+
+                    sizeAnimator.Start( );
                 }
 
                 PointF GetNoteIconPos( bool open )
@@ -774,129 +987,7 @@ namespace App
                     else
                     {
                         return new PointF( Anchor.Frame.Left + (Anchor.Frame.Width - NoteIconClosedSize.Width) / 2, 
-                            Anchor.Frame.Top + (Anchor.Frame.Height - NoteIconClosedSize.Height) / 2 );
-                    }
-                }
-
-                void AnimateNoteIcon( bool open )
-                {
-                    if ( Animating == false )
-                    {
-                        Animating = true;
-
-                        SizeF startSize = NoteIcon.Bounds.Size;
-                        SizeF endSize;
-
-                        PointF startPos = NoteIcon.Position;
-                        PointF endPos = GetNoteIconPos( open );
-
-                        float startTypeSize;
-                        float endTypeSize;
-
-                        float animTime = .2f;
-
-                        // the text must always be smaller than the bounding box,
-                        // so we'll scale the typeSize anim time to be FASTER when opening 
-                        // and SLOWER when closing.
-                        float sizeAnimTimeScalar;
-
-                        // setup the target values based on whether we're opening or closing
-                        if ( open == true )
-                        {
-                            endSize = NoteIconOpenSize;
-
-                            startTypeSize = PrivateNoteConfig.UserNote_IconClosedSize;
-                            endTypeSize = PrivateNoteConfig.UserNote_IconOpenSize;
-
-                            sizeAnimTimeScalar = .95f;
-                        }
-                        else
-                        {
-                            endSize = NoteIconClosedSize;
-
-                            startTypeSize = PrivateNoteConfig.UserNote_IconOpenSize;
-                            endTypeSize = PrivateNoteConfig.UserNote_IconClosedSize;
-
-                            sizeAnimTimeScalar = 1.05f;
-                        }
-
-                        // size...
-                        SimpleAnimator_SizeF sizeAnimator = new SimpleAnimator_SizeF( startSize, endSize, animTime, 
-                                                                delegate(float percent, object value )
-                            {
-                                SizeF currSize = (SizeF)value;
-                                NoteIcon.Bounds = new RectangleF( 0, 0, currSize.Width, currSize.Height );
-                            }, null );
-
-                        sizeAnimator.Start( );
-
-                        // pos...
-                        SimpleAnimator_PointF posAnimator = new SimpleAnimator_PointF( startPos, endPos, animTime, 
-                                                                delegate(float percent, object value )
-                            {
-                                NoteIcon.Position = (PointF)value;
-                            }, null );
-                        posAnimator.Start( );
-
-                        // font typesize...
-                        SimpleAnimator_Float floatAnimator = new SimpleAnimator_Float( startTypeSize, endTypeSize, animTime * sizeAnimTimeScalar, 
-                                                                 delegate(float percent, object value )
-                            {
-                                NoteIcon.SetFont( PrivateControlStylingConfig.Icon_Font_Secondary, (float)value );
-                            }, delegate { Animating = false; } );
-                        floatAnimator.Start( );
-                    }
-                }
-
-                void AnimateUtilityView( bool open )
-                {
-                    if ( AnimatingUtilityView == false )
-                    {
-                        AnimatingUtilityView = true;
-
-                        SizeF startSize = UtilityLayer.Bounds.Size;
-                        SizeF endSize;
-
-                        float animTime = .2f;
-
-                        // setup the target values based on whether we're opening or closing
-                        if ( open == true )
-                        {
-                            UtilityLayer.Hidden = false;
-                            endSize = new SizeF( MinNoteWidth, Rock.Mobile.Graphics.Util.UnitToPx( UtilityLayerHeight ) );
-                        }
-                        else
-                        {
-                            DeleteButton.Hidden = true;
-                            CloseButton.Hidden = true;
-                            endSize = new SizeF( MinNoteWidth, 0 );
-                        }
-
-                        // size...
-                        SimpleAnimator_SizeF sizeAnimator = new SimpleAnimator_SizeF( startSize, endSize, animTime, 
-                            delegate(float percent, object value )
-                            {
-                                SizeF currSize = (SizeF)value;
-                                UtilityLayer.Bounds = new RectangleF( 0, 0, currSize.Width, currSize.Height );
-                            }, 
-                            delegate
-                            { 
-                                // if we CLOSED, hide the utility layer
-                                if ( open == false )
-                                {
-                                    UtilityLayer.Hidden = true;
-                                }
-                                // and if we OPENED, unhide the DELETE button
-                                else
-                                {
-                                    // 
-                                    DeleteButton.Hidden = false;
-                                    CloseButton.Hidden = false;
-                                }
-                                AnimatingUtilityView = false; 
-                            } );
-
-                        sizeAnimator.Start( );
+                                          Anchor.Frame.Top + (Anchor.Frame.Height - NoteIconClosedSize.Height) / 2 );
                     }
                 }
 

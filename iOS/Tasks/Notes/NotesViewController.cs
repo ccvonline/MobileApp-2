@@ -585,39 +585,47 @@ namespace iOS
 
             Rock.Mobile.Util.Debug.WriteLine( "Touches Ended" );
 
-            AnimateTutorialScreen( false );
-
-            UITouch touch = touches.AnyObject as UITouch;
-            if( touch != null )
+            // if the tutorial is showing, all we want to do is hide it.
+            // If we process input, it's possible they'll tap thru it to a URL, which will
+            // switch pages and cause a lot of user confustion
+            if( TutorialShowing( ) )
             {
-                if( Note != null )
+                AnimateTutorialScreen( false );
+            }
+            else
+            {
+                UITouch touch = touches.AnyObject as UITouch;
+                if( touch != null )
                 {
-                    // should we visit a website?
-                    bool urlLaunchesExternalBrowser = false;
-                    bool urlUsesRockImpersonation = false;
-
-                    string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
-                    if ( string.IsNullOrEmpty( activeUrl ) == false )
+                    if( Note != null )
                     {
-                        SaveNoteState( UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height ) );
+                        // should we visit a website?
+                        bool urlLaunchesExternalBrowser = false;
+                        bool urlUsesRockImpersonation = false;
 
-                        DestroyNotes( );
-
-                        // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
-                        if ( urlUsesRockImpersonation )
+                        string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
+                        if ( string.IsNullOrEmpty( activeUrl ) == false )
                         {
-                            MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
-                        }
+                            SaveNoteState( UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height ) );
 
-                        Task.NavToolbar.Reveal( true );
-                        Task.NavToolbar.SetBackButtonEnabled( true );
-                        TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                            DestroyNotes( );
+
+                            // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
+                            if ( urlUsesRockImpersonation )
+                            {
+                                MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
+                            }
+
+                            Task.NavToolbar.Reveal( true );
+                            Task.NavToolbar.SetBackButtonEnabled( true );
+                            TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                        }
                     }
                 }
-            }
 
-            // when a touch is released, re-enabled scrolling
-            UIScrollView.ScrollEnabled = true;
+                // when a touch is released, re-enabled scrolling
+                UIScrollView.ScrollEnabled = true;
+            }
         }
 
         [Foundation.Export("DoubleTapSelector:")]
@@ -629,7 +637,10 @@ namespace iOS
                 {
                     try
                     {
-                        Note.DidDoubleTap( tap.LocationInView( UIScrollView ).ToPointF( ) );
+                        if( Note.DidDoubleTap( tap.LocationInView( UIScrollView ).ToPointF( ) ) )
+                        {
+                            App.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
+                        }
                     }
                     catch( Exception e )
                     {
@@ -741,11 +752,9 @@ namespace iOS
                 MessageAnalytic.Instance.Trigger( MessageAnalytic.Read, NoteName );
 
                 // if the user has never seen it, show them the tutorial screen
-                if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount < PrivateNoteConfig.MaxTutorialDisplayCount )
+                if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
                 {
                     TutorialDisplayed = true;
-
-                    App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount = App.Shared.Network.RockMobileUser.Instance.NoteTutorialShownCount + 1;
 
                     // wait a second before revealing the tutorial overlay
                     System.Timers.Timer timer = new System.Timers.Timer();
@@ -825,7 +834,7 @@ namespace iOS
                     AnimatingTutorial = true;
 
                     // animate the backer (and don't let it get darker than 80%)
-                    SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( .80f, endVal ), .15f, delegate(float percent, object value )
+                    SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( PrivateNoteConfig.MaxTutorialAlpha, endVal ), .15f, delegate(float percent, object value )
                         {
                             TutorialBacker.Alpha = (float)value;
                         }, 
@@ -853,6 +862,17 @@ namespace iOS
                     tutorialAnim.Start( );
                 }
             }
+        }
+
+        bool TutorialShowing( )
+        {
+            // if it's not hidden and IS opaque, then it's showing.
+            if( TutorialBacker.Hidden == false && TutorialBacker.Alpha == PrivateNoteConfig.MaxTutorialAlpha )
+            {
+                return true;
+            }
+
+            return false;
         }
 
         protected void DeleteNote( )

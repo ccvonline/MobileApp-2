@@ -24,7 +24,11 @@ namespace iOS
 
         public void HandleAppURL( string appUrl )
         {
-            ParentViewController.HandleAppURL( appUrl );
+            // guard against double taps. (It's possible a second tap will come thru after we've inactivated ourselves)
+            if( ParentViewController != null )
+            {
+                ParentViewController.HandleAppURL( appUrl );
+            }
         }
 
         /// <summary>

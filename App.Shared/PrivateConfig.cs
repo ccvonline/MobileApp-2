@@ -117,6 +117,12 @@ namespace App.Shared
 
             public const string App_URL_Scheme = "app://";
 
+            /// <summary>
+            /// Android won't load PDFs, so we need to detect those URLs and send them to Google Docs.
+            /// </summary>
+            public const string App_URL_PDF_Redirect_Android = "http://docs.google.com/gview?embedded=true&url=";
+            public const string App_URL_PDF_Ext = ".pdf";
+
             public const string App_URL_Commands_Goto = "goto";
             public const string App_URL_Commands_Execute = "execute";
 
@@ -378,7 +384,12 @@ namespace App.Shared
             /// <summary>
             /// The number of times to show the user the "double tap to take notes" thing.
             /// </summary>
-            public const float MaxTutorialDisplayCount = 3;
+            //public const float MaxTutorialDisplayCount = 3;
+
+            /// <summary>
+            /// The most opaque the tutorial overlay will appear.
+            /// </summary>
+            public const float MaxTutorialAlpha = .80f;
 
             /// <summary>
             /// The suffix to use for the user note filename.
