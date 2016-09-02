@@ -96,6 +96,10 @@ namespace Droid
                     // if the row should display a group
                     if( position < ParentFragment.GroupEntries.Count )
                     {
+                        // ensure the join button is visible, in case this is a reused row
+                        // that had it hidden for "tap for 10 more"
+
+                        messageItem.JoinButton.Visibility = ViewStates.Visible;
                         messageItem.Title.Text = ParentFragment.GroupEntries[ position ].Title;
 
                         // if there's a meeting time set, display it. Otherwise we won't display that row
@@ -119,7 +123,7 @@ namespace Droid
                     // otherwise it's the "10 more" row
                     else
                     {
-                        messageItem.Title.Text = "Tap for 10 More";
+                        messageItem.Title.Text = ConnectStrings.GroupFinder_10More;
                         messageItem.Distance.Text = string.Empty;
                         messageItem.JoinButton.Visibility = ViewStates.Gone;
                         messageItem.MeetingTime.Text = string.Empty;

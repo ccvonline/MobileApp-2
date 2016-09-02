@@ -197,6 +197,7 @@ namespace App.Shared
             public const string GroupFinder_Neighborhood = "Groups Nearest You";
             public const string GroupFinder_JoinLabel = "Join";
             public const string GroupFinder_DetailsLabel = "Details";
+            public const string GroupFinder_10More = "Tap for 10 More";
 
             public const string Main_Connect_Header = "NEXT STEPS";
             public const string Main_Connect_Seperator = "GET ENGAGED";
@@ -215,6 +216,7 @@ namespace App.Shared
             public const string GroupInfo_AboutLeader = "About This Leader";
             public const string GroupInfo_AboutGroup = "About This Group";
             public const string GroupInfo_AboutChildcare = "About Childcare";
+            public const string GroupInfo_NoInfoProvided = "Contact leader for details.";
 
             public const string JoinGroup_RegisterSuccess = "You're registered with {0}. Expect to be contacted in the next few days.";
             public const string JoinGroup_RegisterFailed = "There was a problem registering for {0}. Check your network settings and try again.";

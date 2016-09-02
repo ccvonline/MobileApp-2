@@ -224,7 +224,7 @@ namespace iOS
                         textLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
                         textLabel.BackgroundColor = UIColor.Clear;
                         textLabel.LineBreakMode = UILineBreakMode.TailTruncation;
-                        textLabel.Text = "Tap for 10 More Groups";
+                        textLabel.Text = ConnectStrings.GroupFinder_10More;
                         textLabel.TextAlignment = UITextAlignment.Center;
                         cell.AddSubview( textLabel );
 
