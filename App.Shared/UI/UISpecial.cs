@@ -167,10 +167,9 @@ namespace App.Shared.UI
 
             MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( imageName );
             logoStream.Position = 0;
-            PonyImage = PlatformImageView.Create( scaleImage );
+            PonyImage = PlatformImageView.Create( );
             PonyImage.AddAsSubview( View.PlatformNativeObject );
             PonyImage.Image = logoStream;
-            PonyImage.SizeToFit( );
             PonyImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
             logoStream.Dispose( );
 
@@ -258,10 +257,9 @@ namespace App.Shared.UI
             {
                 MemoryStream logoStream = Rock.Mobile.IO.AssetConvert.AssetToStream( image );
                 logoStream.Position = 0;
-                Image = PlatformImageView.Create( scaleImage );
+                Image = PlatformImageView.Create( );
                 Image.AddAsSubview( parent.PlatformNativeObject );
                 Image.Image = logoStream;
-                Image.SizeToFit( );
                 Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
                 logoStream.Dispose( );
 

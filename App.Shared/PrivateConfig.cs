@@ -561,6 +561,16 @@ namespace App.Shared
             /// The size of the icon to use for the join button.
             /// </summary>
             public const uint GroupFinder_Join_IconSize = 64;
+
+            /// <summary>
+            /// The size of the group leader's image.
+            /// </summary>
+            public const uint GroupInfo_Leader_ImageSize = 128;
+
+            /// <summary>
+            /// The size of the group bio image.
+            /// </summary>
+            public const uint GroupInfo_Group_ImageSize = 256;
         }
 
         public class PrivateControlStylingConfig

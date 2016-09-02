@@ -47,7 +47,7 @@ namespace App.Shared.UI
 
         public delegate void OnButtonClick( int index, bool isCampusSelection );
 
-        public void Create( object masterView, string bgLayerImageName, string logoImageName, bool scaleImageLogo, RectangleF frame, OnButtonClick onClick )
+        public void Create( object masterView, string bgLayerImageName, string logoImageName, RectangleF frame, OnButtonClick onClick )
         {
             // take the handler
             OnClick = onClick;
@@ -56,7 +56,7 @@ namespace App.Shared.UI
             View.BackgroundColor = ControlStylingConfig.OOBE_Splash_BG_Color;
             View.AddAsSubview( masterView );
 
-            ImageBG = PlatformImageView.Create( true );
+            ImageBG = PlatformImageView.Create( );
             ImageBG.AddAsSubview( View.PlatformNativeObject );
             MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( bgLayerImageName );
             if ( stream != null )
@@ -64,7 +64,6 @@ namespace App.Shared.UI
                 stream.Position = 0;
                 ImageBG.Opacity = 0;
                 ImageBG.Image = stream;
-                ImageBG.SizeToFit( );
                 ImageBG.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
                 stream.Dispose( );
             }
@@ -181,10 +180,9 @@ namespace App.Shared.UI
 
             stream = Rock.Mobile.IO.AssetConvert.AssetToStream( logoImageName );
             stream.Position = 0;
-            ImageLogo = PlatformImageView.Create( scaleImageLogo );
+            ImageLogo = PlatformImageView.Create( );
             ImageLogo.AddAsSubview( View.PlatformNativeObject );
             ImageLogo.Image = stream;
-            ImageLogo.SizeToFit( );
             ImageLogo.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
             stream.Dispose( );
 

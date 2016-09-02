@@ -59,7 +59,7 @@ namespace Droid
 
             string bgImageName = string.Format( "oobe_splash_bg_{0}.png", metrics.DensityDpi.ToString( ).ToLower( ) );
 
-            OOBEView.Create( view, bgImageName, imageName, false, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
+            OOBEView.Create( view, bgImageName, imageName, new System.Drawing.RectangleF( 0, 0, NavbarFragment.GetFullDisplayWidth( ), this.Resources.DisplayMetrics.HeightPixels ), 
 
                 delegate(int index, bool isCampusSelection) 
                 {

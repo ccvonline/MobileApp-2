@@ -74,12 +74,12 @@ namespace App.Shared.UI
             GroupTitle.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
             GroupTitle.TextAlignment = TextAlignment.Center;
 
-            LeaderImage = PlatformImageView.Create( true );
+            LeaderImage = PlatformImageView.Create( );
             LeaderImage.AddAsSubview( masterView );
             LeaderImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
             LeaderImage.BackgroundColor = 0;
 
-            GroupImage = PlatformImageView.Create( true );
+            GroupImage = PlatformImageView.Create( );
             GroupImage.AddAsSubview( masterView );
             GroupImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
             GroupImage.BackgroundColor = 0;
@@ -220,7 +220,9 @@ namespace App.Shared.UI
                                 
                                 // setup the leader image
                                 LeaderImage.Image = leaderPhoto;
-                                LeaderImage.SizeToFit( );
+
+                                float imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
+                                LeaderImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
 
                                 // if we had a valid image stream, dispose of it now
                                 if( leaderPhoto != null )
@@ -235,7 +237,9 @@ namespace App.Shared.UI
 
                                 // setup the group image
                                 GroupImage.Image = groupPhoto;
-                                GroupImage.SizeToFit( );
+
+                                imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Group_ImageSize );
+                                GroupImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
 
                                 // if we had a valid image stream, dispose of it now
                                 if( groupPhoto != null )

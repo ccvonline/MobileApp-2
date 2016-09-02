@@ -124,7 +124,6 @@ namespace App
                                     {   
                                         // check for attributes we support
                                         RectangleF elementBounds = new RectangleF( 0, 0, availableWidth, parentParams.Height );
-                                        Parser.ParseBounds( reader, ref parentSize, ref elementBounds );
 
                                         ParseHeaderElement( reader, availableWidth, parentParams.Height, mStyle.mBackgroundColor, out mTitle, ref elementBounds, ref ControlStyles.mHeaderTitle );
                                         break;
@@ -134,7 +133,6 @@ namespace App
                                     {
                                         // check for attributes we support
                                         RectangleF elementBounds = new RectangleF( 0, 0, availableWidth, parentParams.Height );
-                                        Parser.ParseBounds( reader, ref parentSize, ref elementBounds );
 
                                         ParseHeaderElement( reader, availableWidth, parentParams.Height, mStyle.mBackgroundColor, out mDate, ref elementBounds, ref ControlStyles.mHeaderDate );
                                         break;
@@ -144,7 +142,6 @@ namespace App
                                     {
                                         // check for attributes we support
                                         RectangleF elementBounds = new RectangleF( 0, 0, availableWidth, parentParams.Height );
-                                        Parser.ParseBounds( reader, ref parentSize, ref elementBounds );
 
                                         ParseHeaderElement( reader, availableWidth, parentParams.Height, mStyle.mBackgroundColor, out mSpeaker, ref elementBounds, ref ControlStyles.mHeaderSpeaker );
                                         break;
