@@ -7,6 +7,7 @@ using UIKit;
 using AVFoundation;
 using App.Shared.Config;
 using LocalyticsBinding;
+using App.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -57,6 +58,8 @@ namespace iOS
             // If you have defined a root view controller, set it here:
             Springboard = new SpringboardViewController( );
             window.RootViewController = Springboard;
+
+            Rock.Mobile.Util.URL.Override.SetAppUrlOverrides( PrivateGeneralConfig.App_URL_Overrides );
 
             // make the window visible
             window.MakeKeyAndVisible( );

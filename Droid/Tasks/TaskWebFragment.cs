@@ -48,16 +48,24 @@ namespace Droid
             /// <summary>
             /// Utility function to simplify handling a URL with or without an impersonation token, in an embedded webView OR external browser.
             /// </summary>
-            /// <param name="launchesExternalBrowser">If set to <c>true</c> launches external browser.</param>
-            /// <param name="usesImpersonationToken">If set to <c>true</c> uses impersonation token.</param>
-            /// <param name="url">URL.</param>
-            /// <param name="currTask">Curr task.</param>
-            /// <param name="webFragment">Web fragment.</param>
             public static void HandleUrl( bool launchesExternalBrowser, bool usesImpersonationToken, string url, Task currTask, TaskWebFragment webFragment )
             {
                 // guard against malformed URLs
                 if( url.StartsWith( "http", StringComparison.InvariantCultureIgnoreCase ) == true )
                 {
+                    // run the url through our processor to see if it needs to be manipulated
+                    string processedUrl = Rock.Mobile.Util.URL.Override.ProcessURLOverrides( url );
+
+                    // see if it's external
+                    if ( processedUrl.StartsWith( PrivateGeneralConfig.ExternalUrlToken, StringComparison.InvariantCultureIgnoreCase ) )
+                    {
+                        // strip off the PrivateGeneralConfig.ExternalUrlToken and forward it
+                        processedUrl = processedUrl.Substring( PrivateGeneralConfig.ExternalUrlToken.Length );
+
+                        // and flag that we should launch externally, so that the rest of the function runs as normal
+                        launchesExternalBrowser = true;
+                    }
+                    
                     // are we launching a seperate browser?
                     if ( launchesExternalBrowser == true )
                     {
@@ -69,7 +77,7 @@ namespace Droid
                                 delegate( string impersonationToken )
                                 {
                                     // append the mobile platform
-                                    string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( url, PrivateGeneralConfig.MobilePlatform );
+                                    string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
                                     // append the campus (this is part of their identity)
                                     fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
@@ -91,7 +99,7 @@ namespace Droid
                         else
                         {
                             // pretty easy, just fire off an intent.
-                            Android.Net.Uri uri = Android.Net.Uri.Parse( url );
+                            Android.Net.Uri uri = Android.Net.Uri.Parse( processedUrl );
 
                             var intent = new Intent( Intent.ActionView, uri ); 
                             ((Activity)Rock.Mobile.PlatformSpecific.Android.Core.Context).StartActivity( intent );
@@ -100,7 +108,7 @@ namespace Droid
                     else
                     {
                         // otherwise we're not, so its simpler
-                        webFragment.DisplayUrl( url, usesImpersonationToken );
+                        webFragment.DisplayUrl( processedUrl, usesImpersonationToken );
                         currTask.PresentFragment( webFragment, true );
                     }
                 }
@@ -175,11 +183,6 @@ namespace Droid
 
             void ProcessUrl( )
             {
-                // build our list of URL file extension Redirects. These will be used by the WebLayout to know when to launch an
-                // intent instead of tring to process the URL. A good example is PDFs, since those aren't viewable in a WebView.
-                Dictionary<string, string> urlOverrides = new Dictionary<string, string>( );
-                urlOverrides.Add( PrivateGeneralConfig.App_URL_PDF_Ext, PrivateGeneralConfig.App_URL_PDF_Redirect_Android );
-
                 if ( string.IsNullOrEmpty( Url ) == false )
                 {
                     // do they want the impersonation token?
@@ -202,14 +205,14 @@ namespace Droid
                                 }
 
                                 Console.WriteLine( "Browsing to {0}", fullUrl );
-                                WebLayout.LoadUrl( fullUrl, urlOverrides, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                                WebLayout.LoadUrl( fullUrl, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                             });
                     }
                     else
                     {
                         // no impersonation token requested. just load.
                         Console.WriteLine( "Browsing to {0}", Url );
-                        WebLayout.LoadUrl( Url, urlOverrides, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                        WebLayout.LoadUrl( Url, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
                     }
                 }
             }

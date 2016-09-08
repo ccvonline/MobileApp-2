@@ -9,6 +9,7 @@ using App.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Util;
 using App.Shared.PrivateConfig;
 using MobileApp;
+using System.Collections.Generic;
 
 namespace iOS
 {
@@ -49,13 +50,18 @@ namespace iOS
 
             public override bool ShouldStartLoad(UIWebView webView, NSUrlRequest request, UIWebViewNavigationType navigationType)
             {
-                string urlString = request.Url.AbsoluteString.ToString( );
-                if( urlString.StartsWith( PrivateGeneralConfig.ExternalUrlToken ) )
+                // run the url through our processor to see if it needs to be manipulated
+                string processedUrl = Rock.Mobile.Util.URL.Override.ProcessURLOverrides( request.Url.AbsoluteString );
+
+                // gives us a chance to analyze any URL tapped within a webView, and optionally change the load path.
+                if ( processedUrl.StartsWith( PrivateGeneralConfig.ExternalUrlToken, StringComparison.InvariantCultureIgnoreCase ) )
                 {
                     // strip off the PrivateGeneralConfig.ExternalUrlToken and forward it
-                    urlString = urlString.Substring( PrivateGeneralConfig.ExternalUrlToken.Length );
+                    processedUrl = processedUrl.Substring( PrivateGeneralConfig.ExternalUrlToken.Length );
                     
-                    UIApplication.SharedApplication.OpenUrl( new NSUrl( urlString ) );
+                    UIApplication.SharedApplication.OpenUrl( new NSUrl( processedUrl ) );
+
+                    Parent.HandleLoadFinished( );
                     return false;
                 }
 
@@ -213,6 +219,19 @@ namespace iOS
         /// </summary>
         public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool webViewControlsNavbar, bool webviewHidesNavbarOnScroll )
         {
+            // run the url through our processor to see if it needs to be manipulated
+            string processedUrl = Rock.Mobile.Util.URL.Override.ProcessURLOverrides( url );
+
+            // see if it's external
+            if ( processedUrl.StartsWith( PrivateGeneralConfig.ExternalUrlToken, StringComparison.InvariantCultureIgnoreCase ) )
+            {
+                // strip off the PrivateGeneralConfig.ExternalUrlToken and forward it
+                processedUrl = processedUrl.Substring( PrivateGeneralConfig.ExternalUrlToken.Length );
+
+                // and flag that we should launch externally, so that the rest of the function runs as normal
+                launchExternalBrowser = true;
+            }
+
             // do we launch them out of the app?
             if ( launchExternalBrowser == true )
             {
@@ -223,7 +242,7 @@ namespace iOS
                         delegate(string impersonationToken )
                         {
                             // put the platform we're running
-                            string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( url, PrivateGeneralConfig.MobilePlatform );
+                            string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
                             // build the full url with their preferred campus (since thats personal data)
                             fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
@@ -248,7 +267,7 @@ namespace iOS
                 else
                 {
                     // first encode the url
-                    NSString encodedUrlString = url.UrlEncode( );
+                    NSString encodedUrlString = processedUrl.UrlEncode( );
 
                     UIApplication.SharedApplication.OpenUrl( new NSUrl( encodedUrlString ) );
                 }
@@ -256,7 +275,7 @@ namespace iOS
             // they are using an embedded browser, so this is pretty simple
             else
             {
-                TaskWebViewController viewController = new TaskWebViewController( url, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar, webviewHidesNavbarOnScroll );
+                TaskWebViewController viewController = new TaskWebViewController( processedUrl, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar, webviewHidesNavbarOnScroll );
                 parentTask.PerformSegue( currController, viewController );
             }
         }

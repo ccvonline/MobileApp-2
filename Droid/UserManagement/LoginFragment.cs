@@ -248,7 +248,7 @@ namespace Droid
 
                         WebLayout.ResetCookies( );
 
-                        WebLayout.LoadUrl( fromUri, null, PrivateGeneralConfig.ExternalUrlToken,
+                        WebLayout.LoadUrl( fromUri, PrivateGeneralConfig.ExternalUrlToken,
                             delegate( bool result, string forwardUrl )
                             {
                                 // either way, wait for a facebook response

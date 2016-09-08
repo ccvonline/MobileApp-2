@@ -12,6 +12,7 @@ using App.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
 using Com.Localytics.Android;
+using App.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -58,6 +59,7 @@ namespace Droid
 
             Window.AddFlags( WindowManagerFlags.Fullscreen );
 
+            Rock.Mobile.Util.URL.Override.SetAppUrlOverrides( PrivateGeneralConfig.App_URL_Overrides );
 
             // Set our view from the "main" layout resource
             SetContentView( Resource.Layout.Splash );

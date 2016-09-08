@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace App.Shared
 {
@@ -89,11 +90,6 @@ namespace App.Shared
 
 
             /// <summary>
-            /// The URL prefix that directs the embedded browser to launch the link externally
-            /// </summary>
-            public const string ExternalUrlToken = "external:";
-
-            /// <summary>
             /// Used for notifying a website which platform the user is running.
             /// </summary>
             #if __IOS__
@@ -115,13 +111,24 @@ namespace App.Shared
             public const string TaskAction_CampusChanged = "CampusChanged";
             public const string TaskAction_NotesRead = "Page.Read";
 
-            public const string App_URL_Scheme = "app://";
 
             /// <summary>
-            /// Android won't load PDFs, so we need to detect those URLs and send them to Google Docs.
+            /// The URL prefix that directs the embedded browser to launch the link externally
             /// </summary>
-            public const string App_URL_PDF_Redirect_Android = "http://docs.google.com/gview?embedded=true&url=";
-            public const string App_URL_PDF_Ext = ".pdf";
+            public const string ExternalUrlToken = "external:";
+            public const string App_URL_Scheme = "app://";
+
+            public static Dictionary<string, string> App_URL_Overrides = new Dictionary<string, string>
+                { 
+                    //PDFs only need to redirect on Android
+                    #if __ANDROID__
+                    { ".pdf", ExternalUrlToken + "http://docs.google.com/gview?embedded=true&url={0}" },
+                    #endif
+
+                    // any reference to the CCV give site should redirect externally. Avoids in-app donations
+                    { "ccv.church/give", ExternalUrlToken + "{0}" }
+                };
+
 
             public const string App_URL_Commands_Goto = "goto";
             public const string App_URL_Commands_Execute = "execute";
