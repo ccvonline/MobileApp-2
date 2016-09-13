@@ -13,6 +13,23 @@ namespace App
         /// </summary>
         namespace Config
         {
+            // This class can be used to quickly test various things within the app.
+            #if DEBUG
+            public class DebugConfig
+            {
+                /// <summary>
+                /// When this is true, all news items will go to the NewsItemURL.
+                /// Useful for things like app invites, which only work in the app (can't be tested in a browser).
+                /// This way you don't have to setup a news item in Rock.
+                /// </summary>
+                public const bool News_Override_Item = true;
+
+                public const string News_Override_ReferenceURL = "http://ccv.church/soakedmobileinvite";
+                public const bool News_Override_IncludeImpersonationToken = true;
+                public const bool News_Override_ReferenceUrlLaunchesBrowser = false;
+            }
+            #endif
+            
             public class GeneralConfig
             {
                 public const int Version = 2151;

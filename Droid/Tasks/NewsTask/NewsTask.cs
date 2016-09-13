@@ -161,11 +161,23 @@ namespace Droid
                                 }
                                 else
                                 {
-                                    TaskWebFragment.HandleUrl( MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser, 
-                                        MainPage.News[ buttonId ].News.IncludeImpersonationToken, 
-                                        MainPage.News[ buttonId ].News.ReferenceURL,
-                                        this, 
-                                        WebFragment );
+                                    // copy the news item's relevant members. That way, if we're running in debug,
+                                    // and they want to override the news item, we can do that below.
+                                    string newsUrl = MainPage.News[ buttonId ].News.ReferenceURL;
+                                    bool newsImpersonation = MainPage.News[ buttonId ].News.IncludeImpersonationToken;
+                                    bool newsExternalBrowser = MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser;
+
+                                    // If we're running a debug build, see if we should override the news
+                                    #if DEBUG
+                                    if( DebugConfig.News_Override_Item == true )
+                                    {
+                                        newsUrl = DebugConfig.News_Override_ReferenceURL;
+                                        newsImpersonation = DebugConfig.News_Override_IncludeImpersonationToken;
+                                        newsExternalBrowser = DebugConfig.News_Override_ReferenceUrlLaunchesBrowser;
+                                    }
+                                    #endif
+
+                                    TaskWebFragment.HandleUrl( newsExternalBrowser, newsImpersonation, newsUrl, this, WebFragment );
                                 }
                             }
                             else
@@ -195,11 +207,23 @@ namespace Droid
                                 }
                                 else
                                 {
-                                    TaskWebFragment.HandleUrl( DetailsPage.ReferenceURLLaunchesBrowser, 
-                                                               DetailsPage.IncludeImpersonationToken, 
-                                                               DetailsPage.ReferenceURL,
-                                                               this, 
-                                                               WebFragment );
+                                    // copy the news item's relevant members. That way, if we're running in debug,
+                                    // and they want to override the news item, we can do that below.
+                                    string newsUrl = DetailsPage.ReferenceURL;
+                                    bool newsImpersonation = DetailsPage.IncludeImpersonationToken;
+                                    bool newsExternalBrowser = DetailsPage.ReferenceURLLaunchesBrowser;
+
+                                    // If we're running a debug build, see if we should override the news
+                                    #if DEBUG
+                                    if( DebugConfig.News_Override_Item == true )
+                                    {
+                                        newsUrl = DebugConfig.News_Override_ReferenceURL;
+                                        newsImpersonation = DebugConfig.News_Override_IncludeImpersonationToken;
+                                        newsExternalBrowser = DebugConfig.News_Override_ReferenceUrlLaunchesBrowser;
+                                    }
+                                    #endif
+
+                                    TaskWebFragment.HandleUrl( newsExternalBrowser, newsImpersonation, newsUrl, this, WebFragment );
                                 }
                             }
                         }

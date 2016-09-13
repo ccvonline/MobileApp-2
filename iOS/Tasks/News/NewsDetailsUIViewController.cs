@@ -113,7 +113,23 @@ namespace iOS
                     }
                     else
                     {
-                        TaskWebViewController.HandleUrl( NewsItem.ReferenceUrlLaunchesBrowser, NewsItem.IncludeImpersonationToken, NewsItem.ReferenceURL, Task, this, false, false, false );
+                        // copy the news item's relevant members. That way, if we're running in debug,
+                        // and they want to override the news item, we can do that below.
+                        string newsUrl = NewsItem.ReferenceURL;
+                        bool newsImpersonation = NewsItem.IncludeImpersonationToken;
+                        bool newsExternalBrowser = NewsItem.ReferenceUrlLaunchesBrowser;
+
+                        // If we're running a debug build, see if we should override the news
+                        #if DEBUG
+                        if( DebugConfig.News_Override_Item == true )
+                        {
+                            newsUrl = DebugConfig.News_Override_ReferenceURL;
+                            newsImpersonation = DebugConfig.News_Override_IncludeImpersonationToken;
+                            newsExternalBrowser = DebugConfig.News_Override_ReferenceUrlLaunchesBrowser;
+                        }
+                        #endif
+
+                        TaskWebViewController.HandleUrl( newsExternalBrowser, newsImpersonation, newsUrl, Task, this, false, false, false );
                     }
                 };
 
