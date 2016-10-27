@@ -68,5 +68,9 @@
 	<false/>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSCameraUsageDescription</key>
+	<string>The camera is used to optionally create a profile picture.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library is used to optionally upload a profile picture.</string>
 </dict>
 </plist>
