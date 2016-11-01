@@ -186,6 +186,20 @@ namespace App.Shared
             public const float CampusSelectSymbolSize = 14;
 
             /// <summary>
+            /// This is the amount subtracted from normal width of the Campus Text strip.
+            /// It ensures that there's enough space to show the ^ symbol next to the campus.
+            /// /// Differs for iOS and Android
+            /// </summary>
+            public const int CampusTextMaxSizeOffset_Android = 200;
+
+            /// <summary>
+            /// This is the amount subtracted from normal width of the Campus Text strip.
+            /// It ensures that there's enough space to show the ^ symbol next to the campus.
+            /// Differs for iOS and Android
+            /// </summary>
+            public const float CampusTextMaxSizeOffset_iOS = 40;
+
+            /// <summary>
             /// The size of font to use for the element's logo.
             /// </summary>
             public const int Element_FontSize = 23;

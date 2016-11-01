@@ -32,7 +32,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2151;
+                public const int Version = 2160;
 
                 /// <summary>
                 /// The full name of your organization
@@ -72,9 +72,9 @@ namespace App
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
                 #if DEBUG
-                //public const string RockBaseUrl = "http://dev.ccv.church/";
+                public const string RockBaseUrl = "http://dev.ccv.church/";
                 //public const string RockBaseUrl = "http://10.211.55.6:50345/";
-                public const string RockBaseUrl = "http://rock.ccv.church/";
+                //public const string RockBaseUrl = "http://rock.ccv.church/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif

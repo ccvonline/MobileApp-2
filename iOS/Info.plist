@@ -5,7 +5,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>8.1</string>
+	<string>9.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -24,7 +24,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.ccvonline.CCVMobileApp</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.5</string>
+	<string>2.1.6</string>
 	<key>XSLaunchImageAssets</key>
 	<string>Resources/Images.xcassets/LaunchImage.launchimage</string>
 	<key>XSAppIconAssets</key>
@@ -66,11 +66,11 @@
 	<string>CCV Mobile</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>CFBundleVersion</key>
-	<string>1</string>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is used to optionally create a profile picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library is used to optionally upload a profile picture.</string>
+	<key>CFBundleVersion</key>
+	<string>0</string>
 </dict>
 </plist>

@@ -482,6 +482,7 @@ namespace iOS
             CampusSelectionText = new UILabel();
             ControlStyling.StyleUILabel( CampusSelectionText, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             CampusSelectionText.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Springboard_InActiveElementTextColor );
+            CampusSelectionText.LineBreakMode = UILineBreakMode.TailTruncation;
             ScrollView.AddSubview( CampusSelectionText );
 
             CampusSelectionIcon = new UILabel();
@@ -565,7 +566,6 @@ namespace iOS
 
             // set the viewing campus now that their profile has loaded (if they have already done the OOBE)
             CampusSelectionText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
-            CampusSelectionText.SizeToFit( );
 
             // setup the Notification Banner for Taking Notes
             Billboard = new NotificationBillboard( View.Bounds.Width, View.Bounds.Height );
@@ -1271,7 +1271,12 @@ namespace iOS
 
         void UpdateCampusViews( )
         {
-            CampusSelectionText.SizeToFit( ); 
+            CampusSelectionText.SizeToFit( );
+            CampusSelectionText.Frame = new CGRect( CampusSelectionText.Frame.Left, 
+                                                    CampusSelectionText.Frame.Top, 
+                                                    Math.Min( CampusSelectionText.Frame.Width, PrivatePrimaryContainerConfig.SlideAmount_iOS - PrivateSpringboardConfig.CampusTextMaxSizeOffset_iOS ), 
+                                                    CampusSelectionText.Frame.Height );
+
             CampusSelectionIcon.SizeToFit( );
 
             CampusSelectionIcon.Layer.AnchorPoint = CGPoint.Empty;

@@ -1,13 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.1.5" android:versionCode="2151">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.1.6" android:versionCode="2160">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<application android:name="com.ccvonline.CCVMobileApp" android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
 		<!---Get your API Key for Google Maps at console.developers.google.com-->
-		<!--<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCnspI8VUlD1amF-HQlWlnVMPGBFrRIX_Y" />-->
-
-		<!--New one for transferred CCV account-->
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyD4qLNNF7MeD7QpUr57el_x8ZGnaginC3M" />
-
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 	<uses-permission android:name="android.permission.INTERNET" />

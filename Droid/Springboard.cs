@@ -459,6 +459,7 @@ namespace Droid
 
             // set the campus text to whatever their profile has set for viewing.
             CampusText.Text = string.Format( SpringboardStrings.Viewing_Campus, RockLaunchData.Instance.Data.CampusIdToName( RockMobileUser.Instance.ViewingCampus ) ).ToUpper( );
+            CampusText.SetMaxWidth( CampusContainer.LayoutParameters.Width - PrivateSpringboardConfig.CampusTextMaxSizeOffset_Android );
 
             // setup the campus selection button.
             Button campusSelectionButton = CampusContainer.FindViewById<Button>( Resource.Id.campus_selection_button );
@@ -576,6 +577,7 @@ namespace Droid
             if ( CampusText.Text != newCampusText || forceRefresh == true )
             {
                 CampusText.Text = newCampusText;
+                CampusText.SetMaxWidth( CampusContainer.LayoutParameters.Width - PrivateSpringboardConfig.CampusTextMaxSizeOffset_Android );
 
                 // let the news know it should reload
                 PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, new string[] { PrivateGeneralConfig.App_URL_Task_News, PrivateGeneralConfig.App_URL_Execute_CampusChanged } );
