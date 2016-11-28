@@ -71,6 +71,27 @@ namespace App
                             NewsConfig.UpgradeNews[ 4 ],
 
                             new List<System.Guid>( ) );
+
+
+                        // HACK: JINGLE BELLS
+                        JingleBellsNewsItem = new RockNews( 
+                               NewsConfig.JingleBellsHack[ 0 ], 
+
+                               NewsConfig.JingleBellsHack[ 1 ],
+
+                               NewsConfig.JingleBellsHack[ 2 ],
+
+                               true,
+                               false,
+                               false,
+
+                               "",
+                               NewsConfig.JingleBellsHack[ 3 ],
+
+                               "",
+                               NewsConfig.JingleBellsHack[ 4 ],
+
+                               new List<System.Guid>( ) );
                     }
 
                     /// <summary>
@@ -110,6 +131,42 @@ namespace App
                         stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
                         stream.Position = 0;
                         FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
+                        stream.Dispose( );
+                    }
+
+                    // HACK: JINGLE BELLS
+                    public void PrepareJingleBellsNews( )
+                    {
+                        // cache the compiled in main and header images so the News system can get them transparently
+                        #if __IOS__
+                        string mainImageName;
+                        string headerImageName;
+                        if( UIKit.UIScreen.MainScreen.Scale > 1 )
+                        {
+                            mainImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, JingleBellsNewsItem.ImageName, UIKit.UIScreen.MainScreen.Scale );
+                            headerImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, JingleBellsNewsItem.HeaderImageName, UIKit.UIScreen.MainScreen.Scale );
+                        }
+                        else
+                        {
+                            mainImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, JingleBellsNewsItem.ImageName );
+                            headerImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, JingleBellsNewsItem.HeaderImageName );
+                        }
+
+                        #elif __ANDROID__
+                        string mainImageName = JingleBellsNewsItem.ImageName + ".png";
+                        string headerImageName = JingleBellsNewsItem.HeaderImageName + ".png";
+                        #endif
+
+                        // cache the main image
+                        MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
+                        stream.Position = 0;
+                        FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.ImageName, FileCache.CacheFileNoExpiration );
+                        stream.Dispose( );
+
+                        // cache the header image
+                        stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
+                        stream.Position = 0;
+                        FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
                         stream.Dispose( );
                     }
 
@@ -197,6 +254,9 @@ namespace App
                     // The "Please Upgrade" news item we'll show if they're out of date.
                     /// </summary>
                     public RockNews UpgradeNewsItem { get; set; }
+
+                    // HACK: JINGLE BELLS
+                    public RockNews JingleBellsNewsItem { get; set; }
 
                     /// <summary>
                     /// List of all available campuses to choose from.
@@ -586,6 +646,9 @@ namespace App
                     if ( Data.News.Count == 0 )
                     {
                         Data.PrepareUpgradeNews( );
+
+                        // HACK: JINGLE BELLS
+                        Data.PrepareJingleBellsNews( );
                     }
                 }
             }

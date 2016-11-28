@@ -86,6 +86,12 @@ namespace Droid
                                 }
                             }
 
+                            // HACK: JINGLE BELLS
+                            if ( DateTime.Now > NewsConfig.JingleBellsHack_StartTime && DateTime.Now < NewsConfig.JingleBellsHack_EndTime )
+                            {
+                                News.Insert( 0, RockLaunchData.Instance.Data.JingleBellsNewsItem );
+                            }
+
                             // if they need to upgrade, push that news item to the top
                             if( RockLaunchData.Instance.Data.NeedsUpgrade )
                             {

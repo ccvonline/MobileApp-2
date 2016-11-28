@@ -403,6 +403,12 @@
     <AndroidAsset Include="..\Assets\upgrade_news_main%403x.png">
       <Link>Assets\upgrade_news_main.png</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\jingle_bells_header%403x.png">
+      <Link>Assets\jingle_bells_header.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\jingle_bells_main%403x.png">
+      <Link>Assets\jingle_bells_main.png</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

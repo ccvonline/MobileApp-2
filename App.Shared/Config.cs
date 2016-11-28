@@ -22,7 +22,7 @@ namespace App
                 /// Useful for things like app invites, which only work in the app (can't be tested in a browser).
                 /// This way you don't have to setup a news item in Rock.
                 /// </summary>
-                public const bool News_Override_Item = true;
+                public const bool News_Override_Item = false;
 
                 public const string News_Override_ReferenceURL = "http://ccv.church/soakedmobileinvite";
                 public const bool News_Override_IncludeImpersonationToken = true;
@@ -32,7 +32,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2160;
+                public const int Version = 2170;
 
                 /// <summary>
                 /// The full name of your organization
@@ -159,6 +159,26 @@ namespace App
 
                         "upgrade_news_header",
                     };
+
+                // HACK: JINGLE BELLS
+                public static DateTime JingleBellsHack_StartTime = new DateTime( 2015, 12, 21 );
+                public static DateTime JingleBellsHack_EndTime = new DateTime( 2016, 12, 25 );
+                public static string [] JingleBellsHack =
+                {
+                    //Title
+                    "Jingle Bells", 
+
+                    // Description
+                    string.Empty,
+
+                    // Reference URL
+                    "http://ccv.church/christmas16jingle",
+
+                    // Image Names
+                    "jingle_bells_main",
+
+                    "jingle_bells_header",
+                };
             }
 
             public class NoteConfig
