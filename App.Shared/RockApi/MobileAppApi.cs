@@ -62,6 +62,18 @@ namespace MobileApp
             RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
         }
 
+        const string EndPoint_Login = "api/MobileApp/Login";
+        public static void Login( string username, string password, HttpRequest.RequestResult resultHandler )
+        {
+            var loginObj = new
+            {
+                Username = username,
+                Password = password
+            };
+
+            RockApi.Post_CustomEndPoint( RockApi.BaseUrl + EndPoint_Login, loginObj, resultHandler );
+        }
+
         const string EndPoint_GroupInfo = "api/MobileApp/GroupInfo?groupId=";
         public delegate void OnGroupSummaryResult( GroupInfo groupInfo, System.IO.MemoryStream leaderPhoto, System.IO.MemoryStream groupPhoto );
         public class GroupInfo
