@@ -3,6 +3,7 @@ using System.Drawing;
 using Rock.Mobile.UI;
 using App.Shared.Strings;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace App
 {
@@ -22,7 +23,7 @@ namespace App
                 /// Useful for things like app invites, which only work in the app (can't be tested in a browser).
                 /// This way you don't have to setup a news item in Rock.
                 /// </summary>
-                public const bool News_Override_Item = false;
+                public static bool News_Override_Item = false;
 
                 public const string News_Override_ReferenceURL = "http://ccv.church/soakedmobileinvite";
                 public const bool News_Override_IncludeImpersonationToken = true;
@@ -161,8 +162,8 @@ namespace App
                     };
 
                 // HACK: JINGLE BELLS
-                public static DateTime JingleBellsHack_StartTime = new DateTime( 2015, 12, 21 );
-                public static DateTime JingleBellsHack_EndTime = new DateTime( 2016, 12, 25 );
+                public static DateTime JingleBellsHack_StartTime = new DateTime( 2015, 12, 22 );
+                public static DateTime JingleBellsHack_EndTime = new DateTime( 2016, 12, 24 );
                 public static string [] JingleBellsHack =
                 {
                     //Title

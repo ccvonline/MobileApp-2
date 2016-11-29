@@ -459,7 +459,7 @@ namespace iOS
             Elements.Add( new SpringboardElement( this, new NotesTask( "NotesStoryboard_iPhone" )    , MessagesElement, SpringboardConfig.Element_Messages_Icon, SpringboardStrings.Element_Messages_Title ) );
             Elements.Add( new SpringboardElement( this, new GiveTask( "GiveStoryboard_iPhone" )      , GiveElement    , SpringboardConfig.Element_Give_Icon    , SpringboardStrings.Element_Give_Title ) );
             Elements.Add( new SpringboardElement( this, new ConnectTask( "ConnectStoryboard_iPhone" ), ConnectElement , SpringboardConfig.Element_Connect_Icon , SpringboardStrings.Element_Connect_Title ) );
-            Elements.Add( new SpringboardElement( this, new PrayerTask( "PrayerStoryboard_iPhone" )  , PrayerElement  , SpringboardConfig.Element_Prayer_Icon  , SpringboardStrings.Element_Prayer_Title ) );
+            Elements.Add( new SpringboardElement( this, new PrayerTask( "" )                         , PrayerElement  , SpringboardConfig.Element_Prayer_Icon  , SpringboardStrings.Element_Prayer_Title ) );
             Elements.Add( new SpringboardElement( this, new AboutTask( "" )                          , MoreElement    , SpringboardConfig.Element_More_Icon    , SpringboardStrings.Element_More_Title ) );
 
             // add a bottom seperator for the final element
@@ -604,12 +604,29 @@ namespace iOS
                 View.AddSubview( OOBEViewController.View );
 
                 // before we do anything else, force a rock sync. Then we can trust we have good solid launch data.
-                RockNetworkManager.Instance.SyncRockData( null, delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
-                {
-                    // for the OOBE we very much care if syncing worked, and can't let them continue if it didn't.
-                    bool success = Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true;
-                    OOBEViewController.PerformStartup( success );
-                });
+                RockNetworkManager.Instance.SyncRockData( null, 
+                    delegate(System.Net.HttpStatusCode statusCode, string statusDescription)
+                    {
+                        // for the OOBE we very much care if syncing worked, and can't let them continue if it didn't.
+                        bool success = Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true;
+
+                        if( success == true )
+                        {
+                            OOBEViewController.PerformStartup( success );
+                        }
+                        else
+                        {
+                            // if somehow we failed the initial sync, (they don't have a network connection on their first run)
+                            // just abort, and let them into the app.
+
+                            // simulate a campus selection for the first/only campus we have, and then complete the OOBE.
+                            OOBEOnClick( RockLaunchData.Instance.Data.Campuses[ 0 ].Id, true );
+                            CompleteOOBE( );
+
+                            OOBEViewController.RemoveFromParentViewController( );
+                            OOBEViewController.View.RemoveFromSuperview( );
+                        }
+                    });
             }
             else
             {

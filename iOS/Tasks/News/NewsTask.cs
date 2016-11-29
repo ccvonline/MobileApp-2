@@ -75,7 +75,7 @@ namespace iOS
                     }
 
                     // HACK: JINGLE BELLS
-                    if ( DateTime.Now > NewsConfig.JingleBellsHack_StartTime && DateTime.Now < NewsConfig.JingleBellsHack_EndTime )
+                    if ( DateTime.Now >= NewsConfig.JingleBellsHack_StartTime && DateTime.Now <= NewsConfig.JingleBellsHack_EndTime )
                     {
                         News.Insert( 0, RockLaunchData.Instance.Data.JingleBellsNewsItem );
                     }
@@ -103,7 +103,6 @@ namespace iOS
             }
             else if ( viewController as TaskWebViewController == null )
             {
-                //NavToolbar.RevealForTime( 3.0f );
                 NavToolbar.Reveal( true );
             }
         }

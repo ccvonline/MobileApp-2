@@ -29,6 +29,9 @@ namespace App
                     RockApi.SetRockURL( Config.GeneralConfig.RockBaseUrl );
                     RockApi.SetAuthorizationKey( Config.GeneralConfig.RockMobileAppAuthorizationKey );
 
+                    // make sure our built in news items have their images in the cache
+                    RockLaunchData.Instance.TryCacheEmbeddedNewsImages( );
+
                     Requesting = false;
                 }
 
@@ -78,7 +81,6 @@ namespace App
 
                 void LaunchDataReceived(System.Net.HttpStatusCode statusCode, string statusDescription)
                 {
-                    // New general data received. Save it, update fields, etc.
                     if ( ResultCallback != null )
                     {
                         ResultCallback( statusCode, statusDescription );

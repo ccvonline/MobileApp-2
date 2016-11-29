@@ -444,17 +444,10 @@
     <Compile Include="SpringboardViewController.cs" />
     <Compile Include="MainUINavigationController.cs" />
     <Compile Include="ContainerViewController.cs" />
-    <Compile Include="ContainerViewController.designer.cs">
-      <DependentUpon>ContainerViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="NavToolbar.cs" />
     <Compile Include="Tasks\Notes\NotesViewController.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Tasks\TaskUIViewController.cs" />
-    <Compile Include="Tasks\TaskUIViewController.designer.cs">
-      <DependentUpon>TaskUIViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tasks\About\AboutMainPageUIViewController.cs" />
     <Compile Include="Tasks\About\AboutTask.cs" />
     <Compile Include="Tasks\Give\GiveTask.cs" />
     <Compile Include="Tasks\News\NewsTask.cs" />
@@ -467,14 +460,8 @@
       <DependentUpon>NewsMainUIViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Tasks\News\NewsDetailsUIViewController.cs" />
-    <Compile Include="Tasks\About\AboutMainPageUIViewController.designer.cs">
-      <DependentUpon>AboutMainPageUIViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserManagement\ImageCropViewController.cs" />
     <Compile Include="Tasks\Prayer\PrayerMainUIViewController.cs" />
-    <Compile Include="Tasks\Prayer\PrayerMainUIViewController.designer.cs">
-      <DependentUpon>PrayerMainUIViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tasks\Give\GIveMainPageUIViewController.cs" />
     <Compile Include="Tasks\Give\GIveMainPageUIViewController.designer.cs">
       <DependentUpon>GIveMainPageUIViewController.cs</DependentUpon>
@@ -512,7 +499,6 @@
   <ItemGroup>
     <InterfaceDefinition Include="Tasks\News\NewsStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Give\GiveStoryboard_iPhone.storyboard" />
-    <InterfaceDefinition Include="Tasks\Prayer\PrayerStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Notes\NotesStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Connect\ConnectStoryboard_iPhone.storyboard" />
   </ItemGroup>

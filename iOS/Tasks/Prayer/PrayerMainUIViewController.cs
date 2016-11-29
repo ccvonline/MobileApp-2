@@ -315,8 +315,9 @@ namespace iOS
         DateTime LastDownload { get; set; }
 
         UIBlockerView BlockerView { get; set; }
+        UIResultView ResultView { get; set; }
 
-		public PrayerMainUIViewController (IntPtr handle) : base (handle)
+		public PrayerMainUIViewController ( ) : base ( )
 		{
             PrayerRequests = new List<PrayerCard>();
 		}
@@ -326,6 +327,15 @@ namespace iOS
             base.ViewDidLoad();
 
             BlockerView = new UIBlockerView( View, View.Frame.ToRectF( ) );
+
+            ResultView = new UIResultView( View, View.Frame.ToRectF( ), 
+                delegate 
+                { 
+                    if( RequestingPrayers == false )
+                    {
+                        RetrievePrayerRequests( );
+                    }
+                } );
 
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
@@ -341,26 +351,6 @@ namespace iOS
             Carousel = PlatformCardCarousel.Create( View, cardWidth, cardHeight, new System.Drawing.RectangleF( 0, cardYOffset, (float)View.Bounds.Width, viewRealHeight ), PrivatePrayerConfig.Card_AnimationDuration );
 
             CardSize = new CGRect( 0, 0, cardWidth, cardHeight );
-
-            // Setup the request prayers layer
-            //setup our appearance
-            RetrievingPrayersView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
-
-            StatusLabel.Text = PrayerStrings.ViewPrayer_StatusText_Retrieving;
-            ControlStyling.StyleUILabel( StatusLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
-            ControlStyling.StyleBGLayer( StatusBackground );
-
-            ControlStyling.StyleUILabel( ResultLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
-            ControlStyling.StyleBGLayer( ResultBackground );
-
-            ControlStyling.StyleButton( RetryButton, GeneralStrings.Retry, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
-            RetryButton.TouchUpInside += (object sender, EventArgs e ) =>
-                {
-                    if( RequestingPrayers == false )
-                    {
-                        RetrievePrayerRequests( );
-                    }
-                };
 
             LastDownload = DateTime.MinValue;
         }
@@ -388,7 +378,6 @@ namespace iOS
                 TimeSpan deltaTime = DateTime.Now - LastDownload;
                 if ( deltaTime.TotalHours > PrivatePrayerConfig.PrayerDownloadFrequency.TotalHours )
                 {
-                    View.BringSubviewToFront( RetrievingPrayersView );
                     BlockerView.BringToFront( );
 
                     Rock.Mobile.Util.Debug.WriteLine( "Grabbing Prayers" );
@@ -440,15 +429,12 @@ namespace iOS
             }
 
             BlockerView.SetBounds( View.Bounds.ToRectF( ) );
+            ResultView.SetBounds( View.Bounds.ToRectF( ) );
         }
 
         void RetrievePrayerRequests( )
         {
-            // show the retrieve layer
-            RetrievingPrayersView.Layer.Opacity = 1.00f;
-            StatusLabel.Text = PrayerStrings.ViewPrayer_StatusText_Retrieving;
-            ResultLabel.Hidden = true;
-            RetryButton.Hidden = true;
+            ResultView.Hide( );
 
             BlockerView.Show( delegate
                 {
@@ -484,8 +470,6 @@ namespace iOS
                                                 // update our timestamp since this was successful
                                                 LastDownload = DateTime.Now;
 
-                                                RetrievingPrayersView.Layer.Opacity = 0.00f;
-
                                                 // setup the card positions to be to the offscreen to the left, centered on screen, and offscreen to the right
                                                 for( int i = 0; i < Math.Min( prayerRequests.Count, PrivatePrayerConfig.MaxPrayers ); i++ )
                                                 {
@@ -496,11 +480,7 @@ namespace iOS
                                             }
                                             else
                                             {
-                                                // let them know there aren't any prayer requests
-                                                StatusLabel.Text = PrayerStrings.ViewPrayer_StatusText_NoPrayers;
-                                                RetryButton.Hidden = false;
-                                                ResultLabel.Hidden = false;
-                                                ResultLabel.Text = PrayerStrings.ViewPrayer_Result_NoPrayersText;
+                                                ResultView.Show( PrayerStrings.ViewPrayer_StatusText_NoPrayers, null, PrayerStrings.ViewPrayer_Result_NoPrayersText, GeneralStrings.Retry );
                                             }
 
                                             // add a read analytic
@@ -508,10 +488,10 @@ namespace iOS
                                         }
                                         else
                                         {
-                                            StatusLabel.Text = PrayerStrings.ViewPrayer_StatusText_Failed;
-                                            RetryButton.Hidden = false;
-                                            ResultLabel.Hidden = false;
-                                            ResultLabel.Text = PrayerStrings.Error_Retrieve_Message;
+                                            ResultView.Show( PrayerStrings.ViewPrayer_StatusText_Failed, 
+                                                             PrivateControlStylingConfig.Result_Symbol_Failed, 
+                                                             PrayerStrings.Error_Retrieve_Message, 
+                                                             GeneralStrings.Retry );
 
                                             Task.NavToolbar.SetCreateButtonEnabled( false );
                                         }

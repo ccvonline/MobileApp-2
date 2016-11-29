@@ -36,8 +36,19 @@ namespace App
                         ClientModelVersion = 2;
                         //
 
+                        // Set some default values so that if there's no network connection on first run,
+                        // we can still advance.
                         Campuses = new List<Rock.Client.Campus>( );
+                        Rock.Client.Campus defaultCampus = new Rock.Client.Campus()
+                        {
+                            Id = 1,
+                            Guid = new Guid( "76882ae3-1ce8-42a6-a2b6-8c0b29cf8cf8" ),
+                            Name = "Peoria"
+                        };
+                        Campuses.Add( defaultCampus );
+
                         PrayerCategories = new List< KeyValuePair<string, int> >( );
+                        PrayerCategories.Add( new KeyValuePair<string, int>( "Addictive Behavior", 109 ) );
 
                         Genders = new List<string>( );
                         Genders.Add( "Unknown" );
@@ -71,6 +82,7 @@ namespace App
                             NewsConfig.UpgradeNews[ 4 ],
 
                             new List<System.Guid>( ) );
+                        //
 
 
                         // HACK: JINGLE BELLS
@@ -92,14 +104,13 @@ namespace App
                                NewsConfig.JingleBellsHack[ 4 ],
 
                                new List<System.Guid>( ) );
+                        //
                     }
 
                     /// <summary>
-                    /// Copies the hardcoded default news into the News list,
-                    /// so that there is SOMETHING for the user to see. Should only be done
-                    /// if there is no news available after getting launch data.
+                    /// Copies the embedded upgrade images into the file cache so that they can be loaded like normal news item images.
                     /// </summary>
-                    public void PrepareUpgradeNews( )
+                    public void TryCacheUpgradeNewsImages( )
                     {
                         // cache the compiled in main and header images so the News system can get them transparently
                         #if __IOS__
@@ -121,21 +132,27 @@ namespace App
                         string headerImageName = UpgradeNewsItem.HeaderImageName + ".png";
                         #endif
 
-                        // cache the main image
-                        MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the main image if it's not already there
+                        if( FileCache.Instance.FileExists( UpgradeNewsItem.ImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
 
-                        // cache the header image
-                        stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the header image if it's not already there
+                        if( FileCache.Instance.FileExists( UpgradeNewsItem.HeaderImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
                     }
 
                     // HACK: JINGLE BELLS
-                    public void PrepareJingleBellsNews( )
+                    public void TryCacheJingleBellsNewsImages( )
                     {
                         // cache the compiled in main and header images so the News system can get them transparently
                         #if __IOS__
@@ -157,17 +174,23 @@ namespace App
                         string headerImageName = JingleBellsNewsItem.HeaderImageName + ".png";
                         #endif
 
-                        // cache the main image
-                        MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.ImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the main image if it's not already there
+                        if( FileCache.Instance.FileExists( JingleBellsNewsItem.ImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.ImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
 
-                        // cache the header image
-                        stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the header image if it's not already there
+                        if( FileCache.Instance.FileExists( JingleBellsNewsItem.HeaderImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, JingleBellsNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
                     }
 
                     /// <summary>
@@ -287,6 +310,18 @@ namespace App
                     public bool DeveloperModeEnabled { get; set; }
                 }
                 public LaunchData Data { get; set; }
+
+                /// <summary>
+                /// Ensures that the images for "built in" news items are in the file cache.
+                /// They need to be here so the news system can find / load them like 'normal' news items.
+                /// </summary>
+                public void TryCacheEmbeddedNewsImages( )
+                {
+                    Data.TryCacheUpgradeNewsImages( );
+
+                    // HACK: JINGLE BELLS
+                    Data.TryCacheJingleBellsNewsImages( );
+                }
 
                 /// <summary>
                 /// True if the notedb.xml is in the process of being downloaded. This is so that
@@ -639,16 +674,6 @@ namespace App
                             {
                             }
                         }
-                    }
-
-                    // if there's no news after loading, this is our first run, so
-                    // prepare the 'you should upgrade' news item
-                    if ( Data.News.Count == 0 )
-                    {
-                        Data.PrepareUpgradeNews( );
-
-                        // HACK: JINGLE BELLS
-                        Data.PrepareJingleBellsNews( );
                     }
                 }
             }
