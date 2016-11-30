@@ -33,7 +33,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2170;
+                public const int Version = 2171;
 
                 /// <summary>
                 /// The full name of your organization
@@ -162,8 +162,8 @@ namespace App
                     };
 
                 // HACK: JINGLE BELLS
-                public static DateTime JingleBellsHack_StartTime = new DateTime( 2015, 12, 22 );
-                public static DateTime JingleBellsHack_EndTime = new DateTime( 2016, 12, 24 );
+                public static DateTime JingleBellsHack_StartTime = new DateTime( 2016, 12, 22 );
+                public static DateTime JingleBellsHack_EndTime = new DateTime( 2016, 12, 25 );
                 public static string [] JingleBellsHack =
                 {
                     //Title

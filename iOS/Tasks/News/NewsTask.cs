@@ -75,7 +75,7 @@ namespace iOS
                     }
 
                     // HACK: JINGLE BELLS
-                    if ( DateTime.Now >= NewsConfig.JingleBellsHack_StartTime && DateTime.Now <= NewsConfig.JingleBellsHack_EndTime )
+                    if ( (DateTime.Now >= NewsConfig.JingleBellsHack_StartTime && DateTime.Now <= NewsConfig.JingleBellsHack_EndTime) || RockLaunchData.Instance.Data.EnableJingleBells == true )
                     {
                         News.Insert( 0, RockLaunchData.Instance.Data.JingleBellsNewsItem );
                     }

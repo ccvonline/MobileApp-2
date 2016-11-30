@@ -20,6 +20,9 @@ namespace MobileApp
             public List<Rock.Client.Campus> Campuses { get; set; }
             public List<KeyValuePair<string, int>> PrayerCategories { get; set; }
             public int MobileAppVersion { get; set; }
+
+            //HACK: JINGLE BELLS
+            public bool EnableJingleBells { get; set; }
         }
 
         public static void Get_LaunchData( HttpRequest.RequestResult<LaunchData> resultHandler )

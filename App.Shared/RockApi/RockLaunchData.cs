@@ -193,6 +193,7 @@ namespace App
                         }
                     }
 
+
                     /// <summary>
                     /// Private to the client, this should be updated if the model
                     /// changes at all, so that we don't attempt to load an older one when upgrading the app.
@@ -308,6 +309,9 @@ namespace App
                     /// Enables debug features like note refreshing.
                     /// </summary>
                     public bool DeveloperModeEnabled { get; set; }
+
+                    //HACK: JINGLE BELLS
+                    public bool EnableJingleBells { get; set; }
                 }
                 public LaunchData Data { get; set; }
 
@@ -368,6 +372,9 @@ namespace App
                                 {
                                     Data.NeedsUpgrade = false;
                                 }
+
+                                //HACK: JINGLE BELLS
+                                Data.EnableJingleBells = launchData.EnableJingleBells;
 
                                 // now get the news.
                                 GetNews( delegate 
