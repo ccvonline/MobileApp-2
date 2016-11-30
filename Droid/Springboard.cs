@@ -956,7 +956,24 @@ namespace Droid
                 {
                     // for the OOBE we very much care if syncing worked, and can't let them continue if it didn't.
                     bool success = Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true;
-                    OOBEFragment.PerformStartup( success );
+
+                    if( success == true )
+                    {
+                        OOBEFragment.PerformStartup( success );
+                    }
+                    else
+                    {
+                        // if somehow we failed the initial sync, (they don't have a network connection on their first run)
+                        // just abort, and let them into the app.
+
+                        // simulate a campus selection for the first/only campus we have, and then complete the OOBE.
+                        OOBEUserClick( RockLaunchData.Instance.Data.Campuses[ 0 ].Id, true );
+                        ModalFragmentDone( null );
+                        //CompleteOOBE( );
+
+                        //OOBEViewController.RemoveFromParentViewController( );
+                        //OOBEViewController.View.RemoveFromSuperview( );
+                    }
                 });
             }
             // otherwise if the splash hasn't been shown, show it.
