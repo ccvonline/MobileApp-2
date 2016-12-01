@@ -944,9 +944,17 @@ namespace Droid
                 // This will force them to be logged out so they experience the OOBE properly.
                 RockMobileUser.Instance.LogoutAndUnbind( );
 
+                // HACK: JINGLE BELLS - Skip OOBE completely. Pick Peoria for them, and do the splash screen
+                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = RockLaunchData.Instance.Data.Campuses[ 0 ].Id;
+                RockMobileUser.Instance.OOBEComplete = true;
+                IsSplashDone = true;
+                SplashFragment.ContainerView = FullScreenLayout;
+                StartModalFragment( SplashFragment, true );
+                RefreshCampusSelection( true );
+
                 // flag the splash as complete as well, so we don't launch it the next time OnResume is called
                 // show the OOBE, but we won't advance it until the network callback gets called
-                IsSplashDone = true;
+                /*IsSplashDone = true;
                 IsOOBERunning = true;
                 StartModalFragment( OOBEFragment, true );
 
@@ -969,12 +977,8 @@ namespace Droid
                         // simulate a campus selection for the first/only campus we have, and then complete the OOBE.
                         OOBEUserClick( RockLaunchData.Instance.Data.Campuses[ 0 ].Id, true );
                         ModalFragmentDone( null );
-                        //CompleteOOBE( );
-
-                        //OOBEViewController.RemoveFromParentViewController( );
-                        //OOBEViewController.View.RemoveFromSuperview( );
                     }
-                });
+                });*/
             }
             // otherwise if the splash hasn't been shown, show it.
             else if ( IsSplashDone == false )

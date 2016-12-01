@@ -594,12 +594,26 @@ namespace iOS
             if ( RockMobileUser.Instance.OOBEComplete == false )
                 //if( RanOOBE == false )
             {
+                //RanOOBE = true;
+
                 // sanity check for testers that didn't listen to me and delete / reinstall.
                 // This will force them to be logged out so they experience the OOBE properly.
                 RockMobileUser.Instance.LogoutAndUnbind( );
 
-                //RanOOBE = true;
-                IsOOBERunning = true;
+                // HACK: JINGLE BELLS - Skip OOBE completely. Pick Peoria for them, and do the splash screen
+                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = RockLaunchData.Instance.Data.Campuses[ 0 ].Id;
+                RockMobileUser.Instance.OOBEComplete = true;
+
+                // prepare the splash screen animation
+                AddChildViewController( SplashViewController );
+                View.AddSubview( SplashViewController.View );
+                SplashViewController.PerformStartup( );
+
+                // now let the normal activation go
+                OnActivated_SyncRockData( );
+                ///
+
+                /*IsOOBERunning = true;
                 AddChildViewController( OOBEViewController );
                 View.AddSubview( OOBEViewController.View );
 
@@ -626,7 +640,7 @@ namespace iOS
                             OOBEViewController.RemoveFromParentViewController( );
                             OOBEViewController.View.RemoveFromSuperview( );
                         }
-                    });
+                    });*/
             }
             else
             {
