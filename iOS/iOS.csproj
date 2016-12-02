@@ -492,8 +492,8 @@
     <Compile Include="UserManagement\SplashViewController.cs" />
     <Compile Include="Tasks\Connect\GroupInfoViewController.cs" />
   </ItemGroup>
+  <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
-  <Import Project="..\..\..\Spark\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\..\Spark\Rock\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
