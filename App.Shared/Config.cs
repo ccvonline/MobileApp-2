@@ -33,7 +33,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2174;
+                public const int Version = 2175;
 
                 /// <summary>
                 /// The full name of your organization
