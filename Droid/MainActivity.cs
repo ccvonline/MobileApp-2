@@ -17,6 +17,7 @@ using Android.Hardware;
 using Android.Media;
 using Android.Content.Res;
 using Rock.Mobile.Math;
+using Rock.Mobile.Audio;
 
 namespace Droid
 {
@@ -122,9 +123,17 @@ namespace Droid
         DataScheme="ccvmobile",DataHost="go")]
     public class MainActivity : Activity, ISensorEventListener
     {
-        Springboard Springboard { get; set; }
+        //HACK: JINGLE BELLS
+        public static bool JingleBellsEnabled = false;
         SensorManager SensorManager { get; set; }
         static readonly object _syncLock = new object();
+        PlatformSoundEffect.SoundEffectHandle JingleHandle;
+        Vector3 LastPhonePosition = null;
+        bool JingleBellsPlaying = false;
+        System.Timers.Timer JingleTimer;
+        //
+
+        Springboard Springboard { get; set; }
 
         protected override void OnCreate( Bundle bundle )
         {
@@ -163,8 +172,18 @@ namespace Droid
             Springboard = FragmentManager.FindFragmentById(Resource.Id.springboard) as Springboard;
             Springboard.SetActiveTaskFrame( layout );
 
-
+            // HACK: JINGLE BELLS
             SensorManager = (SensorManager) GetSystemService( Context.SensorService );
+            JingleHandle = PlatformSoundEffect.Instance.LoadSoundEffectAsset( "bell.wav" );
+
+            // HACK: JINGLE BELLS
+            JingleTimer = new System.Timers.Timer();
+            JingleTimer.AutoReset = false;
+            JingleTimer.Interval = 1000;
+            JingleTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+            {
+                JingleBellsPlaying = false;
+            };
         }
 
         /// <summary>
@@ -248,6 +267,7 @@ namespace Droid
             // restore our context
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
 
+            // HACK: JINGLE BELLS
             SensorManager.RegisterListener( this, SensorManager.GetDefaultSensor( SensorType.Accelerometer ), SensorDelay.Normal );
         }
 
@@ -255,16 +275,18 @@ namespace Droid
         {
             base.OnPause();
 
+            // HACK: JINGLE BELLS
             SensorManager.UnregisterListener( this );
+            JingleBellsEnabled = false;
         }
 
+        // HACK: JINGLE BELLS
         public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
         {
             // We don't want to do anything here.
         }
 
-        Vector3 LastPhonePosition = null;
-
+        // HACK: JINGLE BELLS
         public void OnSensorChanged(SensorEvent e)
         {
             lock (_syncLock)
@@ -284,12 +306,20 @@ namespace Droid
                     if( changeRate > 4.0f )
                     {
                         LastPhonePosition = currPos;
-                    
-                        Console.WriteLine( string.Format("x={0:f}, y={1:f}, y={2:f}", e.Values[0], e.Values[1], e.Values[2]) );
+
+                        if( JingleBellsPlaying == false && JingleBellsEnabled == true )
+                        {
+                            PlatformSoundEffect.Instance.Play( JingleHandle );
+                            JingleBellsPlaying = true;
+
+                            JingleTimer.Start( );
+                        }
+                        //Console.WriteLine( string.Format("x={0:f}, y={1:f}, y={2:f}", e.Values[0], e.Values[1], e.Values[2]) );
                     }
                 }
             }
         }
+        //
 
         protected override void OnNewIntent(Intent intent)
         {

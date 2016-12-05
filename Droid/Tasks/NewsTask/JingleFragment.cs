@@ -54,7 +54,7 @@ namespace Droid
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
 
-            JingleView.Create( view, "jingle_bells_pre.jpg", "jingle_bells_post.jpg", new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ), delegate{ } );
+            JingleView.Create( view, "jingle_bells_post.jpg", new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
 
             return view;
         }
@@ -72,6 +72,27 @@ namespace Droid
             Point displaySize = new Point( );
             Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
             JingleView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
+
+
+            MainActivity.JingleBellsEnabled = true;
+
+            if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
+            {
+                JingleView.LoadResources( );
+            }
+        }
+
+        public override void TaskReadyForFragmentDisplay()
+        {
+            base.TaskReadyForFragmentDisplay();
+
+            MainActivity.JingleBellsEnabled = true;
+
+            // do not setup display if the task was ready but WE aren't.
+            if ( View != null )
+            {
+                JingleView.LoadResources( );
+            }
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
@@ -83,10 +104,20 @@ namespace Droid
             JingleView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
         }
 
-        public override void OnStop()
+        public override void OnPause()
         {
-            base.OnStop( );
-            JingleView.Destroy( );
+            base.OnPause();
+
+            JingleView.FreeResources( );
+            MainActivity.JingleBellsEnabled = false;
+        }
+
+        public override void OnDestroyView()
+        {
+            base.OnDestroyView();
+
+            JingleView.FreeResources( );
+            MainActivity.JingleBellsEnabled = false;
         }
     }
 }

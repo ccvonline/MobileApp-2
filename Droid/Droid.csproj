@@ -417,9 +417,6 @@
     <AndroidAsset Include="..\Assets\jingle_bells_post.jpg">
       <Link>Assets\jingle_bells_post.jpg</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\jingle_bells_pre.jpg">
-      <Link>Assets\jingle_bells_pre.jpg</Link>
-    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

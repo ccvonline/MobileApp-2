@@ -432,9 +432,6 @@
     <BundleResource Include="..\Assets\jingle_bells_main%403x.png">
       <Link>Resources\jingle_bells_main%403x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\Assets\jingle_bells_pre.jpg">
-      <Link>Resources\jingle_bells_pre.jpg</Link>
-    </BundleResource>
     <BundleResource Include="..\Assets\jingle_bells_post.jpg">
       <Link>Resources\jingle_bells_post.jpg</Link>
     </BundleResource>

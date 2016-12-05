@@ -13,41 +13,24 @@ namespace App.Shared.UI
     public class UIJingle
     {
         public PlatformView View { get; set; }
-        public PlatformImageView Jingle_Pre_Image { get; set; }
-        public PlatformImageView Jingle_Post_Image { get; set; }
+        public PlatformImageView Jingle_Image { get; set; }
         public PlatformButton JingleButton { get; set; }
         PlatformSoundEffect.SoundEffectHandle JingleHandle;
 
-        public UIJingle( )
-        {
-        }
+        string ImageName { get; set; }
 
-        public delegate void OnButtonTap( );
-        OnButtonTap OnButtonTapCallback;
-
-        public void Create( object masterView, string imagePreName, string imagePostName, RectangleF frame, OnButtonTap onButtonTapCallback )
+        public void Create( object masterView, string imageName, RectangleF frame )
         {
             View = PlatformView.Create( );
             View.BackgroundColor = ControlStylingConfig.BackgroundColor;
             View.Frame = frame;
             View.AddAsSubview( masterView );
 
-            MemoryStream preStream = Rock.Mobile.IO.AssetConvert.AssetToStream( imagePreName );
-            preStream.Position = 0;
-            Jingle_Pre_Image = PlatformImageView.Create( );
-            Jingle_Pre_Image.AddAsSubview( View.PlatformNativeObject );
-            Jingle_Pre_Image.Image = preStream;
-            Jingle_Pre_Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
-            preStream.Dispose( );
+            ImageName = imageName;
 
-
-            MemoryStream postStream = Rock.Mobile.IO.AssetConvert.AssetToStream( imagePostName );
-            postStream.Position = 0;
-            Jingle_Post_Image = PlatformImageView.Create( );
-            Jingle_Post_Image.AddAsSubview( View.PlatformNativeObject );
-            Jingle_Post_Image.Image = postStream;
-            Jingle_Post_Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
-            postStream.Dispose( );
+            Jingle_Image = PlatformImageView.Create( );
+            Jingle_Image.AddAsSubview( View.PlatformNativeObject );
+            Jingle_Image.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFill;
 
 
             JingleButton = PlatformButton.Create( );
@@ -57,12 +40,6 @@ namespace App.Shared.UI
             JingleButton.TextColor = 0;
             JingleButton.CornerRadius = 0;
 
-            Jingle_Pre_Image.Hidden = false;
-            Jingle_Post_Image.Hidden = true;
-
-            OnButtonTapCallback = onButtonTapCallback;
-
-            JingleHandle = PlatformSoundEffect.Instance.LoadSoundEffectAsset( "bell.wav" );
 
             bool jingleBellsPlaying = false;
             System.Timers.Timer timer = new System.Timers.Timer();
@@ -75,35 +52,42 @@ namespace App.Shared.UI
 
             JingleButton.ClickEvent = delegate(PlatformButton button) 
             {
-                Jingle_Post_Image.Hidden = false;
-
                 if( jingleBellsPlaying == false )
                 {
                     jingleBellsPlaying = true;
                     timer.Start( );
                     PlatformSoundEffect.Instance.Play( JingleHandle );
                 }
-
-                OnButtonTapCallback( );
             };
-        }
-
-        public void Destroy( )
-        {
-            // clean up resources (looking at you, Android)
-            Jingle_Pre_Image.Destroy( );
-            Jingle_Post_Image.Destroy( );
-
-            PlatformSoundEffect.Instance.ReleaseSoundEffect( JingleHandle );
         }
 
         public void LayoutChanged( RectangleF frame )
         {
             View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
 
-            Jingle_Pre_Image.Frame = View.Frame;
-            Jingle_Post_Image.Frame = View.Frame;
+            Jingle_Image.Frame = View.Frame;
             JingleButton.Frame = View.Frame;
+        }
+
+        public void LoadResources( )
+        {
+            MemoryStream imageStream = Rock.Mobile.IO.AssetConvert.AssetToStream( ImageName );
+            imageStream.Position = 0;
+            Jingle_Image.Image = imageStream;
+            imageStream.Dispose( );
+
+            JingleHandle = PlatformSoundEffect.Instance.LoadSoundEffectAsset( "bell.wav" );
+        }
+
+        public void FreeResources( )
+        {
+            // clean up resources (looking at you, Android)
+            Jingle_Image.Destroy( );
+
+            if( JingleHandle != null )
+            {
+                PlatformSoundEffect.Instance.ReleaseSoundEffect( JingleHandle );
+            }
         }
     }
 }

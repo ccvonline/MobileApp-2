@@ -23,14 +23,11 @@ namespace iOS
             View.Layer.AnchorPoint = CGPoint.Empty;
             View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
-            string jinglePreName = string.Format( "{0}/{1}.jpg", Foundation.NSBundle.MainBundle.BundlePath, "jingle_bells_pre" );
             string jinglePostName = string.Format( "{0}/{1}.jpg", Foundation.NSBundle.MainBundle.BundlePath, "jingle_bells_post" );
 
             JingleView = new UIJingle();
-            JingleView.Create( View, jinglePreName, jinglePostName, View.Frame.ToRectF( ), 
-                              delegate( ) 
-                              {
-                              });
+            JingleView.Create( View, jinglePostName, View.Frame.ToRectF( ) );
+            JingleView.LoadResources( );
         }
 
         public override void ViewDidAppear(bool animated)
