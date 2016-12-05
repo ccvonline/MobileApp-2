@@ -8,6 +8,9 @@ using AVFoundation;
 using App.Shared.Config;
 using LocalyticsBinding;
 using App.Shared.PrivateConfig;
+using CoreMotion;
+using Rock.Mobile.Math;
+using Rock.Mobile.Audio;
 
 namespace iOS
 {
@@ -17,6 +20,10 @@ namespace iOS
     [Register( "AppDelegate" )]
     public partial class AppDelegate : UIApplicationDelegate
     {
+        //HACK: JINGLE BELLS
+        public static bool JingleBellsEnabled = false;
+        CMMotionManager MotionManager { get; set; }
+
         // class-level declarations
         UIWindow window;
 
@@ -70,10 +77,58 @@ namespace iOS
             instance.SetCategory(new NSString("AVAudioSessionCategoryPlayback"), AVAudioSessionCategoryOptions.MixWithOthers, out error);
             instance.SetMode(new NSString("AVAudioSessionModeDefault"), out error);
             instance.SetActive(true, AVAudioSessionSetActiveOptions.NotifyOthersOnDeactivation, out error);
+
+            // HACK: JINGLE BELLS
+            bool jingleBellsPlaying = false;
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.AutoReset = false;
+            timer.Interval = 1000;
+            timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+            {
+                jingleBellsPlaying = false;
+            };
+
+            PlatformSoundEffect.SoundEffectHandle JingleHandle;
+            JingleHandle = PlatformSoundEffect.Instance.LoadSoundEffectAsset( "bell.wav" );
+            Vector3 LastPhonePosition = null;
+
+            MotionManager = new CMMotionManager( );
+            if( MotionManager.AccelerometerAvailable )
+            {
+                MotionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, (data, motionError) =>
+                {
+                    if( LastPhonePosition == null )
+                    {
+                        LastPhonePosition = new Vector3( (float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z );
+                    }
+                    else
+                    {
+                        Vector3 currPos = new Vector3( (float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z );
+
+                        Vector3 delta = LastPhonePosition - currPos;
+
+                        float changeRate = Vector3.Magnitude( delta );
+
+                        if( changeRate > 2.0f )
+                        {
+                            LastPhonePosition = currPos;
+                            Console.WriteLine( "Phone Shook: {0}\r\n", changeRate );
+
+                            if( jingleBellsPlaying == false && JingleBellsEnabled == true )
+                            {
+                                PlatformSoundEffect.Instance.Play( JingleHandle );
+                                jingleBellsPlaying = true;
+
+                                timer.Start( );
+                            }
+                        }
+                    }
+                });
+                ///
+            }
 			
             return true;
         }
-
 
         public override void OnActivated(UIApplication application)
         {
@@ -100,11 +155,17 @@ namespace iOS
         {
             Rock.Mobile.Util.Debug.WriteLine("OnResignActivation called, App moving to inactive state.");
 
+            // HACK: JINGLE BELLS
+            JingleBellsEnabled = false;
+
             Springboard.OnResignActive( );
         }
         public override void DidEnterBackground(UIApplication application)
         {
             Rock.Mobile.Util.Debug.WriteLine("App entering background state.");
+
+            // HACK: JINGLE BELLS
+            JingleBellsEnabled = false;
 
             Springboard.DidEnterBackground( );
 
@@ -122,4 +183,3 @@ namespace iOS
         }
     }
 }
-

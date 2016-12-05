@@ -33,7 +33,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2173;
+                public const int Version = 2174;
 
                 /// <summary>
                 /// The full name of your organization
@@ -173,7 +173,8 @@ namespace App
                     string.Empty,
 
                     // Reference URL
-                    "http://ccv.church/christmas16jingle",
+                    //"http://ccv.church/christmas16jingle",
+                    "app://goto/news/jingle",
 
                     // Image Names
                     "jingle_bells_main",

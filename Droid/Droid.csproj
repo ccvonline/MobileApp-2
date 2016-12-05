@@ -111,6 +111,7 @@
     <Compile Include="Tasks\TaskWebFragment.cs" />
     <Compile Include="UserManagement\SplashFragment.cs" />
     <Compile Include="Tasks\ConnectTask\GroupInfoFragment.cs" />
+    <Compile Include="Tasks\NewsTask\JingleFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -409,6 +410,15 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\jingle_bells_main%403x.png">
       <Link>Assets\jingle_bells_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\bell.wav">
+      <Link>Assets\bell.wav</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\jingle_bells_post.jpg">
+      <Link>Assets\jingle_bells_post.jpg</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\jingle_bells_pre.jpg">
+      <Link>Assets\jingle_bells_pre.jpg</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,9 @@ namespace iOS
     {
         NewsMainUIViewController MainPageVC { get; set; }
 
+        // HACK: JINGLE BELLS
+        JingleUIViewController JingleVC { get; set; }
+
         List<RockNews> News { get; set; }
 
         public NewsTask( string storyboardName ) : base( storyboardName )
@@ -129,6 +132,20 @@ namespace iOS
 
                             MainPageVC.LoadAndDownloadImages( );
                             MainPageVC.LayoutChanged( );
+                        }
+                    }
+                    break;
+                }
+
+                // HACK: JINGLE BELLS
+                case PrivateGeneralConfig.App_URL_Commands_Goto:
+                {
+                    if( arguments[ 0 ] == Command_Keyword( ) )
+                    {
+                        if ( arguments[ 1 ] == "jingle" )
+                        {
+                            JingleVC = new JingleUIViewController( );
+                            PerformSegue( MainPageVC, JingleVC );
                         }
                     }
                     break;

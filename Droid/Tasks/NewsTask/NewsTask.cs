@@ -21,6 +21,9 @@ namespace Droid
                 NewsDetailsFragment DetailsPage { get; set; }
                 TaskWebFragment WebFragment { get; set; }
 
+                // HACK: JINGLE BELLS
+                JingleFragment JingleFragment { get; set; }
+
                 List<RockNews> News { get; set; }
 
                 public NewsTask( NavbarFragment navFragment ) : base( navFragment )
@@ -42,6 +45,14 @@ namespace Droid
 
                     WebFragment = new TaskWebFragment( );
                     WebFragment.ParentTask = this;
+
+                    // HACK: JINGLE BELLS
+                    JingleFragment = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.News.JingleFragment" ) as JingleFragment;
+                    if ( JingleFragment == null )
+                    {
+                        JingleFragment = new JingleFragment( );
+                    }
+                    JingleFragment.ParentTask = this;
 
                     // setup a list we can use to cache the news, so should it update we don't use the wrong set.
                     News = new List<RockNews>();
@@ -133,6 +144,19 @@ namespace Droid
                                 }
                             }
 
+                            break;
+                        }
+
+                        // HACK: JINGLE BELLS
+                        case PrivateGeneralConfig.App_URL_Commands_Goto:
+                        {
+                            if( arguments[ 0 ] == Command_Keyword( ) )
+                            {
+                                if ( arguments[ 1 ] == "jingle" )
+                                {
+                                    PresentFragment( JingleFragment, true );
+                                }
+                            }
                             break;
                         }
                     }

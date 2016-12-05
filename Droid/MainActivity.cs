@@ -13,6 +13,10 @@ using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
 using Com.Localytics.Android;
 using App.Shared.PrivateConfig;
+using Android.Hardware;
+using Android.Media;
+using Android.Content.Res;
+using Rock.Mobile.Math;
 
 namespace Droid
 {
@@ -116,9 +120,11 @@ namespace Droid
     [IntentFilter (new[]{Intent.ActionView}, 
         Categories=new[]{Intent.CategoryDefault, Intent.CategoryBrowsable},
         DataScheme="ccvmobile",DataHost="go")]
-    public class MainActivity : Activity
+    public class MainActivity : Activity, ISensorEventListener
     {
         Springboard Springboard { get; set; }
+        SensorManager SensorManager { get; set; }
+        static readonly object _syncLock = new object();
 
         protected override void OnCreate( Bundle bundle )
         {
@@ -156,6 +162,9 @@ namespace Droid
 
             Springboard = FragmentManager.FindFragmentById(Resource.Id.springboard) as Springboard;
             Springboard.SetActiveTaskFrame( layout );
+
+
+            SensorManager = (SensorManager) GetSystemService( Context.SensorService );
         }
 
         /// <summary>
@@ -238,6 +247,48 @@ namespace Droid
 
             // restore our context
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
+
+            SensorManager.RegisterListener( this, SensorManager.GetDefaultSensor( SensorType.Accelerometer ), SensorDelay.Normal );
+        }
+
+        protected override void OnPause ()
+        {
+            base.OnPause();
+
+            SensorManager.UnregisterListener( this );
+        }
+
+        public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
+        {
+            // We don't want to do anything here.
+        }
+
+        Vector3 LastPhonePosition = null;
+
+        public void OnSensorChanged(SensorEvent e)
+        {
+            lock (_syncLock)
+            {
+                if( LastPhonePosition == null )
+                {
+                    LastPhonePosition = new Vector3( ) { X = e.Values[ 0 ], Y = e.Values[ 1 ], Z = e.Values[ 2 ] };
+                }
+                else
+                {
+                    Vector3 currPos = new Vector3( ) { X = e.Values[ 0 ], Y = e.Values[ 1 ], Z = e.Values[ 2 ] };
+
+                    Vector3 delta = LastPhonePosition - currPos;
+
+                    float changeRate = Vector3.Magnitude( delta );
+
+                    if( changeRate > 4.0f )
+                    {
+                        LastPhonePosition = currPos;
+                    
+                        Console.WriteLine( string.Format("x={0:f}, y={1:f}, y={2:f}", e.Values[0], e.Values[1], e.Values[2]) );
+                    }
+                }
+            }
         }
 
         protected override void OnNewIntent(Intent intent)
