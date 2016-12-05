@@ -69,17 +69,17 @@ namespace Droid
         {
             base.OnResume();
 
-            Point displaySize = new Point( );
-            Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
-            JingleView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
-
-
             MainActivity.JingleBellsEnabled = true;
 
             if ( ParentTask.TaskReadyForFragmentDisplay == true && View != null )
             {
                 JingleView.LoadResources( );
             }
+
+            // update the layout AFTER loading resources, so the image can position correctly
+            Point displaySize = new Point( );
+            Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
+            JingleView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
         }
 
         public override void TaskReadyForFragmentDisplay()
@@ -92,6 +92,11 @@ namespace Droid
             if ( View != null )
             {
                 JingleView.LoadResources( );
+
+                // update the layout AFTER loading resources, so the image can position correctly
+                Point displaySize = new Point( );
+                Activity.WindowManager.DefaultDisplay.GetSize( displaySize );
+                JingleView.LayoutChanged( new System.Drawing.RectangleF( 0, 0, displaySize.X, displaySize.Y ) );
             }
         }
 
