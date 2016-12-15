@@ -24,7 +24,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.ccvonline.CCVMobileApp</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.7</string>
+	<string>2.1.8</string>
 	<key>XSLaunchImageAssets</key>
 	<string>Resources/Images.xcassets/LaunchImage.launchimage</string>
 	<key>XSAppIconAssets</key>
@@ -71,6 +71,6 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library is used to optionally upload a profile picture.</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>0</string>
 </dict>
 </plist>

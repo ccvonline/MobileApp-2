@@ -55,5 +55,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engagement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIJingle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\UINoteDiscGuide.cs" />
   </ItemGroup>
 </Project>

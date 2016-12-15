@@ -112,6 +112,7 @@
     <Compile Include="UserManagement\SplashFragment.cs" />
     <Compile Include="Tasks\ConnectTask\GroupInfoFragment.cs" />
     <Compile Include="Tasks\NewsTask\JingleFragment.cs" />
+    <Compile Include="Tasks\NotesTask\NotesDiscGuideFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

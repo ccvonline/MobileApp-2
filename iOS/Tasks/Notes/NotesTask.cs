@@ -15,7 +15,7 @@ namespace iOS
 
         public NotesTask( string storyboardName ) : base( storyboardName )
         {
-            MainViewController = Storyboard.InstantiateViewController( "MainPageViewController" ) as NotesMainUIViewController;
+            MainViewController = new NotesMainUIViewController( );
             MainViewController.Task = this;
 
             // create the note controller ONCE and let the view controllers grab it as needed.

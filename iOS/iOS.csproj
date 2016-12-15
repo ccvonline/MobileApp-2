@@ -474,9 +474,6 @@
     </Compile>
     <Compile Include="Tasks\Notes\NotesDetailsUIViewController.cs" />
     <Compile Include="Tasks\Notes\NotesMainUIViewController.cs" />
-    <Compile Include="Tasks\Notes\NotesMainUIViewController.designer.cs">
-      <DependentUpon>NotesMainUIViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tasks\Notes\NotesWatchUIViewController.cs" />
     <Compile Include="Tasks\Prayer\Prayer_CreateUIViewController.cs" />
     <Compile Include="Tasks\Prayer\Prayer_PostUIViewController.cs" />
@@ -498,6 +495,7 @@
     <Compile Include="UserManagement\SplashViewController.cs" />
     <Compile Include="Tasks\Connect\GroupInfoViewController.cs" />
     <Compile Include="Tasks\News\JingleUIViewController.cs" />
+    <Compile Include="Tasks\Notes\NotesDiscGuideViewController.cs" />
   </ItemGroup>
   <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
@@ -506,7 +504,6 @@
   <ItemGroup>
     <InterfaceDefinition Include="Tasks\News\NewsStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Give\GiveStoryboard_iPhone.storyboard" />
-    <InterfaceDefinition Include="Tasks\Notes\NotesStoryboard_iPhone.storyboard" />
     <InterfaceDefinition Include="Tasks\Connect\ConnectStoryboard_iPhone.storyboard" />
   </ItemGroup>
   <ItemGroup>

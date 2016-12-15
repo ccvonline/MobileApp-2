@@ -110,7 +110,7 @@ namespace App.Shared
                 }
 
                 [JsonConstructor]
-                public Message( string name, string speaker, string date, string noteUrl, string audioUrl, string watchUrl, string shareUrl )
+                public Message( string name, string speaker, string date, string noteUrl, string audioUrl, string watchUrl, string shareUrl, string discussionGuideUrl )
                 {
                     Name = name;
                     Speaker = speaker;
@@ -119,6 +119,7 @@ namespace App.Shared
                     AudioUrl = audioUrl;
                     WatchUrl = watchUrl;
                     ShareUrl = shareUrl;
+                    DiscussionGuideUrl = discussionGuideUrl;
                 }
 
                 public void MakeURLsAbsolute( string hostDomain )
@@ -142,6 +143,11 @@ namespace App.Shared
                     if ( _ShareUrl != null && _ShareUrl.Contains( "http://" ) == false )
                     {
                         _ShareUrl = _ShareUrl.Insert( 0, hostDomain );
+                    }
+
+                    if( _DiscussionGuideUrl != null && _DiscussionGuideUrl.Contains( "http://" ) == false )
+                    {
+                        _DiscussionGuideUrl = _DiscussionGuideUrl.Insert( 0, hostDomain );
                     }
                 }
 
@@ -263,6 +269,23 @@ namespace App.Shared
                     protected set
                     {
                         _ShareUrl = value == null ? "" : value.Trim( Series.TrimChars );
+                    }
+                }
+
+                /// <summary>
+                /// Url where a discussion guide related to this message can be found.
+                /// </summary>
+                string _DiscussionGuideUrl;
+                public string DiscussionGuideUrl
+                {
+                    get
+                    {
+                        return _DiscussionGuideUrl;
+                    }
+
+                    protected set
+                    {
+                        _DiscussionGuideUrl = value == null ? "" : value.Trim( Series.TrimChars );
                     }
                 }
 

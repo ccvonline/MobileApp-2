@@ -132,7 +132,8 @@ namespace Droid
                     messageItem.Date.Text = ParentFragment.Series.Messages[ position ].Date;
                     messageItem.Speaker.Text = ParentFragment.Series.Messages[ position ].Speaker;
 
-                    if ( string.IsNullOrEmpty( ParentFragment.Series.Messages[ position ].AudioUrl ) == true )
+                    // AudioURL - if blank, disable the button
+                    if ( string.IsNullOrWhiteSpace( ParentFragment.Series.Messages[ position ].AudioUrl ) == true )
                     {
                         messageItem.ToggleListenButton( false );
                     }
@@ -141,7 +142,8 @@ namespace Droid
                         messageItem.ToggleListenButton( true );
                     }
 
-                    if ( string.IsNullOrEmpty( ParentFragment.Series.Messages[ position ].WatchUrl ) == true )
+                    // WatchURL - if blank, disable the button
+                    if ( string.IsNullOrWhiteSpace( ParentFragment.Series.Messages[ position ].WatchUrl ) == true )
                     {
                         messageItem.ToggleWatchButton( false );
                     }
@@ -150,13 +152,24 @@ namespace Droid
                         messageItem.ToggleWatchButton( true );
                     }
 
-                    if ( string.IsNullOrEmpty( ParentFragment.Series.Messages[ position ].NoteUrl ) == true )
+                    // NoteURL - if blank, disable the button
+                    if ( string.IsNullOrWhiteSpace( ParentFragment.Series.Messages[ position ].NoteUrl ) == true )
                     {
                         messageItem.ToggleTakeNotesButton( false );
                     }
                     else
                     {
                         messageItem.ToggleTakeNotesButton( true );
+                    }
+
+                    // DiscussionGuideURL - if blank, disable the button
+                    if ( string.IsNullOrWhiteSpace( ParentFragment.Series.Messages[ position ].DiscussionGuideUrl ) == true )
+                    {
+                        messageItem.ToggleDiscussionGuideButton( false );
+                    }
+                    else
+                    {
+                        messageItem.ToggleDiscussionGuideButton( true );
                     }
 
                     return messageItem;
@@ -239,7 +252,10 @@ namespace Droid
             public class MessageListItem : ListAdapter.ListItemView
             {
                 public LinearLayout TitleLayout { get; set; }
+
                 public TextView Title { get; set; }
+
+                public LinearLayout MessageDetailsLayout { get; set; }
                 public TextView Date { get; set; }
                 public TextView Speaker { get; set; }
 
@@ -247,6 +263,7 @@ namespace Droid
                 Button ListenButton { get; set; }
                 Button WatchButton { get; set; }
                 Button TakeNotesButton { get; set; }
+                Button DiscussionGuideButton { get; set; }
 
                 public NotesDetailsArrayAdapter ParentAdapter { get; set; }
                 public int Position { get; set; }
@@ -258,23 +275,25 @@ namespace Droid
 
                     Orientation = Orientation.Vertical;
 
+                    // Content Layout will hold all the items for this row
                     LinearLayout contentLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     contentLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.MatchParent, LayoutParams.MatchParent );
-                    contentLayout.Orientation = Orientation.Horizontal;
+                    contentLayout.Orientation = Orientation.Vertical;
                     AddView( contentLayout );
 
+                    // Title Layout holds the title, and the MessageDetailsLayout (which contains date / speaker)
                     TitleLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     TitleLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.MatchParent, LayoutParams.WrapContent );
-                    TitleLayout.Orientation = Orientation.Vertical;
+                    TitleLayout.Orientation = Orientation.Horizontal;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Weight = 1;
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
                     ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
-                    ( (LinearLayout.LayoutParams)TitleLayout.LayoutParameters ).BottomMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
                     contentLayout.AddView( TitleLayout );
 
                     Title = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Title.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).Gravity = GravityFlags.Top;
+                    ( (LinearLayout.LayoutParams)Title.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
                     Title.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Bold ), TypefaceStyle.Normal );
                     Title.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Medium_FontSize );
                     Title.SetSingleLine( );
@@ -282,22 +301,36 @@ namespace Droid
                     Title.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor ) );
                     TitleLayout.AddView( Title );
 
+
+                    // This Stores the Date / Speaker
+                    MessageDetailsLayout = new LinearLayout( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                    MessageDetailsLayout.LayoutParameters = new LinearLayout.LayoutParams( LayoutParams.MatchParent, LayoutParams.WrapContent );
+                    MessageDetailsLayout.Orientation = Orientation.Vertical;
+                    ( (LinearLayout.LayoutParams)MessageDetailsLayout.LayoutParameters ).Weight = 1;
+                    ( (LinearLayout.LayoutParams)MessageDetailsLayout.LayoutParameters ).Gravity = GravityFlags.Right;
+                    ( (LinearLayout.LayoutParams)MessageDetailsLayout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)MessageDetailsLayout.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    ( (LinearLayout.LayoutParams)MessageDetailsLayout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( 15 );
+                    TitleLayout.AddView( MessageDetailsLayout );
+
                     Date = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Date.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    ( (LinearLayout.LayoutParams)Date.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
+                    ( (LinearLayout.LayoutParams)Date.LayoutParameters ).Gravity = GravityFlags.Right;
                     Date.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     Date.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     Date.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
-                    ( (LinearLayout.LayoutParams)Date.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
-                    TitleLayout.AddView( Date );
+                    MessageDetailsLayout.AddView( Date );
 
                     Speaker = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Speaker.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    ( (LinearLayout.LayoutParams)Speaker.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
+                    ( (LinearLayout.LayoutParams)Speaker.LayoutParameters ).Gravity = GravityFlags.Right;
                     Speaker.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
                     Speaker.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
                     Speaker.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
-                    ( (LinearLayout.LayoutParams)Speaker.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -4 );
                     Speaker.SetMaxLines( 1 );
-                    TitleLayout.AddView( Speaker );
+                    MessageDetailsLayout.AddView( Speaker );
 
                     // add our own custom seperator at the bottom
                     View seperator = new View( Rock.Mobile.PlatformSpecific.Android.Core.Context );
@@ -318,8 +351,7 @@ namespace Droid
 
                     ListenButton = new Button( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     ListenButton.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    ( (LinearLayout.LayoutParams)ListenButton.LayoutParameters ).Weight = 1;
-                    ( (LinearLayout.LayoutParams)ListenButton.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
+                    ( (LinearLayout.LayoutParams)ListenButton.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -10 );
                     ListenButton.SetTypeface( buttonFontFace, TypefaceStyle.Normal );
                     ListenButton.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateNoteConfig.Details_Table_IconSize );
                     ListenButton.Text = PrivateNoteConfig.Series_Table_Listen_Icon;
@@ -329,8 +361,7 @@ namespace Droid
 
                     WatchButton = new Button( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     WatchButton.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    ( (LinearLayout.LayoutParams)WatchButton.LayoutParameters ).Weight = 1;
-                    ( (LinearLayout.LayoutParams)WatchButton.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
+                    ( (LinearLayout.LayoutParams)WatchButton.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -10 );
                     WatchButton.SetTypeface( buttonFontFace, TypefaceStyle.Normal );
                     WatchButton.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateNoteConfig.Details_Table_IconSize );
                     WatchButton.Text = PrivateNoteConfig.Series_Table_Watch_Icon;
@@ -338,10 +369,19 @@ namespace Droid
                     WatchButton.Background = null;
                     buttonLayout.AddView( WatchButton );
 
+                    DiscussionGuideButton = new Button( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+                    DiscussionGuideButton.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+                    ( (LinearLayout.LayoutParams)DiscussionGuideButton.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -10 );
+                    DiscussionGuideButton.SetTypeface( buttonFontFace, TypefaceStyle.Normal );
+                    DiscussionGuideButton.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateNoteConfig.Details_Table_IconSize );
+                    DiscussionGuideButton.Text = PrivateNoteConfig.Series_Table_DiscussionGuide_Icon;
+                    DiscussionGuideButton.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( NoteConfig.Details_Table_IconColor ) );
+                    DiscussionGuideButton.Background = null;
+                    buttonLayout.AddView( DiscussionGuideButton );
+
                     TakeNotesButton = new Button( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     TakeNotesButton.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
-                    ( (LinearLayout.LayoutParams)TakeNotesButton.LayoutParameters ).Weight = 1;
-                    ( (LinearLayout.LayoutParams)TakeNotesButton.LayoutParameters ).Gravity = GravityFlags.CenterVertical;
+                    ( (LinearLayout.LayoutParams)TakeNotesButton.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -10 );
                     TakeNotesButton.SetTypeface( buttonFontFace, TypefaceStyle.Normal );
                     TakeNotesButton.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateNoteConfig.Details_Table_IconSize );
                     TakeNotesButton.Text = PrivateNoteConfig.Series_Table_TakeNotes_Icon;
@@ -362,6 +402,11 @@ namespace Droid
                     TakeNotesButton.Click += (object sender, EventArgs e ) =>
                         {
                             ParentAdapter.OnClick( Position, 2 );
+                        };
+
+                    DiscussionGuideButton.Click += (object sender, EventArgs e ) =>
+                        {
+                            ParentAdapter.OnClick( Position, 3 );
                         };
                 }
 
@@ -410,6 +455,22 @@ namespace Droid
                         
                         uint disabledColor = Rock.Mobile.Graphics.Util.ScaleRGBAColor( ControlStylingConfig.TextField_PlaceholderTextColor, 2, false );
                         TakeNotesButton.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( disabledColor ) );
+                    }
+                }
+
+                public void ToggleDiscussionGuideButton( bool enabled )
+                {
+                    if ( enabled == true )
+                    {
+                        DiscussionGuideButton.Enabled = true;
+                        DiscussionGuideButton.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( NoteConfig.Details_Table_IconColor ) );
+                    }
+                    else
+                    {
+                        DiscussionGuideButton.Enabled = false;
+
+                        uint disabledColor = Rock.Mobile.Graphics.Util.ScaleRGBAColor( ControlStylingConfig.TextField_PlaceholderTextColor, 2, false );
+                        DiscussionGuideButton.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( disabledColor ) );
                     }
                 }
 

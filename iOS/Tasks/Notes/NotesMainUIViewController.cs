@@ -53,6 +53,11 @@ namespace iOS
                 public UILabel TakeNotesButtonIcon { get; set; }
                 public UILabel TakeNotesButtonLabel { get; set; }
 
+                public UIButton DiscussionGuideButton { get; set; }
+                public UILabel DiscussionGuideButtonIcon { get; set; }
+                public UILabel DiscussionGuideButtonLabel { get; set; }
+
+
                 public UILabel BottomBanner { get; set; }
 
                 public SeriesPrimaryCell( CGRect parentSize, UITableViewCellStyle style, string cellIdentifier, UIImage imagePlaceholder ) : base( style, cellIdentifier )
@@ -142,7 +147,6 @@ namespace iOS
                     TakeNotesButton.SizeToFit( );
                     AddSubview( TakeNotesButton );
 
-
                     TakeNotesButtonIcon = new UILabel( );
                     TakeNotesButton.AddSubview( TakeNotesButtonIcon );
                     TakeNotesButtonIcon.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary, PrivateNoteConfig.Series_Table_IconSize );
@@ -154,6 +158,31 @@ namespace iOS
                     TakeNotesButtonLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
                     TakeNotesButtonLabel.Text = MessagesStrings.Series_Table_TakeNotes;
                     TakeNotesButtonLabel.SizeToFit( );
+
+
+                    // Discussion Guide Info Button
+                    DiscussionGuideButton = new UIButton( UIButtonType.Custom );
+                    DiscussionGuideButton.TouchUpInside += (object sender, EventArgs e) => { Parent.DiscussionGuideButtonClicked( ); };
+                    DiscussionGuideButton.Layer.AnchorPoint = CGPoint.Empty;
+                    DiscussionGuideButton.BackgroundColor = UIColor.Clear;
+                    DiscussionGuideButton.Layer.BorderColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ).CGColor;
+                    DiscussionGuideButton.Layer.BorderWidth = 0;
+                    DiscussionGuideButton.SizeToFit( );
+                    AddSubview( DiscussionGuideButton );
+
+                    DiscussionGuideButtonIcon = new UILabel( );
+                    DiscussionGuideButton.AddSubview( DiscussionGuideButtonIcon );
+                    DiscussionGuideButtonIcon.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary, PrivateNoteConfig.Series_Table_IconSize );
+                    DiscussionGuideButtonIcon.Text = PrivateNoteConfig.Series_Table_DiscussionGuide_Icon;
+                    DiscussionGuideButtonIcon.SizeToFit( );
+
+                    DiscussionGuideButtonLabel = new UILabel( );
+                    DiscussionGuideButton.AddSubview( DiscussionGuideButtonLabel );
+                    DiscussionGuideButtonLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+                    DiscussionGuideButtonLabel.Text = MessagesStrings.Series_Table_DiscussionGuide;
+                    DiscussionGuideButtonLabel.SizeToFit( );
+
+
 
                     // bottom banner
                     BottomBanner = new UILabel( );
@@ -198,6 +227,22 @@ namespace iOS
                         TakeNotesButton.Enabled = false;
                         TakeNotesButtonIcon.TextColor = UIColor.DarkGray;
                         TakeNotesButtonLabel.TextColor = UIColor.DarkGray;
+                    }
+                }
+
+                public void ToggleDiscussionGuideButton( bool enabled )
+                {
+                    if( enabled == true )
+                    {
+                        DiscussionGuideButton.Enabled = true;
+                        DiscussionGuideButtonIcon.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
+                        DiscussionGuideButtonLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
+                    }
+                    else
+                    {
+                        DiscussionGuideButton.Enabled = false;
+                        DiscussionGuideButtonIcon.TextColor = UIColor.DarkGray;
+                        DiscussionGuideButtonLabel.TextColor = UIColor.DarkGray;
                     }
                 }
             }
@@ -403,13 +448,23 @@ namespace iOS
                         cell.TakeNotesButtonIcon.Layer.Position = new CGPoint( (cell.TakeNotesButton.Bounds.Width - labelTotalWidth) / 2 + (cell.TakeNotesButtonIcon.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
                         cell.TakeNotesButtonLabel.Layer.Position = new CGPoint( cell.TakeNotesButtonIcon.Frame.Right + (cell.TakeNotesButtonLabel.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
 
+
+                        // Position the Discussion Guide icon and button
+                        cell.DiscussionGuideButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width + 6, cell.DiscussionGuideButton.Bounds.Height + 10 );
+                        cell.DiscussionGuideButton.Layer.Position = new CGPoint( -5, cell.TakeNotesButton.Frame.Bottom );
+
+                        labelTotalWidth = cell.DiscussionGuideButtonIcon.Bounds.Width + cell.DiscussionGuideButtonLabel.Bounds.Width + 5;
+                        cell.DiscussionGuideButtonIcon.Layer.Position = new CGPoint( (cell.DiscussionGuideButton.Bounds.Width - labelTotalWidth) / 2 + (cell.DiscussionGuideButtonIcon.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
+                        cell.DiscussionGuideButtonLabel.Layer.Position = new CGPoint( cell.DiscussionGuideButtonIcon.Frame.Right + (cell.DiscussionGuideButtonLabel.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
+
+
                         // Position the Bottom Banner
                         cell.BottomBanner.Bounds = new CGRect( 0, 0, cell.Bounds.Width, cell.BottomBanner.Bounds.Height + 10 );
-                        cell.BottomBanner.Layer.Position = new CGPoint( 0, cell.TakeNotesButton.Frame.Bottom - 1 );
+                        cell.BottomBanner.Layer.Position = new CGPoint( 0, cell.DiscussionGuideButton.Frame.Bottom - 1 );
 
                         // Watch Button & Labels
                         // disable the button if there's no watch URL
-                        if ( string.IsNullOrEmpty( latestMessage.WatchUrl ) )
+                        if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) )
                         {
                             cell.ToggleWatchButton( false );
                         }
@@ -421,7 +476,7 @@ namespace iOS
 
                         // Take Notes Button & Labels
                         // disable the button if there's no note URL
-                        if ( string.IsNullOrEmpty( latestMessage.NoteUrl ) )
+                        if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) )
                         {
                             cell.ToggleTakeNotesButton( false );
                         }
@@ -429,11 +484,23 @@ namespace iOS
                         {
                             cell.ToggleTakeNotesButton( true );
                         }
+
+                        // DiscussionGuide Button & Labels
+                        // disable the button if there's no note URL
+                        if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) )
+                        {
+                            cell.ToggleDiscussionGuideButton( false );
+                        }
+                        else
+                        {
+                            cell.ToggleDiscussionGuideButton( true );
+                        }
                     }
                     else
                     {
                         cell.ToggleWatchButton( false );
                         cell.ToggleTakeNotesButton( false );
+                        cell.ToggleDiscussionGuideButton( false );
                     }
                 }
 
@@ -506,6 +573,11 @@ namespace iOS
             {
                 Parent.WatchButtonClicked( );
             }
+
+            public void DiscussionGuideButtonClicked( )
+            {
+                Parent.DiscussionGuideButtonClicked( );
+            }
         }
 
         /// <summary>
@@ -526,10 +598,11 @@ namespace iOS
         NotesDetailsUIViewController DetailsViewController { get; set; }
 
         UIResultView ResultView { get; set; }
+        UITableView NotesTableView { get; set; }
 
         bool IsVisible { get; set; }
 
-        public NotesMainUIViewController (IntPtr handle) : base (handle)
+        public NotesMainUIViewController ( ) : base ( )
         {
             SeriesEntries = new List<SeriesEntry>();
 
@@ -546,8 +619,10 @@ namespace iOS
             base.ViewDidLoad();
 
             // setup our table
+            NotesTableView = new UITableView( );
             NotesTableView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             NotesTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            View.AddSubview( NotesTableView );
 
             ActivityIndicator = new UIActivityIndicatorView( new CGRect( View.Frame.Width / 2, View.Frame.Height / 2, 0, 0 ) );
             ActivityIndicator.StartAnimating( );
@@ -788,6 +863,17 @@ namespace iOS
 
                 Task.PerformSegue( this, noteTask.NoteController );
             }
+        }
+
+        /// <summary>
+        /// Called when the user pressed the "Discussion Guide" button in the primary cell
+        /// </summary>
+        public void DiscussionGuideButtonClicked( )
+        {
+            NotesDiscGuideViewController viewController = new NotesDiscGuideViewController( Task );
+            viewController.DiscGuideURL = SeriesEntries[ 0 ].Series.GetLatestMessage( ).DiscussionGuideUrl;
+
+            Task.PerformSegue( this, viewController );
         }
 
         public void RowClicked( int row )

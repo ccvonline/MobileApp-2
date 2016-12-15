@@ -250,6 +250,7 @@ namespace App.Shared
 
             public const string Series_Table_Watch = "Watch";
             public const string Series_Table_TakeNotes = "Take Notes";
+            public const string Series_Table_DiscussionGuide = "Discussion Guide";
 
             public const string Series_Table_PreviousMessages = "Previous Message Series";
 
@@ -262,6 +263,9 @@ namespace App.Shared
             public const string UserNote_DeleteTitle = "Delete Note";
             public const string UserNote_DeleteMessage = "Are you sure you want to delete this note?";
             public const string UserNote_Prefix = "My Note - ";
+
+            public const string DiscussionGuide_Header = "Discussion Guide";
+            public const string DiscussionGuide_Desc = "Discussion Guides offer a deeper dive into the message. Use these for further studying with your Young Adult or Neighborhood Group.";
 
         }
 
