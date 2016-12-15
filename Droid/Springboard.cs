@@ -192,6 +192,8 @@ namespace Droid
             }
             NavbarFragment.SpringboardParent = this;
 
+            // Note: Fragment Tags must be the fully qualified name of the class, including its namespaces.
+            // This is how Android will find it when searching.
             LoginFragment = FragmentManager.FindFragmentByTag( "Droid.LoginFragment" ) as LoginFragment;
             if ( LoginFragment == null )
             {

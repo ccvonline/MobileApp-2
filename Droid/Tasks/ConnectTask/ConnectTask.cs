@@ -24,6 +24,9 @@ namespace Droid
                 public ConnectTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
+
+                    // Note: Fragment Tags must be the fully qualified name of the class, including its namespaces.
+                    // This is how Android will find it when searching.
                     MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Connect.ConnectPrimaryFragment" ) as ConnectPrimaryFragment;
                     if ( MainPage == null )
                     {

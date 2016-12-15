@@ -17,6 +17,9 @@ namespace Droid
                 public AboutTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
+
+                    // Note: Fragment Tags must be the fully qualified name of the class, including its namespaces.
+                    // This is how Android will find it when searching.
                     MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.TaskWebFragment" ) as TaskWebFragment;
                     if( MainPage == null )
                     {
