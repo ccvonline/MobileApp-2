@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +12,15 @@ using Android.Util;
 using Android.Views;
 using Android.Text;
 using Android.Widget;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Android.Views.InputMethods;
-using App.Shared.Strings;
-using App.Shared.Config;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
 using Android.Telephony;
 using Rock.Mobile.Util.Strings;
 using Java.Lang.Reflect;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Rock.Mobile.Animation;
 using Android.Graphics;
 using Droid.Tasks;

@@ -2,11 +2,11 @@ using System;
 using System.Xml;
 using Rock.Mobile.UI;
 using System.Collections.Generic;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using System.Drawing;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

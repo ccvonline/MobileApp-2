@@ -3,13 +3,13 @@ using System.Xml;
 using Rock.Mobile.UI;
 using System.Threading;
 using System.Collections.Generic;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using System.Drawing;
 using Rock.Mobile.Animation;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

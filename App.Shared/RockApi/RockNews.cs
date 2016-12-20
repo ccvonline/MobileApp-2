@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {
@@ -138,7 +138,7 @@ namespace App
                     {
                         foreach ( Guid campusGuid in CampusGuids )
                         {
-                            campuses += "\n" + App.Shared.Network.RockLaunchData.Instance.Data.CampusGuidToName( campusGuid );
+                            campuses += "\n" + MobileApp.Shared.Network.RockLaunchData.Instance.Data.CampusGuidToName( campusGuid );
                         }
                         developerInfo += string.Format( "\n\nCampuses:{0}", campuses );
                     }

@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +12,13 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Media;
-using App.Shared.Strings;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
-using App.Shared;
-using App.Shared.Analytics;
-using App.Shared.UI;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.UI;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -324,12 +324,12 @@ namespace Droid
                         float playbackPerc = (float)CurrentPosition / (float)Duration;
                         if ( playbackPerc > .01f && playbackPerc < .98f )
                         {
-                            App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = CurrentPosition;
+                            MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = CurrentPosition;
                         }
                         else
                         {
                             // otherwise plan on starting from the beginning
-                            App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = 0;
+                            MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = 0;
                         }
                     }
                 }
@@ -392,9 +392,9 @@ namespace Droid
                     MessageAnalytic.Instance.Trigger( MessageAnalytic.Listen, Name );
 
                     // if this is a new video, store the URL
-                    if ( App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl != MediaUrl )
+                    if ( MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl != MediaUrl )
                     {
-                        App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl = MediaUrl;
+                        MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl = MediaUrl;
 
                         PlayerState = MediaPlayerState.Playing;
                         mp.Start( );
@@ -404,7 +404,7 @@ namespace Droid
                     else
                     {
                         // otherwise, resume where we left off
-                        mp.SeekTo( (int)App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos );
+                        mp.SeekTo( (int)MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos );
                     }
                 }
 

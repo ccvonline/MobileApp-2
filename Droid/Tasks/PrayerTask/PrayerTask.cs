@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Android.App;
 using Android.Content;
 using Android.Views;
 using Droid.Tasks.Notes;
-using App.Shared.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.UI;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

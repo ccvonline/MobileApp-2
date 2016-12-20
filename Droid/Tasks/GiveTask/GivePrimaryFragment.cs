@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Media;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 
 namespace Droid
 {

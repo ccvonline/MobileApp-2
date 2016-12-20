@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using Rock.Mobile.UI;
 using System.Drawing;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.Animation;
 using System.IO;
 using System.Collections.Generic;
 
-namespace App.Shared.UI
+namespace MobileApp.Shared.UI
 {
     public class UISpecial
     {

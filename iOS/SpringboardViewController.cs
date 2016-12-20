@@ -6,18 +6,18 @@ using CoreAnimation;
 using CoreGraphics;
 using System.Collections.Generic;
 using Rock.Mobile.Network;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using AssetsLibrary;
 using System.IO;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
 using Rock.Mobile.PlatformSpecific.iOS.Graphics;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
-using App.Shared;
+using MobileApp.Shared;
 using Rock.Mobile.Animation;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.PlatformSpecific.Util;
@@ -691,7 +691,7 @@ namespace iOS
             }
             else if ( isCampusSelection )
             {
-                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
+                MobileApp.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
             }
             else
             {

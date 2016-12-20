@@ -1,14 +1,14 @@
-﻿using System;
-using App.Shared;
+using System;
+using MobileApp.Shared;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using UIKit;
 using Foundation;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using CoreGraphics;
 using System.Drawing;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
-using App.Shared.Strings;
+using MobileApp.Shared.Strings;
 
 namespace iOS
 {

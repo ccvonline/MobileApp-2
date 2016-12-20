@@ -3,18 +3,18 @@ using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
 using Rock.Mobile.UI;
-using App.Shared.Strings;
+using MobileApp.Shared.Strings;
 using System.Collections.Generic;
 using CoreGraphics;
-using App.Shared.Config;
-using App.Shared.Network;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Network;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
 using Rock.Mobile.Animation;
-using App.Shared;
+using MobileApp.Shared;
 using Rock.Mobile.IO;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -268,9 +268,9 @@ namespace iOS
 
                         // see if there's a person alias ID to use.
                         int? personAliasId = null;
-                        if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                        if ( MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
                         {
-                            personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                            personAliasId = MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
                         }
 
                         prayerRequest.Text = PrayerRequest.Text;
@@ -357,9 +357,9 @@ namespace iOS
             {
                 debugKeyEntered = true;
 
-                App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
+                MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
                 SpringboardViewController.DisplayError( "Developer Mode", 
-                    string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+                    string.Format( "Developer Mode has been toggled: {0}", MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
             }
             else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "version" )
             {

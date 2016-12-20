@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Rock.Mobile.UI;
 using System.Drawing;
 using Rock.Mobile.Animation;
 
-namespace App.Shared.UI
+namespace MobileApp.Shared.UI
 {
     /// <summary>
     /// Used to display a result to a user, including a status message

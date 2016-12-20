@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     namespace Strings
     {

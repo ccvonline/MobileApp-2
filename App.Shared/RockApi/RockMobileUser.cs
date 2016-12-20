@@ -3,18 +3,18 @@ using Rock.Client;
 using Newtonsoft.Json;
 using System.IO;
 using Rock.Mobile.Network;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using System.Collections.Generic;
 using Facebook;
 using RestSharp;
 using Rock.Mobile.Util.Strings;
 using System.Runtime.Serialization.Formatters.Binary;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
 using System.Linq;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {
@@ -290,7 +290,7 @@ namespace App
 
                     // for the address location, default the country to the built in country code.
                     PrimaryAddress.Location = new Rock.Client.Location();
-                    PrimaryAddress.Location.Country = App.Shared.Config.GeneralConfig.CountryCode;
+                    PrimaryAddress.Location.Country = MobileApp.Shared.Config.GeneralConfig.CountryCode;
                 }
 
                 public string PreferredName( )

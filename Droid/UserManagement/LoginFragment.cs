@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +11,18 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using App.Shared.Network;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
 using Android.Webkit;
 using Rock.Mobile.Threading;
 using Android.Views.InputMethods;
 using Rock.Mobile.PlatformSpecific.Android.UI;
 using Rock.Mobile.Animation;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
-using App.Shared.UI;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
+using MobileApp.Shared.UI;
 using System.Drawing;
 
 namespace Droid

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Android.Widget;
 using Rock.Mobile.UI;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Android.Views;
 using Android.Graphics;
 using Android.Graphics.Drawables;

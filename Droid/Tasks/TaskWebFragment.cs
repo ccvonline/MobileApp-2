@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ using Android.Views;
 using Android.Widget;
 using Android.Webkit;
 
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.PlatformSpecific.Android.UI;
-using App.Shared.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.UI;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
 
 namespace Droid
@@ -80,7 +80,7 @@ namespace Droid
                                     string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
                                     // append the campus (this is part of their identity)
-                                    fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                                    fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                                     // if we got the token, append it
                                     if( string.IsNullOrEmpty( impersonationToken ) == false )
@@ -196,7 +196,7 @@ namespace Droid
                                 string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, PrivateGeneralConfig.MobilePlatform );
 
                                 // also include their campus. this is personal data as well.
-                                fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                                fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                                 // if we got it, append it and load
                                 if ( string.IsNullOrEmpty( impersonationToken ) == false )

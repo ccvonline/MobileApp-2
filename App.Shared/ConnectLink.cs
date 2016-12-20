@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     public class ConnectLink
     {
@@ -20,12 +20,12 @@ namespace App.Shared
             List<ConnectLink> linkEntries = new List<ConnectLink>();
 
             // parse the config and see how many additional links we need.
-            for ( int i = 0; i < App.Shared.Config.ConnectConfig.GetEngagedList.Length; i++ )
+            for ( int i = 0; i < MobileApp.Shared.Config.ConnectConfig.GetEngagedList.Length; i++ )
             {
                 ConnectLink link = new ConnectLink();
                 linkEntries.Add( link );
 
-                string[] engagedEntry = App.Shared.Config.ConnectConfig.GetEngagedList[ i ].GetEntry( App.Shared.Network.RockMobileUser.Instance.Groups );
+                string[] engagedEntry = MobileApp.Shared.Config.ConnectConfig.GetEngagedList[ i ].GetEntry( MobileApp.Shared.Network.RockMobileUser.Instance.Groups );
 
                 // use the "positive" list, which has the data for them BEING in the group.
                 link.Title = engagedEntry[ 0 ];

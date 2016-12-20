@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Rock.Mobile.UI;
 using System.Drawing;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 
-namespace App.Shared.UI
+namespace MobileApp.Shared.UI
 {
     /// <summary>
     /// Used to display a result to a user, including a status message

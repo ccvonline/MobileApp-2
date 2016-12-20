@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Rock.Mobile.UI;
 using System.Drawing;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

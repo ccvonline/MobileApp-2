@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +11,19 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Android.Graphics;
 using Rock.Mobile.UI;
 using System.Drawing;
-using App.Shared.Strings;
-using App.Shared.Config;
-using App.Shared.Analytics;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Analytics;
 using Rock.Mobile.Animation;
-using App.Shared;
+using MobileApp.Shared;
 using Rock.Mobile.IO;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Droid.Tasks.Notes;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {
@@ -174,7 +174,7 @@ namespace Droid
                     Spinner.Adapter = adapter;
 
                     // populate the category
-                    foreach ( KeyValuePair<string, int> category in App.Shared.Network.RockLaunchData.Instance.Data.PrayerCategories )
+                    foreach ( KeyValuePair<string, int> category in MobileApp.Shared.Network.RockLaunchData.Instance.Data.PrayerCategories )
                     {
                         adapter.Add( category.Key );
                     }
@@ -208,15 +208,15 @@ namespace Droid
                             prayerRequest.LastName = LastNameText.Text;
 
                             int? personAliasId = null;
-                            if ( App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
+                            if ( MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
                             {
-                                personAliasId = App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
+                                personAliasId = MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId;
                             }
 
                             prayerRequest.Text = RequestText.Text;
                             prayerRequest.EnteredDateTime = DateTime.Now;
                             prayerRequest.ExpirationDate = DateTime.Now.Add( PrivatePrayerConfig.PrayerExpirationTime );
-                            prayerRequest.CategoryId = App.Shared.Network.RockLaunchData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
+                            prayerRequest.CategoryId = MobileApp.Shared.Network.RockLaunchData.Instance.Data.PrayerCategoryToId( Spinner.SelectedItem.ToString( ) );
                             prayerRequest.IsActive = true;
                             prayerRequest.Guid = Guid.NewGuid( );
                             prayerRequest.IsPublic = PublicSwitch.Checked;
@@ -278,9 +278,9 @@ namespace Droid
                     {
                         debugKeyEntered = true;
 
-                        App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
+                        MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled = !MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled;
                         Springboard.DisplayError( "Developer Mode", 
-                            string.Format( "Developer Mode has been toggled: {0}", App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
+                            string.Format( "Developer Mode has been toggled: {0}", MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true ? "ON" : "OFF" ) );
                     }
                     else if ( RequestText.Text.ToLower( ).Trim( ) == "version" )
                     {

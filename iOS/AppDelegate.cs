@@ -5,9 +5,9 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using AVFoundation;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using LocalyticsBinding;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

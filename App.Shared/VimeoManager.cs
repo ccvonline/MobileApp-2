@@ -4,7 +4,7 @@ using Rock.Mobile.Network;
 using RestSharp.Deserializers;
 using System.IO;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     public class VimeoVideo
     {

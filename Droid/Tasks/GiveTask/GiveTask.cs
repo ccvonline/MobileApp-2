@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Android.App;
 using Android.Views;
-using App.Shared.Config;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

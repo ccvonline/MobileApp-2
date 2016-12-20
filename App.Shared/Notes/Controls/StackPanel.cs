@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-using App.Shared.Notes.Styles;
+using MobileApp.Shared.Notes.Styles;
 using Rock.Mobile.UI;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using System.Drawing;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

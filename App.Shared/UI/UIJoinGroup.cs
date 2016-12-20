@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using Rock.Mobile.UI;
 using System.Drawing;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.Animation;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Rock.Mobile.Util.Strings;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
 
-namespace App.Shared.UI
+namespace MobileApp.Shared.UI
 {
     public class UIJoinGroup
     {
@@ -203,12 +203,12 @@ namespace App.Shared.UI
             GroupDetails.TextAlignment = TextAlignment.Center;
             GroupDetails.SizeToFit( );
 
-            FirstName.Text = App.Shared.Network.RockMobileUser.Instance.Person.NickName;
-            LastName.Text = App.Shared.Network.RockMobileUser.Instance.Person.LastName;
+            FirstName.Text = MobileApp.Shared.Network.RockMobileUser.Instance.Person.NickName;
+            LastName.Text = MobileApp.Shared.Network.RockMobileUser.Instance.Person.LastName;
 
 
-            Email.Text = App.Shared.Network.RockMobileUser.Instance.Person.Email;
-            CellPhone.Text = App.Shared.Network.RockMobileUser.Instance.CellPhoneNumberDigits( );
+            Email.Text = MobileApp.Shared.Network.RockMobileUser.Instance.Person.Email;
+            CellPhone.Text = MobileApp.Shared.Network.RockMobileUser.Instance.CellPhoneNumberDigits( );
 
             ResultView.Hide( );
         }

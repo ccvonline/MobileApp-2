@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +11,22 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Android.Graphics;
 using Java.IO;
 using Droid.Tasks;
 using System.IO;
-using App.Shared;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
 using Android.Graphics.Drawables;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Rock.Mobile.PlatformSpecific.Android.UI;
 using Rock.Mobile.Animation;
 using Droid.Tasks.Give;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using Rock.Mobile.Network;
 using MobileApp;
@@ -549,7 +549,7 @@ namespace Droid
             Java.Lang.ICharSequence [] campusStrings = new Java.Lang.ICharSequence[ RockLaunchData.Instance.Data.Campuses.Count ];
             for( int i = 0; i < RockLaunchData.Instance.Data.Campuses.Count; i++ )
             {
-                campusStrings[ i ] = new Java.Lang.String( App.Shared.Network.RockLaunchData.Instance.Data.Campuses[ i ].Name );
+                campusStrings[ i ] = new Java.Lang.String( MobileApp.Shared.Network.RockLaunchData.Instance.Data.Campuses[ i ].Name );
             }
 
             builder.SetTitle( new Java.Lang.String( SpringboardStrings.SelectCampus_SourceTitle ) );
@@ -995,7 +995,7 @@ namespace Droid
             // if they picked their campus, update their viewing campus immediately.
             else if ( isCampusSelection )
             {
-                App.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
+                MobileApp.Shared.Network.RockMobileUser.Instance.ViewingCampus = index;
             }
             else
             {

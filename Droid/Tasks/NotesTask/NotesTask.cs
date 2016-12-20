@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Android.Views;
-using App.Shared.Network;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 using Android.App;
 
 namespace Droid

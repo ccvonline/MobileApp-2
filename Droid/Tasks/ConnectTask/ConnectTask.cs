@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Android.App;
 using Android.Views;
-using App.Shared.Strings;
-using App.Shared;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared;
+using MobileApp.Shared.PrivateConfig;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -136,12 +136,12 @@ namespace Droid
                                 GroupFinder.ShowSearchOnAppear = true;
 
                                 // if we're logged in, give it a starting address
-                                if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.HasFullAddress( ) )
+                                if ( MobileApp.Shared.Network.RockMobileUser.Instance.LoggedIn == true && MobileApp.Shared.Network.RockMobileUser.Instance.HasFullAddress( ) )
                                 {
-                                    GroupFinder.SetSearchAddress( App.Shared.Network.RockMobileUser.Instance.Street1( ), 
-                                        App.Shared.Network.RockMobileUser.Instance.City( ),
-                                        App.Shared.Network.RockMobileUser.Instance.State( ),
-                                        App.Shared.Network.RockMobileUser.Instance.Zip( ) );
+                                    GroupFinder.SetSearchAddress( MobileApp.Shared.Network.RockMobileUser.Instance.Street1( ), 
+                                        MobileApp.Shared.Network.RockMobileUser.Instance.City( ),
+                                        MobileApp.Shared.Network.RockMobileUser.Instance.State( ),
+                                        MobileApp.Shared.Network.RockMobileUser.Instance.Zip( ) );
                                 }
 
                                 PresentFragment( GroupFinder, true );
@@ -157,7 +157,7 @@ namespace Droid
                             // turn off auto-show search so that if the user presses 'back', we don't pop it up again.
                             GroupFinder.ShowSearchOnAppear = false;
                             
-                            App.Shared.GroupFinder.GroupEntry entry = (App.Shared.GroupFinder.GroupEntry)context;
+                            MobileApp.Shared.GroupFinder.GroupEntry entry = (MobileApp.Shared.GroupFinder.GroupEntry)context;
 
                             GroupInfo.GroupEntry = entry;
 
@@ -165,7 +165,7 @@ namespace Droid
                         }
                         else if ( source == GroupInfo )
                         {
-                            App.Shared.GroupFinder.GroupEntry entry = (App.Shared.GroupFinder.GroupEntry)context;
+                            MobileApp.Shared.GroupFinder.GroupEntry entry = (MobileApp.Shared.GroupFinder.GroupEntry)context;
 
                             JoinGroup.GroupTitle = entry.Title;
                             JoinGroup.Distance = string.Format( "{0:##.0} {1}", entry.Distance, ConnectStrings.GroupFinder_MilesSuffix );

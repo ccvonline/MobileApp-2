@@ -1,11 +1,11 @@
 using System;
 using System.Drawing;
 using Rock.Mobile.UI;
-using App.Shared.Strings;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

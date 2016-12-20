@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +13,18 @@ using Android.Views;
 using Android.Widget;
 using Android.Webkit;
 
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Android.Graphics;
 using Android.Gms.Maps;
-using App.Shared;
-using App.Shared.Network;
-using App.Shared.Analytics;
+using MobileApp.Shared;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.Analytics;
 using Rock.Mobile.Animation;
 using Android.Gms.Maps.Model;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Android.Views.InputMethods;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

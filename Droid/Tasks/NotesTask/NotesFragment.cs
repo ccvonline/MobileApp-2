@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +13,17 @@ using System.Drawing;
 using System.IO;
 
 using Rock.Mobile.Network;
-using App.Shared.Notes;
-using App.Shared.Config;
+using MobileApp.Shared.Notes;
+using MobileApp.Shared.Config;
 using RestSharp;
 using Rock.Mobile.UI;
-using App.Shared;
-using App.Shared.Strings;
-using App.Shared.Analytics;
-using App.Shared.UI;
+using MobileApp.Shared;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.UI;
 using Rock.Mobile.Animation;
 using Android.Graphics;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using Rock.Mobile.PlatformSpecific.Android.UI;
 
@@ -281,7 +281,7 @@ namespace Droid
                     };
 
                     // if the refresh button isn't enabled, hide it
-                    if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == false )
+                    if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == false )
                     {
                         RefreshButton.Visibility = ViewStates.Gone;
                     }
@@ -463,7 +463,7 @@ namespace Droid
                         // if the gesture did create a note, flag that so we don't show the tutorial anymore.
                         if( DidGestureCreateNote == true )
                         {
-                            App.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
+                            MobileApp.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
                         }
                     }
                     catch( Exception ex )
@@ -723,7 +723,7 @@ namespace Droid
                         MessageAnalytic.Instance.Trigger( MessageAnalytic.Read, NoteName );
 
                         // display the tutorial if it hasn't been shown this run of the app, and the user has never created their own note.
-                        if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
+                        if( TutorialDisplayed == false && MobileApp.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
                         {
                             TutorialDisplayed = true;
 
@@ -866,7 +866,7 @@ namespace Droid
                                     errorMsg += e.Message;
                                 }
 
-                                if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                                if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                                 {
                                     Springboard.DisplayError( "Note Error", errorMsg );
                                 }

@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ using Android.Widget;
 using Android.Animation;
 using Droid.Tasks;
 using Android.Graphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

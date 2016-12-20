@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Rock.Mobile.Network;
 using System.Drawing;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

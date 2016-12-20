@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
@@ -6,9 +6,9 @@ using Android.Animation;
 using Android.Graphics;
 using Android.App;
 using Android.OS;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

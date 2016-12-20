@@ -6,8 +6,8 @@ using CoreAnimation;
 using CoreGraphics;
 using CoreImage;
 using AssetsLibrary;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

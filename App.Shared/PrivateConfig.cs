@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     /// <summary>
     /// PrivateConfig simply refers to values that you probably do not want or

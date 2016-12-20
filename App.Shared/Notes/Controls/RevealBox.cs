@@ -1,11 +1,11 @@
 using System;
 using System.Xml;
 using Rock.Mobile.UI;
-using App.Shared.Notes.Model;
+using MobileApp.Shared.Notes.Model;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

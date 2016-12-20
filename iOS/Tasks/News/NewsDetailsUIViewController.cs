@@ -2,14 +2,14 @@ using System;
 using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using CoreGraphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared.Strings;
+using MobileApp.Shared.Strings;
 using System.IO;
-using App.Shared;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.PlatformSpecific.Util;
@@ -95,7 +95,7 @@ namespace iOS
             }
 
             // if we're in developer mode, add the start / end times for this promotion
-            if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+            if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
             {
                 NewsDescription.Text += NewsItem.GetDeveloperInfo( );
             }

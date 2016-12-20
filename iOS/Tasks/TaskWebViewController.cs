@@ -3,11 +3,11 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 using CoreGraphics;
-using App.Shared.UI;
-using App.Shared.Strings;
-using App.Shared.Config;
+using MobileApp.Shared.UI;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
 using System.Collections.Generic;
 
@@ -245,7 +245,7 @@ namespace iOS
                             string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
                             // build the full url with their preferred campus (since thats personal data)
-                            fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                            fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                             // URL encode the value
                             NSString encodedUrlString = fullUrl.UrlEncode( );
@@ -342,7 +342,7 @@ namespace iOS
                         string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DisplayUrl, PrivateGeneralConfig.MobilePlatform );
 
                         // include their campus, since that's part of personal data.
-                        fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, App.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+                        fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                         // URL encode the value
                         NSString encodedUrlString = fullUrl.UrlEncode( );

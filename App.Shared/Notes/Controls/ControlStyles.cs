@@ -5,7 +5,7 @@ using Rock.Mobile.Network;
 using RestSharp;
 using System.Text;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

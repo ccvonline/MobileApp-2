@@ -3,9 +3,9 @@ using UIKit;
 using System.Collections.Generic;
 using Foundation;
 using CoreGraphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

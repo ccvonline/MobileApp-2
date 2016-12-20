@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +11,14 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Android.Graphics;
-using App.Shared;
+using MobileApp.Shared;
 using System.IO;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using Rock.Mobile.PlatformSpecific.Android.Util;
 

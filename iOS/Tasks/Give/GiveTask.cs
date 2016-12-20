@@ -2,8 +2,8 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Foundation;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

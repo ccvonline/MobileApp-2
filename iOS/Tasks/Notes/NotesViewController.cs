@@ -7,20 +7,20 @@ using System.IO;
 using CoreAnimation;
 
 using Rock.Mobile.Network;
-using App.Shared.Notes;
+using MobileApp.Shared.Notes;
 using RestSharp;
 using System.Net;
 using System.Text;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
 using System.Drawing;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared;
-using App.Shared.Analytics;
-using App.Shared.Strings;
-using App.Shared.UI;
+using MobileApp.Shared;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.UI;
 using Rock.Mobile.Animation;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 
 namespace iOS
@@ -237,7 +237,7 @@ namespace iOS
 
                 //note: the frame height of the nav bar is what it CURRENTLY is, not what it WILL be after we rotate. So, when we go from Portrait to Landscape,
                 // it says 40, but it's gonna be 32. Conversely, going back, we use 32 and it's actually 40, which causes us to start this view 8px too high.
-                if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                 {
                     // add the refresh button if necessary
                     if ( RefreshButton.Superview == null )
@@ -492,7 +492,7 @@ namespace iOS
                 UIActivityViewController shareController = new UIActivityViewController( items, null );
 
                 // set the subject line in case the share to email
-                string emailSubject = string.Format( App.Shared.Strings.MessagesStrings.Read_Share_Notes, NoteName );
+                string emailSubject = string.Format( MobileApp.Shared.Strings.MessagesStrings.Read_Share_Notes, NoteName );
                 shareController.SetValueForKey( new NSString( emailSubject ), new NSString( "subject" ) );
 
                 // if devices like an iPad want an anchor, set it
@@ -639,7 +639,7 @@ namespace iOS
                     {
                         if( Note.DidDoubleTap( tap.LocationInView( UIScrollView ).ToPointF( ) ) )
                         {
-                            App.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
+                            MobileApp.Shared.Network.RockMobileUser.Instance.UserNoteCreated = true;
                         }
                     }
                     catch( Exception e )
@@ -752,7 +752,7 @@ namespace iOS
                 MessageAnalytic.Instance.Trigger( MessageAnalytic.Read, NoteName );
 
                 // if the user has never seen it, show them the tutorial screen
-                if( TutorialDisplayed == false && App.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
+                if( TutorialDisplayed == false && MobileApp.Shared.Network.RockMobileUser.Instance.UserNoteCreated == false )
                 {
                     TutorialDisplayed = true;
 
@@ -913,7 +913,7 @@ namespace iOS
                             errorMsg += "\n" + e.Message;
                         }
 
-                        if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                        if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                         {
                             // explain that we couldn't generate notes
                             UIAlertView alert = new UIAlertView( );

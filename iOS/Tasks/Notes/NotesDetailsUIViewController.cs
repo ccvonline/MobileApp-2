@@ -2,16 +2,16 @@ using System;
 using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
-using App.Shared.Notes.Model;
+using MobileApp.Shared.Notes.Model;
 using System.Collections.Generic;
 using CoreGraphics;
-using App.Shared;
-using App.Shared.Config;
+using MobileApp.Shared;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
 using System.IO;
-using App.Shared.Analytics;
-using App.Shared.Network;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 
 namespace iOS

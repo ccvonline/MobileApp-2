@@ -2,10 +2,10 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Foundation;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using System.Collections.Generic;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
 using Rock.Mobile.PlatformSpecific.Util;
 
@@ -67,7 +67,7 @@ namespace iOS
                         {
                             // Limit the amount of news to display to MaxNews so we don't show so many we
                             // run out of memory. If DEVELOPER MODE is on, show them all.
-                            if( News.Count < PrivateNewsConfig.MaxNews || App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                            if( News.Count < PrivateNewsConfig.MaxNews || MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                             {
                                 News.Add( new RockNews( newsItem ) );
                             }

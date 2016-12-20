@@ -2,9 +2,9 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Foundation;
-using App.Shared.Config;
-using App.Shared.Network;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

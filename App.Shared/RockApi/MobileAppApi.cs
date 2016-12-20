@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Rock.Mobile.Network;
 using System.Net;
 using System.Collections.Generic;
 using Rock.Mobile;
-using App.Shared.Network;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.PrivateConfig;
 using System.Linq;
 
 namespace MobileApp
@@ -370,10 +370,10 @@ namespace MobileApp
         public static void TryGetImpersonationToken( ImpersonationTokenResponse response )
         {
             // if the user is logged in and has an alias ID, try to get it
-            if ( App.Shared.Network.RockMobileUser.Instance.LoggedIn == true && App.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
+            if ( MobileApp.Shared.Network.RockMobileUser.Instance.LoggedIn == true && MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue == true )
             {
                 // make the request
-                ApplicationApi.GetImpersonationToken( App.Shared.Network.RockMobileUser.Instance.Person.Id, 
+                ApplicationApi.GetImpersonationToken( MobileApp.Shared.Network.RockMobileUser.Instance.Person.Id, 
                     delegate(System.Net.HttpStatusCode statusCode, string statusDescription, string impersonationToken )
                     {
                         // whether it succeeded or not, hand them the response

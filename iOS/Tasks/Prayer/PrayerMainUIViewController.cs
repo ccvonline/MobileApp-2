@@ -6,15 +6,15 @@ using System.Collections.Generic;
 using CoreGraphics;
 using CoreAnimation;
 using Rock.Mobile.UI;
-using App.Shared.Config;
-using App.Shared.Strings;
-using App.Shared.Analytics;
-using App.Shared.Network;
-using App.Shared.UI;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.Network;
+using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
 using System.Drawing;
 using Rock.Mobile.Animation;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.Network;
 
 namespace iOS

@@ -1,10 +1,10 @@
 using System;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Rock.Mobile.Network;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

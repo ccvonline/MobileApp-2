@@ -4,20 +4,20 @@ using UIKit;
 using System.CodeDom.Compiler;
 using CoreLocation;
 using MapKit;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using CoreGraphics;
 using System.Collections.Generic;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Rock.Mobile.Util.Strings;
 using System.Collections;
-using App.Shared;
+using MobileApp.Shared;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
-using App.Shared.Strings;
-using App.Shared.Analytics;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.Analytics;
 using Rock.Mobile.Animation;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -451,7 +451,7 @@ namespace iOS
         {
             base.ViewDidLoad();
 
-            View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BackgroundColor );
+            View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( MobileApp.Shared.Config.ControlStylingConfig.BackgroundColor );
 
             ScrollView = new UIScrollViewWrapper();
             ScrollView.Layer.AnchorPoint = CGPoint.Empty;

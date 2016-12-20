@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 
-using App.Shared.Notes.Styles;
-using App.Shared.Notes.Model;
+using MobileApp.Shared.Notes.Styles;
+using MobileApp.Shared.Notes.Model;
 using Newtonsoft.Json;
 using Rock.Mobile.UI;
 using System.Drawing;
 using System.Text;
-using App.Shared.Strings;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.IO;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {
@@ -660,7 +660,7 @@ namespace App
                     }
                     else
                     {
-                        throw new Exception( App.Shared.Strings.MessagesStrings.TooManyNotes );
+                        throw new Exception( MobileApp.Shared.Strings.MessagesStrings.TooManyNotes );
                     }
 
                     // don't let them create one on top of a reveal box.

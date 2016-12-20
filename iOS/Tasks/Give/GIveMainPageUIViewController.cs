@@ -4,7 +4,7 @@ using UIKit;
 using System.CodeDom.Compiler;
 using AVFoundation;
 using MediaPlayer;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 
 namespace iOS
 {
@@ -23,7 +23,7 @@ namespace iOS
 
             ControlStyling.StyleBGLayer( GiveBannerLayer );
 
-            GiveBanner.Text = App.Shared.Strings.GiveStrings.Header;
+            GiveBanner.Text = MobileApp.Shared.Strings.GiveStrings.Header;
             ControlStyling.StyleUILabel( GiveBanner, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
 
             GiveButton = UIButton.FromType( UIButtonType.Custom );
@@ -31,7 +31,7 @@ namespace iOS
             {
                 UIApplication.SharedApplication.OpenUrl( new NSUrl( GiveConfig.GiveUrl ) );
             };
-            ControlStyling.StyleButton( GiveButton, App.Shared.Strings.GiveStrings.ButtonLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+            ControlStyling.StyleButton( GiveButton, MobileApp.Shared.Strings.GiveStrings.ButtonLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
 
             GiveButton.SizeToFit( );
             GiveButton.Frame = new CoreGraphics.CGRect( ( View.Bounds.Width - GiveButton.Bounds.Width ) / 2, ( View.Bounds.Height - GiveButton.Bounds.Height ) / 2, GiveButton.Bounds.Width, GiveButton.Bounds.Height );

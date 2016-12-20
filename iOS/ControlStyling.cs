@@ -1,7 +1,7 @@
 using System;
 using UIKit;
 using Rock.Mobile.UI;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Foundation;
 using CoreGraphics;
 

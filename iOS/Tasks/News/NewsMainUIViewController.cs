@@ -3,15 +3,15 @@ using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using CoreGraphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared;
+using MobileApp.Shared;
 using System.IO;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
-using App.Shared.Analytics;
+using MobileApp.Shared.Analytics;
 
 namespace iOS
 {

@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using Rock.Mobile.UI;
 using System.Drawing;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.Animation;
 using System.IO;
 using System.Collections.Generic;
 
-namespace App.Shared.UI
+namespace MobileApp.Shared.UI
 {
     public class UIOOBE
     {
@@ -196,7 +196,7 @@ namespace App.Shared.UI
             // TODO: We need to support scrolling for the eventual day we have too many campuses for a single screen.
             // Setup campuses
             CampusButtons = new List<PlatformButton>( );
-            foreach ( Rock.Client.Campus campus in App.Shared.Network.RockLaunchData.Instance.Data.Campuses )
+            foreach ( Rock.Client.Campus campus in MobileApp.Shared.Network.RockLaunchData.Instance.Data.Campuses )
             {
                 PlatformButton campusButton = PlatformButton.Create( );
                 campusButton.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Large_FontSize );

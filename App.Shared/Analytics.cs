@@ -1,9 +1,9 @@
-﻿
+
 using System;
 using System.Collections.Generic;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     namespace Analytics
     {

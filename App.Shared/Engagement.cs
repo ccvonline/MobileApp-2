@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using MobileApp;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     /// <summary>
     /// The Engagement system implements a logic based list item for each entry in the "Next Steps->Get Engaged" section of the app.

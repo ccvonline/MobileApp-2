@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using Rock.Mobile.Network;
-using App.Shared.Notes.Model;
+using MobileApp.Shared.Notes.Model;
 using RestSharp;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.Util.Strings;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {
@@ -477,7 +477,7 @@ namespace App
                                 if( Data.NoteDB.SeriesList[ 0 ].Messages.Count > 0 && 
                                     string.IsNullOrEmpty( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl ) == false )
                                 {
-                                    App.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, Data.NoteDB.HostDomain, true, delegate
+                                    MobileApp.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, Data.NoteDB.HostDomain, true, delegate
                                         {
                                             RequestingNoteDB = false;
 

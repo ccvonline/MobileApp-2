@@ -3,19 +3,19 @@ using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
 using Rock.Mobile.Network;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using CoreAnimation;
 using CoreGraphics;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
 using System.Collections.Generic;
 using Rock.Mobile.Util.Strings;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.Analytics;
-using App.Shared.PrivateConfig;
-using App.Shared.UI;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.PrivateConfig;
+using MobileApp.Shared.UI;
 
 namespace iOS
 {

@@ -5,13 +5,13 @@ using System.CodeDom.Compiler;
 using MediaPlayer;
 using CoreGraphics;
 using System.Collections.Generic;
-using App.Shared.Strings;
-using App.Shared;
-using App.Shared.Analytics;
-using App.Shared.UI;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared;
+using MobileApp.Shared.Analytics;
+using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
-using App.Shared.Config;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -136,9 +136,9 @@ namespace iOS
             DidDisplayError = false;
 
             // if we're watching the same video we last watched, resume
-            if ( MediaUrl == App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl )
+            if ( MediaUrl == MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl )
             {
-                MoviePlayer.InitialPlaybackTime = App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos;
+                MoviePlayer.InitialPlaybackTime = MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos;
             }
 
             MoviePlayer.ContentUrl = new NSUrl( MediaUrl );
@@ -323,12 +323,12 @@ namespace iOS
         void SavePlaybackPos( )
         {
             // store the last video we watched.
-            App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl = MediaUrl;
+            MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaUrl = MediaUrl;
 
             // see where we are in playback and save it.
             if ( MoviePlayer.Duration > 0.00f && MoviePlayer.CurrentPlaybackTime > 0.00f && MoviePlayer.CurrentPlaybackTime < MoviePlayer.Duration )
             {
-                App.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = MoviePlayer.CurrentPlaybackTime;
+                MobileApp.Shared.Network.RockMobileUser.Instance.LastStreamingMediaPos = MoviePlayer.CurrentPlaybackTime;
             }
         }
 

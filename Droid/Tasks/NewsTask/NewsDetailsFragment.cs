@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +13,12 @@ using Android.Views;
 using Android.Widget;
 using Android.Graphics;
 using Rock.Mobile.UI;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Android.Text.Method;
-using App.Shared;
+using MobileApp.Shared;
 using System.IO;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using Rock.Mobile.PlatformSpecific.Android;
 using Rock.Mobile.PlatformSpecific.Android.Util;
@@ -117,10 +117,10 @@ namespace Droid
                     ControlStyling.StyleUILabel( description, ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
 
                     // if we're in developer mode, add the start / end times for this promotion
-                    if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                    if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                     {
                         // if we're in developer mode, add the start / end times for this promotion
-                        if ( App.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                        if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                         {
                             description.Text += DeveloperInfo;
                         }

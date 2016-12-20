@@ -3,11 +3,11 @@ using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
 using CoreGraphics;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using System.Collections.Generic;
-using App.Shared;
-using App.Shared.Strings;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {
@@ -271,7 +271,7 @@ namespace iOS
         {
             base.ViewDidLoad();
 
-            View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( App.Shared.Config.ControlStylingConfig.BackgroundColor );
+            View.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( MobileApp.Shared.Config.ControlStylingConfig.BackgroundColor );
 
             ConnectTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             ConnectTableView.Source = new TableSource( this );

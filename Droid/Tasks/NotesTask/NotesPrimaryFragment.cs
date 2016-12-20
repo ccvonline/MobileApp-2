@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +11,22 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using Android.Graphics;
 using RestSharp;
 using Rock.Mobile.Network;
-using App.Shared.Notes.Model;
-using App.Shared.Config;
-using App.Shared.Strings;
+using MobileApp.Shared.Notes.Model;
+using MobileApp.Shared.Config;
+using MobileApp.Shared.Strings;
 using Rock.Mobile.UI;
 using System.Net;
 using System.IO;
-using App.Shared;
+using MobileApp.Shared;
 using Rock.Mobile.UI.DroidNative;
 using System.Threading;
-using App.Shared.UI;
+using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Android.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using Rock.Mobile.PlatformSpecific.Android.Util;
 

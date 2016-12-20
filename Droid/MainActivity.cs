@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Android.App;
 using Android.Content;
@@ -8,11 +8,11 @@ using Android.Widget;
 using Android.OS;
 using Android.Util;
 using Android.Gms.Maps;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
 using Com.Localytics.Android;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace Droid
 {

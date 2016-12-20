@@ -2,10 +2,10 @@ using System;
 using System.Xml;
 using Rock.Mobile.UI;
 using System.Collections.Generic;
-using App.Shared.Notes.Model;
+using MobileApp.Shared.Notes.Model;
 using System.Drawing;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {
@@ -55,7 +55,7 @@ namespace App
                     // create the font that either we or our parent defined
                     TextView.SetFont( mStyle.mFont.mName, mStyle.mFont.mSize.Value );
                     TextView.TextColor = mStyle.mFont.mColor.Value;
-                    TextView.KeyboardAppearance = App.Shared.Config.GeneralConfig.iOSPlatformUIKeyboardAppearance;
+                    TextView.KeyboardAppearance = MobileApp.Shared.Config.GeneralConfig.iOSPlatformUIKeyboardAppearance;
 
                     // check for border styling
                     if ( mStyle.mBorderColor.HasValue )

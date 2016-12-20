@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using RestSharp.Deserializers;
 
-namespace App
+namespace MobileApp
 {
     namespace Shared
     {

@@ -5,9 +5,9 @@ using System.CodeDom.Compiler;
 using CoreGraphics;
 using System.Collections.Generic;
 using System.Threading;
-using App.Shared.Config;
+using MobileApp.Shared.Config;
 using Rock.Mobile.UI;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 
 namespace iOS
 {

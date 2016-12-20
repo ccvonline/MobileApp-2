@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Rock.Mobile.Util.Strings;
-using App.Shared.Network;
+using MobileApp.Shared.Network;
 using System.Collections;
-using App.Shared.Strings;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.Strings;
+using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.Network;
 using MobileApp;
 using System.Linq;
 
-namespace App.Shared
+namespace MobileApp.Shared
 {
     public class GroupFinder
     {

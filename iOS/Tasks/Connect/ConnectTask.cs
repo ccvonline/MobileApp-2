@@ -2,9 +2,9 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Foundation;
-using App.Shared.PrivateConfig;
+using MobileApp.Shared.PrivateConfig;
 using System.Collections.Generic;
-using App.Shared;
+using MobileApp.Shared;
 using System.Linq;
 
 namespace iOS
