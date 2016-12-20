@@ -12,7 +12,7 @@ namespace iOS
 
         public PrayerTask( string storyboardName ) : base( storyboardName )
         {
-            MainPage = Storyboard.InstantiateViewController( "PrayerMainUIViewController" ) as PrayerMainUIViewController;
+            MainPage = new PrayerMainUIViewController( );
             MainPage.Task = this;
 
             ActiveViewController = MainPage;

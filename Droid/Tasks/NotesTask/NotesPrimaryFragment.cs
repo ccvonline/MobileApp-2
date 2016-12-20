@@ -117,29 +117,40 @@ namespace Droid
                             primaryItem.Date.Text = latestMessage.Date;
 
                             // toggle the Take Notes button
-                            if ( string.IsNullOrEmpty( latestMessage.NoteUrl ) == false )
-                            {
-                                primaryItem.ToggleTakeNotesButton( true );
-                            }
-                            else
+                            if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) == true )
                             {
                                 primaryItem.ToggleTakeNotesButton( false );
                             }
+                            else
+                            {
+                                primaryItem.ToggleTakeNotesButton( true );
+                            }
 
                             // toggle the Watch button
-                            if ( string.IsNullOrEmpty( latestMessage.WatchUrl ) == false )
+                            if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) == true )
                             {
-                                primaryItem.ToggleWatchButton( true );
+                                primaryItem.ToggleWatchButton( false );
                             }
                             else
                             {
-                                primaryItem.ToggleWatchButton( false );
+                                primaryItem.ToggleWatchButton( true );
+                            }
+
+                            // toggle the DiscussionGuide button
+                            if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) == true )
+                            {
+                                primaryItem.ToggleDiscussionGuideButton( false );
+                            }
+                            else
+                            {
+                                primaryItem.ToggleDiscussionGuideButton( true );
                             }
                         }
                         else
                         {
                             primaryItem.ToggleTakeNotesButton( false );
                             primaryItem.ToggleWatchButton( false );
+                            primaryItem.ToggleDiscussionGuideButton( false );
                         }
                     }
 
@@ -204,6 +215,11 @@ namespace Droid
                 {
                     ParentFragment.TakeNotesButtonClicked( );
                 }
+
+                public void DiscussionGuideButtonClicked( )
+                {
+                    ParentFragment.DiscussionGuideButtonClicked( );
+                }
             }
 
             internal class BorderedActionButton
@@ -262,6 +278,7 @@ namespace Droid
                 LinearLayout ButtonLayout { get; set; }
                 BorderedActionButton WatchButton { get; set; }
                 BorderedActionButton TakeNotesButton { get; set; }
+                BorderedActionButton DiscussionGuideButton { get; set; }
 
                 TextView Footer { get; set; }
 
@@ -389,6 +406,34 @@ namespace Droid
                     //
 
 
+                    // DiscussionGuide Button
+                    DiscussionGuideButton = new BorderedActionButton();
+                    DiscussionGuideButton.AddToView( this );
+
+                    ( (LinearLayout.LayoutParams)DiscussionGuideButton.Layout.LayoutParameters ).LeftMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -2 );
+                    ( (LinearLayout.LayoutParams)DiscussionGuideButton.Layout.LayoutParameters ).RightMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -5 );
+                    ( (LinearLayout.LayoutParams)DiscussionGuideButton.Layout.LayoutParameters ).Weight = 1;
+                    DiscussionGuideButton.Layout.BorderWidth = 0;
+                    DiscussionGuideButton.Layout.SetBorderColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
+                    DiscussionGuideButton.Layout.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color ) );
+
+                    DiscussionGuideButton.Icon.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary ), TypefaceStyle.Normal );
+                    DiscussionGuideButton.Icon.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateNoteConfig.Series_Table_IconSize );
+                    DiscussionGuideButton.Icon.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    DiscussionGuideButton.Icon.Text = PrivateNoteConfig.Series_Table_DiscussionGuide_Icon;
+
+                    DiscussionGuideButton.Label.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Regular ), TypefaceStyle.Normal );
+                    DiscussionGuideButton.Label.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+                    DiscussionGuideButton.Label.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_PlaceholderTextColor ) );
+                    DiscussionGuideButton.Label.Text = MessagesStrings.Series_Table_DiscussionGuide;
+
+                    DiscussionGuideButton.Button.Click += (object sender, EventArgs e ) =>
+                    {
+                        ParentAdapter.DiscussionGuideButtonClicked( );
+                    };
+                    //
+
+
                     Footer = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     Footer.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent );
                     ( (LinearLayout.LayoutParams)Footer.LayoutParameters ).TopMargin = (int)Rock.Mobile.Graphics.Util.UnitToPx( -5 );
@@ -430,6 +475,22 @@ namespace Droid
                     {
                         TakeNotesButton.Icon.SetTextColor( Color.DimGray );
                         TakeNotesButton.Label.SetTextColor( Color.DimGray );
+                    }
+                }
+
+                public void ToggleDiscussionGuideButton( bool enabled )
+                {
+                    DiscussionGuideButton.Button.Enabled = enabled;
+
+                    if ( enabled == true )
+                    {
+                        DiscussionGuideButton.Icon.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
+                        DiscussionGuideButton.Label.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor ) );
+                    }
+                    else
+                    {
+                        DiscussionGuideButton.Icon.SetTextColor( Color.DimGray );
+                        DiscussionGuideButton.Label.SetTextColor( Color.DimGray );
                     }
                 }
 
@@ -618,6 +679,12 @@ namespace Droid
                 {
                     // notify the task that the Take Notes button was clicked
                     ParentTask.OnClick( this, -1, 2 );
+                }
+
+                public void DiscussionGuideButtonClicked( )
+                {
+                    // notify the task that the Discussion Guide button was clicked
+                    ParentTask.OnClick( this, -1, 3 );
                 }
 
                 public override void OnResume()

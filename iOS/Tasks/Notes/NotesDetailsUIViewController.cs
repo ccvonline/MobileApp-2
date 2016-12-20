@@ -110,6 +110,7 @@ namespace iOS
                 public UIButton ListenButton { get; set; }
                 public UIButton WatchButton { get; set; }
                 public UIButton TakeNotesButton { get; set; }
+                public UIButton DiscussionGuideButton { get; set; }
 
                 public UIView Seperator { get; set; }
 
@@ -160,14 +161,24 @@ namespace iOS
                     WatchButton.SizeToFit( );
                     AddSubview( WatchButton );
 
+                    DiscussionGuideButton = new UIButton( UIButtonType.Custom );
+                    DiscussionGuideButton.TouchUpInside += (object sender, EventArgs e) => { Parent.RowButtonClicked( RowIndex, 2 ); };
+                    DiscussionGuideButton.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary, PrivateNoteConfig.Details_Table_IconSize );
+                    DiscussionGuideButton.SetTitle( PrivateNoteConfig.Series_Table_DiscussionGuide_Icon, UIControlState.Normal );
+                    DiscussionGuideButton.Layer.AnchorPoint = CGPoint.Empty;
+                    DiscussionGuideButton.BackgroundColor = UIColor.Clear;
+                    DiscussionGuideButton.SizeToFit( );
+                    AddSubview( DiscussionGuideButton );
+
                     TakeNotesButton = new UIButton( UIButtonType.Custom );
-                    TakeNotesButton.TouchUpInside += (object sender, EventArgs e) => { Parent.RowButtonClicked( RowIndex, 2 ); };
+                    TakeNotesButton.TouchUpInside += (object sender, EventArgs e) => { Parent.RowButtonClicked( RowIndex, 3 ); };
                     TakeNotesButton.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( PrivateControlStylingConfig.Icon_Font_Secondary, PrivateNoteConfig.Details_Table_IconSize );
                     TakeNotesButton.SetTitle( PrivateNoteConfig.Series_Table_TakeNotes_Icon, UIControlState.Normal );
                     TakeNotesButton.Layer.AnchorPoint = CGPoint.Empty;
                     TakeNotesButton.BackgroundColor = UIColor.Clear;
                     TakeNotesButton.SizeToFit( );
                     AddSubview( TakeNotesButton );
+
 
                     Seperator = new UIView( );
                     AddSubview( Seperator );
@@ -184,6 +195,7 @@ namespace iOS
                     ListenButton.Hidden = hidden;
                     WatchButton.Hidden = hidden;
                     TakeNotesButton.Hidden = hidden;
+                    DiscussionGuideButton.Hidden = hidden;
                 }
 
                 public void ToggleListenButton( bool enabled )
@@ -214,6 +226,20 @@ namespace iOS
                     }
                 }
 
+                public void ToggleDiscussionGuideButton( bool enabled )
+                {
+                    if ( enabled == true )
+                    {
+                        DiscussionGuideButton.Enabled = true;
+                        DiscussionGuideButton.SetTitleColor( Rock.Mobile.UI.Util.GetUIColor( NoteConfig.Details_Table_IconColor ), UIControlState.Normal );
+                    }
+                    else
+                    {
+                        DiscussionGuideButton.Enabled = false;
+                        DiscussionGuideButton.SetTitleColor( UIColor.DarkGray, UIControlState.Normal );
+                    }
+                }
+
                 public void ToggleTakeNotesButton( bool enabled )
                 {
                     if ( enabled == true )
@@ -234,7 +260,6 @@ namespace iOS
             Series Series { get; set; }
 
             nfloat PendingPrimaryCellHeight { get; set; }
-            nfloat PendingCellHeight { get; set; }
 
             public TableSource (NotesDetailsUIViewController parent, List<MessageEntry> messages, Series series )
             {
@@ -280,7 +305,7 @@ namespace iOS
 
                     default:
                     {
-                        return PrivateNoteConfig.Series_Main_CellHeight;
+                        return PrivateNoteConfig.Series_Detail_CellHeight;
                     }
                 }
 
@@ -402,20 +427,17 @@ namespace iOS
                     cell.Speaker.SizeToFit( );
 
 
-                    nfloat rowHeight = PrivateNoteConfig.Series_Main_CellHeight;
-                    nfloat availableWidth = cell.Bounds.Width - cell.ListenButton.Bounds.Width - cell.WatchButton.Bounds.Width - cell.TakeNotesButton.Bounds.Width;
+                    nfloat rowHeight = PrivateNoteConfig.Series_Detail_CellHeight;
+                    nfloat availableWidth = (cell.Bounds.Width - 20) / 2;
 
-                    // Position the Title & Date in the center to the right of the image
-                    nfloat totalTextHeight = ( cell.Title.Bounds.Height + cell.Date.Bounds.Height + cell.Speaker.Bounds.Height ) - 6;
-
-                    cell.Title.Frame = new CGRect( 10, ( ( rowHeight - totalTextHeight ) / 2 ) - 1, availableWidth, cell.Title.Frame.Height );
+                    cell.Title.Frame = new CGRect( 10, 5, availableWidth, cell.Title.Frame.Height );
                     //cell.Title.BackgroundColor = UIColor.Blue;
 
-                    cell.Date.Frame = new CGRect( cell.Title.Frame.Left, cell.Title.Frame.Bottom - 3, availableWidth, cell.Date.Frame.Height );
-                    //cell.Date.BackgroundColor = UIColor.Yellow;
-
-                    cell.Speaker.Frame = new CGRect( cell.Title.Frame.Left, cell.Date.Frame.Bottom - 3, availableWidth, cell.Speaker.Frame.Height );
+                    cell.Speaker.Frame = new CGRect( cell.Bounds.Width - Math.Min( cell.Speaker.Frame.Width, availableWidth ) - 10, 5, availableWidth, cell.Speaker.Frame.Height );
                     //cell.Speaker.BackgroundColor = UIColor.Green;
+
+                    cell.Date.Frame = new CGRect( cell.Bounds.Width - Math.Min( cell.Date.Frame.Width, availableWidth ) - 10, cell.Speaker.Frame.Bottom - 3, availableWidth, cell.Date.Frame.Height );
+                    //cell.Date.BackgroundColor = UIColor.Yellow;
 
                     // add the seperator to the bottom
                     cell.Seperator.Frame = new CGRect( 0, rowHeight - 1, cell.Bounds.Width, 1 );
@@ -427,26 +449,70 @@ namespace iOS
                     }*/
 
 
-                    // Buttons
-                    cell.TakeNotesButton.Frame = new CGRect( cell.Bounds.Width - cell.TakeNotesButton.Bounds.Width, 
-                        ( rowHeight - cell.TakeNotesButton.Bounds.Height ) / 2, 
-                        cell.TakeNotesButton.Bounds.Width, 
-                        cell.TakeNotesButton.Bounds.Height );
+                    // Buttons (lay them out spaced out evenly under the title / speaker / date)
+                    /*int numButtons = 4;
+                    int buttonYOffset = 15;
 
-                    cell.WatchButton.Frame = new CGRect( cell.TakeNotesButton.Frame.Left - cell.WatchButton.Bounds.Width, 
-                        ( rowHeight - cell.WatchButton.Bounds.Height ) / 2, 
-                        cell.WatchButton.Bounds.Width, 
-                        cell.WatchButton.Bounds.Height );
+                    // first figure out how much space we can put between buttons
+                    nfloat rawButtonWidth = (cell.TakeNotesButton.Bounds.Width + 
+                                               cell.WatchButton.Bounds.Width + 
+                                               cell.ListenButton.Bounds.Width + 
+                                               cell.DiscussionGuideButton.Bounds.Width);
+                    
+                    nfloat buttonSpacing = (cell.Bounds.Width - rawButtonWidth) / numButtons;
 
-                    cell.ListenButton.Frame = new CGRect( cell.WatchButton.Frame.Left - cell.ListenButton.Bounds.Width, 
-                        ( rowHeight - cell.ListenButton.Bounds.Height ) / 2, 
-                        cell.ListenButton.Bounds.Width, 
-                        cell.ListenButton.Bounds.Height );
+                    // now get the "total" width the buttons, with padding, will take up in the row
+                    nfloat totalButtonWidth = rawButtonWidth + (buttonSpacing * 3);
 
+                    // now figure out where the first button should start by taking half their difference
+                    nfloat startingX = (cell.Bounds.Width - totalButtonWidth) / 2;
+
+                    cell.WatchButton.Frame = new CGRect( startingX, 
+                                                         cell.Date.Frame.Bottom - buttonYOffset, 
+                                                         cell.WatchButton.Bounds.Width, 
+                                                         cell.WatchButton.Bounds.Height );
+
+                    cell.ListenButton.Frame = new CGRect( cell.WatchButton.Frame.Right + buttonSpacing, 
+                                                          cell.Date.Frame.Bottom - buttonYOffset, 
+                                                          cell.ListenButton.Bounds.Width, 
+                                                          cell.ListenButton.Bounds.Height );
+
+                    cell.DiscussionGuideButton.Frame = new CGRect( cell.ListenButton.Frame.Right + buttonSpacing, 
+                                                                   cell.Date.Frame.Bottom - buttonYOffset, 
+                                                                   cell.DiscussionGuideButton.Bounds.Width, 
+                                                                   cell.DiscussionGuideButton.Bounds.Height );
+
+                    cell.TakeNotesButton.Frame = new CGRect( cell.DiscussionGuideButton.Frame.Right + buttonSpacing, 
+                                                             cell.Date.Frame.Bottom - buttonYOffset, 
+                                                             cell.TakeNotesButton.Bounds.Width, 
+                                                             cell.TakeNotesButton.Bounds.Height );*/
+
+                    int buttonYOffset = 15;
+
+                    // now figure out where the first button should start by taking half their difference
+                    cell.WatchButton.Frame = new CGRect( 10, 
+                                                        cell.Date.Frame.Bottom - buttonYOffset, 
+                                                        cell.WatchButton.Bounds.Width, 
+                                                        cell.WatchButton.Bounds.Height );
+
+                    cell.ListenButton.Frame = new CGRect( cell.WatchButton.Frame.Right, 
+                                                         cell.Date.Frame.Bottom - buttonYOffset, 
+                                                         cell.ListenButton.Bounds.Width, 
+                                                         cell.ListenButton.Bounds.Height );
+
+                    cell.DiscussionGuideButton.Frame = new CGRect( cell.ListenButton.Frame.Right, 
+                                                                  cell.Date.Frame.Bottom - buttonYOffset, 
+                                                                  cell.DiscussionGuideButton.Bounds.Width, 
+                                                                  cell.DiscussionGuideButton.Bounds.Height );
+
+                    cell.TakeNotesButton.Frame = new CGRect( cell.DiscussionGuideButton.Frame.Right, 
+                                                            cell.Date.Frame.Bottom - buttonYOffset, 
+                                                            cell.TakeNotesButton.Bounds.Width, 
+                                                            cell.TakeNotesButton.Bounds.Height );
 
 
                     // disable the button if there's no listen URL
-                    if ( string.IsNullOrEmpty( Series.Messages[ row ].AudioUrl ) )
+                    if ( string.IsNullOrWhiteSpace( Series.Messages[ row ].AudioUrl ) )
                     {
                         cell.ToggleListenButton( false );
                     }
@@ -456,7 +522,7 @@ namespace iOS
                     }
 
                     // disable the button if there's no watch URL
-                    if ( string.IsNullOrEmpty( Series.Messages[ row ].WatchUrl ) )
+                    if ( string.IsNullOrWhiteSpace( Series.Messages[ row ].WatchUrl ) )
                     {
                         cell.ToggleWatchButton( false );
                     }
@@ -466,7 +532,7 @@ namespace iOS
                     }
 
                     // disable the button if there's no note URL
-                    if ( string.IsNullOrEmpty( Series.Messages[ row ].NoteUrl ) )
+                    if ( string.IsNullOrWhiteSpace( Series.Messages[ row ].NoteUrl ) )
                     {
                         cell.ToggleTakeNotesButton( false );
                     }
@@ -475,7 +541,15 @@ namespace iOS
                         cell.ToggleTakeNotesButton( true );
                     }
 
-                    //PendingCellHeight = rowHeight;
+                    // disable the button if there's no discussion guide URL
+                    if ( string.IsNullOrWhiteSpace( Series.Messages[ row ].DiscussionGuideUrl ) )
+                    {
+                        cell.ToggleDiscussionGuideButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleDiscussionGuideButton( true );
+                    }
                 }
                 else
                 {
@@ -648,8 +722,16 @@ namespace iOS
 
                 Task.PerformSegue( this, viewController );
             }
-            // and 1 would be the second button, which is Notes
+            // 2 would be the Discussion Guide
             else if ( buttonIndex == 2 )
+            {
+                NotesDiscGuideViewController viewController = new NotesDiscGuideViewController( Task );
+                viewController.DiscGuideURL = Series.Messages[ row ].DiscussionGuideUrl;
+
+                Task.PerformSegue( this, viewController );
+            }
+            // and 3 would be the last button, which is Notes
+            else if ( buttonIndex == 3 )
             {
                 // maybe technically a hack...we know our parent is a NoteTask,
                 // so cast it so we can use the existing NotesViewController.

@@ -18,11 +18,15 @@ namespace Droid
                 NotesDetailsFragment DetailsPage { get; set; }
                 NotesWatchFragment WatchPage { get; set; }
                 NotesListenFragment ListenPage { get; set; }
+                NotesDiscGuideFragment DiscGuidePage { get; set; }
                 TaskWebFragment WebViewPage { get; set; }
 
                 public NotesTask( NavbarFragment navFragment ) : base( navFragment )
                 {
                     // create our fragments (which are basically equivalent to iOS ViewControllers)
+
+                    // Note: Fragment Tags must be the fully qualified name of the class, including its namespaces.
+                    // This is how Android will find it when searching.
                     MainPage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesPrimaryFragment" ) as NotesPrimaryFragment;
                     if ( MainPage == null )
                     {
@@ -57,6 +61,13 @@ namespace Droid
                         ListenPage = new NotesListenFragment();
                     }
                     ListenPage.ParentTask = this;
+
+                    DiscGuidePage = navFragment.FragmentManager.FindFragmentByTag( "Droid.Tasks.Notes.NotesDiscGuideFragment" ) as NotesDiscGuideFragment;
+                    if( DiscGuidePage == null )
+                    {
+                        DiscGuidePage = new NotesDiscGuideFragment();
+                    }
+                    DiscGuidePage.ParentTask = this;
 
                     WebViewPage = new TaskWebFragment( );
                     WebViewPage.ParentTask = this;
@@ -168,6 +179,12 @@ namespace Droid
 
                                     PresentFragment( NotesPage, true );
                                 }
+                                // 3 is discussion guide
+                                else if ( buttonChoice == 3 )
+                                {
+                                    DiscGuidePage.DiscGuideURL = MainPage.SeriesEntries[ 0 ].Series.Messages[ 0 ].DiscussionGuideUrl;
+                                    PresentFragment( DiscGuidePage, true );
+                                }
                             }
                             else
                             {
@@ -205,6 +222,12 @@ namespace Droid
 
                                 PresentFragment( NotesPage, true );
                             }
+                            // 3 is discussion guide
+                            else if ( buttonChoice == 3 )
+                            {
+                                DiscGuidePage.DiscGuideURL = DetailsPage.Series.Messages[ buttonId ].DiscussionGuideUrl;
+                                PresentFragment( DiscGuidePage, true );
+                            }
                         }
                         else if ( source == NotesPage )
                         {
@@ -215,6 +238,18 @@ namespace Droid
                             TaskWebFragment.HandleUrl( clickParams.UseExternalBrowser, 
                                                        clickParams.UseImpersonationToken, 
                                                        clickParams.Url,
+                                                       this, 
+                                                       WebViewPage );
+                        }
+                        else if ( source == DiscGuidePage )
+                        {
+                            // Discussion Guide page only has one button, so if it was clicked,
+                            // let them view the guide.
+
+                            WebViewPage.DisableIdleTimer = true;
+                            TaskWebFragment.HandleUrl( true, 
+                                                       false, 
+                                                       DiscGuidePage.DiscGuideURL,
                                                        this, 
                                                        WebViewPage );
                         }

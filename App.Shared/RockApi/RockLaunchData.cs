@@ -74,11 +74,9 @@ namespace App
                     }
 
                     /// <summary>
-                    /// Copies the hardcoded default news into the News list,
-                    /// so that there is SOMETHING for the user to see. Should only be done
-                    /// if there is no news available after getting launch data.
+                    /// Copies the embedded upgrade images into the file cache so that they can be loaded like normal news item images.
                     /// </summary>
-                    public void PrepareUpgradeNews( )
+                    public void TryCacheUpgradeNewsImages( )
                     {
                         // cache the compiled in main and header images so the News system can get them transparently
                         #if __IOS__
@@ -100,17 +98,23 @@ namespace App
                         string headerImageName = UpgradeNewsItem.HeaderImageName + ".png";
                         #endif
 
-                        // cache the main image
-                        MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the main image if it's not already there
+                        if( FileCache.Instance.FileExists( UpgradeNewsItem.ImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
 
-                        // cache the header image
-                        stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
-                        stream.Position = 0;
-                        FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
-                        stream.Dispose( );
+                        // cache the header image if it's not already there
+                        if( FileCache.Instance.FileExists( UpgradeNewsItem.HeaderImageName ) == false )
+                        {
+                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
+                            stream.Position = 0;
+                            FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
+                            stream.Dispose( );
+                        }
                     }
 
                     /// <summary>
@@ -227,6 +231,15 @@ namespace App
                     public bool DeveloperModeEnabled { get; set; }
                 }
                 public LaunchData Data { get; set; }
+
+                /// <summary>
+                /// Ensures that the images for "built in" news items are in the file cache.
+                /// They need to be here so the news system can find / load them like 'normal' news items.
+                /// </summary>
+                public void TryCacheEmbeddedNewsImages( )
+                {
+                    Data.TryCacheUpgradeNewsImages( );
+                }
 
                 /// <summary>
                 /// True if the notedb.xml is in the process of being downloaded. This is so that
@@ -579,13 +592,6 @@ namespace App
                             {
                             }
                         }
-                    }
-
-                    // if there's no news after loading, this is our first run, so
-                    // prepare the 'you should upgrade' news item
-                    if ( Data.News.Count == 0 )
-                    {
-                        Data.PrepareUpgradeNews( );
                     }
                 }
             }

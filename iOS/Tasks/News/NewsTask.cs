@@ -97,7 +97,6 @@ namespace iOS
             }
             else if ( viewController as TaskWebViewController == null )
             {
-                //NavToolbar.RevealForTime( 3.0f );
                 NavToolbar.Reveal( true );
             }
         }

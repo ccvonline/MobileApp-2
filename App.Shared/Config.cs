@@ -3,6 +3,7 @@ using System.Drawing;
 using Rock.Mobile.UI;
 using App.Shared.Strings;
 using App.Shared.PrivateConfig;
+using MobileApp;
 
 namespace App
 {
@@ -22,7 +23,7 @@ namespace App
                 /// Useful for things like app invites, which only work in the app (can't be tested in a browser).
                 /// This way you don't have to setup a news item in Rock.
                 /// </summary>
-                public const bool News_Override_Item = true;
+                public static bool News_Override_Item = false;
 
                 public const string News_Override_ReferenceURL = "http://ccv.church/soakedmobileinvite";
                 public const bool News_Override_IncludeImpersonationToken = true;
@@ -32,7 +33,7 @@ namespace App
             
             public class GeneralConfig
             {
-                public const int Version = 2160;
+                public const int Version = 2180;
 
                 /// <summary>
                 /// The full name of your organization

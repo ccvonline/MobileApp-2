@@ -344,28 +344,28 @@ namespace App
 
                 public void BindRockAccount( string username, string password, BindResult bindResult )
                 {
-                    RockApi.Post_Auth_Login( username, password, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                    MobileAppApi.Login( username, password, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                    {
+                        // if we received Ok (nocontent), we're logged in.
+                        if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                         {
-                            // if we received Ok (nocontent), we're logged in.
-                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                            {
-                                UserID = username;
-                                RockPassword = password;
+                            UserID = username;
+                            RockPassword = password;
 
-                                AccessToken = "";
+                            AccessToken = "";
 
-                                AccountType = BoundAccountType.Rock;
+                            AccountType = BoundAccountType.Rock;
 
-                                // save!
-                                SaveToDevice( );
+                            // save!
+                            SaveToDevice( );
 
-                                bindResult( true);
-                            }
-                            else
-                            {
-                                bindResult( false );
-                            }
-                        });
+                            bindResult( true);
+                        }
+                        else
+                        {
+                            bindResult( false );
+                        }
+                    });
                 }
 
                 public delegate void GetUserCredentials( string fromUri, FacebookClient session );

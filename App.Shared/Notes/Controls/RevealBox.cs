@@ -110,6 +110,9 @@ namespace App
                         }
                     }
 
+                    // ensure that there's something IN the reveal text. We cannot render blank, because the bitmap mask can't be 0 width / height
+                    if( string.IsNullOrWhiteSpace( revealText ) ) throw new Exception( "RevealBox text cannot be blank." );
+
                     // adjust the text
                     switch( mStyle.mTextCase )
                     {

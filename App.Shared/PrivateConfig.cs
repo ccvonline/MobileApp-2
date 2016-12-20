@@ -486,6 +486,11 @@ namespace App.Shared
             public const string Series_Table_TakeNotes_Icon = "";
 
             /// <summary>
+            /// The icon to use representing the action to view a "Discussion Guide" related to a message.
+            /// </summary>
+            public const string Series_Table_DiscussionGuide_Icon = "";
+
+            /// <summary>
             /// The icon to use representing that tapping the element will take you to a new page. (Like a > symbol)
             /// </summary>
             public const string Series_Table_Navigate_Icon = "";
@@ -504,6 +509,11 @@ namespace App.Shared
             /// The width that an image should be within the cell
             /// </summary>
             public const float Series_Main_CellWidth = 70;
+
+            /// <summary>
+            /// The height of the series detail cell. 
+            /// </summary>
+            public const float Series_Detail_CellHeight = 95;
 
             /// <summary>
             /// The icon size for icons in the details table row.

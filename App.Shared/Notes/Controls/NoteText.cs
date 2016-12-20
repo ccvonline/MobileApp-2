@@ -78,6 +78,9 @@ namespace App
                     PlatformLabel.Position = new PointF( bounds.X, bounds.Y );
                 }
 
+                // This constructor is called when explicit Note Text is being declared.
+                // This means the XML has "<NoteText>Something</NoteText>. Its used when
+                // the user wants to alter a particular piece of text within a paragraph.
                 public NoteText( CreateParams parentParams, XmlReader reader )
                 {
                     base.Initialize( );
@@ -126,6 +129,17 @@ namespace App
                     if( mStyle.mBackgroundColor.HasValue )
                     {
                         PlatformLabel.BackgroundColor = mStyle.mBackgroundColor.Value;
+                    }
+
+                    // see if the user wants this text underlined
+                    string underlined = reader.GetAttribute( "Underlined" );
+                    if( string.IsNullOrWhiteSpace( underlined ) == false )
+                    {
+                        bool addUnderline = bool.Parse( underlined );
+                        if( addUnderline )
+                        {
+                            PlatformLabel.AddUnderline( );
+                        }
                     }
 
                     // parse the stream
