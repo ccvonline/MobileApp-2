@@ -1,3 +1,4 @@
+#if !__WIN__
 using System;
 using Facebook;
 using System.Collections.Generic;
@@ -59,3 +60,4 @@ namespace MobileApp.Shared
         }
     }
 }
+#endif

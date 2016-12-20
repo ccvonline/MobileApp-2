@@ -96,6 +96,9 @@ namespace MobileApp
                         #elif __ANDROID__
                         string mainImageName = UpgradeNewsItem.ImageName + ".png";
                         string headerImageName = UpgradeNewsItem.HeaderImageName + ".png";
+                        #else
+                        string mainImageName = string.Empty;
+                        string headerImageName = string.Empty;
                         #endif
 
                         // cache the main image if it's not already there

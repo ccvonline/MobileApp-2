@@ -5,7 +5,6 @@ using System.IO;
 using Rock.Mobile.Network;
 using MobileApp.Shared.Config;
 using System.Collections.Generic;
-using Facebook;
 using RestSharp;
 using Rock.Mobile.Util.Strings;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -368,6 +367,7 @@ namespace MobileApp
                     });
                 }
 
+#if !__WIN__
                 public delegate void GetUserCredentials( string fromUri, FacebookClient session );
                 public void BindFacebookAccount( GetUserCredentials getCredentials )
                 {
@@ -445,6 +445,15 @@ namespace MobileApp
                     }
                 }
 
+                void SyncFacebookInfoToPerson( object infoObj )
+                {
+                    Person.FirstName = FacebookManager.Instance.GetFirstName( infoObj );
+                    Person.NickName = FacebookManager.Instance.GetFirstName( infoObj );
+                    Person.LastName = FacebookManager.Instance.GetLastName( infoObj );
+                    Person.Email = FacebookManager.Instance.GetEmail( infoObj );
+                }
+#endif
+
                 public void LogoutAndUnbind( )
                 {
                     // clear the person and take a blank copy
@@ -462,14 +471,6 @@ namespace MobileApp
 
                     // save!
                     SaveToDevice( );
-                }
-
-                void SyncFacebookInfoToPerson( object infoObj )
-                {
-                    Person.FirstName = FacebookManager.Instance.GetFirstName( infoObj );
-                    Person.NickName = FacebookManager.Instance.GetFirstName( infoObj );
-                    Person.LastName = FacebookManager.Instance.GetLastName( infoObj );
-                    Person.Email = FacebookManager.Instance.GetEmail( infoObj );
                 }
 
                 public void GetPersonData( HttpRequest.RequestResult onResult )
