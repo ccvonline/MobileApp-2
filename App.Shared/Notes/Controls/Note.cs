@@ -881,6 +881,7 @@ namespace MobileApp
                     OnNoteSizeChanging( );
                 }
 
+                #if __WIN__
                 public IEditableUIControl GetControlAtPoint( PointF position )
                 {
                     // let each child add itself and its children
@@ -900,6 +901,7 @@ namespace MobileApp
 
                     return null;
                 }
+                #endif
             }
         }
     }
