@@ -880,6 +880,26 @@ namespace MobileApp
 
                     OnNoteSizeChanging( );
                 }
+
+                public IEditableUIControl GetControlAtPoint( PointF position )
+                {
+                    // let each child add itself and its children
+                    foreach( IUIControl control in ChildControls )
+                    {
+                        IEditableUIControl editableControl = control as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            IEditableUIControl targetControl = editableControl.ControlAtPoint( position );
+
+                            if ( targetControl != null )
+                            {
+                                return targetControl;
+                            }
+                        }
+                    }
+
+                    return null;
+                }
             }
         }
     }

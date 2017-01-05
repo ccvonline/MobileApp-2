@@ -19,39 +19,13 @@ namespace MobileApp
                 public static IUIControl TryParseControl( Notes.BaseControl.CreateParams parentParams, XmlReader reader )
                 {
                     // either create/parse a new control, or return null.
-                    /*switch( reader.Name )
-                    {
-                        case "P":
-                        case "Paragraph": return new Paragraph( parentParams, reader );
-
-                        case "C":
-                        case "Canvas": return new Canvas( parentParams, reader );
-
-                        case "SP":
-                        case "StackPanel": return new StackPanel( parentParams, reader );
-
-                        case "L":
-                        case "List": return new List( parentParams, reader );
-
-                        case "LI":
-                        case "ListItem": return new ListItem( parentParams, reader );
-
-                        case "RB":
-                        case "RevealBox": return new RevealBox( parentParams, reader );
-
-                        case "Q":
-                        case "Quote": return new Quote( parentParams, reader );
-
-                        case "TI":
-                        case "TextInput": return new TextInput( parentParams, reader );
-
-                        case "H":
-                        case "Header": return new Header( parentParams, reader );
-                    }*/
-
                     if ( Paragraph.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableParagraph( parentParams, reader );
+#else
                         return new Paragraph( parentParams, reader );
+#endif
                     }
                     else if ( Canvas.ElementTagMatches( reader.Name ) )
                     {
@@ -59,7 +33,11 @@ namespace MobileApp
                     }
                     else if ( StackPanel.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableStackPanel( parentParams, reader );
+#else
                         return new StackPanel( parentParams, reader );
+#endif
                     }
                     else if ( List.ElementTagMatches( reader.Name ) )
                     {
@@ -87,7 +65,11 @@ namespace MobileApp
                     }
                     else if ( NoteText.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableNoteText( parentParams, reader );
+#else
                         return new NoteText( parentParams, reader );
+#endif
                     }
 
                     throw new Exception( String.Format( "Control of type {0} does not exist.", reader.Name ) );

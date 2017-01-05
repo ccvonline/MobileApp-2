@@ -76,6 +76,7 @@ namespace MobileApp
 
                     // position ourselves in absolute coordinates, and trust our parent to offset us to be relative to them.
                     PlatformLabel.Position = new PointF( bounds.X, bounds.Y );
+                    SetDebugFrame( PlatformLabel.Frame );
                 }
 
                 // This constructor is called when explicit Note Text is being declared.
@@ -193,6 +194,7 @@ namespace MobileApp
                     SetText( noteText );
 
                     PlatformLabel.Position = new PointF( bounds.X, bounds.Y );
+                    SetDebugFrame( PlatformLabel.Frame );
                 }
 
                 public void SetText( string text )

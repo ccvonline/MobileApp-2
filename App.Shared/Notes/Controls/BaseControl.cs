@@ -21,7 +21,7 @@ namespace MobileApp
                 /// <summary>
                 /// Layer used for the debug frame.
                 /// </summary>
-                protected PlatformLabel DebugFrameView { get; set; }
+                protected PlatformView DebugFrameView { get; set; }
                 #endif
 
                 #if DEBUG
@@ -96,7 +96,7 @@ namespace MobileApp
 
                     //Debugging - show the grid frames
                     #if DEBUG
-                    DebugFrameView = PlatformLabel.Create( );
+                    DebugFrameView = PlatformView.Create( );
                     DebugFrameView.Opacity = .50f;
                     DebugFrameView.BackgroundColor = 0x0000FFFF;
                     DebugFrameView.ZPosition = 100;
@@ -316,6 +316,28 @@ namespace MobileApp
                 {
                     //the default behavior is that we should want a bullet point
                     return true;
+                }
+
+                public void ToggleDebug( object masterView )
+                {
+                    // first, flag whether we will be enabling or disabling
+                    bool enablingDebug = !ShowDebugFrame;
+                    
+                    // now keep the flag on so we can make changes
+                    ShowDebugFrame = true;
+
+                    if ( enablingDebug )
+                    {
+                        TryAddDebugLayer( masterView );
+                        SetDebugFrame( GetFrame( ) );
+                    }
+                    else
+                    {
+                        TryRemoveDebugLayer( masterView );
+                    }
+
+                    // and store the new state
+                    ShowDebugFrame = enablingDebug;
                 }
             }
         }
