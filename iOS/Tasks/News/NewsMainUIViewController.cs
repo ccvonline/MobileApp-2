@@ -534,15 +534,19 @@ namespace iOS
                         NSData imageData = NSData.FromStream( imageStream );
                         entry.Image = new UIImage( imageData, UIScreen.MainScreen.Scale );
 
-                        // refresh the table
-                        NewsTableView.ReloadData( );
+                        // refresh the table if it's ready. It's possible we're prepping news items before 
+                        // we've presented the UI (where the tableView gets created)
+                        if( NewsTableView != null )
+                        {
+                            NewsTableView.ReloadData( );
+                        }
 
                         success = true;
                     }
-                    catch( Exception )
+                    catch( Exception e )
                     {
                         FileCache.Instance.RemoveFile( imageName );
-                        Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing.", imageName ) );
+                        Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing. (Exception: {1})", imageName, e.Message ) );
                     }
                     imageStream.Dispose( );
                 }

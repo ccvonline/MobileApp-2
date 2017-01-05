@@ -368,34 +368,34 @@ namespace MobileApp
                 }
 
 #if !__WIN__
-                public delegate void GetUserCredentials( string fromUri, FacebookClient session );
+                public delegate void GetUserCredentials( string fromUri, Facebook.FacebookClient session );
                 public void BindFacebookAccount( GetUserCredentials getCredentials )
                 {
                     Dictionary<string, object> loginRequest = FacebookManager.Instance.CreateLoginRequest( );
 
-                    FacebookClient fbSession = new FacebookClient( );
+                    Facebook.FacebookClient fbSession = new Facebook.FacebookClient( );
                     string requestUri = fbSession.GetLoginUrl( loginRequest ).AbsoluteUri;
 
                     getCredentials( requestUri, fbSession );
                 }
 
-                public bool HasFacebookResponse( string response, FacebookClient session )
+                public bool HasFacebookResponse( string response, Facebook.FacebookClient session )
                 {
                     // if true is returned, there IS a response, so the caller can call the below FacebookCredentialResult
-                    FacebookOAuthResult oauthResult;
+                    Facebook.FacebookOAuthResult oauthResult;
                     return session.TryParseOAuthCallbackUrl( new Uri( response ), out oauthResult );
                 }
 
-                public void FacebookCredentialResult( string response, FacebookClient session, BindResult result )
+                public void FacebookCredentialResult( string response, Facebook.FacebookClient session, BindResult result )
                 {
                     // make sure we got a valid access token
-                    FacebookOAuthResult oauthResult;
+                    Facebook.FacebookOAuthResult oauthResult;
                     if( session.TryParseOAuthCallbackUrl (new Uri ( response ), out oauthResult) == true )
                     {
                         if ( oauthResult.IsSuccess )
                         {
                             // now attempt to get their basic info
-                            FacebookClient fbSession = new FacebookClient( oauthResult.AccessToken );
+                            Facebook.FacebookClient fbSession = new Facebook.FacebookClient( oauthResult.AccessToken );
                             string infoRequest = FacebookManager.Instance.CreateInfoRequest( );
 
                             fbSession.GetTaskAsync( infoRequest ).ContinueWith( t =>
