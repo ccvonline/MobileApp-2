@@ -22,9 +22,6 @@ namespace MobileApp
             /// </summary>
             public class EditableParagraph : Paragraph, IEditableUIControl
             {
-                // store our parent so we know our bound restrictions
-                RectangleF ParentFrame { get; set; }
-
                 BaseControl ParentControl { get; set; }
                 
                 SizeF ParentSize;
@@ -68,30 +65,65 @@ namespace MobileApp
 
                 public void UpdatePosition( float deltaX, float deltaY )
                 {
+                    // first, if there's a parent control, make sure this paragraph stays within its parent. 
+                    if( ParentControl != null )
+                    {
+                        RectangleF parentFrame = ParentControl.GetFrame( );
+
+                        // Left and Top are easy. Do those first
+                        if( Frame.Left + deltaX < parentFrame.Left )
+                        {
+                            deltaX = Math.Max( 0, deltaX );
+                        }
+
+                        if( Frame.Top + deltaY < parentFrame.Top )
+                        {
+                            deltaY = Math.Max( 0, deltaY );
+                        }
+
+                        // Now do the right edge. This is tricky because we will allow this control to move forward
+                        // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
+                    
+                        // Get the width of the widest child. This is the minimum width
+                        // required for the paragraph, since it's wrapping will stop at the widest child.
+                        float minRequiredWidth = 0;
+                        foreach ( IUIControl control in ChildControls )
+                        {
+                            RectangleF controlFrame = control.GetFrame( );
+                            if ( controlFrame.Width > minRequiredWidth )
+                            {
+                                minRequiredWidth = controlFrame.Width;
+                            }
+                        }
+
+                        // now, if the control cannot wrap any further, we want to clamp its movement
+                        // to the parent's right edge
+                        if ( Frame.Width <= minRequiredWidth )
+                        {
+                            // project where this control WOULD be if we allowed moving.
+                            // if that's past the edge of the parent, disallow it.
+
+                            // Right Edge Check
+                            float projectedRightEdge = Frame.Right + deltaX;
+                            if ( projectedRightEdge > parentFrame.Right )
+                            {
+                                deltaX = Math.Min( deltaX, 0 );
+                            }
+                        }
+                    }
+
                     AddOffset( deltaX, deltaY );
 
                     float xPosInParent = Frame.Left;
                     float yPosInParent = Frame.Top;
 
-                    RectangleF parentFrame = ParentControl.GetFrame( );
-
+                    // if the control has a parent, make the positions relative to it
                     if ( ParentControl != null )
                     {
+                        RectangleF parentFrame = ParentControl.GetFrame( );
+
                         xPosInParent = Frame.Left - parentFrame.Left;
                         yPosInParent = Frame.Top - parentFrame.Top;
-
-                        // dont ever let the paragraph's right edge move outside of the parent
-
-                        
-
-                        //float edgeToParentDelta = (xPosInParent + Frame.Width) - parentFrame.Width;
-
-                        //if( edgeToParentDelta > 0 )
-                        //{
-                        //    Console.WriteLine( "Blah" );
-                        //}
-
-                        ////xPosInParent = Math.Min( , ParentControl.GetFrame( ).Right );
                     }
 
                     // given this new position, see how much space we actually have now.
