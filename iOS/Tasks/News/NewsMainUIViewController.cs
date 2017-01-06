@@ -483,7 +483,8 @@ namespace iOS
                     if ( TryLoadCachedImage( newsEntry, newsEntry.News.HeaderImageName ) == false )
                     {
                         // it failed, so download it and try again.
-                        FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL, newsEntry.News.HeaderImageName, null,
+                        string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
+                        FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL + widthParam, newsEntry.News.HeaderImageName, null,
                             delegate
                             {
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
@@ -502,7 +503,8 @@ namespace iOS
                     if ( TryLoadCachedImage( newsEntry, newsEntry.News.ImageName ) == false )
                     {
                         // it failed, so download it and try again.
-                        FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL, newsEntry.News.ImageName, null,
+                        string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
+                        FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, null,
                             delegate
                             {
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate

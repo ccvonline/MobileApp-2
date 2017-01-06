@@ -82,7 +82,8 @@ namespace iOS
                 ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
                 // request!
-                FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL, NewsItem.HeaderImageName, null,
+                string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
+                FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, null,
                     delegate
                     {
                         Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
