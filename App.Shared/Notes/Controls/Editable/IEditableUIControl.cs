@@ -7,7 +7,9 @@ namespace MobileApp.Shared.Notes
     {
         IEditableUIControl ControlAtPoint( PointF point );
 
-        void UpdatePosition( float deltaX, float deltaY );
+        PointF GetPosition( );
+
+        void SetPosition( float xPos, float yPos );
 
         void ToggleHighlight( object masterView );
     }

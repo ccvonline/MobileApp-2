@@ -174,7 +174,7 @@ namespace MobileApp
                     if( ShowDebugFrame )
                     {
                         DebugFrameView.Position = new PointF( DebugFrameView.Position.X + xOffset, 
-                            DebugFrameView.Position.Y + yOffset );
+                                                              DebugFrameView.Position.Y + yOffset );
                     }
                     #endif
                 }

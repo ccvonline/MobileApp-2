@@ -42,17 +42,31 @@ namespace MobileApp
                     ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref ParentSize );
                 }
 
-                public void UpdatePosition( float deltaX, float deltaY )
+                public PointF GetPosition( )
                 {
-                    AddOffset( deltaX, deltaY );
+                    return new PointF( Frame.Left, Frame.Top );
+                }
 
-                    foreach ( IEditableUIControl control in ChildControls )
+                public void SetPosition( float xPos, float yPos )
+                {
+                    float currX = Frame.Left;
+                    float currY = Frame.Top;
+
+                    Frame = new RectangleF( xPos, yPos, Frame.Width, Frame.Height );
+
+                    float xOffset = Frame.Left - currX;
+                    float yOffset = Frame.Top - currY;
+
+                    // position each interactive label relative to ourselves
+                    foreach( IUIControl control in ChildControls )
                     {
-                        if ( control != null )
-                        {
-                            control.UpdatePosition( 0, 0 );
-                        }
+                        control.AddOffset( xOffset, yOffset );
                     }
+
+                    BorderView.Position = new PointF( BorderView.Position.X + xOffset,
+                                                      BorderView.Position.Y + yOffset );
+
+                    SetDebugFrame( Frame );
                 }
 
                 public IEditableUIControl ControlAtPoint( PointF point )

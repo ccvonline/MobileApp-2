@@ -39,9 +39,16 @@ namespace MobileApp
                     return null;
                 }
 
-                public void UpdatePosition( float deltaX, float deltaY )
+                public PointF GetPosition( )
                 {
-                   AddOffset( deltaX, deltaY );
+                    return new PointF( PlatformLabel.Frame.Left, PlatformLabel.Frame.Top );
+                }
+
+                public void SetPosition( float xPos, float yPos )
+                {
+                    PlatformLabel.Position = new PointF( xPos, yPos );
+
+                    SetDebugFrame( PlatformLabel.Frame );
                 }
 
                 public void ToggleHighlight( object masterView )

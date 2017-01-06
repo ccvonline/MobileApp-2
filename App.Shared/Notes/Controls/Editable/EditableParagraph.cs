@@ -63,27 +63,30 @@ namespace MobileApp
                     return null;
                 }
 
-                public void UpdatePosition( float deltaX, float deltaY )
+                public PointF GetPosition( )
+                {
+                    return new PointF( Frame.Left, Frame.Top );
+                }
+
+                public void SetPosition( float xPos, float yPos )
                 {
                     // first, if there's a parent control, make sure this paragraph stays within its parent. 
-                    if( ParentControl != null )
+                    if ( ParentControl != null )
                     {
                         RectangleF parentFrame = ParentControl.GetFrame( );
+                        
+                        // clamp the yPos to the vertical bounds of our parent
+                        yPos = Math.Max( yPos, parentFrame.Top );
+                        yPos = Math.Min( yPos, parentFrame.Bottom );
 
-                        // Left and Top are easy. Do those first
-                        if( Frame.Left + deltaX < parentFrame.Left )
-                        {
-                            deltaX = Math.Max( 0, deltaX );
-                        }
 
-                        if( Frame.Top + deltaY < parentFrame.Top )
-                        {
-                            deltaY = Math.Max( 0, deltaY );
-                        }
+                        // now left, which is easy
+                        xPos = Math.Max( xPos, parentFrame.Left );
+
 
                         // Now do the right edge. This is tricky because we will allow this control to move forward
                         // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
-                    
+
                         // Get the width of the widest child. This is the minimum width
                         // required for the paragraph, since it's wrapping will stop at the widest child.
                         float minRequiredWidth = 0;
@@ -98,21 +101,31 @@ namespace MobileApp
 
                         // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
-                        if ( Frame.Width <= minRequiredWidth )
+                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
                         {
-                            // project where this control WOULD be if we allowed moving.
-                            // if that's past the edge of the parent, disallow it.
-
                             // Right Edge Check
-                            float projectedRightEdge = Frame.Right + deltaX;
-                            if ( projectedRightEdge > parentFrame.Right )
-                            {
-                                deltaX = Math.Min( deltaX, 0 );
-                            }
+                            xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
                         }
                     }
 
-                    AddOffset( deltaX, deltaY );
+                    //AddOffset( deltaX, deltaY );
+                    float currX = Frame.Left;
+                    float currY = Frame.Top;
+
+                    Frame = new RectangleF( xPos, yPos, Frame.Width, Frame.Height );
+
+                    float xOffset = Frame.Left - currX;
+                    float yOffset = Frame.Top - currY;
+
+                     // position each interactive label relative to ourselves
+                    foreach( IUIControl control in ChildControls )
+                    {
+                        control.AddOffset( xOffset, yOffset );
+                    }
+
+                    BorderView.Position = new PointF( BorderView.Position.X + xOffset,
+                                                      BorderView.Position.Y + yOffset );
+
 
                     float xPosInParent = Frame.Left;
                     float yPosInParent = Frame.Top;
