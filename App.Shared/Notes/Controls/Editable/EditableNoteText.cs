@@ -44,6 +44,10 @@ namespace MobileApp
                     return new PointF( PlatformLabel.Frame.Left, PlatformLabel.Frame.Top );
                 }
 
+                public void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas )
+                {
+                }
+
                 public void SetPosition( float xPos, float yPos )
                 {
                     PlatformLabel.Position = new PointF( xPos, yPos );

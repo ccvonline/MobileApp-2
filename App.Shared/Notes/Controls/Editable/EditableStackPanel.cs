@@ -69,6 +69,10 @@ namespace MobileApp
                     SetDebugFrame( Frame );
                 }
 
+                public void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas )
+                {
+                }
+
                 public IEditableUIControl ControlAtPoint( PointF point )
                 {
                     // see if any of our child controls contain the point
@@ -89,7 +93,6 @@ namespace MobileApp
                     return null;
                 }
                 
-
                 public void ToggleHighlight( object masterView )
                 {
                     ToggleDebug( masterView );

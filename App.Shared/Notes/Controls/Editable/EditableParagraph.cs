@@ -1,14 +1,11 @@
 #if __WIN__
+using MobileApp.Shared.Notes.Styles;
+using MobileApp.Shared.PrivateConfig;
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Text.RegularExpressions;
-
-using MobileApp.Shared.Notes.Styles;
-using Rock.Mobile.UI;
-using MobileApp.Shared.Config;
 using System.Drawing;
-using MobileApp.Shared.PrivateConfig;
+using System.Windows.Controls;
+using System.Xml;
 
 namespace MobileApp
 {
@@ -16,19 +13,24 @@ namespace MobileApp
     {
         namespace Notes
         {
-            /// <summary>
-            /// Container for Text, RevealText and InputText. Manages wrapping 
-            /// and alignment of children.
-            /// </summary>
             public class EditableParagraph : Paragraph, IEditableUIControl
             {
                 BaseControl ParentControl { get; set; }
                 
+                object ParentView { get; set; }
+                
                 SizeF ParentSize;
                 RectangleF Padding;
 
+                bool EditMode_Enabled = false;
+                TextBox EditMode_TextBox = null;
+
                 public EditableParagraph( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
+                    // create our textbox that will display the text being edited.
+                    EditMode_TextBox = new TextBox( );
+                    EditMode_TextBox.KeyUp += EditMode_TextBox_KeyUp;
+
                     // this will be null if the parent is the actual note
                     ParentControl = parentParams.Parent as BaseControl;
 
@@ -41,6 +43,80 @@ namespace MobileApp
                     RectangleF tempBounds = new RectangleF( );
                     GetMarginsAndPadding( ref mStyle, ref ParentSize, ref tempBounds, out tempMargin, out Padding );
                     ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref ParentSize );
+                }
+
+                public override void AddToView( object obj )
+                {
+                    // store the parentView so we can add / remove children as needed when editing
+                    ParentView = obj;
+
+                    base.AddToView( obj );
+                }
+                
+                private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
+                {
+                    switch ( e.Key )
+                    {
+                        case System.Windows.Input.Key.Escape:
+                        {
+                            EnableEditMode( false, null );
+                            break;
+                        }
+
+                        case System.Windows.Input.Key.Return:
+                        {
+                            // if they press return, commit the changed text.
+                            
+                            // remove the existing child controls
+                            foreach ( IUIControl control in ChildControls )
+                            {
+                                control.RemoveFromView( ParentView );
+                            }
+                            ChildControls.Clear( );
+
+                            SetText( EditMode_TextBox.Text );
+
+                            SetPosition( Frame.Left, Frame.Top );
+
+                            EnableEditMode( false, null );
+
+                            // now add the new child controls
+                            foreach ( IUIControl control in ChildControls )
+                            {
+                                control.AddToView( ParentView );
+                            }
+                            
+                            break;
+                        }
+                    }
+                }
+
+                // Takes a string and replaces the content of the paragraph with it.
+                private void SetText( string text )
+                {
+                    // give the text a style that doesn't include things it shouldn't inherit
+                    Styles.Style textStyle = mStyle;
+                    textStyle.mBorderColor = null;
+                    textStyle.mBorderRadius = null;
+                    textStyle.mBorderWidth = null;
+                    
+                    // now break it into words so we can do word wrapping
+                    string[] words = text.Split( ' ' );
+
+                    foreach ( string word in words )
+                    {
+                        // create labels out of each one
+                        if ( string.IsNullOrEmpty( word ) == false )
+                        {
+                            // if the last thing we added was a special control like a reveal box, we 
+                            // need the first label after that to have a leading space so it doesn't bunch up against
+                            // the control
+                            string nextWord = word;
+                            NoteText wordLabel = new NoteText( new CreateParams( this, Frame.Width, Frame.Height, ref textStyle ), nextWord + " " );
+
+                            ChildControls.Add( wordLabel );
+                        }
+                    }
                 }
 
                 public IEditableUIControl ControlAtPoint( PointF point )
@@ -61,6 +137,43 @@ namespace MobileApp
                     }
 
                     return null;
+                }
+
+                public void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas )
+                {
+                    // don't allow setting the mode to what it's already set to
+                    if( enabled != EditMode_Enabled )
+                    {
+                        // enter enable mode
+                        if ( enabled == true )
+                        {
+                            parentCanvas.Children.Add( EditMode_TextBox );
+
+                            // position and size the textbox
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top );
+
+                            EditMode_TextBox.Width = Frame.Width;
+                            EditMode_TextBox.Height = Frame.Height;
+
+
+                            // get the full text. we can use the build HTML stream code to do this.
+                            string htmlStream = string.Empty;
+                            string textStream = string.Empty;
+                            BuildHTMLContent( ref htmlStream, ref textStream, new List<IUIControl>( ) );
+
+                            // assign the text and we're done
+                            EditMode_TextBox.Text = textStream;
+                        }
+                        else
+                        {
+                            // exit enable mode. We know the parent is a canvas because of the design
+                            (EditMode_TextBox.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox );
+                        }
+
+                        // store the change
+                        EditMode_Enabled = enabled;
+                    }
                 }
 
                 public PointF GetPosition( )
@@ -353,7 +466,6 @@ namespace MobileApp
                     }
                 }
             
-
                 public void ToggleHighlight( object masterView )
                 {
                     ToggleDebug( masterView );

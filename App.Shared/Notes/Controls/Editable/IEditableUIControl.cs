@@ -7,6 +7,8 @@ namespace MobileApp.Shared.Notes
     {
         IEditableUIControl ControlAtPoint( PointF point );
 
+        void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas );
+
         PointF GetPosition( );
 
         void SetPosition( float xPos, float yPos );
