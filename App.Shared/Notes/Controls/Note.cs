@@ -882,7 +882,7 @@ namespace MobileApp
                 }
 
                 #if __WIN__
-                public IEditableUIControl GetControlAtPoint( PointF position )
+                public IEditableUIControl HandleMouseDown( PointF position )
                 {
                     // let each child add itself and its children
                     foreach( IUIControl control in ChildControls )
@@ -890,7 +890,7 @@ namespace MobileApp
                         IEditableUIControl editableControl = control as IEditableUIControl;
                         if( editableControl != null )
                         {
-                            IEditableUIControl targetControl = editableControl.ControlAtPoint( position );
+                            IEditableUIControl targetControl = editableControl.HandleMouseDown( position );
 
                             if ( targetControl != null )
                             {
@@ -900,6 +900,64 @@ namespace MobileApp
                     }
 
                     return null;
+                }
+
+                public IEditableUIControl HandleMouseDoubleClick( PointF position )
+                {
+                    // let each child add itself and its children
+                    foreach( IUIControl control in ChildControls )
+                    {
+                        IEditableUIControl editableControl = control as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            IEditableUIControl targetControl = editableControl.HandleMouseDoubleClick( position );
+
+                            if ( targetControl != null )
+                            {
+                                return targetControl;
+                            }
+                        }
+                    }
+
+                    return null;
+                }
+
+                public IEditableUIControl HandleMouseHover( PointF position )
+                {
+                    IEditableUIControl consumingControl = null;
+
+                    // create a position outside the canvas. As soon as we find an item we're hovering over,
+                    // we'll send the rest of the controls this position to force them to discontinue their hover state
+                    PointF oobPos = new PointF( -100, -100 );
+
+                    // let each child add itself and its children
+                    int i;
+                    for( i = 0; i < ChildControls.Count; i++ )
+                    {
+                        IEditableUIControl editableControl = ChildControls[ i ] as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            consumingControl = editableControl.HandleMouseHover( position );
+                            if( consumingControl != null )
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    // now let the remainig children turn off
+                    i++;
+                    for( ; i < ChildControls.Count; i++ )
+                    {
+                        IEditableUIControl editableControl = ChildControls[ i ] as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            editableControl.HandleMouseHover( oobPos );
+                        }
+                    }
+
+                    // and return the control consuming this hover
+                    return consumingControl;
                 }
                 #endif
             }

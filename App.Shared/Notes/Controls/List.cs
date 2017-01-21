@@ -142,7 +142,7 @@ namespace MobileApp
                                     listItemPrefixStr = numberedCount.ToString() + ". ";
                                 }
 
-                                NoteText textLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref style ), listItemPrefixStr );
+                                NoteText textLabel = Parser.CreateNoteText( new CreateParams( this, availableWidth, parentParams.Height, ref style ), listItemPrefixStr );
                                 ChildControls.Add( textLabel );
 
 

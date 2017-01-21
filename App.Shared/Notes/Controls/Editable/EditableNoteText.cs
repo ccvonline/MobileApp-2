@@ -4,6 +4,7 @@ using System.Xml;
 using System.Collections.Generic;
 using Rock.Mobile.UI;
 using System.Drawing;
+using System.Windows.Input;
 
 namespace MobileApp
 {
@@ -16,9 +17,19 @@ namespace MobileApp
             /// </summary>
             public class EditableNoteText : NoteText, IEditableUIControl
             {
+                // store the background color so that if we change it for hovering, we can restore it after
+                uint OrigBackgroundColor = 0;
+                
+                // Store the canvas that is actually rendering this control, so we can
+                // add / remove edit controls as needed (text boxes, toolbars, etc.)
+                System.Windows.Controls.Canvas ParentEditingCanvas;
+                bool EditMode_Enabled = false;
+                
                 public EditableNoteText( CreateParams parentParams, string text ) : base( parentParams, text )
                 {
-                   
+                    ParentEditingCanvas = null;
+
+                    OrigBackgroundColor = PlatformLabel.BackgroundColor;
                 }
 
                 // This constructor is called when explicit Note Text is being declared.
@@ -26,10 +37,59 @@ namespace MobileApp
                 // the user wants to alter a particular piece of text within a paragraph.
                 public EditableNoteText( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
-                    
+                    ParentEditingCanvas = null;
+
+                    OrigBackgroundColor = PlatformLabel.BackgroundColor; 
                 }
-                
-                public IEditableUIControl ControlAtPoint( PointF point )
+
+                public override void AddToView( object obj )
+                {
+                    // store our parent canvas so we can toggle editing as needed
+                    ParentEditingCanvas = obj as System.Windows.Controls.Canvas;
+
+                    base.AddToView( obj );
+                }
+
+                public IEditableUIControl HandleMouseDoubleClick( PointF point )
+                {
+                    if( PlatformLabel.Frame.Contains( point ) )
+                    {
+                        EditMode_Enabled = true;
+                        PlatformLabel.BackgroundColor = 0xFF222277;
+
+                        return this;
+                    }
+                    
+                    return null;
+                }
+
+                public void HandleKeyUp( KeyEventArgs e )
+                {
+                    EditMode_Enabled = false;
+                    PlatformLabel.BackgroundColor = OrigBackgroundColor;
+                }
+
+                public bool IsEditing( )
+                {
+                    return EditMode_Enabled;
+                }
+
+                public void HandleUnderline( )
+                {
+                    // We'll simply toggle what we've got
+
+                    if( PlatformLabel.Editable_HasUnderline( ) == false )
+                    {
+                        PlatformLabel.Editable_AddUnderline( );
+                    }
+                    else
+                    {
+                        PlatformLabel.Editable_RemoveUnderline( );
+                    }
+                }
+
+
+                public IEditableUIControl HandleMouseDown( PointF point )
                 {
                     if( PlatformLabel.Frame.Contains( point ) )
                     {
@@ -43,11 +103,7 @@ namespace MobileApp
                 {
                     return new PointF( PlatformLabel.Frame.Left, PlatformLabel.Frame.Top );
                 }
-
-                public void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas )
-                {
-                }
-
+                
                 public void SetPosition( float xPos, float yPos )
                 {
                     PlatformLabel.Position = new PointF( xPos, yPos );
@@ -55,9 +111,19 @@ namespace MobileApp
                     SetDebugFrame( PlatformLabel.Frame );
                 }
 
-                public void ToggleHighlight( object masterView )
+                public IEditableUIControl HandleMouseHover( PointF mousePos )
                 {
-                    ToggleDebug( masterView );
+                    bool mouseHovering = GetFrame( ).Contains( mousePos );
+                    if ( mouseHovering == true )
+                    {
+                        PlatformLabel.BackgroundColor = 0xFFFFFF77;
+                        return this;
+                    }
+                    else
+                    {
+                        PlatformLabel.BackgroundColor = OrigBackgroundColor;
+                        return null;
+                    }
                 }
             }
         }

@@ -188,7 +188,7 @@ namespace MobileApp
                                     // if the last control was an element (NoteText or Reveal), then we have two in a row. So place a space between them!
                                     if ( lastControlWasElement )
                                     {
-                                        NoteText textLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), " " );
+                                        NoteText textLabel = Parser.CreateNoteText( new CreateParams( this, availableWidth, parentParams.Height, ref mStyle ), " " );
                                         ChildControls.Add( textLabel );
                                     }
 
@@ -246,7 +246,7 @@ namespace MobileApp
                                             lastControlWasElement = false;
                                         }
 
-                                        NoteText wordLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), nextWord + " " );
+                                        NoteText wordLabel = Parser.CreateNoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), nextWord + " " );
 
                                         ChildControls.Add( wordLabel );
                                     }
@@ -284,7 +284,7 @@ namespace MobileApp
                         textStyle.mFont.mSize = mStyle.mFont.mSize ?? ControlStyles.mText.mFont.mSize;
                         textStyle.mAlignment = Alignment.Right;
 
-                        NoteText wordLabel = new NoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );
+                        NoteText wordLabel = Parser.CreateNoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );
                         ChildControls.Add( wordLabel );
                     }
 

@@ -75,6 +75,15 @@ namespace MobileApp
                     throw new Exception( String.Format( "Control of type {0} does not exist.", reader.Name ) );
                 }
 
+                public static NoteText CreateNoteText( Notes.BaseControl.CreateParams parentParams, string text )
+                {
+#if __WIN__
+                    return new EditableNoteText( parentParams, text );
+#else
+                    return new NoteText( parentParams, text );
+#endif
+                }
+
                 public static void ParseBounds( XmlReader reader, ref SizeF parentSize, ref RectangleF bounds )
                 {
                     // first check without the Margin prefix.

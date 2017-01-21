@@ -4,7 +4,10 @@ using MobileApp.Shared.PrivateConfig;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace MobileApp
@@ -17,7 +20,7 @@ namespace MobileApp
             {
                 BaseControl ParentControl { get; set; }
                 
-                object ParentView { get; set; }
+                System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
                 SizeF ParentSize;
                 RectangleF Padding;
@@ -25,8 +28,17 @@ namespace MobileApp
                 bool EditMode_Enabled = false;
                 TextBox EditMode_TextBox = null;
 
+                // store the background color so that if we change it for hovering, we can restore it after
+                uint OrigBackgroundColor = 0;
+
+                // the size (in pixels) to extend the paragraph's frame
+                // for mouse interaction
+                const float CornerExtensionSize = 5;
+                
                 public EditableParagraph( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
+                    ParentEditingCanvas = null;
+
                     // create our textbox that will display the text being edited.
                     EditMode_TextBox = new TextBox( );
                     EditMode_TextBox.KeyUp += EditMode_TextBox_KeyUp;
@@ -43,14 +55,96 @@ namespace MobileApp
                     RectangleF tempBounds = new RectangleF( );
                     GetMarginsAndPadding( ref mStyle, ref ParentSize, ref tempBounds, out tempMargin, out Padding );
                     ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref ParentSize );
+
+                    OrigBackgroundColor = BorderView.BackgroundColor;
                 }
 
                 public override void AddToView( object obj )
                 {
-                    // store the parentView so we can add / remove children as needed when editing
-                    ParentView = obj;
+                    // store the parentView, which we know is a canvas, so we can add / remove children as needed when editing
+                    ParentEditingCanvas = obj as System.Windows.Controls.Canvas;
 
                     base.AddToView( obj );
+                }
+
+                public bool IsEditing( )
+                {
+                    return EditMode_Enabled;
+                }
+
+                public void HandleKeyUp( KeyEventArgs e )
+                {
+                    // ignore
+                }
+
+                public IEditableUIControl HandleMouseHover( PointF mousePos )
+                {
+                    IEditableUIControl consumingControl = null;
+                    bool hoveringChildControl = false;
+                                        
+                    // create a position outside the canvas. As soon as we find an item we're hovering over,
+                    // we'll send the rest of the controls this position to force them to discontinue their hover state
+                    PointF oobPos = new PointF( -100, -100 );
+
+                    // see if any of our child controls contain the point
+                    int i;
+                    for( i = 0; i < ChildControls.Count; i++ )
+                    {
+                        IEditableUIControl editControl = ChildControls[ i ] as IEditableUIControl;
+                        if ( editControl != null )
+                        {
+                            // if we're hovering over any control, flag it, but don't stop checking
+                            consumingControl = editControl.HandleMouseHover( mousePos );
+                            if( consumingControl != null )
+                            {
+                                hoveringChildControl = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // now let the remainig children turn off
+                    i++;
+                    for( ; i < ChildControls.Count; i++ )
+                    {
+                        IEditableUIControl editableControl = ChildControls[ i ] as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            editableControl.HandleMouseHover( oobPos );
+                        }
+                    }
+                    
+                    // if we're over a child
+                    if( hoveringChildControl == true )
+                    {
+                        // restore the color
+                        BorderView.BackgroundColor = OrigBackgroundColor;
+                    }
+                    else
+                    {
+                        // otherwise, see if we're hovering over the paragraph, and if we are, highlight it
+                        RectangleF frame = GetFrame( );
+                        frame.Inflate( CornerExtensionSize, CornerExtensionSize );
+
+                        // are we hovering over this control?
+                        bool mouseHovering = frame.Contains( mousePos );
+                        if( mouseHovering == true )
+                        {
+                            // take us as the consumer
+                            consumingControl = this;
+
+                            // set the hover appearance
+                            BorderView.BackgroundColor = 0xFFFFFF77;
+                        }
+                        // we're NOT hovering
+                        else
+                        {
+                            // so revert the color
+                            BorderView.BackgroundColor = OrigBackgroundColor;
+                        }
+                    }
+
+                    return consumingControl;
                 }
                 
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
@@ -59,31 +153,23 @@ namespace MobileApp
                     {
                         case System.Windows.Input.Key.Escape:
                         {
-                            EnableEditMode( false, null );
+                            EnableEditMode( false );
                             break;
                         }
 
                         case System.Windows.Input.Key.Return:
                         {
                             // if they press return, commit the changed text.
-                            
-                            // remove the existing child controls
-                            foreach ( IUIControl control in ChildControls )
-                            {
-                                control.RemoveFromView( ParentView );
-                            }
-                            ChildControls.Clear( );
-
                             SetText( EditMode_TextBox.Text );
+                                
+                            EnableEditMode( false );
 
                             SetPosition( Frame.Left, Frame.Top );
-
-                            EnableEditMode( false, null );
 
                             // now add the new child controls
                             foreach ( IUIControl control in ChildControls )
                             {
-                                control.AddToView( ParentView );
+                                control.AddToView( ParentEditingCanvas );
                             }
                             
                             break;
@@ -94,6 +180,12 @@ namespace MobileApp
                 // Takes a string and replaces the content of the paragraph with it.
                 private void SetText( string text )
                 {
+                    foreach ( IUIControl control in ChildControls )
+                    {
+                        control.RemoveFromView( ParentEditingCanvas );
+                    }
+                    ChildControls.Clear( );
+
                     // give the text a style that doesn't include things it shouldn't inherit
                     Styles.Style textStyle = mStyle;
                     textStyle.mBorderColor = null;
@@ -112,26 +204,56 @@ namespace MobileApp
                             // need the first label after that to have a leading space so it doesn't bunch up against
                             // the control
                             string nextWord = word;
-                            NoteText wordLabel = new NoteText( new CreateParams( this, Frame.Width, Frame.Height, ref textStyle ), nextWord + " " );
+                            NoteText wordLabel = new EditableNoteText( new CreateParams( this, Frame.Width, Frame.Height, ref textStyle ), nextWord + " " );
 
                             ChildControls.Add( wordLabel );
                         }
                     }
                 }
 
-                public IEditableUIControl ControlAtPoint( PointF point )
+                public IEditableUIControl HandleMouseDoubleClick( PointF point )
                 {
-                    // see if any of our child controls contain the point
-                    //foreach( IUIControl control in ChildControls )
-                    //{
-                    //    IUIControl consumingControl = control.ControlAtPoint( point );
-                    //    if( consumingControl != null)
-                    //    {
-                    //        return consumingControl;
-                    //    }
-                    //}
+                    // for double click, we need to give all our child controls a chance to consume
 
-                    if ( GetFrame( ).Contains( point ) )
+                    // see if any of our child controls contain the point
+                    foreach ( IUIControl control in ChildControls )
+                    {
+                        // if this control is editable
+                        IEditableUIControl editableControl = control as IEditableUIControl;
+                        if ( editableControl != null )
+                        {
+                            // if it (or a child) consumes, return that
+                            IEditableUIControl consumingControl = editableControl.HandleMouseDoubleClick( point );
+                            if ( consumingControl != null )
+                            {
+                                return consumingControl;
+                            }
+                        }
+                    }
+
+                    // create a grabbable corner outside of the paragraph words
+                    RectangleF frame = GetFrame( );
+                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
+
+                    if ( frame.Contains( point ) )
+                    {
+                        // notify the caller we're consuming, and turn on edit mode
+                        EnableEditMode( true );
+                        return this;
+                    }
+
+                    return null;
+                }
+
+                public IEditableUIControl HandleMouseDown( PointF point )
+                {
+                    // for mouse down, we don't want any children to consume
+
+                    // create a grabbable corner outside of the paragraph words
+                    RectangleF frame = GetFrame( );
+                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
+
+                    if ( frame.Contains( point ) )
                     {
                         return this;
                     }
@@ -139,7 +261,7 @@ namespace MobileApp
                     return null;
                 }
 
-                public void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas )
+                private void EnableEditMode( bool enabled )
                 {
                     // don't allow setting the mode to what it's already set to
                     if( enabled != EditMode_Enabled )
@@ -147,7 +269,7 @@ namespace MobileApp
                         // enter enable mode
                         if ( enabled == true )
                         {
-                            parentCanvas.Children.Add( EditMode_TextBox );
+                            ParentEditingCanvas.Children.Add( EditMode_TextBox );
 
                             // position and size the textbox
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left );
@@ -164,6 +286,13 @@ namespace MobileApp
 
                             // assign the text and we're done
                             EditMode_TextBox.Text = textStream;
+
+                            Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
+                            { 
+                                EditMode_TextBox.Focus( );
+                                Keyboard.Focus( EditMode_TextBox );
+                                EditMode_TextBox.CaretIndex = EditMode_TextBox.Text.Length + 1;
+                            }));
                         }
                         else
                         {
@@ -183,108 +312,117 @@ namespace MobileApp
 
                 public void SetPosition( float xPos, float yPos )
                 {
-                    // first, if there's a parent control, make sure this paragraph stays within its parent. 
-                    if ( ParentControl != null )
+                    // we're not moving if we're in edit mode
+                    if( EditMode_Enabled == false )
                     {
-                        RectangleF parentFrame = ParentControl.GetFrame( );
-                        
-                        // clamp the yPos to the vertical bounds of our parent
-                        yPos = Math.Max( yPos, parentFrame.Top );
-                        yPos = Math.Min( yPos, parentFrame.Bottom );
-
-
-                        // now left, which is easy
-                        xPos = Math.Max( xPos, parentFrame.Left );
-
-
-                        // Now do the right edge. This is tricky because we will allow this control to move forward
-                        // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
-
-                        // Get the width of the widest child. This is the minimum width
-                        // required for the paragraph, since it's wrapping will stop at the widest child.
-                        float minRequiredWidth = 0;
-                        foreach ( IUIControl control in ChildControls )
+                        // first, if there's a parent control, make sure this paragraph stays within its parent. 
+                        if ( ParentControl != null )
                         {
-                            RectangleF controlFrame = control.GetFrame( );
-                            if ( controlFrame.Width > minRequiredWidth )
+                            RectangleF parentFrame = ParentControl.GetFrame( );
+                        
+                            // clamp the yPos to the vertical bounds of our parent
+                            yPos = Math.Max( yPos, parentFrame.Top );
+                            yPos = Math.Min( yPos, parentFrame.Bottom );
+
+
+                            // now left, which is easy
+                            xPos = Math.Max( xPos, parentFrame.Left );
+
+
+                            // Now do the right edge. This is tricky because we will allow this control to move forward
+                            // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
+
+                            // Get the width of the widest child. This is the minimum width
+                            // required for the paragraph, since it's wrapping will stop at the widest child.
+                            float minRequiredWidth = 0;
+                            foreach ( IUIControl control in ChildControls )
                             {
-                                minRequiredWidth = controlFrame.Width;
+                                RectangleF controlFrame = control.GetFrame( );
+                                if ( controlFrame.Width > minRequiredWidth )
+                                {
+                                    minRequiredWidth = controlFrame.Width;
+                                }
+                            }
+
+                            // now, if the control cannot wrap any further, we want to clamp its movement
+                            // to the parent's right edge
+                            if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
+                            {
+                                // Right Edge Check
+                                xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
                             }
                         }
 
-                        // now, if the control cannot wrap any further, we want to clamp its movement
-                        // to the parent's right edge
-                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
+                        //AddOffset( deltaX, deltaY );
+                        float currX = Frame.Left;
+                        float currY = Frame.Top;
+
+                        Frame = new RectangleF( xPos, yPos, Frame.Width, Frame.Height );
+
+                        float xOffset = Frame.Left - currX;
+                        float yOffset = Frame.Top - currY;
+
+                         // position each interactive label relative to ourselves
+                        foreach( IUIControl control in ChildControls )
                         {
-                            // Right Edge Check
-                            xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
+                            control.AddOffset( xOffset, yOffset );
                         }
-                    }
 
-                    //AddOffset( deltaX, deltaY );
-                    float currX = Frame.Left;
-                    float currY = Frame.Top;
-
-                    Frame = new RectangleF( xPos, yPos, Frame.Width, Frame.Height );
-
-                    float xOffset = Frame.Left - currX;
-                    float yOffset = Frame.Top - currY;
-
-                     // position each interactive label relative to ourselves
-                    foreach( IUIControl control in ChildControls )
-                    {
-                        control.AddOffset( xOffset, yOffset );
-                    }
-
-                    BorderView.Position = new PointF( BorderView.Position.X + xOffset,
-                                                      BorderView.Position.Y + yOffset );
+                        BorderView.Position = new PointF( BorderView.Position.X + xOffset,
+                                                          BorderView.Position.Y + yOffset );
 
 
-                    float xPosInParent = Frame.Left;
-                    float yPosInParent = Frame.Top;
+                        float xPosInParent = Frame.Left;
+                        float yPosInParent = Frame.Top;
 
-                    // if the control has a parent, make the positions relative to it
-                    if ( ParentControl != null )
-                    {
-                        RectangleF parentFrame = ParentControl.GetFrame( );
+                        // if the control has a parent, make the positions relative to it
+                        if ( ParentControl != null )
+                        {
+                            RectangleF parentFrame = ParentControl.GetFrame( );
 
-                        xPosInParent = Frame.Left - parentFrame.Left;
-                        yPosInParent = Frame.Top - parentFrame.Top;
-                    }
+                            xPosInParent = Frame.Left - parentFrame.Left;
+                            yPosInParent = Frame.Top - parentFrame.Top;
+                        }
 
-                    // given this new position, see how much space we actually have now.
-                    UpdateLayout( ParentSize.Width - xPosInParent, ParentSize.Height - yPosInParent );
+                        // given this new position, see how much space we actually have now.
+                        UpdateLayout( ParentSize.Width - xPosInParent, ParentSize.Height - yPosInParent );
 
                     
-                    // Build our final frame that determines our dimensions
-                    RectangleF frame = new RectangleF( 65000, 65000, -65000, -65000 );
+                        // Build our final frame that determines our dimensions
+                        RectangleF frame = new RectangleF( 65000, 65000, -65000, -65000 );
 
-                    // for each child control
-                    foreach ( IUIControl control in ChildControls )
-                    {
-                        // enlarge our frame by the current frame and the next child
-                        frame = Parser.CalcBoundingFrame( frame, control.GetFrame( ) );
-                    }
+                        // for each child control
+                        foreach ( IUIControl control in ChildControls )
+                        {
+                            // enlarge our frame by the current frame and the next child
+                            frame = Parser.CalcBoundingFrame( frame, control.GetFrame( ) );
+                        }
 
                     
-                    // now set the new width / height
-                    int borderPaddingPx = 0;
+                        // now set the new width / height
+                        int borderPaddingPx = 0;
 
-                    if( mStyle.mBorderWidth.HasValue )
-                    {
-                        borderPaddingPx = (int)Rock.Mobile.Graphics.Util.UnitToPx( mStyle.mBorderWidth.Value + PrivateNoteConfig.BorderPadding );
+                        if( mStyle.mBorderWidth.HasValue )
+                        {
+                            borderPaddingPx = (int)Rock.Mobile.Graphics.Util.UnitToPx( mStyle.mBorderWidth.Value + PrivateNoteConfig.BorderPadding );
+                        }
+
+                        Frame = new RectangleF( Frame.Left, 
+                                                Frame.Top, 
+                                                frame.Width + Padding.Width + Padding.Left + (borderPaddingPx * 2), 
+                                                frame.Height + Padding.Height + Padding.Top + (borderPaddingPx * 2) //add in padding
+                                               );
+
+                        // and store that as our bounds
+                        BorderView.Frame = Frame;
+
+                        SetDebugFrame( Frame );
                     }
+                }
 
-                    Frame = new RectangleF( Frame.Left, 
-                                            Frame.Top, 
-                                            frame.Width + Padding.Width + Padding.Left + (borderPaddingPx * 2), 
-                                            frame.Height + Padding.Height + Padding.Top + (borderPaddingPx * 2) //add in padding
-                                           );
-
-                    // and store that as our bounds
-                    BorderView.Frame = Frame;
-
-                    SetDebugFrame( Frame );
+                public void HandleUnderline( )
+                {
+                    // nothing to do for us
                 }
 
                 void UpdateLayout( float maxWidth, float maxHeight )
@@ -464,11 +602,6 @@ namespace MobileApp
                         // set their correct X offset
                         rowControl.AddOffset( xRowAdjust, yAdjust );
                     }
-                }
-            
-                public void ToggleHighlight( object masterView )
-                {
-                    ToggleDebug( masterView );
                 }
             }
         }

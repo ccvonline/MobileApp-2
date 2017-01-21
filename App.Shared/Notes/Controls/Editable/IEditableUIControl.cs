@@ -1,19 +1,23 @@
 ﻿#if __WIN__
 using System.Drawing;
+using System.Windows.Input;
 
 namespace MobileApp.Shared.Notes
 {
     public interface IEditableUIControl
     {
-        IEditableUIControl ControlAtPoint( PointF point );
-
-        void EnableEditMode( bool enabled, System.Windows.Controls.Canvas parentCanvas );
+        IEditableUIControl HandleMouseDown( PointF point );
+        IEditableUIControl HandleMouseDoubleClick( PointF point );
+        IEditableUIControl HandleMouseHover( PointF mousePos );
+        
+        void HandleKeyUp( KeyEventArgs e );
+        void HandleUnderline( );
 
         PointF GetPosition( );
 
-        void SetPosition( float xPos, float yPos );
+        bool IsEditing( );
 
-        void ToggleHighlight( object masterView );
+        void SetPosition( float xPos, float yPos );
     }
 }
 #endif
