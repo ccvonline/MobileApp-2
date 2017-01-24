@@ -425,6 +425,16 @@ namespace MobileApp
                     // nothing to do for us
                 }
 
+                public void HandleFont( string fontName )
+                {
+                    // nothing to do for us
+                }
+
+                public List<EditStyling.Style> GetEditStyles( )
+                {
+                    return new List<EditStyling.Style>( );
+                }
+
                 void UpdateLayout( float maxWidth, float maxHeight )
                 {
                     RectangleF bounds = new RectangleF( 0, 0, maxWidth, maxHeight );

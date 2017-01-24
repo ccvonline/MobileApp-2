@@ -74,6 +74,17 @@ namespace MobileApp
                     return EditMode_Enabled;
                 }
 
+                public List<EditStyling.Style> GetEditStyles( )
+                {
+                    // shift & or together the styles we support
+                    List<EditStyling.Style> styles = new List<EditStyling.Style>( );
+                    styles.Add( EditStyling.Style.Font );
+                    styles.Add( EditStyling.Style.RevealBox );
+                    styles.Add( EditStyling.Style.Underline );
+                    
+                    return styles;
+                }
+
                 public void HandleUnderline( )
                 {
                     // We'll simply toggle what we've got
@@ -88,6 +99,11 @@ namespace MobileApp
                     }
                 }
 
+                public void HandleFont( string fontName )
+                {
+                    // TODO: Handle font size separately
+                    PlatformLabel.SetFont( fontName, 14 );
+                }
 
                 public IEditableUIControl HandleMouseDown( PointF point )
                 {

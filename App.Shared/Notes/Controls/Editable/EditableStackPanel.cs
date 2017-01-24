@@ -69,6 +69,16 @@ namespace MobileApp
                     // nothing to do for us
                 }
 
+                public void HandleFont( string fontName )
+                {
+                    // nothing to do for us
+                }
+
+                public List<EditStyling.Style> GetEditStyles( )
+                {
+                    return new List<EditStyling.Style>( );
+                }
+
                 public PointF GetPosition( )
                 {
                     return new PointF( Frame.Left, Frame.Top );
