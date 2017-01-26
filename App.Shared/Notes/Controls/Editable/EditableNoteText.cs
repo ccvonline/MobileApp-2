@@ -85,24 +85,55 @@ namespace MobileApp
                     return styles;
                 }
 
-                public void HandleUnderline( )
+                public object GetStyleValue( EditStyling.Style style )
                 {
-                    // We'll simply toggle what we've got
+                    switch( style )
+                    {
+                        case EditStyling.Style.Font:
+                        {
+                            string fontName = PlatformLabel.Editable_GetFontName( );
+                            float fontSize = PlatformLabel.Editable_GetFontSize( );
 
-                    if( PlatformLabel.Editable_HasUnderline( ) == false )
-                    {
-                        PlatformLabel.Editable_AddUnderline( );
+                            return new EditStyling.FontStyle( fontName, fontSize );
+                        }
+
+                        case EditStyling.Style.Underline:
+                        {
+                            return PlatformLabel.Editable_HasUnderline( );
+                        }
                     }
-                    else
-                    {
-                        PlatformLabel.Editable_RemoveUnderline( );
-                    }
+
+                    return null;
                 }
 
-                public void HandleFont( string fontName )
+                public void SetStyleValue( EditStyling.Style style, object value )
                 {
-                    // TODO: Handle font size separately
-                    PlatformLabel.SetFont( fontName, 14 );
+                    switch( style )
+                    {
+                        case EditStyling.Style.Font:
+                        {
+                            EditStyling.FontStyle fontValue = (EditStyling.FontStyle)value;
+                            PlatformLabel.SetFont( fontValue.mName, fontValue.mSize );
+
+                            break;
+                        }
+
+                        case EditStyling.Style.Underline:
+                        {
+                            bool enableUnderline = (bool) value;
+
+                            if( enableUnderline )
+                            {
+                                PlatformLabel.Editable_AddUnderline( );
+                            }
+                            else
+                            {
+                                PlatformLabel.Editable_RemoveUnderline( );
+                            }
+
+                            break;
+                        }
+                    }
                 }
 
                 public IEditableUIControl HandleMouseDown( PointF point )

@@ -16,6 +16,19 @@ namespace MobileApp.Shared.Notes
             RevealBox
         }
 
+        // wrapper class for passing the values required for the font style
+        public class FontStyle
+        {
+            public FontStyle( string name, float size )
+            {
+                mName = name;
+                mSize = size;
+            }
+
+            public string mName;
+            public float mSize;
+        }
+
         //public static ulong CreateSupportedStyles( List<Style> supportedStyles )
         //{
         //    ulong supportedStyleBits = 0;
@@ -49,13 +62,13 @@ namespace MobileApp.Shared.Notes
         IEditableUIControl HandleMouseHover( PointF mousePos );
         
         void HandleKeyUp( KeyEventArgs e );
-        void HandleUnderline( );
-        void HandleFont( string fontName );
 
         PointF GetPosition( );
 
         bool IsEditing( );
         List<EditStyling.Style> GetEditStyles( );
+        object GetStyleValue( EditStyling.Style style );
+        void SetStyleValue( EditStyling.Style style, object value );
 
         void SetPosition( float xPos, float yPos );
     }

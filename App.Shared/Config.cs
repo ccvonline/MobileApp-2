@@ -345,7 +345,7 @@ namespace MobileApp
                 /// <summary>
                 /// The font to use representing a bold font throughout the app.
                 /// </summary>
-                public const string Font_Bold = "DINOffc-CondBlack";
+                public const string Font_Bold = "DINOffcCondBlack-Regular";
 
                 /// <summary>
                 /// The font to use representing a regular font throughout the app.
@@ -355,7 +355,7 @@ namespace MobileApp
                 /// <summary>
                 /// The font to use representing a light font throughout the app.
                 /// </summary>
-                public const string Font_Light = "OpenSans-Light";
+                public const string Font_Light = "OpenSansLight-Regular";
 
                 /// <summary>
                 /// The size of to use for the large font throughout the app.

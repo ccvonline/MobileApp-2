@@ -64,16 +64,15 @@ namespace MobileApp
                     base.AddToView( obj );
                 }
 
-                public void HandleUnderline( )
+                public object GetStyleValue( EditStyling.Style style )
                 {
-                    // nothing to do for us
+                    return null;
                 }
 
-                public void HandleFont( string fontName )
+                public void SetStyleValue( EditStyling.Style style, object value )
                 {
-                    // nothing to do for us
                 }
-
+                
                 public List<EditStyling.Style> GetEditStyles( )
                 {
                     return new List<EditStyling.Style>( );

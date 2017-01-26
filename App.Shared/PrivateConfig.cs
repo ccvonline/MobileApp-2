@@ -609,12 +609,12 @@ namespace MobileApp.Shared
             /// <summary>
             /// The primary (most commonly used) icon font
             /// </summary>
-            public const string Icon_Font_Primary = "FontAwesome";
+            public const string Icon_Font_Primary = "FontAwesome-Regular";
 
             /// <summary>
             /// The secondary (used in occasional spots) icon font
             /// </summary>
-            public const string Icon_Font_Secondary = "Bh";
+            public const string Icon_Font_Secondary = "icomoon-Regular";
 
             /// <summary>
             /// The symbol to use for a result that was successful.
