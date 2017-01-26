@@ -132,141 +132,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\Assets\Fonts\Bevan.ttf">
-      <Link>Resources\Fonts\Bevan.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
-      <Link>Resources\Fonts\ChangaOne-Italic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
-      <Link>Resources\Fonts\ChangaOne-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
-      <Link>Resources\Fonts\DroidSerif-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
-      <Link>Resources\Fonts\DroidSerif-BoldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
-      <Link>Resources\Fonts\DroidSerif-Italic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\DroidSerif.ttf">
-      <Link>Resources\Fonts\DroidSerif.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-Black.ttf">
-      <Link>Resources\Fonts\Merriweather-Black.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-Bold.ttf">
-      <Link>Resources\Fonts\Merriweather-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
-      <Link>Resources\Fonts\Merriweather-BoldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
-      <Link>Resources\Fonts\Merriweather-HeavyItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-Italic.ttf">
-      <Link>Resources\Fonts\Merriweather-Italic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-Light.ttf">
-      <Link>Resources\Fonts\Merriweather-Light.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
-      <Link>Resources\Fonts\Merriweather-LightItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Merriweather-Regular.ttf">
-      <Link>Resources\Fonts\Merriweather-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Montserrat-Bold.ttf">
-      <Link>Resources\Fonts\Montserrat-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Montserrat-Regular.ttf">
-      <Link>Resources\Fonts\Montserrat-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-Bold.ttf">
-      <Link>Resources\Fonts\OpenSans-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
-      <Link>Resources\Fonts\OpenSans-BoldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-ExtraBold.ttf">
-      <Link>Resources\Fonts\OpenSans-ExtraBold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-ExtraBoldItalic.ttf">
-      <Link>Resources\Fonts\OpenSans-ExtraBoldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-Italic.ttf">
-      <Link>Resources\Fonts\OpenSans-Italic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-Light.ttf">
-      <Link>Resources\Fonts\OpenSans-Light.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-LightItalic.ttf">
-      <Link>Resources\Fonts\OpenSans-LightItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-Regular.ttf">
-      <Link>Resources\Fonts\OpenSans-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-Semibold.ttf">
-      <Link>Resources\Fonts\OpenSans-Semibold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\OpenSans-SemiboldItalic.ttf">
-      <Link>Resources\Fonts\OpenSans-SemiboldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\PassionOne-Black.ttf">
-      <Link>Resources\Fonts\PassionOne-Black.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\PassionOne-Bold.ttf">
-      <Link>Resources\Fonts\PassionOne-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\PassionOne-Regular.ttf">
-      <Link>Resources\Fonts\PassionOne-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Quicksand-Bold.ttf">
-      <Link>Resources\Fonts\Quicksand-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Quicksand-Light.ttf">
-      <Link>Resources\Fonts\Quicksand-Light.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Quicksand-Regular.ttf">
-      <Link>Resources\Fonts\Quicksand-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-Italic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Light.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-Light.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-LightItalic.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-LightItalic.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
-      <Link>Resources\Fonts\RobotoCondensed-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
-      <Link>Resources\Fonts\RobotoSlab-Bold.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
-      <Link>Resources\Fonts\RobotoSlab-Light.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
-      <Link>Resources\Fonts\RobotoSlab-Regular.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
-      <Link>Resources\Fonts\RobotoSlab-Thin.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\FontAwesome.ttf">
-      <Link>Resources\Fonts\FontAwesome.ttf</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\Bh.ttf">
-      <Link>Resources\Fonts\Bh.ttf</Link>
-    </BundleResource>
     <BundleResource Include="..\Assets\spot_mask.png">
       <Link>Resources\spot_mask.png</Link>
     </BundleResource>
@@ -314,9 +179,6 @@
     </BundleResource>
     <BundleResource Include="..\Assets\serve_thumb.png">
       <Link>Resources\serve_thumb.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
-      <Link>Resources\Fonts\DINOffc-CondBlack.ttf</Link>
     </BundleResource>
     <BundleResource Include="..\Assets\splash_logo_ipad_landscape.png">
       <Link>Resources\splash_logo_ipad_landscape.png</Link>
@@ -413,6 +275,147 @@
     </BundleResource>
     <BundleResource Include="..\Assets\upgrade_news_header%403x.png">
       <Link>Resources\upgrade_news_header%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Bevan-Regular.ttf">
+      <Link>Resources\Fonts\Bevan-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
+      <Link>Resources\Fonts\ChangaOne-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
+      <Link>Resources\Fonts\ChangaOne-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DINOffcCondBlack-Regular.ttf">
+      <Link>Resources\Fonts\DINOffcCondBlack-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
+      <Link>Resources\Fonts\DroidSerif-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
+      <Link>Resources\Fonts\DroidSerif-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
+      <Link>Resources\Fonts\DroidSerif-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\DroidSerif-Regular.ttf">
+      <Link>Resources\Fonts\DroidSerif-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\FontAwesome-Regular.ttf">
+      <Link>Resources\Fonts\FontAwesome-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Black.ttf">
+      <Link>Resources\Fonts\Merriweather-Black.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Bold.ttf">
+      <Link>Resources\Fonts\Merriweather-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-HeavyItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Italic.ttf">
+      <Link>Resources\Fonts\Merriweather-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Light.ttf">
+      <Link>Resources\Fonts\Merriweather-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
+      <Link>Resources\Fonts\Merriweather-LightItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Merriweather-Regular.ttf">
+      <Link>Resources\Fonts\Merriweather-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Montserrat-Bold.ttf">
+      <Link>Resources\Fonts\Montserrat-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Montserrat-Regular.ttf">
+      <Link>Resources\Fonts\Montserrat-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Bold.ttf">
+      <Link>Resources\Fonts\OpenSans-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
+      <Link>Resources\Fonts\OpenSans-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Italic.ttf">
+      <Link>Resources\Fonts\OpenSans-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSans-Regular.ttf">
+      <Link>Resources\Fonts\OpenSans-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansExtraBold-Italic.ttf">
+      <Link>Resources\Fonts\OpenSansExtraBold-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansExtraBold-Regular.ttf">
+      <Link>Resources\Fonts\OpenSansExtraBold-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansLight-Italic.ttf">
+      <Link>Resources\Fonts\OpenSansLight-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansLight-Regular.ttf">
+      <Link>Resources\Fonts\OpenSansLight-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansSemibold-Italic.ttf">
+      <Link>Resources\Fonts\OpenSansSemibold-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\OpenSansSemibold-Regular.ttf">
+      <Link>Resources\Fonts\OpenSansSemibold-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Black.ttf">
+      <Link>Resources\Fonts\PassionOne-Black.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Bold.ttf">
+      <Link>Resources\Fonts\PassionOne-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\PassionOne-Regular.ttf">
+      <Link>Resources\Fonts\PassionOne-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Pe-icon-7-stroke-Regular.ttf">
+      <Link>Resources\Fonts\Pe-icon-7-stroke-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Bold.ttf">
+      <Link>Resources\Fonts\Quicksand-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Light.ttf">
+      <Link>Resources\Fonts\Quicksand-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\Quicksand-Regular.ttf">
+      <Link>Resources\Fonts\Quicksand-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
+      <Link>Resources\Fonts\RobotoCondensed-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensedLight-Italic.ttf">
+      <Link>Resources\Fonts\RobotoCondensedLight-Italic.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoCondensedLight-Regular.ttf">
+      <Link>Resources\Fonts\RobotoCondensedLight-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Bold.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Light.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
+      <Link>Resources\Fonts\RobotoSlab-Thin.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\Fonts\icomoon-Regular.ttf">
+      <Link>Resources\Fonts\icomoon-Regular.ttf</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>

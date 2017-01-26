@@ -178,7 +178,6 @@
   <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Assets\Fonts\" />
     <Folder Include="Tasks\" />
     <Folder Include="Tasks\NewsTask\" />
     <Folder Include="Tasks\NotesTask\" />
@@ -198,143 +197,8 @@
     <Folder Include="Resources\drawable-xxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\Assets\Fonts\Bevan.ttf">
-      <Link>Assets\Fonts\Bevan.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
-      <Link>Assets\Fonts\ChangaOne-Italic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
-      <Link>Assets\Fonts\ChangaOne-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
-      <Link>Assets\Fonts\DroidSerif-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
-      <Link>Assets\Fonts\DroidSerif-BoldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
-      <Link>Assets\Fonts\DroidSerif-Italic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\DroidSerif.ttf">
-      <Link>Assets\Fonts\DroidSerif.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Black.ttf">
-      <Link>Assets\Fonts\Merriweather-Black.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Bold.ttf">
-      <Link>Assets\Fonts\Merriweather-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
-      <Link>Assets\Fonts\Merriweather-BoldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
-      <Link>Assets\Fonts\Merriweather-HeavyItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Italic.ttf">
-      <Link>Assets\Fonts\Merriweather-Italic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Light.ttf">
-      <Link>Assets\Fonts\Merriweather-Light.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
-      <Link>Assets\Fonts\Merriweather-LightItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Regular.ttf">
-      <Link>Assets\Fonts\Merriweather-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Bold.ttf">
-      <Link>Assets\Fonts\Montserrat-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Regular.ttf">
-      <Link>Assets\Fonts\Montserrat-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Bold.ttf">
-      <Link>Assets\Fonts\OpenSans-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
-      <Link>Assets\Fonts\OpenSans-BoldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-ExtraBold.ttf">
-      <Link>Assets\Fonts\OpenSans-ExtraBold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-ExtraBoldItalic.ttf">
-      <Link>Assets\Fonts\OpenSans-ExtraBoldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Italic.ttf">
-      <Link>Assets\Fonts\OpenSans-Italic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Light.ttf">
-      <Link>Assets\Fonts\OpenSans-Light.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-LightItalic.ttf">
-      <Link>Assets\Fonts\OpenSans-LightItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Regular.ttf">
-      <Link>Assets\Fonts\OpenSans-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Semibold.ttf">
-      <Link>Assets\Fonts\OpenSans-Semibold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\OpenSans-SemiboldItalic.ttf">
-      <Link>Assets\Fonts\OpenSans-SemiboldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Black.ttf">
-      <Link>Assets\Fonts\PassionOne-Black.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Bold.ttf">
-      <Link>Assets\Fonts\PassionOne-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Regular.ttf">
-      <Link>Assets\Fonts\PassionOne-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Bold.ttf">
-      <Link>Assets\Fonts\Quicksand-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Light.ttf">
-      <Link>Assets\Fonts\Quicksand-Light.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Regular.ttf">
-      <Link>Assets\Fonts\Quicksand-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-Italic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Light.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-Light.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-LightItalic.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-LightItalic.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
-      <Link>Assets\Fonts\RobotoCondensed-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
-      <Link>Assets\Fonts\RobotoSlab-Bold.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
-      <Link>Assets\Fonts\RobotoSlab-Light.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
-      <Link>Assets\Fonts\RobotoSlab-Regular.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
-      <Link>Assets\Fonts\RobotoSlab-Thin.ttf</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Assets\spot_mask.png">
       <Link>Assets\spot_mask.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\FontAwesome.ttf">
-      <Link>Assets\Fonts\FontAwesome.ttf</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\Bh.ttf">
-      <Link>Assets\Fonts\Bh.ttf</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\baptism_thumb.png">
       <Link>Assets\baptism_thumb.png</Link>
@@ -362,9 +226,6 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\serve_thumb.png">
       <Link>Assets\serve_thumb.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\Fonts\DINOffc-CondBlack.ttf">
-      <Link>Assets\Fonts\DINOffc-CondBlack.ttf</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\splash_logo_android.png">
       <Link>Assets\splash_logo_android.png</Link>
@@ -404,6 +265,147 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\upgrade_news_main%403x.png">
       <Link>Assets\upgrade_news_main.png</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Bevan-Regular.ttf">
+      <Link>Assets\Fonts\Bevan-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Italic.ttf">
+      <Link>Assets\Fonts\ChangaOne-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\ChangaOne-Regular.ttf">
+      <Link>Assets\Fonts\ChangaOne-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DINOffcCondBlack-Regular.ttf">
+      <Link>Assets\Fonts\DINOffcCondBlack-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Bold.ttf">
+      <Link>Assets\Fonts\DroidSerif-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-BoldItalic.ttf">
+      <Link>Assets\Fonts\DroidSerif-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Italic.ttf">
+      <Link>Assets\Fonts\DroidSerif-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\DroidSerif-Regular.ttf">
+      <Link>Assets\Fonts\DroidSerif-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\FontAwesome-Regular.ttf">
+      <Link>Assets\Fonts\FontAwesome-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Black.ttf">
+      <Link>Assets\Fonts\Merriweather-Black.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Bold.ttf">
+      <Link>Assets\Fonts\Merriweather-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-BoldItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-HeavyItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-HeavyItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Italic.ttf">
+      <Link>Assets\Fonts\Merriweather-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Light.ttf">
+      <Link>Assets\Fonts\Merriweather-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-LightItalic.ttf">
+      <Link>Assets\Fonts\Merriweather-LightItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Merriweather-Regular.ttf">
+      <Link>Assets\Fonts\Merriweather-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Bold.ttf">
+      <Link>Assets\Fonts\Montserrat-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Montserrat-Regular.ttf">
+      <Link>Assets\Fonts\Montserrat-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Bold.ttf">
+      <Link>Assets\Fonts\OpenSans-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-BoldItalic.ttf">
+      <Link>Assets\Fonts\OpenSans-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Italic.ttf">
+      <Link>Assets\Fonts\OpenSans-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSans-Regular.ttf">
+      <Link>Assets\Fonts\OpenSans-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansExtraBold-Italic.ttf">
+      <Link>Assets\Fonts\OpenSansExtraBold-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansExtraBold-Regular.ttf">
+      <Link>Assets\Fonts\OpenSansExtraBold-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansLight-Italic.ttf">
+      <Link>Assets\Fonts\OpenSansLight-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansLight-Regular.ttf">
+      <Link>Assets\Fonts\OpenSansLight-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansSemibold-Italic.ttf">
+      <Link>Assets\Fonts\OpenSansSemibold-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\OpenSansSemibold-Regular.ttf">
+      <Link>Assets\Fonts\OpenSansSemibold-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Black.ttf">
+      <Link>Assets\Fonts\PassionOne-Black.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Bold.ttf">
+      <Link>Assets\Fonts\PassionOne-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\PassionOne-Regular.ttf">
+      <Link>Assets\Fonts\PassionOne-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Pe-icon-7-stroke-Regular.ttf">
+      <Link>Assets\Fonts\Pe-icon-7-stroke-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Bold.ttf">
+      <Link>Assets\Fonts\Quicksand-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Light.ttf">
+      <Link>Assets\Fonts\Quicksand-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\Quicksand-Regular.ttf">
+      <Link>Assets\Fonts\Quicksand-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Bold.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-BoldItalic.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-BoldItalic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Italic.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensed-Regular.ttf">
+      <Link>Assets\Fonts\RobotoCondensed-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensedLight-Italic.ttf">
+      <Link>Assets\Fonts\RobotoCondensedLight-Italic.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoCondensedLight-Regular.ttf">
+      <Link>Assets\Fonts\RobotoCondensedLight-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Bold.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Bold.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Light.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Light.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Regular.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Regular.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\RobotoSlab-Thin.ttf">
+      <Link>Assets\Fonts\RobotoSlab-Thin.ttf</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\Assets\Fonts\icomoon-Regular.ttf">
+      <Link>Assets\Fonts\icomoon-Regular.ttf</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
