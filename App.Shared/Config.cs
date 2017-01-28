@@ -75,7 +75,6 @@ namespace MobileApp
                 #if DEBUG
                 public const string RockBaseUrl = "http://dev.ccv.church/";
                 //public const string RockBaseUrl = "http://10.211.55.6:50345/";
-                //public const string RockBaseUrl = "http://rock.ccv.church/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif
@@ -153,7 +152,7 @@ namespace MobileApp
                         string.Empty,
 
                         // Reference URL
-                        "http://ccv.church/apps",
+                        "http://rock.ccv.church/apps",
 
                         // Image Names
                         "upgrade_news_main",
@@ -230,7 +229,7 @@ namespace MobileApp
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
-                public const string GiveUrl = "http://ccv.church/ma-give";
+                public const string GiveUrl = "http://rock.ccv.church/ma-give";
             }
 
             public class ControlStylingConfig
