@@ -349,7 +349,7 @@ namespace iOS
             // since we're reappearing, we know we're safe to reset our download count
             NoteDownloadRetries = MaxDownloadAttempts;
             Rock.Mobile.Util.Debug.WriteLine( "Resetting Download Attempts" );
-
+            View.Bounds = Task.ContainerBounds;
             LayoutChanged( );
         }
 
