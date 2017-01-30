@@ -138,7 +138,7 @@ namespace iOS
         /// <value>The orientation.</value>
 		//UIDeviceOrientation Orientation { get; set; }
         int OrientationState { get; set; }
-
+               
         /// <summary>
         /// The overlay displayed the first time the user enters Notes
         /// </summary>
