@@ -587,6 +587,9 @@ namespace MobileApp
                                 if ( text[ 0 ] != ' ' )
                                 {
                                     ( (NoteText) control ).SetText( ' ' + text );
+
+                                    // re-acquire the width, since we just added a space.
+                                    controlFrame = control.GetFrame( );
                                 }
                             }
                         }
