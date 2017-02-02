@@ -49,7 +49,11 @@ namespace MobileApp
                     }
                     else if ( RevealBox.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableRevealBox( parentParams, reader );
+#else
                         return new RevealBox( parentParams, reader );
+#endif
                     }
                     else if ( Quote.ElementTagMatches( reader.Name ) )
                     {
@@ -81,6 +85,15 @@ namespace MobileApp
                     return new EditableNoteText( parentParams, text );
 #else
                     return new NoteText( parentParams, text );
+#endif
+                }
+
+                public static RevealBox CreateRevealBox( Notes.BaseControl.CreateParams parentParams, string revealText )
+                {
+#if __WIN__
+                    return new EditableRevealBox( parentParams, revealText );
+#else
+                    return new NoteText( parentParams, revealText );
 #endif
                 }
 

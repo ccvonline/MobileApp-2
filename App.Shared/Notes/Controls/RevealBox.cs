@@ -25,6 +25,80 @@ namespace MobileApp
 
                 public string Text { get { return PlatformLabel != null ? PlatformLabel.Text : ""; } }
 
+                public RevealBox( CreateParams parentParams, string revealText ) : base( )
+                {
+                    // don't call the base constructor that reads. we'll do the reading here.
+                    base.Initialize( );
+
+                    Revealed = false;
+
+                    PlatformLabel = PlatformLabel.CreateRevealLabel( );
+                    PlatformLabel.SetFade( 0.0f );
+
+                    // take our parent's style, and for anything not set by them use the default.
+                    mStyle = parentParams.Style;
+                    Styles.Style.MergeStyleAttributesWithDefaults( ref mStyle, ref ControlStyles.mText );
+                    
+                    // create the font that either we or our parent defined
+                    PlatformLabel.SetFont( mStyle.mFont.mName, mStyle.mFont.mSize.Value );
+                    PlatformLabel.TextColor = mStyle.mFont.mColor.Value;
+
+                    // check for border styling
+                    if ( mStyle.mBorderColor.HasValue )
+                    {
+                        PlatformLabel.BorderColor = mStyle.mBorderColor.Value;
+                    }
+
+                    if( mStyle.mBorderRadius.HasValue )
+                    {
+                        PlatformLabel.CornerRadius = mStyle.mBorderRadius.Value;
+                    }
+
+                    if( mStyle.mBorderWidth.HasValue )
+                    {
+                        PlatformLabel.BorderWidth = mStyle.mBorderWidth.Value;
+                    }
+
+                    if( mStyle.mBackgroundColor.HasValue )
+                    {
+                        PlatformLabel.BackgroundColor = mStyle.mBackgroundColor.Value;
+                    }
+
+                    // set the dimensions and position
+                    RectangleF bounds = new RectangleF( );
+                    
+                    if( bounds.Width == 0 )
+                    {
+                        // always take the available width, in case this control
+                        // is specified to be offset relative to its parent
+                        bounds.Width = parentParams.Width - bounds.X;
+                    }
+                    PlatformLabel.Bounds = bounds;
+                    
+                    // ensure that there's something IN the reveal text. We cannot render blank, because the bitmap mask can't be 0 width / height
+                    if( string.IsNullOrWhiteSpace( revealText ) ) throw new Exception( "RevealBox text cannot be blank." );
+                    
+                    // adjust the text
+                    switch( mStyle.mTextCase )
+                    {
+                        case Styles.TextCase.Upper:
+                        {
+                            revealText = revealText.ToUpper( );
+                            break;
+                        }
+
+                        case Styles.TextCase.Lower:
+                        {
+                            revealText = revealText.ToLower( );
+                            break;
+                        }
+                    }
+
+                    SetText( revealText );
+
+                    PlatformLabel.Position = new PointF( bounds.X, bounds.Y );
+                }
+
                 public RevealBox( CreateParams parentParams, XmlReader reader ) : base( )
                 {
                     // don't call the base constructor that reads. we'll do the reading here.

@@ -12,47 +12,10 @@ namespace MobileApp.Shared.Notes
         public enum Style
         {
             Underline,
-            Font,
+            FontSize,
+            FontName,
             RevealBox
         }
-
-        // wrapper class for passing the values required for the font style
-        public class FontStyle
-        {
-            public FontStyle( string name, float size )
-            {
-                mName = name;
-                mSize = size;
-            }
-
-            public string mName;
-            public float mSize;
-        }
-
-        //public static ulong CreateSupportedStyles( List<Style> supportedStyles )
-        //{
-        //    ulong supportedStyleBits = 0;
-
-        //    foreach( Style style in supportedStyles )
-        //    {
-        //        supportedStyleBits |= (uint) (1 << (int)style);
-        //    }
-
-        //    return supportedStyleBits;
-        //}
-
-        //public static bool StyleSupported( ulong supportedStyleBits, Style style )
-        //{
-        //    // create a mask with the style bit set
-        //    uint styleMask = (uint) (1 << (int)style);
-
-        //    // mask it off and see if it's non-0
-        //    if( (supportedStyleBits & styleMask) != 0 )
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
     }
 
     public interface IEditableUIControl
@@ -69,6 +32,14 @@ namespace MobileApp.Shared.Notes
         List<EditStyling.Style> GetEditStyles( );
         object GetStyleValue( EditStyling.Style style );
         void SetStyleValue( EditStyling.Style style, object value );
+
+        // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
+        // used by the notes platform.
+        MobileApp.Shared.Notes.Styles.Style GetControlStyle( );
+
+        // a child will call this on its parent when a style changes.
+        // gives the parent a chance to respond and deal with it.
+        void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl );
 
         void SetPosition( float xPos, float yPos );
     }

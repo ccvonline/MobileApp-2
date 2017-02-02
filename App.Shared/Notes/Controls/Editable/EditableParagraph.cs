@@ -204,7 +204,7 @@ namespace MobileApp
                             // need the first label after that to have a leading space so it doesn't bunch up against
                             // the control
                             string nextWord = word;
-                            NoteText wordLabel = new EditableNoteText( new CreateParams( this, Frame.Width, Frame.Height, ref textStyle ), nextWord + " " );
+                            NoteText wordLabel = Parser.CreateNoteText( new CreateParams( this, Frame.Width, Frame.Height, ref textStyle ), nextWord + " " );
 
                             ChildControls.Add( wordLabel );
                         }
@@ -432,6 +432,76 @@ namespace MobileApp
                 public List<EditStyling.Style> GetEditStyles( )
                 {
                     return new List<EditStyling.Style>( );
+                }
+
+                public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )
+                {
+                    switch( style )
+                    {
+                        case EditStyling.Style.RevealBox:
+                        {
+                            // first, find the target in our list
+                            int targetIndex = 0;
+                            foreach( IUIControl child in ChildControls )
+                            {
+                                // when we find it
+                                if( child.Equals( childControl ) == true )
+                                {
+                                    // take its index, and remove it from the renderer and our list of children
+                                    targetIndex = ChildControls.IndexOf( child );
+
+                                    child.RemoveFromView( ParentEditingCanvas );
+                                    ChildControls.RemoveAt( targetIndex );
+                                    break;
+                                }
+                            }
+
+                            // if we received RevealBox, we're either upgrading a NoteText to BE a RevealBox,
+                            // or downgrading a RevealBox to be a normal NoteText.
+                            EditableNoteText editableNoteText = childControl as EditableNoteText;
+                            if ( editableNoteText != null )
+                            {
+                                // create a new revealBox that has the styling and text of the noteText it's replacing.
+                                Style controlStyle = childControl.GetControlStyle( );
+                                RevealBox newRevealBox = Parser.CreateRevealBox( new CreateParams( this, Frame.Width, Frame.Height, ref controlStyle ), editableNoteText.GetText( ).Trim( ) );
+                                newRevealBox.AddToView( ParentEditingCanvas );
+                                
+                                // add the new revealBox into the same spot as what it's replacing
+                                ChildControls.Insert( targetIndex, newRevealBox );
+                            }
+
+                            EditableRevealBox editableRevealBox = childControl as EditableRevealBox;
+                            if( editableRevealBox != null )
+                            {
+                                // create a new revealBox that has the styling and text of the noteText it's replacing.
+                                Style controlStyle = childControl.GetControlStyle( );
+                                NoteText newNoteText = Parser.CreateNoteText( new CreateParams( this, Frame.Width, Frame.Height, ref controlStyle ), editableRevealBox.GetText( ).Trim( ) );
+                                newNoteText.AddToView( ParentEditingCanvas );
+                                
+                                // add the new revealBox into the same spot as what it's replacing
+                                ChildControls.Insert( targetIndex, newNoteText );
+                            }
+
+                            break;
+                        }
+                    }
+
+                    // for now, lets just redo our layout.
+                    SetPosition( Frame.Left, Frame.Top );
+
+                    // now see if there's a parent that we should notify
+                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                    if( editableParent != null )
+                    {
+                        editableParent.HandleChildStyleChanged( style, this );
+                    }
+                }
+
+                // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
+                // used by the notes platform.
+                public MobileApp.Shared.Notes.Styles.Style GetControlStyle( )
+                {
+                    return mStyle;
                 }
 
                 void UpdateLayout( float maxWidth, float maxHeight )

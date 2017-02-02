@@ -15,6 +15,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableNoteText.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableParagraph.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableRevealBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableStackPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\IEditableUIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockMobileUser.cs" />

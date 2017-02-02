@@ -21,8 +21,6 @@ namespace MobileApp
             {
                 // store our parent so we know our bound restrictions
                 RectangleF ParentFrame { get; set; }
-
-                BaseControl ParentControl { get; set; }
                 
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -34,13 +32,16 @@ namespace MobileApp
                 // Store the canvas that is actually rendering this control, so we can
                 // add / remove edit controls as needed (text boxes, toolbars, etc.)
                 System.Windows.Controls.Canvas ParentEditingCanvas;
+
+                // store our literal parent control so we can notify if we were updated
+                IEditableUIControl ParentControl { get; set; }
                 
                 public EditableStackPanel( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as BaseControl;
+                    ParentControl = parentParams.Parent as IEditableUIControl;
 
                     // take the max width / height we'll be allowed to fit in
                     SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -72,10 +73,30 @@ namespace MobileApp
                 public void SetStyleValue( EditStyling.Style style, object value )
                 {
                 }
+
+                // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
+                // used by the notes platform.
+                public MobileApp.Shared.Notes.Styles.Style GetControlStyle( )
+                {
+                    return mStyle;
+                }
                 
                 public List<EditStyling.Style> GetEditStyles( )
                 {
                     return new List<EditStyling.Style>( );
+                }
+
+                public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )
+                {
+                    // for now, lets just redo our layout.
+                    SetPosition( Frame.Left, Frame.Top );
+
+                    // now see if there's a parent that we should notify
+                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                    if( editableParent != null )
+                    {
+                        editableParent.HandleChildStyleChanged( style, this );
+                    }
                 }
 
                 public PointF GetPosition( )
@@ -110,7 +131,7 @@ namespace MobileApp
                     // see if any of our child controls contain the point
                     foreach ( IEditableUIControl control in ChildControls )
                     {
-                        IEditableUIControl consumingControl = control.HandleMouseDown( point );
+                        IEditableUIControl consumingControl = control.HandleMouseDoubleClick( point );
                         if ( consumingControl != null )
                         {
                             return consumingControl;

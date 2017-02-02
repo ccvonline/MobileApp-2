@@ -1,8 +1,8 @@
-#if __WIN__
 using System;
 using System.Xml;
-using System.Collections.Generic;
 using Rock.Mobile.UI;
+using MobileApp.Shared.Notes.Model;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
 
@@ -13,9 +13,9 @@ namespace MobileApp
         namespace Notes
         {
             /// <summary>
-            /// Control that lays out basic text. Used by Paragraphs.
+            /// A text label that is hidden until a user taps on it.
             /// </summary>
-            public class EditableNoteText : NoteText, IEditableUIControl
+            public class EditableRevealBox : RevealBox, IEditableUIControl
             {
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -27,8 +27,8 @@ namespace MobileApp
 
                 // store our literal parent control so we can notify if we were updated
                 IEditableUIControl ParentControl { get; set; }
-                
-                public EditableNoteText( CreateParams parentParams, string text ) : base( parentParams, text )
+
+                public EditableRevealBox( CreateParams parentParams, string text ) : base( parentParams, text )
                 {
                     ParentControl = parentParams.Parent as IEditableUIControl;
 
@@ -40,7 +40,7 @@ namespace MobileApp
                 // This constructor is called when explicit Note Text is being declared.
                 // This means the XML has "<NoteText>Something</NoteText>. Its used when
                 // the user wants to alter a particular piece of text within a paragraph.
-                public EditableNoteText( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
+                public EditableRevealBox( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentControl = parentParams.Parent as IEditableUIControl;
 
@@ -119,9 +119,9 @@ namespace MobileApp
 
                         case EditStyling.Style.RevealBox:
                         {
-                            // here, we're basically saying "no, we're not a reveal box" so the system
-                            // knows to upgrade us.
-                            return false;
+                            // here, we're basically saying "YES, we ARE a reveal box" so the system
+                            // knows to downgrade us.
+                            return true;
                         }
                     }
 
@@ -217,8 +217,8 @@ namespace MobileApp
                         return null;
                     }
                 }
+            
             }
         }
     }
 }
-#endif

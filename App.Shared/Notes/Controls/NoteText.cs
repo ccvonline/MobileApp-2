@@ -30,10 +30,7 @@ namespace MobileApp
                     base.Initialize( );
 
                     PlatformLabel = PlatformLabel.Create( );
-
-                    // check for attributes we support
-                    RectangleF bounds = new RectangleF( );
-
+                    
                     // take our parent's style, and for anything not set by them use the default.
                     mStyle = parentParams.Style;
                     Styles.Style.MergeStyleAttributesWithDefaults( ref mStyle, ref ControlStyles.mText );
@@ -63,6 +60,8 @@ namespace MobileApp
                     }
 
                     // set the dimensions and position
+                    RectangleF bounds = new RectangleF( );
+                    
                     if( bounds.Width == 0 )
                     {
                         // always take the available width, in case this control
