@@ -959,6 +959,24 @@ namespace MobileApp
                     // and return the control consuming this hover
                     return consumingControl;
                 }
+
+                public IEditableUIControl HandleCreateControl( Type controlType, System.Windows.Point mousePos )
+                {
+                    //TODO: We need to support child controls (like putting a paragraph in a StackPanel parent)
+
+                    // create the control and add it to our immediate children
+                    IUIControl newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
+                    ChildControls.Add( newControl );
+                    
+                    // add it to our renderable canvas
+                    newControl.AddToView( MasterView );
+
+                    // default it to where the click occurred
+                    newControl.AddOffset( (float)mousePos.X, (float)mousePos.Y );
+                    
+                    // return the editable interface for the caller
+                    return newControl as IEditableUIControl;
+                }
                 #endif
             }
         }

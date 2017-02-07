@@ -97,6 +97,23 @@ namespace MobileApp
 #endif
                 }
 
+#if __WIN__
+                // This is used only by Windows in order to create new controls in the note
+                public static IUIControl CreateEditableControl( Type controlType, Notes.BaseControl.CreateParams parentParams )
+                {
+                    if ( controlType == typeof( EditableParagraph ) )
+                    {
+                        // seed the paragaph with some default text
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<P>New Paragraph</P>" ) );
+                        reader.Read( );
+
+                        return new EditableParagraph( parentParams, reader );
+                    }
+
+                    return null;
+                }
+#endif
+
                 public static void ParseBounds( XmlReader reader, ref SizeF parentSize, ref RectangleF bounds )
                 {
                     // first check without the Margin prefix.
