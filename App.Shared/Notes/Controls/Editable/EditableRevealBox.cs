@@ -1,3 +1,4 @@
+#if __WIN__
 using System;
 using System.Xml;
 using Rock.Mobile.UI;
@@ -222,3 +223,4 @@ namespace MobileApp
         }
     }
 }
+#endif

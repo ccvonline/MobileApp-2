@@ -93,7 +93,7 @@ namespace MobileApp
 #if __WIN__
                     return new EditableRevealBox( parentParams, revealText );
 #else
-                    return new NoteText( parentParams, revealText );
+                    return new RevealBox( parentParams, revealText );
 #endif
                 }
 
