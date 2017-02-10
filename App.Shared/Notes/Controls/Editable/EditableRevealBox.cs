@@ -204,6 +204,34 @@ namespace MobileApp
                     SetDebugFrame( PlatformLabel.Frame );
                 }
 
+                public IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos )
+                {
+                    // we can't be a container for any control type passed in,
+                    // and we don't support any children as controls
+                    return null;
+                }
+
+                public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
+                {
+                    return null;
+                }
+
+                public void HandleDeleteControl( )
+                {
+                    // todo: handle deleting ourselves and any child controls
+
+                    // notify our parent
+                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                    if( editableParent != null )
+                    {
+                        editableParent.HandleChildDeleted( this );
+                    }
+                }
+
+                public void HandleChildDeleted( IEditableUIControl childControl )
+                {
+                }
+
                 public IEditableUIControl HandleMouseHover( PointF mousePos )
                 {
                     bool mouseHovering = GetFrame( ).Contains( mousePos );

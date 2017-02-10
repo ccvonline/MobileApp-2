@@ -211,6 +211,18 @@ namespace MobileApp
                     }
                 }
 
+                public IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos )
+                {
+                    // we can't be a container for any control type passed in,
+                    // and we don't support any children as controls
+                    return null;
+                }
+
+                public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
+                {
+                    return null;
+                }
+
                 public IEditableUIControl HandleMouseDoubleClick( PointF point )
                 {
                     // for double click, we need to give all our child controls a chance to consume
@@ -432,6 +444,22 @@ namespace MobileApp
                 public List<EditStyling.Style> GetEditStyles( )
                 {
                     return new List<EditStyling.Style>( );
+                }
+
+                public void HandleDeleteControl( )
+                {
+                    // todo: handle deleting ourselves and any child controls
+
+                    // notify our parent
+                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                    if( editableParent != null )
+                    {
+                        editableParent.HandleChildDeleted( this );
+                    }
+                }
+
+                public void HandleChildDeleted( IEditableUIControl childControl )
+                {
                 }
 
                 public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )

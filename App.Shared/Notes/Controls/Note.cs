@@ -960,22 +960,68 @@ namespace MobileApp
                     return consumingControl;
                 }
 
-                public IEditableUIControl HandleCreateControl( Type controlType, System.Windows.Point mousePos )
+                public IEditableUIControl ContainerForControl( Type controlType, PointF mousePos )
                 {
-                    //TODO: We need to support child controls (like putting a paragraph in a StackPanel parent)
+                    // this will return the deepest level control that can own controlType as a parent.
+                    // Example: contrlType == Paragraph, it's going to return the deepest level Stack Panel or Canvas found.
+                    foreach( IUIControl control in ChildControls )
+                    {
+                        IEditableUIControl editableControl = control as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            IEditableUIControl targetControl = editableControl.ContainerForControl( controlType, mousePos );
 
-                    // create the control and add it to our immediate children
-                    IUIControl newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
-                    ChildControls.Add( newControl );
-                    
-                    // add it to our renderable canvas
-                    newControl.AddToView( MasterView );
+                            if ( targetControl != null )
+                            {
+                                return targetControl;
+                            }
+                        }
+                    }
 
-                    // default it to where the click occurred
-                    newControl.AddOffset( (float)mousePos.X, (float)mousePos.Y );
+                    return null;
+                }
+
+
+                public IEditableUIControl HandleCreateControl( Type controlType, PointF mousePos )
+                {
+                    // first, see if any child control can handle it.
+                    IUIControl newControl = null;
+
+                    foreach( IUIControl control in ChildControls )
+                    {
+                        IEditableUIControl editableControl = control as IEditableUIControl;
+                        if ( editableControl != null )
+                        {
+                            IEditableUIControl containerControl = editableControl.ContainerForControl( controlType, mousePos );
+                            if( containerControl != null )
+                            {
+                                newControl = containerControl.HandleCreateControl( controlType, mousePos );
+                                break;
+                            }
+                        }
+                    }
+
+                    // if we got thru all our children and nobody created the control, we'll do it.
+                    if( newControl == null )
+                    {
+                        // create the control and add it to our immediate children
+                        newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
+                        ChildControls.Add( newControl );
                     
+                        // add it to our renderable canvas
+                        newControl.AddToView( MasterView );
+
+                        // default it to where the click occurred
+                        newControl.AddOffset( (float)mousePos.X, (float)mousePos.Y );
+                    }
+
                     // return the editable interface for the caller
                     return newControl as IEditableUIControl;
+                }
+
+                public void HandleDeleteControl( IEditableUIControl control )
+                {
+                    control.HandleDeleteControl( );
                 }
                 #endif
             }

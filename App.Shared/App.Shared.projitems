@@ -13,8 +13,12 @@
     <Folder Include="$(MSBuildThisFileDirectory)UI\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableListItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableNoteText.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableParagraph.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableQuote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableRevealBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableStackPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\IEditableUIControl.cs" />

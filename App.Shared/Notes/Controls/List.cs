@@ -36,10 +36,10 @@ namespace MobileApp
                 protected PlatformView BorderView { get; set; }
 
                 /// <summary>
-                /// The bounds (including position) of the stack panel.
+                /// The bounds (including position) of the list.
                 /// </summary>
                 /// <value>The bounds.</value>
-                protected RectangleF Bounds { get; set; }
+                protected RectangleF Frame { get; set; }
 
                 protected override void Initialize( )
                 {
@@ -217,12 +217,12 @@ namespace MobileApp
                     // calculate them on the fly because we
                     // would lose any control defined offsets, which would throw everything off.
                     bounds.Height = ( yOffset - bounds.Y ) + padding.Height + borderPaddingPx;
-                    Bounds = bounds;
+                    Frame = bounds;
 
                     BorderView.Frame = bounds;
 
                     // store our debug frame
-                    SetDebugFrame( Bounds );
+                    SetDebugFrame( Frame );
 
                     // sort everything
                     ChildControls.Sort( BaseControl.Sort );
@@ -258,7 +258,7 @@ namespace MobileApp
                                                       BorderView.Position.Y + yOffset );
 
                     // update our bounds by the new offsets.
-                    Bounds = new RectangleF( Bounds.X + xOffset, Bounds.Y + yOffset, Bounds.Width, Bounds.Height );
+                    Frame = new RectangleF( Frame.X + xOffset, Frame.Y + yOffset, Frame.Width, Frame.Height );
                 }
 
                 public override void AddToView( object obj )
@@ -289,7 +289,7 @@ namespace MobileApp
 
                 public override RectangleF GetFrame( )
                 {
-                    return Bounds;
+                    return Frame;
                 }
 
                 protected override List<IUIControl> GetChildControls( )

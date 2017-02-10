@@ -23,7 +23,10 @@ namespace MobileApp.Shared.Notes
         IEditableUIControl HandleMouseDown( PointF point );
         IEditableUIControl HandleMouseDoubleClick( PointF point );
         IEditableUIControl HandleMouseHover( PointF mousePos );
-        
+        IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos );
+        IUIControl HandleCreateControl( System.Type controlType, PointF mousePos );
+        void HandleDeleteControl( );
+
         void HandleKeyUp( KeyEventArgs e );
 
         PointF GetPosition( );
@@ -40,6 +43,10 @@ namespace MobileApp.Shared.Notes
         // a child will call this on its parent when a style changes.
         // gives the parent a chance to respond and deal with it.
         void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl );
+
+        // a child will call this on its parent when it's being deleted.
+        // gives the parent a chance to respond and deal with it.
+        void HandleChildDeleted( IEditableUIControl childControl );
 
         void SetPosition( float xPos, float yPos );
     }

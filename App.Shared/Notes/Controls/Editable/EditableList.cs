@@ -17,7 +17,7 @@ namespace MobileApp
     {
         namespace Notes
         {
-            public class EditableStackPanel : StackPanel, IEditableUIControl
+            public class EditableList: List, IEditableUIControl
             {
                 // store our parent so we know our bound restrictions
                 RectangleF ParentFrame { get; set; }
@@ -36,7 +36,7 @@ namespace MobileApp
                 // store our literal parent control so we can notify if we were updated
                 IEditableUIControl ParentControl { get; set; }
                 
-                public EditableStackPanel( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
+                public EditableList( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
@@ -137,14 +137,8 @@ namespace MobileApp
                             return consumingControl;
                         }
                     }
-
-                    RectangleF frame = GetFrame( );
-                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
-                    if ( frame.Contains( point ) )
-                    {
-                        return this;
-                    }
-
+                    
+                    // we don't need to support double click on ourselves
                     return null;
                 }
                 
@@ -159,14 +153,8 @@ namespace MobileApp
                             return consumingControl;
                         }
                     }
-
-                    RectangleF frame = GetFrame( );
-                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
-                    if ( frame.Contains( point ) )
-                    {
-                        return this;
-                    }
-
+                    
+                    // also don't need to support mouse down
                     return null;
                 }
 
@@ -203,22 +191,6 @@ namespace MobileApp
                     return null;
                 }
 
-                public void HandleDeleteControl( )
-                {
-                    // todo: handle deleting ourselves and any child controls
-
-                    // notify our parent
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
-                    {
-                        editableParent.HandleChildDeleted( this );
-                    }
-                }
-
-                public void HandleChildDeleted( IEditableUIControl childControl )
-                {
-                }
-
                 public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
                 {
                     // create the control and add it to our immediate children
@@ -239,6 +211,22 @@ namespace MobileApp
                     
                     // return the editable interface for the caller
                     return newControl;
+                }
+
+                public void HandleDeleteControl( )
+                {
+                    // todo: handle deleting ourselves and any child controls
+
+                    // notify our parent
+                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                    if( editableParent != null )
+                    {
+                        editableParent.HandleChildDeleted( this );
+                    }
+                }
+
+                public void HandleChildDeleted( IEditableUIControl childControl )
+                {
                 }
                 
                 public IEditableUIControl HandleMouseHover( PointF mousePos )

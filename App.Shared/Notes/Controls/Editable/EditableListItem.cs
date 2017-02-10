@@ -17,7 +17,7 @@ namespace MobileApp
     {
         namespace Notes
         {
-            public class EditableStackPanel : StackPanel, IEditableUIControl
+            public class EditableListItem: ListItem, IEditableUIControl
             {
                 // store our parent so we know our bound restrictions
                 RectangleF ParentFrame { get; set; }
@@ -36,7 +36,7 @@ namespace MobileApp
                 // store our literal parent control so we can notify if we were updated
                 IEditableUIControl ParentControl { get; set; }
                 
-                public EditableStackPanel( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
+                public EditableListItem( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
@@ -137,14 +137,8 @@ namespace MobileApp
                             return consumingControl;
                         }
                     }
-
-                    RectangleF frame = GetFrame( );
-                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
-                    if ( frame.Contains( point ) )
-                    {
-                        return this;
-                    }
-
+                    
+                    // we don't need to support double click on ourselves
                     return null;
                 }
                 
@@ -159,14 +153,8 @@ namespace MobileApp
                             return consumingControl;
                         }
                     }
-
-                    RectangleF frame = GetFrame( );
-                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
-                    if ( frame.Contains( point ) )
-                    {
-                        return this;
-                    }
-
+                    
+                    // also don't need to support mouse down
                     return null;
                 }
 

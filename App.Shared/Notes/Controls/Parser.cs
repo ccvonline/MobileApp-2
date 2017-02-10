@@ -41,11 +41,19 @@ namespace MobileApp
                     }
                     else if ( List.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableList( parentParams, reader );
+#else
                         return new List( parentParams, reader );
+#endif
                     }
                     else if ( ListItem.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableListItem( parentParams, reader );
+#else
                         return new ListItem( parentParams, reader );
+#endif
                     }
                     else if ( RevealBox.ElementTagMatches( reader.Name ) )
                     {
@@ -57,7 +65,11 @@ namespace MobileApp
                     }
                     else if ( Quote.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableQuote( parentParams, reader );
+#else
                         return new Quote( parentParams, reader );
+#endif
                     }
                     else if ( TextInput.ElementTagMatches( reader.Name ) )
                     {
@@ -65,7 +77,11 @@ namespace MobileApp
                     }
                     else if ( Header.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableHeader( parentParams, reader );
+#else
                         return new Header( parentParams, reader );
+#endif
                     }
                     else if ( NoteText.ElementTagMatches( reader.Name ) )
                     {
