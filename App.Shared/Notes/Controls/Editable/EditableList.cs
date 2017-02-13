@@ -213,20 +213,58 @@ namespace MobileApp
                     return newControl;
                 }
 
-                public void HandleDeleteControl( )
+                public void HandleDelete( bool notifyParent )
                 {
-                    // todo: handle deleting ourselves and any child controls
-
-                    // notify our parent
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
+                    // first, delete all our child controls
+                    int i = 0;
+                    for( i = ChildControls.Count - 1; i >= 0; i-- )
                     {
-                        editableParent.HandleChildDeleted( this );
+                        // since we DO support child controls that are containers, call HandleDelete on all our children
+                        IEditableUIControl editableControl = ChildControls[ i ] as IEditableUIControl;
+                        if( editableControl != null )
+                        {
+                            // let them know not to inform their parent, since that's us.
+                            editableControl.HandleDelete( false );
+                        }
+                        else
+                        {
+                            // if it's not editable, we need to remove it ourselves
+                            ChildControls[ i ].RemoveFromView( ParentEditingCanvas );
+                        }
+                        
+                        ChildControls.Remove( ChildControls[ i ] );
+                    }
+
+                    // clean ourselves up
+                    RemoveFromView( ParentEditingCanvas );
+
+                    // notify our parent if we need to
+                    if( notifyParent )
+                    {
+                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                        if ( editableParent != null )
+                        {
+                            editableParent.HandleChildDeleted( this );
+                        }
                     }
                 }
 
                 public void HandleChildDeleted( IEditableUIControl childControl )
                 {
+                    // find this control in our list and remove it
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        if( child.Equals( childControl ) == true )
+                        {
+                            child.RemoveFromView( ParentEditingCanvas );
+                            ChildControls.Remove( child );
+                            break;
+                        }
+                    }
+
+                    SetPosition( Frame.Left, Frame.Top );
+
+                    //todo: we'll need to update our list ordering
                 }
                 
                 public IEditableUIControl HandleMouseHover( PointF mousePos )

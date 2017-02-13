@@ -216,20 +216,24 @@ namespace MobileApp
                     return null;
                 }
 
-                public void HandleDeleteControl( )
+                public void HandleDelete( bool notifyParent )
                 {
-                    // todo: handle deleting ourselves and any child controls
+                    RemoveFromView( ParentEditingCanvas );
 
                     // notify our parent
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
+                    if( notifyParent )
                     {
-                        editableParent.HandleChildDeleted( this );
+                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
+                        if ( editableParent != null )
+                        {
+                            editableParent.HandleChildDeleted( this );
+                        }
                     }
                 }
 
                 public void HandleChildDeleted( IEditableUIControl childControl )
                 {
+                    // this control doesn't support children
                 }
 
                 public IEditableUIControl HandleMouseHover( PointF mousePos )

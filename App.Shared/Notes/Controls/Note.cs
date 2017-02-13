@@ -1021,7 +1021,17 @@ namespace MobileApp
 
                 public void HandleDeleteControl( IEditableUIControl control )
                 {
-                    control.HandleDeleteControl( );
+                    control.HandleDelete( true );
+
+                    // if this control was a direct child of ours, remove it.
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        if( child.Equals( control ) == true )
+                        {
+                            ChildControls.Remove( child );
+                            break;
+                        }
+                    }
                 }
                 #endif
             }
