@@ -229,7 +229,7 @@ namespace MobileApp
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
-                public const string GiveUrl = "http://rock.ccv.church/ma-give";
+                public const string GiveUrl = "http://my.ccv.church/ma-give";
             }
 
             public class ControlStylingConfig
