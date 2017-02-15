@@ -1001,18 +1001,22 @@ namespace MobileApp
                         }
                     }
 
-                    // if we got thru all our children and nobody created the control, we'll do it.
+                    // if we got thru all our children and nobody created the control, we'll do it. (maybe.)
                     if( newControl == null )
                     {
-                        // create the control and add it to our immediate children
-                        newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
-                        ChildControls.Add( newControl );
+                        // the only thing we cannot specifically add is a ListItem, as that MUST be a child of a list.
+                        if( controlType != typeof( EditableListItem ) )
+                        {
+                            // create the control and add it to our immediate children
+                            newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
+                            ChildControls.Add( newControl );
                     
-                        // add it to our renderable canvas
-                        newControl.AddToView( MasterView );
+                            // add it to our renderable canvas
+                            newControl.AddToView( MasterView );
 
-                        // default it to where the click occurred
-                        newControl.AddOffset( (float)mousePos.X, (float)mousePos.Y );
+                            // default it to where the click occurred
+                            newControl.AddOffset( (float) mousePos.X, (float) mousePos.Y );
+                        }
                     }
 
                     // return the editable interface for the caller

@@ -154,7 +154,13 @@ namespace MobileApp
                         }
                     }
                     
-                    // also don't need to support mouse down
+                    RectangleF frame = GetFrame( );
+                    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
+                    if ( frame.Contains( point ) )
+                    {
+                        return this;
+                    }
+
                     return null;
                 }
 
@@ -193,24 +199,29 @@ namespace MobileApp
 
                 public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
                 {
-                    // create the control and add it to our immediate children
-                    IUIControl newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
-                    ChildControls.Add( newControl );
+                    if ( controlType == typeof( EditableListItem ) )
+                    {
+                        // create the control and add it to our immediate children
+                        IUIControl newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
+                        ChildControls.Add( newControl );
                     
-                    // add it to our renderable canvas
-                    newControl.AddToView( ParentEditingCanvas );
+                        // add it to our renderable canvas
+                        newControl.AddToView( ParentEditingCanvas );
 
-                    // get the position relative to us
-                    //PointF localPos = new PointF( mousePos.X - Frame.Left, mousePos.Y - Frame.Top );
+                        // get the position relative to us
+                        //PointF localPos = new PointF( mousePos.X - Frame.Left, mousePos.Y - Frame.Top );
 
-                    // default it to where the click occurred
-                    newControl.AddOffset( mousePos.X, mousePos.Y );
+                        // default it to where the click occurred
+                        newControl.AddOffset( mousePos.X, mousePos.Y );
 
-                    // force our position to update
-                    SetPosition( Frame.Left, Frame.Top );
-                    
-                    // return the editable interface for the caller
-                    return newControl;
+                        // force our position to update
+                        SetPosition( Frame.Left, Frame.Top );
+
+                        // return the editable interface for the caller
+                        return newControl;
+                    }
+
+                    return null;
                 }
 
                 public void HandleDelete( bool notifyParent )

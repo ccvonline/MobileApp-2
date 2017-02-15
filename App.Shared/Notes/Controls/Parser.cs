@@ -125,6 +125,46 @@ namespace MobileApp
 
                         return new EditableParagraph( parentParams, reader );
                     }
+                    else if ( controlType == typeof( EditableStackPanel ) )
+                    {
+                        // give the stack panel some back width and color so the user can see it
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<SP BackgroundColor=\"#00770077\" Height=\"200\" Width=\"200\"><P>New Stack Panel</P></SP>" ) );
+                        reader.Read( );
+
+                        return new EditableStackPanel( parentParams, reader );
+                    }
+                    else if ( controlType == typeof( EditableHeader ) )
+                    {
+                        // give the stack panel some back width and color so the user can see it
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Header> <Title>Title</Title> <Speaker>Speaker</Speaker> <Date>1-1-2018</Date> </Header>" ) );
+                        reader.Read( );
+
+                        return new EditableHeader( parentParams, reader );
+                    }
+                    else if ( controlType == typeof( EditableList ) )
+                    {
+                        // give the stack panel some back width and color so the user can see it
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<List> <ListItem>Item 1</ListItem> <ListItem>Item 2</ListItem> <ListItem>Item 3</ListItem></List>" ) );
+                        reader.Read( );
+
+                        return new EditableList( parentParams, reader );
+                    }
+                    else if ( controlType == typeof( EditableListItem ) )
+                    {
+                        // give the stack panel some back width and color so the user can see it
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<ListItem>New List Item</ListItem>" ) );
+                        reader.Read( );
+
+                        return new EditableListItem( parentParams, reader );
+                    }
+                    else if ( controlType == typeof( EditableQuote ) )
+                    {
+                        // give the stack panel some back width and color so the user can see it
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Quote Citation=\"Citation\">New Quote Body</Quote>" ) );
+                        reader.Read( );
+
+                        return new EditableQuote( parentParams, reader );
+                    }
 
                     return null;
                 }
