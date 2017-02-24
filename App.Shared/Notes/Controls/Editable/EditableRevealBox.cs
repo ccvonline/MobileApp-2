@@ -6,6 +6,7 @@ using MobileApp.Shared.Notes.Model;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
+using RestSharp.Extensions.MonoHttp;
 
 namespace MobileApp
 {
@@ -253,7 +254,9 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    return "<RB>" + PlatformLabel.Text + "</RB>";
+                    string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
+
+                    return "<RB>" + encodedText + "</RB>";
                 }
             }
         }

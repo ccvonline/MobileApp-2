@@ -12,6 +12,7 @@ using MobileApp.Shared.PrivateConfig;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using RestSharp.Extensions.MonoHttp;
 
 namespace MobileApp
 {
@@ -320,8 +321,11 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string xml = "<Q Citation=\"" + Citation.Text + "\">" + 
-                                    QuoteLabel.Text +
+                    string encodedQuote = HttpUtility.HtmlEncode( QuoteLabel.Text );
+                    string encodedCitation = HttpUtility.HtmlEncode( Citation.Text );
+
+                    string xml = "<Q Citation=\"" + encodedCitation + "\">" + 
+                                    encodedQuote +
                                  "</Q>";
                     return xml;
                 }

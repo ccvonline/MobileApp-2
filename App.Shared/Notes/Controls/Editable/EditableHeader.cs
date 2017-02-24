@@ -12,6 +12,7 @@ using MobileApp.Shared.PrivateConfig;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using RestSharp.Extensions.MonoHttp;
 
 namespace MobileApp
 {
@@ -339,10 +340,14 @@ namespace MobileApp
 
                 public string Export( )
                 {
+                    string encodedTitle = HttpUtility.HtmlEncode( mTitle.Text );
+                    string encodedSpeaker = HttpUtility.HtmlEncode( mSpeaker.Text );
+                    string encodedDate = HttpUtility.HtmlEncode( mDate.Text );
+
                     return "<Header>" + 
-                              "<Title>" + mTitle.Text + "</Title>" + 
-                              "<Speaker>" + mSpeaker.Text + "</Speaker>" + 
-                              "<Date>" + mDate.Text + "</Date>" +
+                              "<Title>" + encodedTitle + "</Title>" + 
+                              "<Speaker>" + encodedSpeaker + "</Speaker>" + 
+                              "<Date>" + encodedDate + "</Date>" +
                            "</Header>";
 
                 }

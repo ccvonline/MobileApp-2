@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Rock.Mobile.UI;
 using System.Drawing;
 using System.Windows.Input;
+using RestSharp.Extensions.MonoHttp;
 
 namespace MobileApp
 {
@@ -252,7 +253,8 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    return "<NT>" + PlatformLabel.Text + "</NT>";
+                    string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
+                    return "<NT>" + encodedText + "</NT>";
                 }
             }
         }

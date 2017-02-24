@@ -767,6 +767,17 @@ namespace MobileApp
 
                 public string Export( )
                 {
+                    // Todo - we only need to set positioning for container controls, not individual noteText or RBs within.
+
+                    //PointF parentPos = ParentControl.GetPosition( );
+                    //PointF localPos = new PointF( GetFrame( ).Left - parentPos.X, GetFrame( ).Top - parentPos.Y );
+
+                    //// convert to a percentage
+                    //RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
+
+                    //string xPerc = ((localPos.X / parentFrame.Width) * 100.0f).ToString( );
+                    //string yPerc = ((localPos.Y / parentFrame.Height) * 100.0f).ToString( );
+
                     string xml = "<P>";
 
                     foreach( IUIControl child in ChildControls )
