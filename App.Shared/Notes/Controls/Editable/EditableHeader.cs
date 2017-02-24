@@ -41,7 +41,7 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                IEditableUIControl ParentControl { get; set; }
+                object ParentControl { get; set; }
                 
                 public EditableHeader( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -58,7 +58,7 @@ namespace MobileApp
                     EditMode_TextBox_Date.KeyUp += EditMode_TextBox_KeyUp;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as IEditableUIControl;
+                    ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
                     SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -105,8 +105,16 @@ namespace MobileApp
                         {
                             // if they press return, commit the changed text.
                             mTitle.Text = EditMode_TextBox_Title.Text;
+                            mTitle.Frame = new RectangleF( mTitle.Frame.Left, mTitle.Frame.Top, 0, 0 );
+                            mTitle.SizeToFit( );
+
                             mSpeaker.Text = EditMode_TextBox_Speaker.Text;
+                            mSpeaker.Frame = new RectangleF( mSpeaker.Frame.Left, mSpeaker.Frame.Top, 0, 0 );
+                            mSpeaker.SizeToFit( );
+
                             mDate.Text = EditMode_TextBox_Date.Text;
+                            mDate.Frame = new RectangleF( mDate.Frame.Left, mDate.Frame.Top, 0, 0 );
+                            mDate.SizeToFit( );
                                 
                             EnableEditMode( false );
 
@@ -212,6 +220,11 @@ namespace MobileApp
                         if ( editableParent != null )
                         {
                             editableParent.HandleChildDeleted( this );
+                        }
+                        else
+                        {
+                            Note noteParent = ParentControl as Note;
+                            noteParent.HandleChildDeleted( this );
                         }
                     }
                 }
@@ -322,6 +335,16 @@ namespace MobileApp
                     }
 
                     return consumingControl;
+                }
+
+                public string Export( )
+                {
+                    return "<Header>" + 
+                              "<Title>" + mTitle.Text + "</Title>" + 
+                              "<Speaker>" + mSpeaker.Text + "</Speaker>" + 
+                              "<Date>" + mDate.Text + "</Date>" +
+                           "</Header>";
+
                 }
             }
         }

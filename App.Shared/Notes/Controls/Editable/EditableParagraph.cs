@@ -18,7 +18,7 @@ namespace MobileApp
         {
             public class EditableParagraph : Paragraph, IEditableUIControl
             {
-                BaseControl ParentControl { get; set; }
+                object ParentControl { get; set; }
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -44,7 +44,7 @@ namespace MobileApp
                     EditMode_TextBox.KeyUp += EditMode_TextBox_KeyUp;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as BaseControl;
+                    ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
                     ParentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -328,9 +328,10 @@ namespace MobileApp
                     if( EditMode_Enabled == false )
                     {
                         // first, if there's a parent control, make sure this paragraph stays within its parent. 
-                        if ( ParentControl != null )
+                        BaseControl parentAsBase = ParentControl as BaseControl;
+                        if ( parentAsBase != null )
                         {
-                            RectangleF parentFrame = ParentControl.GetFrame( );
+                            RectangleF parentFrame = parentAsBase.GetFrame( );
                         
                             // clamp the yPos to the vertical bounds of our parent
                             yPos = Math.Max( yPos, parentFrame.Top );
@@ -388,9 +389,9 @@ namespace MobileApp
                         float yPosInParent = Frame.Top;
 
                         // if the control has a parent, make the positions relative to it
-                        if ( ParentControl != null )
+                        if ( parentAsBase != null )
                         {
-                            RectangleF parentFrame = ParentControl.GetFrame( );
+                            RectangleF parentFrame = parentAsBase.GetFrame( );
 
                             xPosInParent = Frame.Left - parentFrame.Left;
                             yPosInParent = Frame.Top - parentFrame.Top;
@@ -479,6 +480,11 @@ namespace MobileApp
                         {
                             editableParent.HandleChildDeleted( this );
                         }
+                        else
+                        {
+                            Note noteParent = ParentControl as Note;
+                            noteParent.HandleChildDeleted( this );
+                        }
                     }
                 }
 
@@ -494,8 +500,17 @@ namespace MobileApp
                         }
                     }
 
-                    // update our layout
-                    SetPosition( Frame.Left, Frame.Top );
+                    // if we still have children
+                    if( ChildControls.Count > 0 )
+                    {
+                        // update our layout
+                        SetPosition( Frame.Left, Frame.Top );
+                    }
+                    else
+                    {
+                        // otherwise, delete ourselves and tell our parent
+                        HandleDelete( true );
+                    }
                 }
 
                 public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )
@@ -748,6 +763,24 @@ namespace MobileApp
                         // set their correct X offset
                         rowControl.AddOffset( xRowAdjust, yAdjust );
                     }
+                }
+
+                public string Export( )
+                {
+                    string xml = "<P>";
+
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        IEditableUIControl editableChild = child as IEditableUIControl;
+                        if( editableChild != null )
+                        {
+                            xml += editableChild.Export( );
+                        }
+                    }
+
+                    xml += "</P>";
+
+                    return xml;
                 }
             }
         }

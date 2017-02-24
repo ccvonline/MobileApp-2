@@ -39,6 +39,8 @@ namespace MobileApp.Shared.Notes
         object GetStyleValue( EditStyling.Style style );
         void SetStyleValue( EditStyling.Style style, object value );
 
+        string Export( );
+
         // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
         // used by the notes platform.
         MobileApp.Shared.Notes.Styles.Style GetControlStyle( );

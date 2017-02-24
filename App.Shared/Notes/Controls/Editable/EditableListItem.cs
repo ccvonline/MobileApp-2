@@ -92,10 +92,9 @@ namespace MobileApp
                     SetPosition( Frame.Left, Frame.Top );
 
                     // now see if there's a parent that we should notify
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
+                    if( ParentControl != null )
                     {
-                        editableParent.HandleChildStyleChanged( style, this );
+                        ParentControl.HandleChildStyleChanged( style, this );
                     }
                 }
 
@@ -219,11 +218,11 @@ namespace MobileApp
                     // notify our parent if we need to
                     if( notifyParent )
                     {
-                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                        if ( editableParent != null )
+                        if ( ParentControl != null )
                         {
-                            editableParent.HandleChildDeleted( this );
+                            ParentControl.HandleChildDeleted( this );
                         }
+                        // no need to check for a Note parent, because we can't be a direct child of Note
                     }
                 }
 
@@ -239,8 +238,17 @@ namespace MobileApp
                         }
                     }
 
-                    // update our layout
-                    SetPosition( Frame.Left, Frame.Top );
+                    // if we still have children
+                    if( ChildControls.Count > 0 )
+                    {
+                        // update our layout
+                        SetPosition( Frame.Left, Frame.Top );
+                    }
+                    else
+                    {
+                        // otherwise, delete ourselves and tell our parent
+                        HandleDelete( true );
+                    }
                 }
 
                 public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
@@ -339,6 +347,24 @@ namespace MobileApp
                     }
 
                     return consumingControl;
+                }
+
+                public string Export( )
+                {
+                    string xml = "<LI>";
+
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        IEditableUIControl editableChild = child as IEditableUIControl;
+                        if( editableChild != null )
+                        {
+                            xml += editableChild.Export( );
+                        }
+                    }
+
+                    xml += "</LI>";
+
+                    return xml;
                 }
             }
         }

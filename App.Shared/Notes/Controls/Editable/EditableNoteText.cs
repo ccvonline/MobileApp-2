@@ -222,11 +222,11 @@ namespace MobileApp
                     // notify our parent
                     if( notifyParent )
                     {
-                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                        if ( editableParent != null )
+                        if ( ParentControl != null )
                         {
-                            editableParent.HandleChildDeleted( this );
+                            ParentControl.HandleChildDeleted( this );
                         }
+                        // no need to check for a Note parent, because we can't be a direct child of Note
                     }
                 }
 
@@ -248,6 +248,11 @@ namespace MobileApp
                         PlatformLabel.BackgroundColor = OrigBackgroundColor;
                         return null;
                     }
+                }
+
+                public string Export( )
+                {
+                    return "<NT>" + PlatformLabel.Text + "</NT>";
                 }
             }
         }

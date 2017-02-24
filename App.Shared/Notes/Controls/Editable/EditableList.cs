@@ -34,14 +34,14 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                IEditableUIControl ParentControl { get; set; }
+                object ParentControl { get; set; }
                 
                 public EditableList( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as IEditableUIControl;
+                    ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
                     SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -257,6 +257,11 @@ namespace MobileApp
                         {
                             editableParent.HandleChildDeleted( this );
                         }
+                        else
+                        {
+                            Note noteParent = ParentControl as Note;
+                            noteParent.HandleChildDeleted( this );
+                        }
                     }
                 }
 
@@ -267,15 +272,24 @@ namespace MobileApp
                     {
                         if( child.Equals( childControl ) == true )
                         {
-                            child.RemoveFromView( ParentEditingCanvas );
                             ChildControls.Remove( child );
                             break;
                         }
                     }
 
-                    SetPosition( Frame.Left, Frame.Top );
+                    // if we still have children
+                    if( ChildControls.Count > 0 )
+                    {
+                        //todo: we'll need to update our list ordering
 
-                    //todo: we'll need to update our list ordering
+                        // update our layout
+                        SetPosition( Frame.Left, Frame.Top );
+                    }
+                    else
+                    {
+                        // otherwise, delete ourselves and tell our parent
+                        HandleDelete( true );
+                    }
                 }
                 
                 public IEditableUIControl HandleMouseHover( PointF mousePos )
@@ -346,6 +360,24 @@ namespace MobileApp
                     }
 
                     return consumingControl;
+                }
+
+                public string Export( )
+                {
+                    string xml = "<L>";
+
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        EditableListItem editableChild = child as EditableListItem;
+                        if( editableChild != null )
+                        {
+                            xml += editableChild.Export( );
+                        }
+                    }
+
+                    xml += "</L>";
+
+                    return xml;
                 }
             }
         }

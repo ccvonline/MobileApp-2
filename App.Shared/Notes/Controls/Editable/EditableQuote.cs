@@ -40,7 +40,7 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                IEditableUIControl ParentControl { get; set; }
+                object ParentControl { get; set; }
                 
                 public EditableQuote( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -54,7 +54,7 @@ namespace MobileApp
                     EditMode_TextBox_Citation.KeyUp += EditMode_TextBox_KeyUp;
                     
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as IEditableUIControl;
+                    ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
                     SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -101,7 +101,12 @@ namespace MobileApp
                         {
                             // if they press return, commit the changed text.
                             QuoteLabel.Text = EditMode_TextBox_Quote.Text;
+                            QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, 0, 0 );
+                            QuoteLabel.SizeToFit( );
+
                             Citation.Text = EditMode_TextBox_Citation.Text;
+                            Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, 0, 0 );
+                            Citation.SizeToFit( );
                                 
                             EnableEditMode( false );
 
@@ -245,13 +250,18 @@ namespace MobileApp
                 {
                     RemoveFromView( ParentEditingCanvas );
 
-                    // notify our parent
+                    // notify our parent if we need to
                     if( notifyParent )
                     {
                         IEditableUIControl editableParent = ParentControl as IEditableUIControl;
                         if ( editableParent != null )
                         {
                             editableParent.HandleChildDeleted( this );
+                        }
+                        else
+                        {
+                            Note noteParent = ParentControl as Note;
+                            noteParent.HandleChildDeleted( this );
                         }
                     }
                 }
@@ -306,6 +316,14 @@ namespace MobileApp
                     }
 
                     return consumingControl;
+                }
+
+                public string Export( )
+                {
+                    string xml = "<Q Citation=\"" + Citation.Text + "\">" + 
+                                    QuoteLabel.Text +
+                                 "</Q>";
+                    return xml;
                 }
             }
         }

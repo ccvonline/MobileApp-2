@@ -1025,17 +1025,38 @@ namespace MobileApp
 
                 public void HandleDeleteControl( IEditableUIControl control )
                 {
+                    // notify the control to delete itself. if this results in a
+                    // direct child of ours being deleted, we'll receive a HandleChildDeleted call
                     control.HandleDelete( true );
+                }
 
-                    // if this control was a direct child of ours, remove it.
+                public void HandleChildDeleted( IEditableUIControl childControl )
+                {
+                    // this allows direct children of ours to notify us they were deleted
+                    // (example: a user deletes the last word of text in a paragraph - the paragraph deletes itself, but Note must remove it from its ChildControls list.)
+
                     foreach( IUIControl child in ChildControls )
                     {
-                        if( child.Equals( control ) == true )
+                        if( child.Equals( childControl ) == true )
                         {
                             ChildControls.Remove( child );
                             break;
                         }
                     }
+                }
+
+                public string Export( )
+                {
+                    string xmlExport = "<Note>";
+
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        IEditableUIControl editableChild = child as IEditableUIControl;
+                        xmlExport += editableChild.Export( );
+                    }
+
+                    xmlExport += "</Note>";
+                    return xmlExport;
                 }
                 #endif
             }

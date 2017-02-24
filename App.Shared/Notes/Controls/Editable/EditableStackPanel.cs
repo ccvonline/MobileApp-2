@@ -34,14 +34,14 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                IEditableUIControl ParentControl { get; set; }
+                object ParentControl { get; set; }
                 
                 public EditableStackPanel( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent as IEditableUIControl;
+                    ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
                     SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
@@ -236,6 +236,11 @@ namespace MobileApp
                         {
                             editableParent.HandleChildDeleted( this );
                         }
+                        else
+                        {
+                            Note noteParent = ParentControl as Note;
+                            noteParent.HandleChildDeleted( this );
+                        }
                     }
                 }
 
@@ -251,8 +256,17 @@ namespace MobileApp
                         }
                     }
 
-                    // update our layout
-                    SetPosition( Frame.Left, Frame.Top );
+                    // if we still have children
+                    if( ChildControls.Count > 0 )
+                    {
+                        // update our layout
+                        SetPosition( Frame.Left, Frame.Top );
+                    }
+                    else
+                    {
+                        // otherwise, delete ourselves and tell our parent
+                        HandleDelete( true );
+                    }
                 }
 
                 public IUIControl HandleCreateControl( System.Type controlType, PointF mousePos )
@@ -350,6 +364,24 @@ namespace MobileApp
                     }
 
                     return consumingControl;
+                }
+
+                public string Export( )
+                {
+                    string xml = "<SP>";
+
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        IEditableUIControl editableChild = child as IEditableUIControl;
+                        if( editableChild != null )
+                        {
+                            xml += editableChild.Export( );
+                        }
+                    }
+
+                    xml += "</SP>";
+
+                    return xml;
                 }
             }
         }
