@@ -6,6 +6,9 @@ using Rock.Mobile;
 using MobileApp.Shared.Network;
 using MobileApp.Shared.PrivateConfig;
 using System.Linq;
+using Rock.Client;
+using MobileApp.Shared.Strings;
+using Rock.Mobile.Util.Strings;
 
 namespace MobileApp
 {
@@ -170,6 +173,67 @@ namespace MobileApp
             };
 
             RockApi.Post_CustomEndPoint( RockApi.BaseUrl + EndPoint_GroupRegistration, groupRegModel, resultHandler );
+        }
+
+        class RegAccountData
+        {
+            public string Username;
+            public string Password;
+            
+            public string FirstName;
+            public string LastName;
+            public string Email;
+
+            public string CellPhoneNumber;
+        }
+
+        const string EndPoint_Register = "api/MobileApp/RegisterNewUser/";
+        public static void RegisterNewUser( string username, string password, string firstName, string lastName, string email, string phoneNumberText, HttpRequest.RequestResult resultHandler)
+        {
+            //JHM 2-28-17 WOAH TWO YEARS LATER!?! This was in the old crappy RegisterNewUser, replaced by this slick one. But I gotta keep the comment below, cause I gotta be me!
+                //JHM 3-11-15 ALMOST FRIDAY THE 13th SIX YEARS LATER YAAAHH!!!!!
+                //Until we release, or at least are nearly done testing, do not allow actual user registrations.
+                //resultHandler( HttpStatusCode.OK, "" );
+                //return;
+            //
+
+            RegAccountData regAccountModel = new RegAccountData()
+            {
+                Username = username,
+                Password = password,
+                
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+
+                CellPhoneNumber = phoneNumberText
+            };
+
+            RockApi.Post_CustomEndPoint(RockApi.BaseUrl + EndPoint_Register, regAccountModel, 
+                delegate( HttpStatusCode statusCode, string statusDescription )
+                {
+                    // Everything worked
+                    if (Rock.Mobile.Network.Util.StatusInSuccessRange(statusCode) == true)
+                    {
+                        resultHandler(statusCode, statusDescription);
+                    }
+                    // Person already exists in Rock (so they should use the website)
+                    else if (HttpStatusCode.Conflict == statusCode)
+                    {
+                        resultHandler(statusCode, RegisterStrings.RegisterResult_PersonAlreadyExists );
+                    }
+                    // Login already exists
+                    else if (HttpStatusCode.Unauthorized == statusCode)
+                    {
+                        resultHandler(statusCode, RegisterStrings.RegisterResult_LoginUsed );
+                    }
+                    // Random failure
+                    else
+                    {
+                        resultHandler(statusCode, GeneralStrings.Network_Result_FailedText );
+                    }
+                }
+           );
         }
 
         public delegate void OnFamilyAndAddressResult( System.Net.HttpStatusCode code, string desc, Rock.Client.Group family, Rock.Client.GroupLocation familyAddress );
@@ -385,93 +449,6 @@ namespace MobileApp
                 // they didn't pass requirements, so hand back an empty string.
                 response( string.Empty );
             }
-        }
-
-        const string RegisterResult_BadLogin = "CreateLoginError";
-        public static void RegisterNewUser( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, string username, string password, HttpRequest.RequestResult resultHandler )
-        {
-            //JHM 3-11-15 ALMOST FRIDAY THE 13th SIX YEARS LATER YAAAHH!!!!!
-            //Until we release, or at least are nearly done testing, do not allow actual user registrations.
-            //resultHandler( HttpStatusCode.OK, "" );
-            //return;
-
-            // this is a complex end point. To register a user is a multiple step process.
-            //1. Create a new Person on Rock
-            //2. Request that Person back
-            //3. Create a new Login for that person
-            //4. Post the location, phone number and home campus
-            person.Guid = Guid.NewGuid( );
-
-            RockApi.Post_People( person, 0, 
-                delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
-                {
-                    if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) )
-                    {
-                        ApplicationApi.GetPersonByGuid( person.Guid,
-                            delegate(System.Net.HttpStatusCode personStatusCode, string personStatusDescription, Rock.Client.Person createdPerson ) 
-                            {
-                                if ( Rock.Mobile.Network.Util.StatusInSuccessRange( personStatusCode ) )
-                                {
-                                    // it worked. now put their login info.
-                                    RockApi.Post_UserLogins( createdPerson.Id, username, password, PrivateGeneralConfig.EntityType_UserLoginId,
-                                        delegate(System.Net.HttpStatusCode loginStatusCode, string loginStatusDescription) 
-                                        {
-                                            // if this worked, we are home free
-                                            if ( Rock.Mobile.Network.Util.StatusInSuccessRange( loginStatusCode ) )
-                                            {
-                                                // now update their phone number, if valid
-                                                if( phoneNumber != null )
-                                                {
-                                                    ApplicationApi.AddOrUpdateCellPhoneNumber( createdPerson, phoneNumber, true, 0, 
-                                                        delegate(HttpStatusCode phoneStatusCode, string phoneStatusDescription) 
-                                                        {
-                                                            // NOTICE: We are passing back the loginStatus, not the phone status.
-                                                            // This is because if the login was created, we're DONE and they can login.
-                                                            // Updating their phone number is purely a bonus.
-                                                            if( resultHandler != null )
-                                                            {
-                                                                resultHandler( loginStatusCode, loginStatusDescription );
-                                                            }
-                                                        });
-                                                }
-                                                else
-                                                {
-                                                    // phone number not provided, go with the result of the login creation
-                                                    if( resultHandler != null )
-                                                    {
-                                                        resultHandler( loginStatusCode, RegisterResult_BadLogin );
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                // Failed
-                                                if( resultHandler != null )
-                                                {
-                                                    resultHandler( loginStatusCode, RegisterResult_BadLogin );
-                                                }
-                                            }
-                                        });
-                                }
-                                else
-                                {
-                                    // Failed
-                                    if( resultHandler != null )
-                                    {
-                                        resultHandler( personStatusCode, personStatusDescription );
-                                    }
-                                }
-                            });
-                    }
-                    else
-                    {
-                        // Failed
-                        if( resultHandler != null )
-                        {
-                            resultHandler( statusCode, statusDescription );
-                        }
-                    }
-                } );
         }
     }
 }

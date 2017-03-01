@@ -397,8 +397,7 @@ namespace iOS
 
                             // create a new user and submit them
                             Rock.Client.Person newPerson = new Rock.Client.Person();
-                            Rock.Client.PhoneNumber newPhoneNumber = null;
-
+                            
                             // copy all the edited fields into the person object
                             newPerson.Email = EmailText.Field.Text;
 
@@ -407,20 +406,8 @@ namespace iOS
                             newPerson.FirstName = NickNameText.Field.Text;
 
                             newPerson.LastName = LastNameText.Field.Text;
-                            //newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
-                            //newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
 
-                            // Update their cell phone. 
-                            if ( string.IsNullOrEmpty( CellPhoneText.Field.Text ) == false )
-                            {
-                                // update the phone number
-                                string digits = CellPhoneText.Field.Text.AsNumeric( );
-                                newPhoneNumber = new Rock.Client.PhoneNumber();
-                                newPhoneNumber.Number = digits;
-                                newPhoneNumber.NumberFormatted = digits.AsPhoneNumber( );
-                            }
-
-                            MobileAppApi.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Field.Text, PasswordText.Field.Text,
+                            MobileAppApi.RegisterNewUser( UserNameText.Field.Text, PasswordText.Field.Text, NickNameText.Field.Text, LastNameText.Field.Text, EmailText.Field.Text, CellPhoneText.Field.Text, 
                                 delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                                 {
                                     if ( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
@@ -438,7 +425,7 @@ namespace iOS
                                         State = RegisterState.Fail;
                                         ResultView.Show( RegisterStrings.RegisterStatus_Failed, 
                                             PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                            statusDescription == RegisterStrings.RegisterResult_BadLogin ? RegisterStrings.RegisterResult_LoginUsed : RegisterStrings.RegisterResult_Failed,
+                                            statusDescription,
                                             GeneralStrings.Done );
                                     }
 

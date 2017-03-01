@@ -297,7 +297,6 @@ namespace Droid
 
                     // create a new user and submit them
                     Rock.Client.Person newPerson = new Rock.Client.Person();
-                    Rock.Client.PhoneNumber newPhoneNumber = null;
 
                     // copy all the edited fields into the person object
                     newPerson.Email = EmailText.Text;
@@ -307,21 +306,8 @@ namespace Droid
                     newPerson.FirstName = NickNameText.Text;
 
                     newPerson.LastName = LastNameText.Text;
-                    //newPerson.ConnectionStatusValueId = PrivateGeneralConfig.PersonConnectionStatusValueId;
-                    //newPerson.RecordStatusValueId = PrivateGeneralConfig.PersonRecordStatusValueId;
 
-                    // Update their cell phone. 
-                    if ( string.IsNullOrEmpty( CellPhoneText.Text ) == false )
-                    {
-                        // update the phone number
-                        string digits = CellPhoneText.Text.AsNumeric( );
-                        newPhoneNumber = new Rock.Client.PhoneNumber();
-                        newPhoneNumber.Number = digits;
-                        newPhoneNumber.NumberFormatted = digits.AsPhoneNumber( );
-                        newPhoneNumber.NumberTypeValueId = PrivateGeneralConfig.CellPhoneValueId;
-                    }
-
-                    MobileAppApi.RegisterNewUser( newPerson, newPhoneNumber, UserNameText.Text, PasswordText.Text,
+                    MobileAppApi.RegisterNewUser(UserNameText.Text, PasswordText.Text, NickNameText.Text, LastNameText.Text, EmailText.Text, CellPhoneText.Text,
                         delegate(System.Net.HttpStatusCode statusCode, string statusDescription )
                         {
                             ProgressBarBlocker.Visibility = ViewStates.Gone;
@@ -347,7 +333,7 @@ namespace Droid
                                 State = RegisterState.Fail;
                                 ResultView.Show( RegisterStrings.RegisterStatus_Failed, 
                                     PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                    statusDescription == RegisterStrings.RegisterResult_BadLogin ? RegisterStrings.RegisterResult_LoginUsed : RegisterStrings.RegisterResult_Failed,
+                                    statusDescription,
                                     GeneralStrings.Done );
                             }
 
