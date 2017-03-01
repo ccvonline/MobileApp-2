@@ -75,18 +75,13 @@ namespace MobileApp.Shared
                     // add it, which will fail if it's alread in the list
                     categoryObj.PerformedActions.Add( action );
 
-                    if ( GeneralConfig.Use_Analytics == true )
+                    if (GeneralConfig.Use_Analytics == true)
                     {
-#if !DEBUG
-                        #if __IOS__
-                            Foundation.NSDictionary nsAttribs = Foundation.NSDictionary.FromObjectAndKey( new Foundation.NSString( action ), new Foundation.NSString( categoryObj.Name ) );
-                            LocalyticsBinding.Localytics.TagEvent( Name, nsAttribs );
-                        #elif __ANDROID__
-                            System.Collections.Generic.Dictionary<string, string> attribs = new System.Collections.Generic.Dictionary<string, string>();
-                            attribs.Add( categoryObj.Name, action );
-                            Com.Localytics.Android.Localytics.TagEvent( Name, attribs );
+                        #if !DEBUG
+                            HockeyApp.MetricsManager.TrackEvent(Name,
+                                                                new Dictionary<string, string> { { category, action } },
+                                                                new Dictionary<string, double> { { "Time", 1.0 } });
                         #endif
-#endif
                     }
                 }
             }

@@ -11,13 +11,13 @@ using Android.Gms.Maps;
 using MobileApp.Shared.Config;
 using Rock.Mobile.PlatformSpecific.Android.Graphics;
 using Android.Graphics;
-using Com.Localytics.Android;
 using MobileApp.Shared.PrivateConfig;
+using HockeyApp.Android;
+using HockeyApp.Android.Metrics;
 
 namespace Droid
 {
     [Application( Name="com.ccvonline.CCVMobileApp" )]
-    [MetaData ("LOCALYTICS_APP_KEY", Value=GeneralConfig.Droid_Localytics_Key)]
     public class MainApplication : Application
     {
         public MainApplication( System.IntPtr whatever, Android.Runtime.JniHandleOwnership jniHandle ) : base( whatever, jniHandle )
@@ -30,10 +30,6 @@ namespace Droid
 
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
 
-#if !DEBUG
-            LocalyticsActivityLifecycleCallbacks callback = new LocalyticsActivityLifecycleCallbacks( this );
-            RegisterActivityLifecycleCallbacks( callback );
-#endif
         }
     }
     
@@ -124,10 +120,6 @@ namespace Droid
         {
             base.OnCreate( bundle );
 
-#if !DEBUG
-            Xamarin.Insights.Initialize( GeneralConfig.Droid_Xamarin_Insights_Key, this );
-#endif
-
             Window.AddFlags(WindowManagerFlags.Fullscreen);
 
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
@@ -156,6 +148,12 @@ namespace Droid
 
             Springboard = FragmentManager.FindFragmentById(Resource.Id.springboard) as Springboard;
             Springboard.SetActiveTaskFrame( layout );
+
+            // Register HockeyApp
+            #if !DEBUG
+                CrashManager.Register( this, GeneralConfig.Droid_HockeyApp_Id );
+                MetricsManager.Register( Application, GeneralConfig.Droid_HockeyApp_Id );
+            #endif
         }
 
         /// <summary>

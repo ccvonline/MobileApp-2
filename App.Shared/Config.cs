@@ -74,7 +74,7 @@ namespace MobileApp
                 /// </summary>
                 #if DEBUG
                 public const string RockBaseUrl = "http://dev.ccv.church/";
-                //public const string RockBaseUrl = "http://10.211.55.6:50345/";
+                //public const string RockBaseUrl = "http://10.211.55.3:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif
@@ -96,13 +96,10 @@ namespace MobileApp
                 public const bool Use_Analytics = true;
 
                 /// <summary>
-                /// Defines the "app" keys for your Xamarin Insights analytics.
+                ///  The iOS and Android App ID's, respectively, for HockeyApp analytics.
                 /// </summary>
-                public const string iOS_Xamarin_Insights_Key = "0ddb3228fc1eb8272392278ae7d73aa64bb535a5";
-                public const string Droid_Xamarin_Insights_Key = "4d2a2e4245f141dad44ee3f8e89fb2370dfab628";
-
-                public const string iOS_Localytics_Key = "ba64af94d379a0e732e4ffe-0841c882-67b7-11e5-bef4-0013a62af900";
-                public const string Droid_Localytics_Key = "ba64af94d379a0e732e4ffe-0841c882-67b7-11e5-bef4-0013a62af900";
+                public const string iOS_HockeyApp_Id = "b851b5a3a79142d38e3cffd3a01015f0";
+                public const string Droid_HockeyApp_Id = "81b31ba83ad3416e932bd2bd0b5d8213";
             }
 
             public class SpringboardConfig

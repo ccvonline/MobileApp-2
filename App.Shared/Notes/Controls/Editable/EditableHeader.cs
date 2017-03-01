@@ -104,28 +104,22 @@ namespace MobileApp
 
                         case System.Windows.Input.Key.Return:
                         {
-                            // only allow editing to end if there's text in all text boxes
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Title.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Speaker.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Date.Text ) == false )
-                            {
-                                // if they press return, commit the changed text.
-                                mTitle.Text = EditMode_TextBox_Title.Text;
-                                mTitle.Frame = new RectangleF( mTitle.Frame.Left, mTitle.Frame.Top, 0, 0 );
-                                mTitle.SizeToFit( );
+                            // if they press return, commit the changed text.
+                            mTitle.Text = EditMode_TextBox_Title.Text;
+                            mTitle.Frame = new RectangleF( mTitle.Frame.Left, mTitle.Frame.Top, 0, 0 );
+                            mTitle.SizeToFit( );
 
-                                mSpeaker.Text = EditMode_TextBox_Speaker.Text;
-                                mSpeaker.Frame = new RectangleF( mSpeaker.Frame.Left, mSpeaker.Frame.Top, 0, 0 );
-                                mSpeaker.SizeToFit( );
+                            mSpeaker.Text = EditMode_TextBox_Speaker.Text;
+                            mSpeaker.Frame = new RectangleF( mSpeaker.Frame.Left, mSpeaker.Frame.Top, 0, 0 );
+                            mSpeaker.SizeToFit( );
 
-                                mDate.Text = EditMode_TextBox_Date.Text;
-                                mDate.Frame = new RectangleF( mDate.Frame.Left, mDate.Frame.Top, 0, 0 );
-                                mDate.SizeToFit( );
+                            mDate.Text = EditMode_TextBox_Date.Text;
+                            mDate.Frame = new RectangleF( mDate.Frame.Left, mDate.Frame.Top, 0, 0 );
+                            mDate.SizeToFit( );
                                 
-                                EnableEditMode( false );
+                            EnableEditMode( false );
 
-                                SetPosition( Frame.Left, Frame.Top );
-                            }
+                            SetPosition( Frame.Left, Frame.Top );
                             
                             break;
                         }
@@ -287,36 +281,9 @@ namespace MobileApp
                     return null;
                 }
 
-                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
+                public void HandleKeyUp( KeyEventArgs e )
                 {
-                    // for controls with textBoxes used for editing, we need
-                    // to be consistent with how it will handle input.
-                    bool releaseFocus = false;
-                    switch( e.Key )
-                    {
-                        case Key.Return:
-                        {
-                            // on return, editing will only end, (and thus focus should clear)
-                            // if there's text in the text box
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Title.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Speaker.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Date.Text ) == false )
-                            {
-                                releaseFocus = true;
-                            }
-
-                            break;
-                        }
-
-                        case Key.Escape:
-                        {
-                            // on escape, always release focus
-                            releaseFocus = true;
-                            break;
-                        }
-                    }
-
-                    return releaseFocus;
+                    // ignore
                 }
 
                 public bool IsEditing( )
@@ -382,6 +349,7 @@ namespace MobileApp
                               "<Speaker>" + encodedSpeaker + "</Speaker>" + 
                               "<Date>" + encodedDate + "</Date>" +
                            "</Header>";
+
                 }
             }
         }

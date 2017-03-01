@@ -436,7 +436,6 @@ namespace iOS
 
             MoreElement = new UIView( new CGRect( 0, 0, elementWidth, elementHeight ) );
             ScrollView.AddSubview( MoreElement );
-            //
 
             EditPictureButton = new UIButton( new CGRect( 0, 0, 112, 112 )  );
             ScrollView.AddSubview( EditPictureButton );
