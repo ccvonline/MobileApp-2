@@ -157,9 +157,9 @@ namespace MobileApp
                     return null;
                 }
 
-                public void HandleKeyUp( KeyEventArgs e )
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
                 {
-                    // ignore
+                    return false;
                 }
 
                 public bool IsEditing( )

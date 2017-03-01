@@ -100,19 +100,23 @@ namespace MobileApp
 
                         case System.Windows.Input.Key.Return:
                         {
-                            // if they press return, commit the changed text.
-                            QuoteLabel.Text = EditMode_TextBox_Quote.Text;
-                            QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, 0, 0 );
-                            QuoteLabel.SizeToFit( );
+                            // only allow enditing to end if there's text in both boxes
+                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false && 
+                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
+                            {
+                                // if they press return, commit the changed text.
+                                QuoteLabel.Text = EditMode_TextBox_Quote.Text;
+                                QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, 0, 0 );
+                                QuoteLabel.SizeToFit( );
 
-                            Citation.Text = EditMode_TextBox_Citation.Text;
-                            Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, 0, 0 );
-                            Citation.SizeToFit( );
+                                Citation.Text = EditMode_TextBox_Citation.Text;
+                                Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, 0, 0 );
+                                Citation.SizeToFit( );
                                 
-                            EnableEditMode( false );
+                                EnableEditMode( false );
 
-                            SetPosition( Frame.Left, Frame.Top );
-                            
+                                SetPosition( Frame.Left, Frame.Top );
+                            }
                             break;
                         }
                     }
@@ -237,9 +241,35 @@ namespace MobileApp
                     return null;
                 }
 
-                public void HandleKeyUp( KeyEventArgs e )
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
                 {
-                    // ignore
+                    // for controls with textBoxes used for editing, we need
+                    // to be consistent with how it will handle input.
+                    bool releaseFocus = false;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        {
+                            // on return, editing will only end, (and thus focus should clear)
+                            // if there's text in the text box
+                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false && 
+                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
+                            {
+                                releaseFocus = true;
+                            }
+
+                            break;
+                        }
+
+                        case Key.Escape:
+                        {
+                            // on escape, always release focus
+                            releaseFocus = true;
+                            break;
+                        }
+                    }
+
+                    return releaseFocus;
                 }
 
                 public bool IsEditing( )

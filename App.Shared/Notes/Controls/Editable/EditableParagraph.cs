@@ -72,9 +72,34 @@ namespace MobileApp
                     return EditMode_Enabled;
                 }
 
-                public void HandleKeyUp( KeyEventArgs e )
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
                 {
-                    // ignore
+                    // for controls with textBoxes used for editing, we need
+                    // to be consistent with how it will handle input.
+                    bool releaseFocus = false;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        {
+                            // on return, editing will only end, (and thus focus should clear)
+                            // if there's text in the text box
+                            if( string.IsNullOrWhiteSpace( EditMode_TextBox.Text ) == false )
+                            {
+                                releaseFocus = true;
+                            }
+
+                            break;
+                        }
+
+                        case Key.Escape:
+                        {
+                            // on escape, always release focus
+                            releaseFocus = true;
+                            break;
+                        }
+                    }
+
+                    return releaseFocus;
                 }
 
                 public IEditableUIControl HandleMouseHover( PointF mousePos )
@@ -160,16 +185,19 @@ namespace MobileApp
                         case System.Windows.Input.Key.Return:
                         {
                             // if they press return, commit the changed text.
-                            SetText( EditMode_TextBox.Text );
-                                
-                            EnableEditMode( false );
-
-                            SetPosition( Frame.Left, Frame.Top );
-
-                            // now add the new child controls
-                            foreach ( IUIControl control in ChildControls )
+                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox.Text ) == false )
                             {
-                                control.AddToView( ParentEditingCanvas );
+                                SetText( EditMode_TextBox.Text );
+
+                                EnableEditMode( false );
+
+                                SetPosition( Frame.Left, Frame.Top );
+
+                                // now add the new child controls
+                                foreach ( IUIControl control in ChildControls )
+                                {
+                                    control.AddToView( ParentEditingCanvas );
+                                }
                             }
                             
                             break;
@@ -641,6 +669,7 @@ namespace MobileApp
                             // would be a space between words.
                             // note: we can safely cast to a NoteText because that's the only child type we allow.
                             string text = ( (NoteText)control ).GetText( ).TrimStart( ' ' );
+                            
                             ( (NoteText) control ).SetText( text );
 
                             // advance to the next row
@@ -663,7 +692,9 @@ namespace MobileApp
                             {
                                 string text = ( (NoteText)control ).GetText( );
 
-                                if ( text[ 0 ] != ' ' )
+                                // if text.Length is 0, this was simply a blank space after a reveal box that
+                                // was trimmed, and now needs its blank space restored
+                                if ( text.Length == 0 || text[ 0 ] != ' ' )
                                 {
                                     ( (NoteText) control ).SetText( ' ' + text );
 
@@ -738,20 +769,20 @@ namespace MobileApp
                         // I made it bounds.width again and can't find any problems with it, but I'm leaving the old calculation
                         // here just in case we need it again. :-\
                         case Alignment.Right:
-                            {
-                                xRowAdjust = ( bounds.Width - rowWidth );
-                                break;
-                            }
+                        {
+                            xRowAdjust = ( bounds.Width - rowWidth );
+                            break;
+                        }
                         case Alignment.Center:
-                            {
-                                xRowAdjust = ( ( bounds.Width / 2 ) - ( rowWidth / 2 ) );
-                                break;
-                            }
+                        {
+                            xRowAdjust = ( ( bounds.Width / 2 ) - ( rowWidth / 2 ) );
+                            break;
+                        }
                         case Alignment.Left:
-                            {
-                                xRowAdjust = 0;
-                                break;
-                            }
+                        {
+                            xRowAdjust = 0;
+                            break;
+                        }
                     }
 
                     // Now adjust each control to be aligned correctly on X and Y

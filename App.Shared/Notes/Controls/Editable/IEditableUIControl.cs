@@ -30,7 +30,8 @@ namespace MobileApp.Shared.Notes
         // therefore needs to tell its parent so the parent can update layout.
         void HandleDelete( bool notifyParent ); 
 
-        void HandleKeyUp( KeyEventArgs e );
+        // controls should return true if they want focus released
+        bool HandleFocusedControlKeyUp( KeyEventArgs e );
 
         PointF GetPosition( );
 

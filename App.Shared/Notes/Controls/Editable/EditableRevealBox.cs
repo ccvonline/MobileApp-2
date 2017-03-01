@@ -72,10 +72,20 @@ namespace MobileApp
                     return null;
                 }
 
-                public void HandleKeyUp( KeyEventArgs e )
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
                 {
-                    EditMode_Enabled = false;
-                    PlatformLabel.BackgroundColor = OrigBackgroundColor;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        case Key.Escape:
+                        {
+                            EditMode_Enabled = false;
+                            PlatformLabel.BackgroundColor = OrigBackgroundColor;
+                            return true;
+                        }
+                    }
+
+                    return false;
                 }
 
                 public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )
@@ -254,9 +264,16 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
-
-                    return "<RB>" + encodedText + "</RB>";
+                    // only export if there's valid text. If we're simply a blank space, we don't need to be saved.
+                    if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
+                    {
+                        string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
+                        return "<RB>" + encodedText + "</RB>";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
                 }
             }
         }
