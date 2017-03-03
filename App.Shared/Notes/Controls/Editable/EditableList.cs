@@ -18,10 +18,7 @@ namespace MobileApp
         namespace Notes
         {
             public class EditableList: List, IEditableUIControl
-            {
-                // store our parent so we know our bound restrictions
-                RectangleF ParentFrame { get; set; }
-                
+            {                
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
 

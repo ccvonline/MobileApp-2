@@ -26,10 +26,7 @@ namespace MobileApp
                 TextBox EditMode_TextBox_Title = null;
                 TextBox EditMode_TextBox_Date = null;
                 TextBox EditMode_TextBox_Speaker = null;
-
-                // store our parent so we know our bound restrictions
-                RectangleF ParentFrame { get; set; }
-                
+                                
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
 

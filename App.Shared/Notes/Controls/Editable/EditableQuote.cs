@@ -25,10 +25,7 @@ namespace MobileApp
                 bool EditMode_Enabled = false;
                 TextBox EditMode_TextBox_Quote = null;
                 TextBox EditMode_TextBox_Citation = null;
-
-                // store our parent so we know our bound restrictions
-                RectangleF ParentFrame { get; set; }
-                
+                                
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
 
@@ -42,6 +39,10 @@ namespace MobileApp
 
                 // store our literal parent control so we can notify if we were updated
                 object ParentControl { get; set; }
+
+                RectangleF Padding;
+                int BorderPaddingPx;
+                SizeF ParentSize;
                 
                 public EditableQuote( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -58,15 +59,20 @@ namespace MobileApp
                     ParentControl = parentParams.Parent;
 
                     // take the max width / height we'll be allowed to fit in
-                    SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
+                    ParentSize = new SizeF( parentParams.Width, parentParams.Height );
 
                     // get our margin / padding
                     // note - declare a temp margin on the stack that we'll throw out. We store this in our BaseControl.
                     RectangleF tempMargin;
                     RectangleF tempBounds = new RectangleF( );
-                    RectangleF padding;
-                    GetMarginsAndPadding( ref mStyle, ref parentSize, ref tempBounds, out tempMargin, out padding );
-                    ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref parentSize );
+                    GetMarginsAndPadding( ref mStyle, ref ParentSize, ref tempBounds, out tempMargin, out Padding );
+                    ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref ParentSize );
+                    
+                    if( mStyle.mBorderWidth.HasValue )
+                    {
+                        BorderView.BorderWidth = mStyle.mBorderWidth.Value;
+                        BorderPaddingPx = (int)Rock.Mobile.Graphics.Util.UnitToPx( mStyle.mBorderWidth.Value + PrivateNoteConfig.BorderPadding );
+                    }
 
                     OrigBackgroundColor = BorderView.BackgroundColor;
                 }
@@ -106,15 +112,11 @@ namespace MobileApp
                             {
                                 // if they press return, commit the changed text.
                                 QuoteLabel.Text = EditMode_TextBox_Quote.Text;
-                                QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, 0, 0 );
-                                QuoteLabel.SizeToFit( );
-
                                 Citation.Text = EditMode_TextBox_Citation.Text;
-                                Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, 0, 0 );
-                                Citation.SizeToFit( );
                                 
                                 EnableEditMode( false );
 
+                                // update the position, which also effects layout
                                 SetPosition( Frame.Left, Frame.Top );
                             }
                             break;
@@ -205,11 +207,134 @@ namespace MobileApp
                     // we're not moving if we're in edit mode
                     if( EditMode_Enabled == false )
                     {
+                        // first, let the Citation + Glyph define the minimum width this control can be
+                        Citation.Frame = new RectangleF( );
+                        Citation.SizeToFit( );
+
+                        
+                        // now, we need to ensure we stay within our parent, whether that's a control or the Note
+                        RectangleF parentFrame;
+
+                        BaseControl parentAsBase = ParentControl as BaseControl;
+                        if ( parentAsBase != null )
+                        {
+                            // our parent is a control, so clamp our X/Y to its X/Y
+                            parentFrame = parentAsBase.GetFrame( );
+                        
+                            // clamp the yPos to the vertical bounds of our parent
+                            yPos = Math.Max( yPos, parentFrame.Top );
+                            yPos = Math.Min( yPos, parentFrame.Bottom );
+
+
+                            // now left, which is easy
+                            xPos = Math.Max( xPos, parentFrame.Left );
+                        }
+                        else
+                        {
+                            // no restriction on X/Y, but take width/height
+                            parentFrame = new RectangleF( 0, 0, ParentSize.Width, ParentSize.Height );
+                        }
+
+                         // Now do the right edge. This is tricky because we will allow this control to move forward
+                        // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
+
+                        // Get the width of the widest child, which is always the citation plus glyph.
+                        float minRequiredWidth = Citation.Frame.Width + UrlGlyph.Frame.Width;
+                            
+                        // now, if the control cannot wrap any further, we want to clamp its movement
+                        // to the parent's right edge
+                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
+                        {
+                            // Right Edge Check
+                            xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
+                        }
+
+
+                        //TODO / FIX: Somehow, our left edge isn't holding to Max( Left, CitationWidth ) like it should,
+                        // causing the quote to shrink too much.
+
+
                         float xOffset = xPos - Frame.Left;
                         float yOffset = yPos - Frame.Top;
 
                         base.AddOffset( xOffset, yOffset );
+                        
 
+                        // now update the actual width and height of the Quote based on the available width left
+                        float availableWidth = ParentSize.Width - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
+                        QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, availableWidth, 0 );
+                        QuoteLabel.SizeToFit( );
+
+                        Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, availableWidth, 0 );
+                        Citation.SizeToFit( );
+
+                        
+
+                        // now that we know our text size, we can adjust the citation
+                        // for citation width, attempt to use quote width, but if there was no quote text,
+                        // the width will be 0, so we'll fallback to the citation width.
+
+                        RectangleF frame;
+                        if( string.IsNullOrEmpty( QuoteLabel.Text ) != true )
+                        {   
+                            // when taking the citation frame, put it at the left edge of the quote,
+                            // because if it's longer than the quote we'll want the bounding frame to use
+                            // its width as opposed to the quote's width.
+                            Citation.Frame = new RectangleF( QuoteLabel.Frame.Left, 
+                                                             QuoteLabel.Frame.Bottom, 
+                                                             Citation.Frame.Width,
+                                                             Citation.Frame.Height );
+
+                            UrlGlyph.Frame = new RectangleF( Citation.Frame.Right,
+                                                             Citation.Frame.Top - ( (UrlGlyph.Frame.Height - Citation.Frame.Height) / 2),
+                                                             UrlGlyph.Frame.Width,
+                                                             UrlGlyph.Frame.Height );
+
+                            RectangleF citationGlyphFrame = Parser.CalcBoundingFrame( Citation.Frame, UrlGlyph.Frame );
+
+                            // get a bounding frame for the quote and citation
+                            frame = Parser.CalcBoundingFrame( QuoteLabel.Frame, citationGlyphFrame );
+
+                            // now right-adjust it IF it's smaller than the quote
+                            if ( citationGlyphFrame.Width < QuoteLabel.Frame.Width )
+                            {
+                                Citation.Position = new PointF( QuoteLabel.Frame.Right - citationGlyphFrame.Width, Citation.Position.Y );
+                                UrlGlyph.Position = new PointF( Citation.Frame.Right, UrlGlyph.Frame.Top );
+                            }
+                        }
+                        else
+                        {
+                            Citation.Frame = new RectangleF( QuoteLabel.Frame.Left, 
+                                                             QuoteLabel.Frame.Top, 
+                                                             Citation.Frame.Width,
+                                                             Citation.Frame.Height );
+
+                            UrlGlyph.Frame = new RectangleF( Citation.Frame.Right,
+                                                             Citation.Frame.Top - ( (UrlGlyph.Frame.Height - Citation.Frame.Height) / 2),
+                                                             UrlGlyph.Frame.Width,
+                                                             UrlGlyph.Frame.Height );
+
+                            // get a bounding frame for the quote and citation
+                            frame = Parser.CalcBoundingFrame( Citation.Frame, UrlGlyph.Frame );
+                        }
+
+                        Citation.TextAlignment = TextAlignment.Right;
+
+                        // reintroduce vertical padding
+                        frame.Height = frame.Height + Padding.Top + Padding.Height;
+
+                        // setup our bounding rect for the border
+
+                        // because we're basing it off of the largest control (quote or citation),
+                        // we need to reintroduce the border padding.
+                        frame = new RectangleF( frame.X - BorderPaddingPx - Padding.Left, 
+                                                frame.Y - BorderPaddingPx - Padding.Top, 
+                                                frame.Width + (Padding.Width * 2) + (BorderPaddingPx * 2), 
+                                                frame.Height + (Padding.Height) + BorderPaddingPx );
+
+                        // and store that as our bounds
+                        BorderView.Frame = frame;
+                        Frame = frame;
                         SetDebugFrame( Frame );
                     }
                 }
