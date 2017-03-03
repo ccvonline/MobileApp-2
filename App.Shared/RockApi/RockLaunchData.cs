@@ -332,7 +332,7 @@ namespace MobileApp
                                     // sort it by priority
                                     model.Sort( delegate(Rock.Client.ContentChannelItem x, Rock.Client.ContentChannelItem y )
                                         {
-                                            return x.Priority < y.Priority ? -1 : 1;
+                                            return x.Priority.CompareTo(y.Priority);
                                         } );
                                     
                                     // clear existing news

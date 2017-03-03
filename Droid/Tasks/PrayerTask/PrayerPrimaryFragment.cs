@@ -630,7 +630,17 @@ namespace Droid
                                     // sort the prayers based on prayer count (least prayed for first)
                                     prayerRequests.Sort( delegate(Rock.Client.PrayerRequest x, Rock.Client.PrayerRequest y) 
                                         {
-                                            return x.PrayerCount < y.PrayerCount ? -1 : 1;
+                                            if (x.PrayerCount < y.PrayerCount)
+                                            {
+                                                return -1;
+                                            }
+
+                                            if (x.PrayerCount > y.PrayerCount)
+                                            {
+                                                return 1;
+                                            }
+
+                                            return 0;
                                         });
                                     
                                     LastDownloadTime = DateTime.Now;
