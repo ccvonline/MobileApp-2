@@ -239,20 +239,16 @@ namespace MobileApp
                         // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
 
                         // Get the width of the widest child, which is always the citation plus glyph.
-                        float minRequiredWidth = Citation.Frame.Width + UrlGlyph.Frame.Width;
+                        float minRequiredWidth = Citation.Frame.Width + UrlGlyph.Frame.Width + (BorderPaddingPx * 2) + Padding.Left + Padding.Width;
                             
                         // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
-                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
+                        if( xPos >= Math.Floor( parentFrame.Right - minRequiredWidth ) )
                         {
                             // Right Edge Check
                             xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
                         }
-
-
-                        //TODO / FIX: Somehow, our left edge isn't holding to Max( Left, CitationWidth ) like it should,
-                        // causing the quote to shrink too much.
-
+                        
 
                         float xOffset = xPos - Frame.Left;
                         float yOffset = yPos - Frame.Top;
@@ -260,8 +256,9 @@ namespace MobileApp
                         base.AddOffset( xOffset, yOffset );
                         
 
-                        // now update the actual width and height of the Quote based on the available width left
-                        float availableWidth = ParentSize.Width - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
+                        // now update the actual width and height of the Quote based on the available width remaining
+                        // our width remaining is the parent's right edge minus the control's left edge minus all padding.
+                        float availableWidth = parentFrame.Right - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
                         QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, availableWidth, 0 );
                         QuoteLabel.SizeToFit( );
 

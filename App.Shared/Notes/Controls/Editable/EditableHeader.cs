@@ -40,6 +40,9 @@ namespace MobileApp
 
                 // store our literal parent control so we can notify if we were updated
                 object ParentControl { get; set; }
+
+                RectangleF Padding;
+                int BorderPaddingPx;
                 
                 public EditableHeader( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -65,9 +68,14 @@ namespace MobileApp
                     // note - declare a temp margin on the stack that we'll throw out. We store this in our BaseControl.
                     RectangleF tempMargin;
                     RectangleF tempBounds = new RectangleF( );
-                    RectangleF padding;
-                    GetMarginsAndPadding( ref mStyle, ref parentSize, ref tempBounds, out tempMargin, out padding );
+                    GetMarginsAndPadding( ref mStyle, ref parentSize, ref tempBounds, out tempMargin, out Padding );
                     ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref parentSize );
+                                        
+                    if( mStyle.mBorderWidth.HasValue )
+                    {
+                        BorderView.BorderWidth = mStyle.mBorderWidth.Value;
+                        BorderPaddingPx = (int)Rock.Mobile.Graphics.Util.UnitToPx( mStyle.mBorderWidth.Value + PrivateNoteConfig.BorderPadding );
+                    }
 
                     OrigBackgroundColor = BorderView.BackgroundColor;
                 }
@@ -108,20 +116,48 @@ namespace MobileApp
                             {
                                 // if they press return, commit the changed text.
                                 mTitle.Text = EditMode_TextBox_Title.Text;
-                                mTitle.Frame = new RectangleF( mTitle.Frame.Left, mTitle.Frame.Top, 0, 0 );
+                                mTitle.Frame = new RectangleF( );
                                 mTitle.SizeToFit( );
 
                                 mSpeaker.Text = EditMode_TextBox_Speaker.Text;
-                                mSpeaker.Frame = new RectangleF( mSpeaker.Frame.Left, mSpeaker.Frame.Top, 0, 0 );
+                                mSpeaker.Frame = new RectangleF( );
                                 mSpeaker.SizeToFit( );
 
                                 mDate.Text = EditMode_TextBox_Date.Text;
-                                mDate.Frame = new RectangleF( mDate.Frame.Left, mDate.Frame.Top, 0, 0 );
+                                mDate.Frame = new RectangleF( );
                                 mDate.SizeToFit( );
                                 
                                 EnableEditMode( false );
+                                    
 
-                                SetPosition( Frame.Left, Frame.Top );
+                                // offset the controls according to our layout
+                                mTitle.Position = new PointF( Frame.X + Padding.Left + BorderPaddingPx, 
+                                                              Frame.Y + Padding.Top + BorderPaddingPx );
+
+                                // guarantee date and speaker are below title.
+                                float titleDetailsSpacing = Rock.Mobile.Graphics.Util.UnitToPx( -9 );
+                                mDate.Position = new PointF( Frame.X + Padding.Left + BorderPaddingPx, 
+                                                             mTitle.Frame.Bottom + titleDetailsSpacing );
+
+                                mSpeaker.Position = new PointF( Frame.Right - (mSpeaker.Frame.Width + Padding.Left + BorderPaddingPx), 
+                                                                mTitle.Frame.Bottom + titleDetailsSpacing );
+
+
+                                // verify that the speaker won't overlap date. if it will, left justify them under each other beneath the title.
+                                if ( mSpeaker.Position.X < mDate.Frame.Right )
+                                {
+                                    mDate.Position = new PointF( mTitle.Position.X, mTitle.Frame.Bottom + titleDetailsSpacing);
+                                    mSpeaker.Position = new PointF( mTitle.Position.X, mDate.Frame.Bottom );
+                                }
+
+                                // determine the lowest control
+                                float bottomY = mSpeaker.Frame.Bottom > mTitle.Frame.Bottom ? mSpeaker.Frame.Bottom : mTitle.Frame.Bottom;
+                                bottomY = bottomY > mDate.Frame.Bottom ? bottomY : mDate.Frame.Bottom;
+
+                                // set our bounds
+                                Frame = new RectangleF( Frame.X, Frame.Y, Frame.Width, (bottomY + Padding.Height + BorderPaddingPx) - Frame.Y);
+                                BorderView.Frame = Frame;
+                                SetDebugFrame( Frame );
                             }
                             
                             break;
@@ -253,7 +289,7 @@ namespace MobileApp
 
                         base.AddOffset( xOffset, yOffset );
 
-                        SetDebugFrame( Frame );
+                        
                     }
                 }
                 
