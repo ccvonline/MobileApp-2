@@ -62,6 +62,7 @@ namespace MobileApp.Shared
 
             public void Trigger( string category, string action )
             {
+
                 // make sure this category exists. It must be added by the constructor of the derived event.
                 Category categoryObj = Categories.Find( c => c.Name == category );
                 if ( categoryObj == null )
@@ -80,7 +81,7 @@ namespace MobileApp.Shared
                         #if !DEBUG
                             HockeyApp.MetricsManager.TrackEvent(Name,
                                                                 new Dictionary<string, string> { { category, action } },
-                                                                new Dictionary<string, double> { { "Time", 1.0 } });
+                                                                new Dictionary<string, double> () );
                         #endif
                     }
                 }

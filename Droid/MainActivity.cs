@@ -107,25 +107,25 @@ namespace Droid
         }
     }
 
-    [Activity( Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", LaunchMode = Android.Content.PM.LaunchMode.SingleTask, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize )]
+    [Activity(Label = GeneralConfig.AndroidAppName, Icon = "@drawable/icon", LaunchMode = Android.Content.PM.LaunchMode.SingleTask, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     //This defines support for a URL scheme in the format "ccvmobile://go" that will re-launch this activity.
-    [IntentFilter (new[]{Intent.ActionView}, 
-        Categories=new[]{Intent.CategoryDefault, Intent.CategoryBrowsable},
-        DataScheme="ccvmobile",DataHost="go")]
+    [IntentFilter(new[] { Intent.ActionView },
+        Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+        DataScheme = "ccvmobile", DataHost = "go")]
     public class MainActivity : Activity
     {
         Springboard Springboard { get; set; }
 
-        protected override void OnCreate( Bundle bundle )
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate( bundle );
+            base.OnCreate(bundle);
 
             Window.AddFlags(WindowManagerFlags.Fullscreen);
 
             Rock.Mobile.PlatformSpecific.Android.Core.Context = this;
 
             // default our app to protrait mode, and let the notes change it.
-            if ( SupportsLandscapeWide( ) && Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked( ) )
+            if (SupportsLandscapeWide() && Rock.Mobile.PlatformSpecific.Android.Core.IsOrientationUnlocked())
             {
                 RequestedOrientation = Android.Content.PM.ScreenOrientation.FullSensor;
             }
@@ -135,23 +135,23 @@ namespace Droid
             }
 
             DisplayMetrics metrics = Resources.DisplayMetrics;
-            Rock.Mobile.Util.Debug.WriteLine( string.Format( "Android Device detected dpi: {0}", metrics.DensityDpi ) );
+            Rock.Mobile.Util.Debug.WriteLine(string.Format("Android Device detected dpi: {0}", metrics.DensityDpi));
 
             // Set our view from the "main" layout resource
-            SetContentView( Resource.Layout.Main );
+            SetContentView(Resource.Layout.Main);
 
             // get the active task frame and give it to the springboard
             FrameLayout layout = FindViewById<FrameLayout>(Resource.Id.activetask);
 
-            Rock.Mobile.UI.PlatformBaseUI.Init( );
-            MapsInitializer.Initialize( this );
+            Rock.Mobile.UI.PlatformBaseUI.Init();
+            MapsInitializer.Initialize(this);
 
             Springboard = FragmentManager.FindFragmentById(Resource.Id.springboard) as Springboard;
-            Springboard.SetActiveTaskFrame( layout );
+            Springboard.SetActiveTaskFrame(layout);
 
             // Register HockeyApp
             #if !DEBUG
-                CrashManager.Register( this, GeneralConfig.Droid_HockeyApp_Id );
+            CrashManager.Register(this, GeneralConfig.Droid_HockeyApp_Id, new HockeyCrashManagerSettings() );
                 MetricsManager.Register( Application, GeneralConfig.Droid_HockeyApp_Id );
             #endif
         }
@@ -259,6 +259,14 @@ namespace Droid
             if ( Springboard.CanPressBack( ) )
             {
                 base.OnBackPressed( );
+            }
+        }
+
+        public class HockeyCrashManagerSettings : CrashManagerListener
+        {
+            public override bool ShouldAutoUploadCrashes()
+            {
+                return true;
             }
         }
     }

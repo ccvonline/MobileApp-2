@@ -38,10 +38,13 @@ namespace iOS
             
             // Register HockeyApp
             #if !DEBUG
+
                 var manager = BITHockeyManager.SharedHockeyManager;
                 manager.Configure( GeneralConfig.iOS_HockeyApp_Id );
+                manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
                 manager.StartManager();
                 manager.Authenticator.AuthenticateInstallation();
+
             #endif
 
             // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 

@@ -416,11 +416,11 @@ namespace MobileApp
                                                 // one of the attribute values we wanted wasn't there. Package up what WAS there and report
                                                 // the error. We can then use process of elimination to fix it.
                                                 Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found is: {0}. Full Exception {1}", currKey, e ) );
-#if !DEBUG
-                                                string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
-                                                Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
-                                                Xamarin.Insights.Report( reportException );
-#endif
+
+                                                // Xamarin Insights was able to report on exceptions. HockeyApp cannot as of Mar 2017.
+                                                // When this functionality becomes available, we should implement it here in just Release Mode.
+                                                // - CG
+
                                             }
                                         }
                                     }

@@ -288,15 +288,6 @@ namespace Droid
 
                         Springboard.DisplayError( "Current Version", GeneralConfig.Version.ToString( ) );
                     }
-                    else if ( RequestText.Text.ToLower( ).Trim( ) == "upload dumps" )
-                    {
-#if !DEBUG
-                        debugKeyEntered = true;
-
-                        Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
-                        Springboard.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
-#endif
-                    }
                     else
                     {
                         // otherwise, see if our special UI caught it.
