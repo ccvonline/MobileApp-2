@@ -1047,12 +1047,17 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string xmlExport = "<Note>";
+                    // when exporting, remove margin and padding, because they aren't needed in a visual editor
+                    string xmlExport = "<Note Margin=\"0\" Padding=\"0\">";
+                    
+                    float nextYPos = 0;
 
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
-                        xmlExport += editableChild.Export( );
+                        xmlExport += editableChild.Export( nextYPos );
+
+                        nextYPos = child.GetFrame( ).Bottom;
                     }
 
                     xmlExport += "</Note>";

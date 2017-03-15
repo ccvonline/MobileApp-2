@@ -363,16 +363,35 @@ namespace MobileApp
                     return consumingControl;
                 }
 
-                public string Export( )
+                public string Export( float currYPos )
                 {
-                    string xml = "<SP>";
+                    // start by setting our position to our global position, and then we'll translate.
+                    float controlLeftPos = Frame.Left;
+                    float controlTopPos = Frame.Top;
+                    
+                    // if we have a parent, we want to be relative to its top
+                    if( ParentControl as BaseControl != null )
+                    {
+                        RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
+                        controlLeftPos -= parentFrame.Left;
+                        controlTopPos -= parentFrame.Top;
+                    }
+                    else
+                    {
+                        // no parent, so we want to be relative to whatever the last control did
+                        controlTopPos -= currYPos;
+                    }
 
+                    string xml = string.Format( "<SP Left=\"{0}\" Top=\"{1}\">", controlLeftPos, controlTopPos );
+                    
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
                         if( editableChild != null )
                         {
-                            xml += editableChild.Export( );
+                            xml += editableChild.Export( currYPos );
+
+                            currYPos = child.GetFrame( ).Bottom;
                         }
                     }
 

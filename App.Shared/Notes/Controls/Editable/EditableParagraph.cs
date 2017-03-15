@@ -796,27 +796,34 @@ namespace MobileApp
                     }
                 }
 
-                public string Export( )
+                public string Export( float currYPos )
                 {
-                    // Todo - we only need to set positioning for container controls, not individual noteText or RBs within.
-
-                    //PointF parentPos = ParentControl.GetPosition( );
-                    //PointF localPos = new PointF( GetFrame( ).Left - parentPos.X, GetFrame( ).Top - parentPos.Y );
-
-                    //// convert to a percentage
-                    //RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
-
-                    //string xPerc = ((localPos.X / parentFrame.Width) * 100.0f).ToString( );
-                    //string yPerc = ((localPos.Y / parentFrame.Height) * 100.0f).ToString( );
-
-                    string xml = "<P>";
+                    // start by setting our position to our global position, and then we'll translate.
+                    float controlLeftPos = Frame.Left;
+                    float controlTopPos = Frame.Top;
+                    
+                    // if we have a parent, we want to be relative to its top
+                    if( ParentControl as BaseControl != null )
+                    {
+                        RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
+                        controlLeftPos -= parentFrame.Left;
+                        controlTopPos -= parentFrame.Top;
+                    }
+                    else
+                    {
+                        // no parent, so we want to be relative to whatever the last control did
+                        controlTopPos -= currYPos;
+                    }
+                    
+                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\">", controlLeftPos, controlTopPos );
 
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
                         if( editableChild != null )
                         {
-                            xml += editableChild.Export( );
+                            // children of paragraphs cannot set their own position, so pass 0
+                            xml += editableChild.Export( 0 );
                         }
                     }
 

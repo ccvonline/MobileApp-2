@@ -404,13 +404,14 @@ namespace MobileApp
                     return consumingControl;
                 }
 
-                public string Export( )
+                public string Export( float currYPos )
                 {
                     string encodedTitle = HttpUtility.HtmlEncode( mTitle.Text );
                     string encodedSpeaker = HttpUtility.HtmlEncode( mSpeaker.Text );
                     string encodedDate = HttpUtility.HtmlEncode( mDate.Text );
 
-                    return "<Header>" + 
+                    // remove margin from the header, because it simply doesn't matter for a visual editor
+                    return "<Header Margin=\"0\">" + 
                               "<Title>" + encodedTitle + "</Title>" + 
                               "<Speaker>" + encodedSpeaker + "</Speaker>" + 
                               "<Date>" + encodedDate + "</Date>" +

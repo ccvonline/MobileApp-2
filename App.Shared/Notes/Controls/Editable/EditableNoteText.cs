@@ -261,7 +261,7 @@ namespace MobileApp
                     }
                 }
 
-                public string Export( )
+                public string Export( float currYPos )
                 {
                     // only export if there's valid text. If we're simply a blank space, we don't need to be saved.
                     if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
