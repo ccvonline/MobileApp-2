@@ -25,6 +25,7 @@ namespace MobileApp
                 bool EditMode_Enabled = false;
                 TextBox EditMode_TextBox_Quote = null;
                 TextBox EditMode_TextBox_Citation = null;
+                TextBox EditMode_TextBox_Url = null;
                                 
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -54,6 +55,9 @@ namespace MobileApp
 
                     EditMode_TextBox_Citation = new TextBox( );
                     EditMode_TextBox_Citation.KeyUp += EditMode_TextBox_KeyUp;
+
+                    EditMode_TextBox_Url = new TextBox( );
+                    EditMode_TextBox_Url.KeyUp += EditMode_TextBox_KeyUp;
                     
                     // this will be null if the parent is the actual note
                     ParentControl = parentParams.Parent;
@@ -106,13 +110,14 @@ namespace MobileApp
 
                         case System.Windows.Input.Key.Return:
                         {
-                            // only allow enditing to end if there's text in both boxes
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false && 
+                            // editing can end as long as ONE of the two has text
+                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false ||
                                  string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
                             {
                                 // if they press return, commit the changed text.
                                 QuoteLabel.Text = EditMode_TextBox_Quote.Text;
                                 Citation.Text = EditMode_TextBox_Citation.Text;
+                                ActiveUrl = EditMode_TextBox_Url.Text;
                                 
                                 EnableEditMode( false );
 
@@ -141,8 +146,7 @@ namespace MobileApp
 
                             EditMode_TextBox_Quote.Width = QuoteLabel.Frame.Width;
                             EditMode_TextBox_Quote.Height = QuoteLabel.Frame.Height;
-
-                            // speaker
+                            
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, Citation.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, Citation.Frame.Top );
 
@@ -152,6 +156,16 @@ namespace MobileApp
                             // assign each text box
                             EditMode_TextBox_Quote.Text = QuoteLabel.Text;
                             EditMode_TextBox_Citation.Text = Citation.Text;
+
+
+                            // and now the URL support
+                            EditMode_TextBox_Url.Text = ActiveUrl;
+                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
+                            EditMode_TextBox_Url.Width = Frame.Width;
+                            EditMode_TextBox_Url.Height = 33;
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom );
+
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
                             { 
@@ -165,6 +179,7 @@ namespace MobileApp
                             // exit enable mode. We know the parent is a canvas because of the design
                             (EditMode_TextBox_Quote.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Quote );
                             (EditMode_TextBox_Citation.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Citation );
+                            (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
                         }
 
                         // store the change
@@ -210,7 +225,17 @@ namespace MobileApp
                         // first, let the Citation + Glyph define the minimum width this control can be
                         Citation.Frame = new RectangleF( );
                         Citation.SizeToFit( );
-
+                        
+                        if ( string.IsNullOrEmpty( ActiveUrl ) == false )
+                        {
+                            UrlGlyph.Text = PrivateNoteConfig.CitationUrl_Icon;
+                        }
+                        else
+                        {
+                            UrlGlyph.Text = string.Empty;
+                        }
+                        UrlGlyph.SizeToFit( );
+                        //
                         
                         // now, we need to ensure we stay within our parent, whether that's a control or the Note
                         RectangleF parentFrame;
@@ -265,7 +290,8 @@ namespace MobileApp
                         Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, availableWidth, 0 );
                         Citation.SizeToFit( );
 
-                        
+                        UrlGlyph.Frame = new RectangleF( Citation.Frame.Right, Citation.Frame.Top, Math.Max( 0, (availableWidth - Citation.Frame.Right) ), 0 );
+                        UrlGlyph.SizeToFit( );
 
                         // now that we know our text size, we can adjust the citation
                         // for citation width, attempt to use quote width, but if there was no quote text,
@@ -493,7 +519,17 @@ namespace MobileApp
                     string encodedQuote = HttpUtility.HtmlEncode( QuoteLabel.Text );
                     string encodedCitation = HttpUtility.HtmlEncode( Citation.Text );
 
-                    string xml = string.Format( "<Q Margin=\"0\" Left=\"{0}\" Top=\"{1}\" Citation=\"{2}\">{3}</Q>", controlLeftPos, controlTopPos, encodedCitation, encodedQuote );
+                    // Add the tag and attribs
+                    string xml = string.Format( "<Q Margin=\"0\" Left=\"{0}\" Top=\"{1}\" Width=\"{2}\" Citation=\"{3}\"", controlLeftPos, controlTopPos, Frame.Width, encodedCitation );
+
+                    if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )
+                    {
+                        xml += string.Format( " Url=\"{0}\"", HttpUtility.HtmlEncode( ActiveUrl ) );
+                    }
+                    xml += ">";
+
+                    // and the content
+                    xml += encodedQuote + "</Q>";
                     return xml;
                 }
             }

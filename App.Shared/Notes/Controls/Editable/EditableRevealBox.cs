@@ -268,7 +268,7 @@ namespace MobileApp
                     if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
                     {
                         string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
-                        return "<RB>" + encodedText + "</RB>";
+                        return "<RB>" + encodedText.Trim( new char[] { ' ' } ) + "</RB>";
                     }
                     else
                     {

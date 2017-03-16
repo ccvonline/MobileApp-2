@@ -365,7 +365,7 @@ namespace MobileApp
                         controlTopPos -= currYPos;
                     }
 
-                    string xml = string.Format( "<LI Left=\"{0}\" Top=\"{1}\">", controlLeftPos, controlTopPos );
+                    string xml = string.Format( "<LI Left=\"{0}\" Top=\"{1}\" Width=\"{2}\">", controlLeftPos, controlTopPos, Frame.Width );
 
                     foreach( IUIControl child in ChildControls )
                     {
