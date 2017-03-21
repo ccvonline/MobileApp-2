@@ -39,7 +39,7 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                object ParentControl { get; set; }
+                Note ParentNote { get; set; }
 
                 RectangleF Padding;
                 int BorderPaddingPx;
@@ -60,10 +60,10 @@ namespace MobileApp
                     EditMode_TextBox_Url.KeyUp += EditMode_TextBox_KeyUp;
                     
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent;
+                    ParentNote = parentParams.Parent as Note;
 
-                    // take the max width / height we'll be allowed to fit in
-                    ParentSize = new SizeF( parentParams.Width, parentParams.Height );
+                    // take the max width / height we'll be allowed to fit in (restore the padding, since we actively remove it when dragging / exporting)
+                    ParentSize = new SizeF( parentParams.Width + ParentNote.Padding.Left + ParentNote.Padding.Right, parentParams.Height );
 
                     // get our margin / padding
                     // note - declare a temp margin on the stack that we'll throw out. We store this in our BaseControl.
@@ -203,13 +203,6 @@ namespace MobileApp
                 {
                     // for now, lets just redo our layout.
                     SetPosition( Frame.Left, Frame.Top );
-
-                    // now see if there's a parent that we should notify
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
-                    {
-                        editableParent.HandleChildStyleChanged( style, this );
-                    }
                 }
 
                 public PointF GetPosition( )
@@ -237,28 +230,11 @@ namespace MobileApp
                         UrlGlyph.SizeToFit( );
                         //
                         
-                        // now, we need to ensure we stay within our parent, whether that's a control or the Note
-                        RectangleF parentFrame;
+                        // clamp the yPos to the vertical bounds of our parent
+                        yPos = Math.Max( yPos, ParentNote.Padding.Top );
 
-                        BaseControl parentAsBase = ParentControl as BaseControl;
-                        if ( parentAsBase != null )
-                        {
-                            // our parent is a control, so clamp our X/Y to its X/Y
-                            parentFrame = parentAsBase.GetFrame( );
-                        
-                            // clamp the yPos to the vertical bounds of our parent
-                            yPos = Math.Max( yPos, parentFrame.Top );
-                            yPos = Math.Min( yPos, parentFrame.Bottom );
-
-
-                            // now left, which is easy
-                            xPos = Math.Max( xPos, parentFrame.Left );
-                        }
-                        else
-                        {
-                            // no restriction on X/Y, but take width/height
-                            parentFrame = new RectangleF( 0, 0, ParentSize.Width, ParentSize.Height );
-                        }
+                        // now left, which is easy
+                        xPos = Math.Max( xPos, ParentNote.Padding.Left );
 
                          // Now do the right edge. This is tricky because we will allow this control to move forward
                         // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
@@ -266,12 +242,12 @@ namespace MobileApp
                         // Get the width of the widest child, which is always the citation plus glyph.
                         float minRequiredWidth = Citation.Frame.Width + UrlGlyph.Frame.Width + (BorderPaddingPx * 2) + Padding.Left + Padding.Width;
                             
-                        // now, if the control cannot wrap any further, we want to clamp its movement
+                         // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
-                        if( xPos >= Math.Floor( parentFrame.Right - minRequiredWidth ) )
+                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
                         {
                             // Right Edge Check
-                            xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
+                            xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
                         }
                         
 
@@ -283,7 +259,7 @@ namespace MobileApp
 
                         // now update the actual width and height of the Quote based on the available width remaining
                         // our width remaining is the parent's right edge minus the control's left edge minus all padding.
-                        float availableWidth = parentFrame.Right - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
+                        float availableWidth = (ParentSize.Width - ParentNote.Padding.Right) - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
                         QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, availableWidth, 0 );
                         QuoteLabel.SizeToFit( );
 
@@ -432,16 +408,7 @@ namespace MobileApp
                     // notify our parent if we need to
                     if( notifyParent )
                     {
-                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                        if ( editableParent != null )
-                        {
-                            editableParent.HandleChildDeleted( this );
-                        }
-                        else
-                        {
-                            Note noteParent = ParentControl as Note;
-                            noteParent.HandleChildDeleted( this );
-                        }
+                        ParentNote.HandleChildDeleted( this );
                     }
                 }
 
@@ -497,29 +464,23 @@ namespace MobileApp
                     return consumingControl;
                 }
 
-                public string Export( float currYPos )
+                public string Export( RectangleF parentPadding, float currYPos )
                 {
                     // start by setting our position to our global position, and then we'll translate.
                     float controlLeftPos = Frame.Left;
                     float controlTopPos = Frame.Top;
                     
-                    // if we have a parent, we want to be relative to its top
-                    if( ParentControl as BaseControl != null )
-                    {
-                        RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
-                        controlLeftPos -= parentFrame.Left;
-                        controlTopPos -= parentFrame.Top;
-                    }
-                    else
-                    {
-                        // no parent, so we want to be relative to whatever the last control did
-                        controlTopPos -= currYPos;
-                    }
+                     // for vertical, it's relative to the control above it, so just make it relative to that
+                    controlTopPos -= currYPos;
+
+                    // for horizontal, it just needs to remove padding, since it'll be re-applied on load
+                    controlLeftPos -= parentPadding.Left;
                     
                     string encodedQuote = HttpUtility.HtmlEncode( QuoteLabel.Text );
                     string encodedCitation = HttpUtility.HtmlEncode( Citation.Text );
 
                     // Add the tag and attribs
+                    // Note: remove margin, because the default_style includes it, and that makes no sense when we will visually place it
                     string xml = string.Format( "<Q Margin=\"0\" Left=\"{0}\" Top=\"{1}\" Width=\"{2}\" Citation=\"{3}\"", controlLeftPos, controlTopPos, Frame.Width, encodedCitation );
 
                     if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )

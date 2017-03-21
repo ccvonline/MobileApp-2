@@ -18,7 +18,7 @@ namespace MobileApp
         {
             public class EditableParagraph : Paragraph, IEditableUIControl
             {
-                object ParentControl { get; set; }
+                Note ParentNote { get; set; }
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -44,10 +44,10 @@ namespace MobileApp
                     EditMode_TextBox.KeyUp += EditMode_TextBox_KeyUp;
 
                     // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent;
+                    ParentNote = parentParams.Parent as Note;
 
-                    // take the max width / height we'll be allowed to fit in
-                    ParentSize = new SizeF( parentParams.Width, parentParams.Height );
+                    // take the max width / height we'll be allowed to fit in (restore the padding, since we actively remove it when dragging / exporting)
+                    ParentSize = new SizeF( parentParams.Width + ParentNote.Padding.Left + ParentNote.Padding.Right, parentParams.Height );
 
                     // get our margin / padding
                     // note - declare a temp margin on the stack that we'll throw out. We store this in our BaseControl.
@@ -349,52 +349,42 @@ namespace MobileApp
                 {
                     return new PointF( Frame.Left, Frame.Top );
                 }
-
+                
                 public void SetPosition( float xPos, float yPos )
                 {
                     // we're not moving if we're in edit mode
                     if( EditMode_Enabled == false )
                     {
-                        // first, if there's a parent control, make sure this paragraph stays within its parent. 
-                        BaseControl parentAsBase = ParentControl as BaseControl;
-                        if ( parentAsBase != null )
+                        // clamp the yPos to the vertical bounds of our parent
+                        yPos = Math.Max( yPos, ParentNote.Padding.Top );
+
+                        // now left, which is easy
+                        xPos = Math.Max( xPos, ParentNote.Padding.Left );
+
+
+                        // Now do the right edge. This is tricky because we will allow this control to move forward
+                        // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
+
+                        // Get the width of the widest child. This is the minimum width
+                        // required for the paragraph, since it's wrapping will stop at the widest child.
+                        float minRequiredWidth = 0;
+                        foreach ( IUIControl control in ChildControls )
                         {
-                            RectangleF parentFrame = parentAsBase.GetFrame( );
-                        
-                            // clamp the yPos to the vertical bounds of our parent
-                            yPos = Math.Max( yPos, parentFrame.Top );
-                            yPos = Math.Min( yPos, parentFrame.Bottom );
-
-
-                            // now left, which is easy
-                            xPos = Math.Max( xPos, parentFrame.Left );
-
-
-                            // Now do the right edge. This is tricky because we will allow this control to move forward
-                            // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
-
-                            // Get the width of the widest child. This is the minimum width
-                            // required for the paragraph, since it's wrapping will stop at the widest child.
-                            float minRequiredWidth = 0;
-                            foreach ( IUIControl control in ChildControls )
+                            RectangleF controlFrame = control.GetFrame( );
+                            if ( controlFrame.Width > minRequiredWidth )
                             {
-                                RectangleF controlFrame = control.GetFrame( );
-                                if ( controlFrame.Width > minRequiredWidth )
-                                {
-                                    minRequiredWidth = controlFrame.Width;
-                                }
-                            }
-
-                            // now, if the control cannot wrap any further, we want to clamp its movement
-                            // to the parent's right edge
-                            if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
-                            {
-                                // Right Edge Check
-                                xPos = Math.Min( xPos, parentFrame.Right - minRequiredWidth );
+                                minRequiredWidth = controlFrame.Width;
                             }
                         }
 
-                        //AddOffset( deltaX, deltaY );
+                        // now, if the control cannot wrap any further, we want to clamp its movement
+                        // to the parent's right edge
+                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
+                        {
+                            // Right Edge Check
+                            xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
+                        }
+
                         float currX = Frame.Left;
                         float currY = Frame.Top;
 
@@ -415,18 +405,9 @@ namespace MobileApp
 
                         float xPosInParent = Frame.Left;
                         float yPosInParent = Frame.Top;
-
-                        // if the control has a parent, make the positions relative to it
-                        if ( parentAsBase != null )
-                        {
-                            RectangleF parentFrame = parentAsBase.GetFrame( );
-
-                            xPosInParent = Frame.Left - parentFrame.Left;
-                            yPosInParent = Frame.Top - parentFrame.Top;
-                        }
-
+                        
                         // given this new position, see how much space we actually have now.
-                        UpdateLayout( ParentSize.Width - xPosInParent, ParentSize.Height - yPosInParent );
+                        UpdateLayout( (ParentSize.Width - ParentNote.Padding.Right) - xPosInParent, ParentSize.Height - yPosInParent );
 
                     
                         // Build our final frame that determines our dimensions
@@ -503,16 +484,7 @@ namespace MobileApp
                     // notify our parent if we need to
                     if( notifyParent )
                     {
-                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                        if ( editableParent != null )
-                        {
-                            editableParent.HandleChildDeleted( this );
-                        }
-                        else
-                        {
-                            Note noteParent = ParentControl as Note;
-                            noteParent.HandleChildDeleted( this );
-                        }
+                        ParentNote.HandleChildDeleted( this );
                     }
                 }
 
@@ -595,13 +567,6 @@ namespace MobileApp
 
                     // for now, lets just redo our layout.
                     SetPosition( Frame.Left, Frame.Top );
-
-                    // now see if there's a parent that we should notify
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
-                    {
-                        editableParent.HandleChildStyleChanged( style, this );
-                    }
                 }
 
                 // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
@@ -796,24 +761,17 @@ namespace MobileApp
                     }
                 }
 
-                public string Export( float currYPos )
+                public string Export( RectangleF parentPadding, float currYPos )
                 {
                     // start by setting our position to our global position, and then we'll translate.
                     float controlLeftPos = Frame.Left;
                     float controlTopPos = Frame.Top;
                     
-                    // if we have a parent, we want to be relative to its top
-                    if( ParentControl as BaseControl != null )
-                    {
-                        RectangleF parentFrame = (ParentControl as BaseControl).GetFrame( );
-                        controlLeftPos -= parentFrame.Left;
-                        controlTopPos -= parentFrame.Top;
-                    }
-                    else
-                    {
-                        // no parent, so we want to be relative to whatever the last control did
-                        controlTopPos -= currYPos;
-                    }
+                     // for vertical, it's relative to the control above it, so just make it relative to that
+                    controlTopPos -= currYPos;
+
+                    // for horizontal, it just needs to remove padding, since it'll be re-applied on load
+                    controlLeftPos -= parentPadding.Left;
                     
                     string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" Width=\"{2}\" ChildAlignment=\"{3}\">", controlLeftPos, controlTopPos, Frame.Width, ChildHorzAlignment );
 
@@ -823,7 +781,7 @@ namespace MobileApp
                         if( editableChild != null )
                         {
                             // children of paragraphs cannot set their own position, so pass 0
-                            xml += editableChild.Export( 0 );
+                            xml += editableChild.Export( new RectangleF( ), 0 );
                         }
                     }
 

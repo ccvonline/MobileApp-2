@@ -40,7 +40,7 @@ namespace MobileApp.Shared.Notes
         object GetStyleValue( EditStyling.Style style );
         void SetStyleValue( EditStyling.Style style, object value );
 
-        string Export( float currYPos );
+        string Export( RectangleF parentPadding, float currYPos );
 
         // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
         // used by the notes platform.

@@ -86,6 +86,11 @@ namespace MobileApp
                 /// <value>The height of the device.</value>
                 protected float DeviceHeight { get; set; }
 
+                /// <summary>
+                /// Store the padding used so that children can know their movement restrictions
+                /// </summary>
+                public RectangleF Padding { get; set; }
+
                 protected DisplayMessageBoxDelegate RequestDisplayMessageBox { get; set; }
 
                 /// <summary>
@@ -329,6 +334,8 @@ namespace MobileApp
                     float rightPadding = Styles.Style.GetValueForNullable( mStyle.mPaddingRight, parentWidthUnits, 0 );
                     float topPadding = Styles.Style.GetValueForNullable( mStyle.mPaddingTop, parentHeightUnits, 0 );
                     float bottomPadding = Styles.Style.GetValueForNullable( mStyle.mPaddingBottom, parentHeightUnits, 0 );
+
+                    Padding = new RectangleF( leftPadding, rightPadding, topPadding, bottomPadding );
 
                     // now calculate the available width based on padding. (Don't actually change our width)
                     float availableWidth = parentWidthUnits - leftPadding - rightPadding;
@@ -1004,19 +1011,24 @@ namespace MobileApp
                     // if we got thru all our children and nobody created the control, we'll do it. (maybe.)
                     if( newControl == null )
                     {
-                        // the only thing we cannot specifically add is a ListItem, as that MUST be a child of a list.
-                        if( controlType != typeof( EditableListItem ) )
-                        {
-                            // create the control and add it to our immediate children
-                            newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ) );
-                            ChildControls.Add( newControl );
-                    
-                            // add it to our renderable canvas
-                            newControl.AddToView( MasterView );
+                        // create the control and add it to our immediate children
+                        float availableWidth = Frame.Width - Padding.Right - Padding.Left;
 
-                            // default it to where the click occurred
-                            newControl.AddOffset( (float) mousePos.X, (float) mousePos.Y );
+                        // if the control type is a header, and its allowed, use the full width
+                        float workingWidth = availableWidth;
+                        if ( typeof( EditableHeader ) == controlType && mStyle.mFullWidthHeader == true )
+                        {
+                            workingWidth = Frame.Width;
                         }
+
+                        newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, workingWidth, DeviceHeight, ref mStyle ) );
+                        ChildControls.Add( newControl );
+                    
+                        // add it to our renderable canvas
+                        newControl.AddToView( MasterView );
+
+                        // default it to where the click occurred
+                        newControl.AddOffset( (float) mousePos.X, (float) mousePos.Y );
                     }
 
                     // return the editable interface for the caller
@@ -1047,15 +1059,14 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    // when exporting, remove margin and padding, because they aren't needed in a visual editor
-                    string xmlExport = "<Note Margin=\"0\" Padding=\"0\">";
+                    string xmlExport = "<Note StyleSheet=\"http://ccv.church/content/mobileapp/xml/default_style.xml\">";
                     
                     float nextYPos = 0;
 
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
-                        xmlExport += editableChild.Export( nextYPos );
+                        xmlExport += editableChild.Export( new RectangleF( 38.4f, 38.4f, 0, 0 ), nextYPos );
 
                         nextYPos = child.GetFrame( ).Bottom;
                     }

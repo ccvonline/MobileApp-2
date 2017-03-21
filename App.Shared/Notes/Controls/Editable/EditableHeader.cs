@@ -39,10 +39,12 @@ namespace MobileApp
                 System.Windows.Controls.Canvas ParentEditingCanvas;
 
                 // store our literal parent control so we can notify if we were updated
-                object ParentControl { get; set; }
+                Note ParentNote { get; set; }
 
                 RectangleF Padding;
                 int BorderPaddingPx;
+
+                SizeF ParentSize;
                 
                 public EditableHeader( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -57,19 +59,18 @@ namespace MobileApp
 
                     EditMode_TextBox_Date = new TextBox( );
                     EditMode_TextBox_Date.KeyUp += EditMode_TextBox_KeyUp;
+                    
+                    ParentNote = parentParams.Parent as Note;
 
-                    // this will be null if the parent is the actual note
-                    ParentControl = parentParams.Parent;
-
-                    // take the max width / height we'll be allowed to fit in
-                    SizeF parentSize = new SizeF( parentParams.Width, parentParams.Height );
+                    // take the max width / height we'll be allowed to fit in (and because it's the header, ignore note padding)
+                    ParentSize = new SizeF( parentParams.Width, parentParams.Height );
 
                     // get our margin / padding
                     // note - declare a temp margin on the stack that we'll throw out. We store this in our BaseControl.
                     RectangleF tempMargin;
                     RectangleF tempBounds = new RectangleF( );
-                    GetMarginsAndPadding( ref mStyle, ref parentSize, ref tempBounds, out tempMargin, out Padding );
-                    ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref parentSize );
+                    GetMarginsAndPadding( ref mStyle, ref ParentSize, ref tempBounds, out tempMargin, out Padding );
+                    ApplyImmediateMargins( ref tempBounds, ref tempMargin, ref ParentSize );
                                         
                     if( mStyle.mBorderWidth.HasValue )
                     {
@@ -116,7 +117,7 @@ namespace MobileApp
                             {
                                 // if they press return, commit the changed text.
                                 mTitle.Text = EditMode_TextBox_Title.Text;
-                                mTitle.Frame = new RectangleF( );
+                                mTitle.Frame = new RectangleF( 0, 0, ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2), 0 );
                                 mTitle.SizeToFit( );
 
                                 mSpeaker.Text = EditMode_TextBox_Speaker.Text;
@@ -240,13 +241,6 @@ namespace MobileApp
                 {
                     // for now, lets just redo our layout.
                     SetPosition( Frame.Left, Frame.Top );
-
-                    // now see if there's a parent that we should notify
-                    IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                    if( editableParent != null )
-                    {
-                        editableParent.HandleChildStyleChanged( style, this );
-                    }
                 }
 
                 public void HandleDelete( bool notifyParent )
@@ -256,16 +250,7 @@ namespace MobileApp
                     // notify our parent
                     if( notifyParent )
                     {
-                        IEditableUIControl editableParent = ParentControl as IEditableUIControl;
-                        if ( editableParent != null )
-                        {
-                            editableParent.HandleChildDeleted( this );
-                        }
-                        else
-                        {
-                            Note noteParent = ParentControl as Note;
-                            noteParent.HandleChildDeleted( this );
-                        }
+                        ParentNote.HandleChildDeleted( this );
                     }
                 }
 
@@ -284,12 +269,14 @@ namespace MobileApp
                     // we're not moving if we're in edit mode
                     if( EditMode_Enabled == false )
                     {
+                        // clamp the left/top to 0, 0 within the parent (headers can ignore padding)
+                        yPos = Math.Max( yPos, 0 );
+                        xPos = Math.Max( xPos, 0 );
+
                         float xOffset = xPos - Frame.Left;
                         float yOffset = yPos - Frame.Top;
 
                         base.AddOffset( xOffset, yOffset );
-
-                        
                     }
                 }
                 
@@ -404,7 +391,7 @@ namespace MobileApp
                     return consumingControl;
                 }
 
-                public string Export( float currYPos )
+                public string Export( RectangleF parentPadding, float currYPos )
                 {
                     string encodedTitle = HttpUtility.HtmlEncode( mTitle.Text );
                     string encodedSpeaker = HttpUtility.HtmlEncode( mSpeaker.Text );
