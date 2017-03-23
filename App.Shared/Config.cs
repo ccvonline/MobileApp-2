@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2190;
+                public const int Version = 2191;
 
                 /// <summary>
                 /// The full name of your organization
@@ -73,8 +73,8 @@ namespace MobileApp
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
                 #if DEBUG
-                public const string RockBaseUrl = "http://dev.ccv.church/";
-                //public const string RockBaseUrl = "http://10.211.55.6:50345/";
+                //public const string RockBaseUrl = "http://dev.ccv.church/";
+                public const string RockBaseUrl = "http://10.211.55.3:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif
