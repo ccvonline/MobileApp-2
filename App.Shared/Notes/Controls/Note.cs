@@ -888,7 +888,7 @@ namespace MobileApp
                     OnNoteSizeChanging( );
                 }
 
-                #if __WIN__
+#if __WIN__
                 public IEditableUIControl HandleMouseDown( PointF position )
                 {
                     // let each child add itself and its children
@@ -927,6 +927,36 @@ namespace MobileApp
                     }
 
                     return null;
+                }
+
+                public IEditableUIControl HandleControlSnappingX( IEditableUIControl sourceControl, PointF currPos, PointF snapRange )
+                {
+                    // given a currPos (which is the position the control WILL move to, not the current position of the control), 
+                    // find controls that fall within snapRange, and "snap" horizontally to the one closest
+                    IEditableUIControl nearbyControl = null;
+                    float minDeltaX = snapRange.X;
+                    
+                    int i;
+                    for( i = 0; i < ChildControls.Count; i++ )
+                    {
+                        // make sure it's an editable control that isn't ourself
+                        IEditableUIControl editableControl = ChildControls[ i ] as IEditableUIControl;
+                        if( editableControl != null && editableControl != sourceControl )
+                        {
+                            // get the distance
+                            float deltaX = Math.Abs( currPos.X - editableControl.GetPosition( ).X );
+                            float deltaY = Math.Abs( currPos.Y - editableControl.GetPosition( ).Y );
+
+                            // if we're within range, take it
+                            if( deltaX < minDeltaX && deltaY < snapRange.Y )
+                            {
+                                nearbyControl = editableControl;
+                                minDeltaX = deltaX;
+                            }
+                        }
+                    }
+
+                    return nearbyControl;
                 }
 
                 public IEditableUIControl HandleMouseHover( PointF position )
@@ -1074,7 +1104,7 @@ namespace MobileApp
                     xmlExport += "</Note>";
                     return xmlExport;
                 }
-                #endif
+#endif
             }
         }
     }
