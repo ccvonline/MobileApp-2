@@ -1090,13 +1090,24 @@ namespace MobileApp
                 public string Export( )
                 {
                     string xmlExport = "<Note StyleSheet=\"http://ccv.church/content/mobileapp/xml/default_style.xml\">";
+
+                    // first, sort all controls by Y. That way, if something was created and then moved UP, it won't
+                    // have a negative value
+                    ChildControls.Sort( delegate( IUIControl a, IUIControl b )
+                    {
+                        if( a.GetFrame( ).Top < b.GetFrame( ).Top )
+                        {
+                            return -1;
+                        }
+                        return 1;
+                    });
                     
                     float nextYPos = 0;
 
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
-                        xmlExport += editableChild.Export( new RectangleF( 38.4f, 38.4f, 0, 0 ), nextYPos );
+                        xmlExport += editableChild.Export( new RectangleF( Padding.Left, Padding.Top, 0, 0 ), nextYPos );
 
                         nextYPos = child.GetFrame( ).Bottom;
                     }

@@ -163,8 +163,8 @@ namespace MobileApp
                         bounds.Height = ParsePositioningValue( result );
                     }
 
-                    // Convert percentages to whole values (and we do support negative positions)
-                    if ( bounds.X < 1 && bounds.X > -1 )
+                    // Convert percentages to whole values
+                    if ( bounds.X < 1 )
                     {
                         bounds.X = parentSize.Width * bounds.X;
                     }
@@ -173,7 +173,7 @@ namespace MobileApp
                         bounds.X = Rock.Mobile.Graphics.Util.UnitToPx( bounds.X );
                     }
 
-                    if ( bounds.Y < 1 && bounds.Y > -1 )
+                    if ( bounds.Y < 1 )
                     {
                         bounds.Y = parentSize.Height * bounds.Y;
                     }
@@ -181,8 +181,7 @@ namespace MobileApp
                     {
                         bounds.Y = Rock.Mobile.Graphics.Util.UnitToPx( bounds.Y );
                     }
-
-                    // note: we don't support negative width / height.
+                    
                     if ( bounds.Width < 1 )
                     {
                         bounds.Width = Math.Max( 1, parentSize.Width - bounds.X ) * bounds.Width;

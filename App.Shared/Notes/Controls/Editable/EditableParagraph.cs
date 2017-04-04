@@ -773,7 +773,7 @@ namespace MobileApp
                     // for horizontal, it just needs to remove padding, since it'll be re-applied on load
                     controlLeftPos -= parentPadding.Left;
                     
-                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" Width=\"{2}\" ChildAlignment=\"{3}\">", controlLeftPos, controlTopPos, Frame.Width, ChildHorzAlignment );
+                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" ChildAlignment=\"{2}\">", controlLeftPos, controlTopPos, ChildHorzAlignment );
 
                     foreach( IUIControl child in ChildControls )
                     {
