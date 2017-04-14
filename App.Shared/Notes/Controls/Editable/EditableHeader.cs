@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using RestSharp.Extensions.MonoHttp;
+using WinNotes;
 
 namespace MobileApp
 {
@@ -23,9 +24,9 @@ namespace MobileApp
             public class EditableHeader: Header, IEditableUIControl
             {
                 bool EditMode_Enabled = false;
-                TextBox EditMode_TextBox_Title = null;
-                TextBox EditMode_TextBox_Date = null;
-                TextBox EditMode_TextBox_Speaker = null;
+                EditModeTextBox EditMode_TextBox_Title = null;
+                EditModeTextBox EditMode_TextBox_Date = null;
+                EditModeTextBox EditMode_TextBox_Speaker = null;
                                 
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -51,13 +52,13 @@ namespace MobileApp
                     ParentEditingCanvas = null;
 
                     // create our textbox that will display the text being edited.
-                    EditMode_TextBox_Title = new TextBox( );
+                    EditMode_TextBox_Title = new EditModeTextBox( );
                     EditMode_TextBox_Title.KeyUp += EditMode_TextBox_KeyUp;
 
-                    EditMode_TextBox_Speaker = new TextBox( );
+                    EditMode_TextBox_Speaker = new EditModeTextBox( );
                     EditMode_TextBox_Speaker.KeyUp += EditMode_TextBox_KeyUp;
 
-                    EditMode_TextBox_Date = new TextBox( );
+                    EditMode_TextBox_Date = new EditModeTextBox( );
                     EditMode_TextBox_Date.KeyUp += EditMode_TextBox_KeyUp;
                     
                     ParentNote = parentParams.Parent as Note;
@@ -178,32 +179,41 @@ namespace MobileApp
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Speaker );
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Date );
 
+                            // hide the regular text
+                            mTitle.Hidden = true;
+                            mSpeaker.Hidden = true;
+                            mDate.Hidden = true;
+
                             // position and size the textboxes
+                            float availableWidth = ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
+
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Title, mTitle.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Title, mTitle.Frame.Top );
 
-                            EditMode_TextBox_Title.Width = mTitle.Frame.Width;
+                            EditMode_TextBox_Title.Width = availableWidth;
                             EditMode_TextBox_Title.Height = mTitle.Frame.Height;
 
-                            // speaker
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Speaker, mSpeaker.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top );
-
-                            EditMode_TextBox_Speaker.Width = mSpeaker.Frame.Width;
-                            EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height;
-
-                            // date
+                            
+                             // date
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Date, mDate.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top + 15 );
 
-                            EditMode_TextBox_Date.Width = mDate.Frame.Width;
+                            EditMode_TextBox_Date.Width = availableWidth / 2;
                             EditMode_TextBox_Date.Height = mDate.Frame.Height;
 
                             
+                            // speaker
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Speaker, mDate.Frame.Left + (availableWidth / 2) );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top + 15 );
+
+                            EditMode_TextBox_Speaker.Width = availableWidth / 2;
+                            EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height;
+                            
+                            
                             // assign each text box
-                            EditMode_TextBox_Title.Text = mTitle.Text;
-                            EditMode_TextBox_Speaker.Text = mSpeaker.Text;
-                            EditMode_TextBox_Date.Text = mDate.Text;
+                            EditMode_TextBox_Title.Text = mTitle.Text.Trim( ' ' );
+                            EditMode_TextBox_Speaker.Text = mSpeaker.Text.Trim( ' ' );
+                            EditMode_TextBox_Date.Text = mDate.Text.Trim( ' ' );
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
                             { 
@@ -214,6 +224,11 @@ namespace MobileApp
                         }
                         else
                         {
+                            // unhide the regular controls
+                            mTitle.Hidden = false;
+                            mSpeaker.Hidden = false;
+                            mDate.Hidden = false;
+
                             // exit enable mode. We know the parent is a canvas because of the design
                             (EditMode_TextBox_Title.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Title );
                             (EditMode_TextBox_Speaker.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Speaker );

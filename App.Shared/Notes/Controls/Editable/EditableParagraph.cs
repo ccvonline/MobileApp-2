@@ -10,6 +10,10 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
 
+using System.Windows.Media;
+using RestSharp.Extensions.MonoHttp;
+using WinNotes;
+
 namespace MobileApp
 {
     namespace Shared
@@ -26,7 +30,8 @@ namespace MobileApp
                 RectangleF Padding;
 
                 bool EditMode_Enabled = false;
-                TextBox EditMode_TextBox = null;
+                EditModeTextBox EditMode_TextBox = null;
+                EditModeTextBox EditMode_TextBox_Url = null;
 
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -34,14 +39,17 @@ namespace MobileApp
                 // the size (in pixels) to extend the paragraph's frame
                 // for mouse interaction
                 const float CornerExtensionSize = 5;
-                
+                                
                 public EditableParagraph( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
                     ParentEditingCanvas = null;
 
                     // create our textbox that will display the text being edited.
-                    EditMode_TextBox = new TextBox( );
+                    EditMode_TextBox = new EditModeTextBox( );
                     EditMode_TextBox.KeyUp += EditMode_TextBox_KeyUp;
+
+                    EditMode_TextBox_Url = new EditModeTextBox( );
+                    EditMode_TextBox_Url.KeyUp += EditMode_TextBox_KeyUp;
 
                     // this will be null if the parent is the actual note
                     ParentNote = parentParams.Parent as Note;
@@ -58,7 +66,7 @@ namespace MobileApp
 
                     OrigBackgroundColor = BorderView.BackgroundColor;
                 }
-
+                
                 public override void AddToView( object obj )
                 {
                     // store the parentView, which we know is a canvas, so we can add / remove children as needed when editing
@@ -187,7 +195,7 @@ namespace MobileApp
                             // if they press return, commit the changed text.
                             if ( string.IsNullOrWhiteSpace( EditMode_TextBox.Text ) == false )
                             {
-                                SetText( EditMode_TextBox.Text );
+                                SetText( EditMode_TextBox.Text, EditMode_TextBox_Url.Text );
 
                                 EnableEditMode( false );
 
@@ -206,7 +214,7 @@ namespace MobileApp
                 }
 
                 // Takes a string and replaces the content of the paragraph with it.
-                private void SetText( string text )
+                private void SetText( string text, string activeUrl )
                 {
                     foreach ( IUIControl control in ChildControls )
                     {
@@ -237,6 +245,10 @@ namespace MobileApp
                             ChildControls.Add( wordLabel );
                         }
                     }
+
+                    ActiveUrl = activeUrl;
+
+                    TryAddUrlGlyph( Frame.Width, Frame.Height );
                 }
 
                 public IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos )
@@ -312,20 +324,30 @@ namespace MobileApp
                             ParentEditingCanvas.Children.Add( EditMode_TextBox );
 
                             // position and size the textbox
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top );
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left - 5 );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top - 2 );
 
-                            EditMode_TextBox.Width = Frame.Width;
-                            EditMode_TextBox.Height = Frame.Height;
-
+                            EditMode_TextBox.Width = Frame.Width * ParentSize.Width;
+                            EditMode_TextBox.Height = Frame.Height * 1.25f;
 
                             // get the full text. we can use the build HTML stream code to do this.
                             string htmlStream = string.Empty;
                             string textStream = string.Empty;
                             BuildHTMLContent( ref htmlStream, ref textStream, new List<IUIControl>( ) );
 
-                            // assign the text and we're done
+                            // if the last character is a URL glyph, remove it
+                            textStream = textStream.Trim( new char[] { ' ', PrivateNoteConfig.CitationUrl_Icon[0] } );
+
+                            // assign the text
                             EditMode_TextBox.Text = textStream;
+
+                            // and now the URL support
+                            EditMode_TextBox_Url.Text = ActiveUrl;
+                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
+                            EditMode_TextBox_Url.Width = Frame.Width;
+                            EditMode_TextBox_Url.Height = 33;
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom );
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
                             { 
@@ -338,6 +360,7 @@ namespace MobileApp
                         {
                             // exit enable mode. We know the parent is a canvas because of the design
                             (EditMode_TextBox.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox );
+                            (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
                         }
 
                         // store the change
@@ -773,7 +796,13 @@ namespace MobileApp
                     // for horizontal, it just needs to remove padding, since it'll be re-applied on load
                     controlLeftPos -= parentPadding.Left;
                     
-                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" ChildAlignment=\"{2}\">", controlLeftPos, controlTopPos, ChildHorzAlignment );
+                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" ChildAlignment=\"{2}\"", controlLeftPos, controlTopPos, ChildHorzAlignment );
+                    if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )
+                    {
+                        xml += string.Format( " Url=\"{0}\"", HttpUtility.HtmlEncode( ActiveUrl ) );
+                    }
+
+                    xml += ">";
 
                     foreach( IUIControl child in ChildControls )
                     {

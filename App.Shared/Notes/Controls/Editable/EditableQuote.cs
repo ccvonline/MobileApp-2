@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using RestSharp.Extensions.MonoHttp;
+using WinNotes;
 
 namespace MobileApp
 {
@@ -23,9 +24,9 @@ namespace MobileApp
             public class EditableQuote: Quote, IEditableUIControl
             {
                 bool EditMode_Enabled = false;
-                TextBox EditMode_TextBox_Quote = null;
-                TextBox EditMode_TextBox_Citation = null;
-                TextBox EditMode_TextBox_Url = null;
+                EditModeTextBox EditMode_TextBox_Quote = null;
+                EditModeTextBox EditMode_TextBox_Citation = null;
+                EditModeTextBox EditMode_TextBox_Url = null;
                                 
                 // store the background color so that if we change it for hovering, we can restore it after
                 uint OrigBackgroundColor = 0;
@@ -50,13 +51,14 @@ namespace MobileApp
                     ParentEditingCanvas = null;
 
                     // create our textbox that will display the text being edited.
-                    EditMode_TextBox_Quote = new TextBox( );
+                    EditMode_TextBox_Quote = new EditModeTextBox( );
+                    EditMode_TextBox_Quote.TextWrapping = System.Windows.TextWrapping.Wrap;
                     EditMode_TextBox_Quote.KeyUp += EditMode_TextBox_KeyUp;
 
-                    EditMode_TextBox_Citation = new TextBox( );
+                    EditMode_TextBox_Citation = new EditModeTextBox( );
                     EditMode_TextBox_Citation.KeyUp += EditMode_TextBox_KeyUp;
 
-                    EditMode_TextBox_Url = new TextBox( );
+                    EditMode_TextBox_Url = new EditModeTextBox( );
                     EditMode_TextBox_Url.KeyUp += EditMode_TextBox_KeyUp;
                     
                     // this will be null if the parent is the actual note
@@ -137,6 +139,12 @@ namespace MobileApp
                         // enter enable mode
                         if ( enabled == true )
                         {
+                            // hide the normal controls
+                            QuoteLabel.Hidden = true;
+                            Citation.Hidden = true;
+                            BorderView.Hidden = true;
+                            UrlGlyph.Hidden = true;
+
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Quote );
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Citation );
 
@@ -144,18 +152,19 @@ namespace MobileApp
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Quote, QuoteLabel.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Quote, QuoteLabel.Frame.Top );
 
-                            EditMode_TextBox_Quote.Width = QuoteLabel.Frame.Width;
-                            EditMode_TextBox_Quote.Height = QuoteLabel.Frame.Height;
+                            float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), QuoteLabel.Frame.Width * 4 );
+                            EditMode_TextBox_Quote.Width = availWidth;
+                            EditMode_TextBox_Quote.Height = QuoteLabel.Frame.Height * 4;
                             
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, Citation.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, Citation.Frame.Top );
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, QuoteLabel.Frame.Left );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height  );
 
-                            EditMode_TextBox_Citation.Width = Citation.Frame.Width;
+                            EditMode_TextBox_Citation.Width = availWidth;
                             EditMode_TextBox_Citation.Height = Citation.Frame.Height;
                             
                             // assign each text box
-                            EditMode_TextBox_Quote.Text = QuoteLabel.Text;
-                            EditMode_TextBox_Citation.Text = Citation.Text;
+                            EditMode_TextBox_Quote.Text = QuoteLabel.Text.Trim( ' ' );
+                            EditMode_TextBox_Citation.Text = Citation.Text.Trim( ' ' );
 
 
                             // and now the URL support
@@ -163,8 +172,8 @@ namespace MobileApp
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
                             EditMode_TextBox_Url.Width = Frame.Width;
                             EditMode_TextBox_Url.Height = 33;
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom );
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, QuoteLabel.Frame.Left );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height + EditMode_TextBox_Citation.Height );
 
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
@@ -176,6 +185,12 @@ namespace MobileApp
                         }
                         else
                         {
+                            // unhide the normal controls
+                            QuoteLabel.Hidden = false;
+                            Citation.Hidden = false;
+                            BorderView.Hidden = false;
+                            UrlGlyph.Hidden = false;
+
                             // exit enable mode. We know the parent is a canvas because of the design
                             (EditMode_TextBox_Quote.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Quote );
                             (EditMode_TextBox_Citation.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Citation );

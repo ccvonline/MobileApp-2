@@ -272,21 +272,7 @@ namespace MobileApp
 
                     // should we add a URL Glyph? We're gonna be clever and add it AS a NoteText, so that it integrates with the paragraph nicely.
                     // now add our glyph, if relevant
-                    if ( string.IsNullOrEmpty( ActiveUrl ) == false )
-                    {
-                        // give the text a style that doesn't include things it shouldn't inherit
-                        Styles.Style textStyle = mStyle;
-                        textStyle.mBorderColor = 0;
-                        textStyle.mBorderRadius = 0;
-                        textStyle.mBorderWidth = 0;
-                        textStyle.mFont.mColor = mStyle.mFont.mColor ?? ControlStyles.mText.mFont.mColor;
-                        textStyle.mFont.mName = PrivateControlStylingConfig.Icon_Font_Secondary;
-                        textStyle.mFont.mSize = mStyle.mFont.mSize ?? ControlStyles.mText.mFont.mSize;
-                        textStyle.mAlignment = Alignment.Right;
-
-                        NoteText wordLabel = Parser.CreateNoteText( new CreateParams( this, availableWidth, parentParams.Height, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );
-                        ChildControls.Add( wordLabel );
-                    }
+                    TryAddUrlGlyph( availableWidth, parentParams.Height );
 
 
                     // layout all controls
@@ -454,6 +440,25 @@ namespace MobileApp
 
                         // set their correct X offset
                         rowControl.AddOffset( xRowAdjust, yAdjust );
+                    }
+                }
+
+                public void TryAddUrlGlyph( float parentWidth, float parentHeight )
+                {
+                    if ( string.IsNullOrEmpty( ActiveUrl ) == false )
+                    {
+                        // give the text a style that doesn't include things it shouldn't inherit
+                        Styles.Style textStyle = mStyle;
+                        textStyle.mBorderColor = 0;
+                        textStyle.mBorderRadius = 0;
+                        textStyle.mBorderWidth = 0;
+                        textStyle.mFont.mColor = mStyle.mFont.mColor ?? ControlStyles.mText.mFont.mColor;
+                        textStyle.mFont.mName = PrivateControlStylingConfig.Icon_Font_Secondary;
+                        textStyle.mFont.mSize = mStyle.mFont.mSize ?? ControlStyles.mText.mFont.mSize;
+                        textStyle.mAlignment = Alignment.Right;
+
+                        NoteText wordLabel = Parser.CreateNoteText( new CreateParams( this, parentWidth, parentHeight, ref textStyle ), PrivateNoteConfig.CitationUrl_Icon );
+                        ChildControls.Add( wordLabel );
                     }
                 }
 
