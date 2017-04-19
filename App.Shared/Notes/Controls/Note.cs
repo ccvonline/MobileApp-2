@@ -90,7 +90,7 @@ namespace MobileApp
                 /// Store the padding used so that children can know their movement restrictions
                 /// </summary>
                 public RectangleF Padding { get; set; }
-
+                
                 protected DisplayMessageBoxDelegate RequestDisplayMessageBox { get; set; }
 
                 /// <summary>
@@ -348,6 +348,13 @@ namespace MobileApp
                     {
                         mStyle.mFullWidthHeader = bool.Parse( result );
                     }
+                    
+                    bool usingVisualEditor = false;
+                    result = reader.GetAttribute( "VisualEditor" );
+                    if ( string.IsNullOrEmpty( result ) == false )
+                    {
+                        usingVisualEditor = bool.Parse( result );
+                    }
 
                     // begin reading the xml stream
                     bool finishedReading = false;
@@ -380,11 +387,10 @@ namespace MobileApp
                         }
                     }
 
-                    // lay stuff out vertically like a stackPanel.
-                    // layout all controls
-                    float yOffset = bounds.Y + topPadding; //vertically they should just stack
-
-                    // now we must center each control within the stack.
+                    // lay stuff out vertically. If the notes were built by hand, like a stackPanel.
+                    // if not by hand, like a canvas.
+                    float noteHeight = bounds.Y + topPadding;
+                    
                     foreach( IUIControl control in ChildControls )
                     {
                         RectangleF controlFrame = control.GetFrame( );
@@ -416,7 +422,10 @@ namespace MobileApp
                         }
 
 
-                        // adjust the next sibling by yOffset
+                        // place this next control at yOffset. 
+                        // If the note was generated visually, yOffset should be 0, because all controls are absolute. 
+                        // If the note was hand-built, yOffset should be the current noteHeight, which makes each control relative to the one above it.
+                        float yOffset = usingVisualEditor == true ? 0 : noteHeight;
 
                         // if it's the header and full width is specified, don't apply padding.
                         if ( control as Header != null && mStyle.mFullWidthHeader == true )
@@ -427,13 +436,13 @@ namespace MobileApp
                         {
                             control.AddOffset( xAdjust + leftPadding, yOffset );
                         }
-
-                        // and the next sibling must begin there
-                        yOffset = control.GetFrame( ).Bottom + controlMargin.Height;
+                        
+                        // update the note height
+                        noteHeight = control.GetFrame( ).Bottom + controlMargin.Height;
                     }
 
                     bounds.Width = parentWidthUnits;
-                    bounds.Height = ( yOffset - bounds.Y ) + bottomPadding;
+                    bounds.Height = ( noteHeight - bounds.Y ) + bottomPadding;
                     Frame = bounds;
 
                     AddControlsToView( );
@@ -1059,6 +1068,13 @@ namespace MobileApp
 
                         // default it to where the click occurred
                         newControl.AddOffset( (float) mousePos.X, (float) mousePos.Y );
+
+                        // if the newly created control is the lower than all others, update the note height.
+                        // This lets us continue to build vertically
+                        if( newControl.GetFrame( ).Bottom > Frame.Height )
+                        {
+                            Frame = new RectangleF( Frame.Left, Frame.Top, Frame.Width, newControl.GetFrame( ).Bottom + Padding.Bottom );
+                        }
                     }
 
                     // return the editable interface for the caller
@@ -1089,7 +1105,7 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string xmlExport = "<Note StyleSheet=\"http://ccv.church/content/mobileapp/xml/default_style.xml\">";
+                    string xmlExport = "<Note VisualEditor=\"True\" StyleSheet=\"http://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
 
                     // first, sort all controls by Y. That way, if something was created and then moved UP, it won't
                     // have a negative value
@@ -1102,14 +1118,10 @@ namespace MobileApp
                         return 1;
                     });
                     
-                    float nextYPos = 0;
-
                     foreach( IUIControl child in ChildControls )
                     {
                         IEditableUIControl editableChild = child as IEditableUIControl;
-                        xmlExport += editableChild.Export( new RectangleF( Padding.Left, Padding.Top, 0, 0 ), nextYPos );
-
-                        nextYPos = child.GetFrame( ).Bottom;
+                        xmlExport += editableChild.Export( new RectangleF( Padding.Left, Padding.Top, 0, 0 ), 0 );
                     }
 
                     xmlExport += "</Note>";

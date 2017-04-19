@@ -496,8 +496,11 @@ namespace MobileApp
 
                     // Add the tag and attribs
                     // Note: remove margin, because the default_style includes it, and that makes no sense when we will visually place it
-                    string xml = string.Format( "<Q Margin=\"0\" Left=\"{0}\" Top=\"{1}\" Citation=\"{2}\"", controlLeftPos, controlTopPos, encodedCitation );
+                    string xml = string.Format( "<Q Margin=\"0\" Citation=\"{0}\" Top=\"{1}\"", encodedCitation, controlTopPos );
 
+                    controlLeftPos /= (ParentSize.Width - parentPadding.Left - parentPadding.Right);
+                    xml += string.Format( "Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
+                    
                     if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )
                     {
                         xml += string.Format( " Url=\"{0}\"", HttpUtility.HtmlEncode( ActiveUrl ) );

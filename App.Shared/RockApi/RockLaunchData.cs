@@ -417,9 +417,11 @@ namespace MobileApp
                                                 // the error. We can then use process of elimination to fix it.
                                                 Rock.Mobile.Util.Debug.WriteLine( string.Format( "News Item Exception. Attribute Value not found is: {0}. Full Exception {1}", currKey, e ) );
 #if !DEBUG
+#if !__WIN__
                                                 string attribValues = JsonConvert.SerializeObject( item.AttributeValues );
                                                 Exception reportException = new Exception( "News Item Exception. Attribute Value not found. Attribute Values found: " + attribValues, e );
                                                 Xamarin.Insights.Report( reportException );
+#endif
 #endif
                                             }
                                         }

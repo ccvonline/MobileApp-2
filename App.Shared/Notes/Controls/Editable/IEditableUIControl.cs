@@ -14,7 +14,8 @@ namespace MobileApp.Shared.Notes
             Underline,
             FontSize,
             FontName,
-            RevealBox
+            RevealBox,
+            Alignment
         }
     }
 

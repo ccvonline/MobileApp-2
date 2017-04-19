@@ -266,8 +266,18 @@ namespace MobileApp
                     // only export if there's valid text. If we're simply a blank space, we don't need to be saved.
                     if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
                     {
-                        string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
-                        return "<NT>" + encodedText.Trim( new char[] { ' ' } ) + "</NT>";
+                        // first get the text itself
+                        string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text ).Trim( new char[] { ' ' } );
+
+                        // setup note attributes
+                        string attributeStrings = string.Format( "FontName=\"{0}\" FontSize=\"{1}\"", PlatformLabel.Editable_GetFontName( ), PlatformLabel.Editable_GetFontSize( ) );
+                        if( PlatformLabel.Editable_HasUnderline( ) )
+                        {
+                            attributeStrings += " Underlined=\"True\"";
+                        }
+                            
+                        // build the final string
+                        return "<NT " + attributeStrings + ">" + encodedText + "</NT>";
                     }
                     else
                     {

@@ -39,6 +39,8 @@ namespace MobileApp
                 // the size (in pixels) to extend the paragraph's frame
                 // for mouse interaction
                 const float CornerExtensionSize = 5;
+
+                bool ExportPercentage { get; set; }
                                 
                 public EditableParagraph( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -467,16 +469,37 @@ namespace MobileApp
 
                 public object GetStyleValue( EditStyling.Style style )
                 {
+                    switch( style )
+                    {
+                        case EditStyling.Style.Alignment:
+                        {
+                            return ExportPercentage;
+                        }
+                    }
+
                     return null;
                 }
 
                 public void SetStyleValue( EditStyling.Style style, object value )
                 {
+                    switch( style )
+                    {
+                        case EditStyling.Style.Alignment:
+                        {
+                            bool usePercent = (bool)value;
+
+                            ExportPercentage = usePercent;
+                            break;
+                        }
+                    }
                 }
 
                 public List<EditStyling.Style> GetEditStyles( )
                 {
-                    return new List<EditStyling.Style>( );
+                    List<EditStyling.Style> styleList = new List<EditStyling.Style>( );
+                    styleList.Add( EditStyling.Style.Alignment );
+
+                    return styleList;
                 }
 
                 public void HandleDelete( bool notifyParent )
@@ -796,13 +819,27 @@ namespace MobileApp
                     // for horizontal, it just needs to remove padding, since it'll be re-applied on load
                     controlLeftPos -= parentPadding.Left;
                     
-                    string xml = string.Format( "<P Left=\"{0}\" Top=\"{1}\" ChildAlignment=\"{2}\"", controlLeftPos, controlTopPos, ChildHorzAlignment );
+                    string xml = "<P ";
+
+                    string attributes = "";
+                    //if ( ExportPercentage )
+                    {
+                        controlLeftPos /= (ParentSize.Width - parentPadding.Left - parentPadding.Right);
+                        attributes += string.Format( "Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
+                    }
+                    //else
+                    //{
+                    //    attributes += string.Format( "Left=\"{0}\"", controlLeftPos );
+                    //}
+
+                    attributes += string.Format( " Top=\"{0}\"", controlTopPos );
+                    
                     if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )
                     {
-                        xml += string.Format( " Url=\"{0}\"", HttpUtility.HtmlEncode( ActiveUrl ) );
+                        attributes += string.Format( " Url=\"{0}\"", HttpUtility.HtmlEncode( ActiveUrl ) );
                     }
 
-                    xml += ">";
+                    xml += attributes + ">";
 
                     foreach( IUIControl child in ChildControls )
                     {
