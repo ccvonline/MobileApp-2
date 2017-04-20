@@ -499,7 +499,7 @@ namespace MobileApp
                     string xml = string.Format( "<Q Margin=\"0\" Citation=\"{0}\" Top=\"{1}\"", encodedCitation, controlTopPos );
 
                     controlLeftPos /= (ParentSize.Width - parentPadding.Left - parentPadding.Right);
-                    xml += string.Format( "Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
+                    xml += string.Format( " Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
                     
                     if ( string.IsNullOrWhiteSpace( ActiveUrl ) == false )
                     {
