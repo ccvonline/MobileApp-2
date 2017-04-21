@@ -519,6 +519,11 @@ namespace MobileApp.Shared
             /// The icon size for icons in the details table row.
             /// </summary>
             public const uint Details_Table_IconSize = 62;
+
+            /// <summary>
+            /// The prefix for any Biblia API calls for the Bible Passage Viewer.
+            /// </summary>
+            public const string Biblia_Prefix = "bible://";
         }
 
         public class PrivatePrayerConfig

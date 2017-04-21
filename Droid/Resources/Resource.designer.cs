@@ -2459,106 +2459,109 @@ namespace Droid
 			public const int abc_simple_dropdown_hint = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int Connect_GroupFinder = 2130903063;
+			public const int BiblePassage = 2130903063;
 			
 			// aapt resource value: 0x7f030018
-			public const int Connect_Primary = 2130903064;
+			public const int Connect_GroupFinder = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int DatePicker = 2130903065;
+			public const int Connect_Primary = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int Give_Primary = 2130903066;
+			public const int DatePicker = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int GroupInfo = 2130903067;
+			public const int Give_Primary = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int hockeyapp_activity_expiry_info = 2130903068;
+			public const int GroupInfo = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int hockeyapp_activity_feedback = 2130903069;
+			public const int hockeyapp_activity_expiry_info = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int hockeyapp_activity_login = 2130903070;
+			public const int hockeyapp_activity_feedback = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int hockeyapp_activity_update = 2130903071;
+			public const int hockeyapp_activity_login = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int hockeyapp_fragment_update = 2130903072;
+			public const int hockeyapp_activity_update = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int hockeyapp_view_feedback_message = 2130903073;
+			public const int hockeyapp_fragment_update = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int ImageCrop = 2130903074;
+			public const int hockeyapp_view_feedback_message = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int JoinGroup = 2130903075;
+			public const int ImageCrop = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int Login = 2130903076;
+			public const int JoinGroup = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int Main = 2130903077;
+			public const int Login = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int mr_media_route_chooser_dialog = 2130903078;
+			public const int Main = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int mr_media_route_controller_dialog = 2130903079;
+			public const int mr_media_route_chooser_dialog = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int mr_media_route_list_item = 2130903080;
+			public const int mr_media_route_controller_dialog = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int navbar = 2130903081;
+			public const int mr_media_route_list_item = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int News_Details = 2130903082;
+			public const int navbar = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int News_Primary = 2130903083;
+			public const int News_Details = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int Notes = 2130903084;
+			public const int News_Primary = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int Notes_Details = 2130903085;
+			public const int Notes = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int Notes_Primary = 2130903086;
+			public const int Notes_Details = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int OOBEView = 2130903087;
+			public const int Notes_Primary = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int Prayer_Create = 2130903088;
+			public const int OOBEView = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int Prayer_Post = 2130903089;
+			public const int Prayer_Create = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int Prayer_Primary = 2130903090;
+			public const int Prayer_Post = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int Profile = 2130903091;
+			public const int Prayer_Primary = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int Register = 2130903092;
+			public const int Profile = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int Splash = 2130903093;
+			public const int Register = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int Springboard = 2130903094;
+			public const int Splash = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int support_simple_spinner_dropdown_item = 2130903095;
+			public const int Springboard = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int TaskWebView = 2130903096;
+			public const int support_simple_spinner_dropdown_item = 2130903096;
+			
+			// aapt resource value: 0x7f030039
+			public const int TaskWebView = 2130903097;
 			
 			static Layout()
 			{

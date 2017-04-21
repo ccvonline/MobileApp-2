@@ -78,7 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Springboard.cs" />
     <Compile Include="NavbarFragment.cs" />
@@ -115,6 +114,8 @@
     <Compile Include="UserManagement\SplashFragment.cs" />
     <Compile Include="Tasks\ConnectTask\GroupInfoFragment.cs" />
     <Compile Include="Tasks\NotesTask\NotesDiscGuideFragment.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Tasks\NotesTask\BiblePassageFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -175,6 +176,7 @@
       <Link>Resources\drawable-xxhdpi\splash_combo_android.png</Link>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\GroupInfo.axml" />
+    <AndroidResource Include="Resources\layout\BiblePassage.axml" />
   </ItemGroup>
   <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />

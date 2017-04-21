@@ -20,7 +20,7 @@ namespace iOS
 
             // create the note controller ONCE and let the view controllers grab it as needed.
             // That way, we can hold it in memory and cache notes, rather than always reloading them.
-            NoteController = new NotesViewController();
+            NoteController = new NotesViewController( );
             NoteController.Task = this;
         }
 
@@ -80,8 +80,9 @@ namespace iOS
         public bool IsReading( )
         {
             // if we're in notes or the web view, we are rading notes.
-            if( ActiveViewController as NotesViewController != null || 
-                ActiveViewController as TaskWebViewController != null )
+            if( ActiveViewController as NotesViewController != null ||
+                ActiveViewController as TaskWebViewController != null ||
+                ActiveViewController as BiblePassageViewController != null )
             {
                 return true;
             }
@@ -89,7 +90,7 @@ namespace iOS
             return false;
         }
 
-        public override void WillShowViewController(TaskUIViewController viewController)
+        public override void WillShowViewController( TaskUIViewController viewController )
         {
             base.WillShowViewController( viewController );
 
@@ -97,13 +98,13 @@ namespace iOS
             // force the device back to portrait
 
             // if the notes are active, make sure the share button gets turned on
-            if ( ( viewController as NotesViewController ) != null )
+            if( ( viewController as NotesViewController ) != null )
             {
                 // Let the view controller manage this being enabled, because
                 // it's conditional on being in landscape or not.
                 NavToolbar.SetCreateButtonEnabled( false, null );
                 NavToolbar.SetShareButtonEnabled( true, delegate
-                    { 
+                    {
                         ( viewController as NotesViewController ).ShareNotes( );
                     } );
 
@@ -111,49 +112,54 @@ namespace iOS
                 // go ahead and show the bar, because we're at the top of the page.
                 NavToolbar.Reveal( true );
             }
-            else if ( ( viewController as NotesWatchUIViewController ) != null )
+            else if( ( viewController as NotesWatchUIViewController ) != null )
             {
                 // Let the view controller manage this being enabled, because
                 // it's conditional on being in landscape or not.
                 NavToolbar.SetCreateButtonEnabled( false, null );
                 NavToolbar.SetShareButtonEnabled( true, delegate
-                    { 
+                    {
                         ( viewController as NotesWatchUIViewController ).ShareVideo( );
                     } );
             }
-            else if ( ( viewController as NotesDetailsUIViewController ) != null )
+            else if( ( viewController as NotesDetailsUIViewController ) != null )
             {
                 NavToolbar.SetCreateButtonEnabled( false, null );
                 NavToolbar.SetShareButtonEnabled( false, null );
                 //NavToolbar.RevealForTime( 3.0f );
                 NavToolbar.Reveal( true );
             }
-            else if ( ( viewController as NotesMainUIViewController ) != null )
+            else if( ( viewController as NotesMainUIViewController ) != null )
             {
                 NavToolbar.SetCreateButtonEnabled( false, null );
                 NavToolbar.SetShareButtonEnabled( false, null );
                 NavToolbar.Reveal( false );
             }
-            else if ( ( viewController as TaskWebViewController ) != null )
+            else if( ( viewController as TaskWebViewController ) != null )
+            {
+                NavToolbar.SetCreateButtonEnabled( false, null );
+                NavToolbar.SetShareButtonEnabled( false, null );
+            }
+            else if( ( viewController as BiblePassageViewController ) != null )
             {
                 NavToolbar.SetCreateButtonEnabled( false, null );
                 NavToolbar.SetShareButtonEnabled( false, null );
             }
         }
 
-        public override void TouchesEnded(TaskUIViewController taskUIViewController, NSSet touches, UIEvent evt)
+        public override void TouchesEnded( TaskUIViewController taskUIViewController, NSSet touches, UIEvent evt )
         {
-            base.TouchesEnded(taskUIViewController, touches, evt);
+            base.TouchesEnded( taskUIViewController, touches, evt );
 
             // immediately hide the toolbar on the main page
-            if ( ActiveViewController == MainViewController )
+            if( ActiveViewController == MainViewController )
             {
                 NavToolbar.Reveal( false );
             }
             // allow it as long as it's the watch window in portrait mode or landscape wide mode.
-            else if ( ( ActiveViewController as NotesWatchUIViewController ) != null )
+            else if( ( ActiveViewController as NotesWatchUIViewController ) != null )
             {
-                if ( SpringboardViewController.IsLandscapeWide( ) || SpringboardViewController.IsDevicePortrait( ) )
+                if( SpringboardViewController.IsLandscapeWide( ) || SpringboardViewController.IsDevicePortrait( ) )
                 {
                     //NavToolbar.RevealForTime( 3.0f );
                 }
@@ -163,7 +169,7 @@ namespace iOS
         public override bool CanContainerPan( NSSet touches, UIEvent evt )
         {
             NotesViewController notesVC = ActiveViewController as NotesViewController;
-            if ( notesVC != null )
+            if( notesVC != null )
             {
                 //return the inverse of touching a user note's bool.
                 // so false if they ARE touching a note, true if they are not.
@@ -181,14 +187,14 @@ namespace iOS
             ActiveViewController.OnActivated( );
         }
 
-        public override void WillEnterForeground()
+        public override void WillEnterForeground( )
         {
-            base.WillEnterForeground();
+            base.WillEnterForeground( );
 
             ActiveViewController.WillEnterForeground( );
         }
 
-        public override void AppOnResignActive()
+        public override void AppOnResignActive( )
         {
             base.AppOnResignActive( );
 
@@ -202,19 +208,20 @@ namespace iOS
             ActiveViewController.AppDidEnterBackground( );
         }
 
-        public override void AppWillTerminate()
+        public override void AppWillTerminate( )
         {
             base.AppWillTerminate( );
 
             ActiveViewController.AppWillTerminate( );
         }
 
-        public override bool SupportsLandscape()
+        public override bool SupportsLandscape( )
         {
             // if we're using the watch or notes controller, allow landscape
-            if ( ( ActiveViewController as NotesViewController ) != null || 
-                 ( ActiveViewController as NotesWatchUIViewController ) != null || 
-                 ( ActiveViewController as TaskWebViewController ) != null )
+            if( ( ActiveViewController as NotesViewController ) != null ||
+                 ( ActiveViewController as NotesWatchUIViewController ) != null ||
+                 ( ActiveViewController as TaskWebViewController ) != null ||
+                ( ActiveViewController as BiblePassageViewController ) != null )
             {
                 return true;
             }
@@ -239,7 +246,8 @@ namespace iOS
         public override bool WantOverrideBackButton( ref bool enabled )
         {
             // otherwise, the one exception is if the webview is open
-            if ( ( ActiveViewController as TaskWebViewController ) != null )
+            if( ( ActiveViewController as TaskWebViewController ) != null ||
+                ( ActiveViewController as BiblePassageViewController ) != null )
             {
                 enabled = true;
                 return true;
