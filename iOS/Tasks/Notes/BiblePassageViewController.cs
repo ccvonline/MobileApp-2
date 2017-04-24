@@ -81,8 +81,8 @@ namespace iOS
             // (always comes after the "?search=" token, which is 8 characters long, hence the offset).
             string passageCitation = activeUrl.Substring( activeUrl.IndexOf( PrivateNoteConfig.Biblia_Prefix, StringComparison.CurrentCulture ) + 8 );
 
-            BibliaAddress = string.Format( "https://api.biblia.com/v1/bible/content/LEB.html?passage={0}&style=fullyFormatted&key=850223e9d11c8401d54408629fb4a0f0",
-                                          passageCitation );
+			BibliaAddress = string.Format( "https://api.biblia.com/v1/bible/content/LEB.html?passage={0}&style=fullyFormatted&key={1}",
+			                              passageCitation, GeneralConfig.Biblia_API_Key );
 
         }
 

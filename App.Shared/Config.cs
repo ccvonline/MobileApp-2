@@ -100,6 +100,8 @@ namespace MobileApp
                 /// </summary>
                 public const string iOS_HockeyApp_Id = "b851b5a3a79142d38e3cffd3a01015f0";
                 public const string Droid_HockeyApp_Id = "81b31ba83ad3416e932bd2bd0b5d8213";
+
+				public const string Biblia_API_Key = "850223e9d11c8401d54408629fb4a0f0";
             }
 
             public class SpringboardConfig
