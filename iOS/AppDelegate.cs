@@ -6,8 +6,8 @@ using Foundation;
 using UIKit;
 using AVFoundation;
 using MobileApp.Shared.Config;
-using LocalyticsBinding;
 using MobileApp.Shared.PrivateConfig;
+using HockeyApp.iOS;
 
 namespace iOS
 {
@@ -35,13 +35,17 @@ namespace iOS
         //
         public override bool FinishedLaunching( UIApplication app, NSDictionary options )
         {
-#if !DEBUG
-            LocalyticsBinding.Localytics.Integrate( GeneralConfig.iOS_Localytics_Key );
-            if( app.ApplicationState != UIApplicationState.Background )
-            {
-                LocalyticsBinding.Localytics.OpenSession( );
-            }
-#endif
+            
+            // Register HockeyApp
+            #if !DEBUG
+
+                var manager = BITHockeyManager.SharedHockeyManager;
+                manager.Configure( GeneralConfig.iOS_HockeyApp_Id );
+                manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
+                manager.StartManager();
+                manager.Authenticator.AuthenticateInstallation();
+
+            #endif
 
             // create a new window instance based on the screen size. If we're a phone launched in landscape (only possible on the iPhone 6+), 
             // force a portait layout.
@@ -80,10 +84,7 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine("OnActivated called, App is active.");
 
             Springboard.OnActivated( );
-#if !DEBUG
-            LocalyticsBinding.Localytics.OpenSession( );
-            LocalyticsBinding.Localytics.Upload( );
-#endif
+
         }
         public override void WillEnterForeground(UIApplication application)
         {
@@ -91,10 +92,6 @@ namespace iOS
 
             Springboard.WillEnterForeground( );
 
-#if !DEBUG
-            LocalyticsBinding.Localytics.OpenSession( );
-            LocalyticsBinding.Localytics.Upload( );
-#endif
         }
         public override void OnResignActivation(UIApplication application)
         {
@@ -108,10 +105,6 @@ namespace iOS
 
             Springboard.DidEnterBackground( );
 
-#if !DEBUG
-            LocalyticsBinding.Localytics.CloseSession( );
-            LocalyticsBinding.Localytics.Upload( );
-#endif
         }
 
         // not guaranteed that this will run

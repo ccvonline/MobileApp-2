@@ -367,15 +367,6 @@ namespace iOS
 
                 SpringboardViewController.DisplayError( "Current Version", GeneralConfig.Version.ToString( ) );
             }
-            else if ( PrayerRequest.Text.ToLower( ).Trim( ) == "upload dumps" )
-            {
-#if !DEBUG
-                debugKeyEntered = true;
-
-                Xamarin.Insights.PurgePendingCrashReports( ).Wait( );
-                SpringboardViewController.DisplayError( "Crash Dumps Sent", "Just uploaded all pending crash dumps." );
-#endif
-            }
             else
             {
                 // otherwise, see if our special UI caught it.

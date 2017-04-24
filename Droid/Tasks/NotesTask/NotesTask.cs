@@ -20,6 +20,7 @@ namespace Droid
                 NotesListenFragment ListenPage { get; set; }
                 NotesDiscGuideFragment DiscGuidePage { get; set; }
                 TaskWebFragment WebViewPage { get; set; }
+                BiblePassageFragment BiblePassagePage { get; set; }
 
                 public NotesTask( NavbarFragment navFragment ) : base( navFragment )
                 {
@@ -232,14 +233,22 @@ namespace Droid
                         else if ( source == NotesPage )
                         {
                             NotesFragment.UrlClickParams clickParams = (NotesFragment.UrlClickParams)context;
-                            
-                            // the context is the activeURL to visit.
-                            WebViewPage.DisableIdleTimer = true;
-                            TaskWebFragment.HandleUrl( clickParams.UseExternalBrowser, 
-                                                       clickParams.UseImpersonationToken, 
-                                                       clickParams.Url,
-                                                       this, 
-                                                       WebViewPage );
+                            if (clickParams.Url.StartsWith(PrivateNoteConfig.Biblia_Prefix))
+                            {
+                                BiblePassagePage = new BiblePassageFragment(clickParams.Url);
+                                BiblePassagePage.ParentTask = this;
+                                PresentFragment( BiblePassagePage, true );
+                            }
+                            else
+                            {
+                                // the context is the activeURL to visit.
+                                WebViewPage.DisableIdleTimer = true;
+                                TaskWebFragment.HandleUrl(clickParams.UseExternalBrowser,
+                                                           clickParams.UseImpersonationToken,
+                                                           clickParams.Url,
+                                                           this,
+                                                           WebViewPage);
+                            }
                         }
                         else if ( source == DiscGuidePage )
                         {

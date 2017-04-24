@@ -212,6 +212,8 @@ namespace iOS
 
         bool PreloadComplete { get; set; }
 
+        //TODO: Remove the black screen and timer functionality and replace with opacity = false fix
+        //by uncommenting line 305 (WebView.Opaque = false)
         const string BlackHtml = "<html><body style=\"background-color:black;\"></body></html>";
 
         /// <summary>
@@ -300,6 +302,7 @@ namespace iOS
             WebView = new UIWebView( );
             WebView.Layer.AnchorPoint = CGPoint.Empty;
             WebView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
+            //WebView.Opaque = false;
             WebView.Delegate = new CustomWebViewDelegate( this );
             WebView.ScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
             WebView.Hidden = true;

@@ -33,13 +33,13 @@ namespace iOS
         // UIScrollView will check for scrolling and suppress touchesBegan
         // if the user is scrolling. We want to allow our controls to consume it
         // before that.
-        public override UIView HitTest(CGPoint point, UIEvent uievent)
+        public override UIView HitTest( CGPoint point, UIEvent uievent )
         {
             // transform the point into absolute coords (as if there was no scrolling)
             CGPoint absolutePoint = new CGPoint( ( point.X - ContentOffset.X ) + Frame.Left,
                                                  ( point.Y - ContentOffset.Y ) + Frame.Top );
 
-            if ( Frame.Contains( absolutePoint ) )
+            if( Frame.Contains( absolutePoint ) )
             {
                 // Base OS controls need to know whether to process & consume
                 // input or pass it up to the higher level (us.)
@@ -51,10 +51,10 @@ namespace iOS
                     return null;
                 }
             }
-            return base.HitTest(point, uievent);
+            return base.HitTest( point, uievent );
         }
 
-        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        public override void TouchesBegan( NSSet touches, UIEvent evt )
         {
             if( Interceptor != null )
             {
@@ -62,7 +62,7 @@ namespace iOS
             }
         }
 
-        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        public override void TouchesMoved( NSSet touches, UIEvent evt )
         {
             if( Interceptor != null )
             {
@@ -136,9 +136,9 @@ namespace iOS
         /// so we can know when it changes and only rebuild the notes then.
         /// </summary>
         /// <value>The orientation.</value>
-		//UIDeviceOrientation Orientation { get; set; }
+        //UIDeviceOrientation Orientation { get; set; }
         int OrientationState { get; set; }
-               
+
         /// <summary>
         /// The overlay displayed the first time the user enters Notes
         /// </summary>
@@ -169,11 +169,11 @@ namespace iOS
         /// We set it to 0 in debug because that means we WANT the error, as
         /// the user could be working on notes and need the error.
         /// </summary>
-        #if DEBUG
+#if DEBUG
         static int MaxDownloadAttempts = 0;
-        #else
+#else
         static int MaxDownloadAttempts = 5;
-        #endif
+#endif
 
         /// <summary>
         /// The amount of times we've attempted to download the current note.
@@ -202,14 +202,14 @@ namespace iOS
         protected void SaveNoteState( nfloat scrollOffsetPercent )
         {
             // request quick backgrounding so we can save our user notes
-            nint taskID = UIApplication.SharedApplication.BeginBackgroundTask( () => {});
+            nint taskID = UIApplication.SharedApplication.BeginBackgroundTask( ( ) => { } );
 
             if( Note != null )
             {
-                Note.SaveState( (float)scrollOffsetPercent );
+                Note.SaveState( ( float ) scrollOffsetPercent );
             }
 
-            UIApplication.SharedApplication.EndBackgroundTask(taskID);
+            UIApplication.SharedApplication.EndBackgroundTask( taskID );
         }
 
         public override void ViewDidLayoutSubviews( )
@@ -220,27 +220,27 @@ namespace iOS
             Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
         }
 
-        public override void LayoutChanged()
+        public override void LayoutChanged( )
         {
-            base.LayoutChanged();
+            base.LayoutChanged( );
 
             // get the orientation state. WE consider unknown- 1, profile 0, landscape 1,
             int orientationState = SpringboardViewController.IsDeviceLandscape( ) == true ? 1 : 0;
 
             // if the states are in disagreement, correct it
-            if ( OrientationState != orientationState ) 
+            if( OrientationState != orientationState )
             {
                 OrientationState = orientationState;
 
                 // get the offset scrolled before changing our frame (which will cause us to lose it)
-                nfloat scrollOffsetPercent = UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height );
+                nfloat scrollOffsetPercent = UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height );
 
                 //note: the frame height of the nav bar is what it CURRENTLY is, not what it WILL be after we rotate. So, when we go from Portrait to Landscape,
                 // it says 40, but it's gonna be 32. Conversely, going back, we use 32 and it's actually 40, which causes us to start this view 8px too high.
-                if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                if( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                 {
                     // add the refresh button if necessary
-                    if ( RefreshButton.Superview == null )
+                    if( RefreshButton.Superview == null )
                     {
                         View.AddSubview( RefreshButton );
                     }
@@ -253,7 +253,7 @@ namespace iOS
                 else
                 {
                     // remove the refresh button if necessary
-                    if ( RefreshButton.Superview != null )
+                    if( RefreshButton.Superview != null )
                     {
                         RefreshButton.RemoveFromSuperview( );
                     }
@@ -262,7 +262,7 @@ namespace iOS
                     UIScrollView.Layer.Position = new CGPoint( UIScrollView.Layer.Position.X, UIScrollView.Layer.Position.Y );
                 }
 
-                Indicator.Layer.Position = new CGPoint (View.Bounds.Width / 2, View.Bounds.Height / 2);
+                Indicator.Layer.Position = new CGPoint( View.Bounds.Width / 2, View.Bounds.Height / 2 );
 
                 // re-create our notes with the new dimensions
                 PrepareCreateNotes( scrollOffsetPercent, false );
@@ -280,14 +280,14 @@ namespace iOS
 
             OrientationState = -1;
 
-            UIScrollView = new CustomScrollView();
+            UIScrollView = new CustomScrollView( );
             UIScrollView.Interceptor = this;
             UIScrollView.Frame = View.Frame;
             UIScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( 0x1C1C1CFF );
             UIScrollView.Delegate = new NavBarRevealHelperDelegate( Task.NavToolbar );
             UIScrollView.Layer.AnchorPoint = new CGPoint( 0, 0 );
 
-            UITapGestureRecognizer tapGesture = new UITapGestureRecognizer();
+            UITapGestureRecognizer tapGesture = new UITapGestureRecognizer( );
             tapGesture.NumberOfTapsRequired = 2;
             tapGesture.AddTarget( this, new ObjCRuntime.Selector( "DoubleTapSelector:" ) );
             UIScrollView.AddGestureRecognizer( tapGesture );
@@ -305,13 +305,13 @@ namespace iOS
             RefreshButton.SizeToFit( );
 
             // if they tap the refresh button, refresh the list
-            RefreshButton.TouchUpInside += (object sender, EventArgs e ) =>
+            RefreshButton.TouchUpInside += ( object sender, EventArgs e ) =>
             {
                 DeleteNote( );
 
                 PrepareCreateNotes( 0, true );
             };
-            
+
             ResultView = new UIResultView( UIScrollView, View.Frame.ToRectF( ), OnResultViewDone );
 
             ResultView.Hide( );
@@ -342,9 +342,9 @@ namespace iOS
             PrepareCreateNotes( 0, true );
         }
 
-        public override void ViewWillAppear(bool animated)
+        public override void ViewWillAppear( bool animated )
         {
-            base.ViewWillAppear(animated);
+            base.ViewWillAppear( animated );
 
             // since we're reappearing, we know we're safe to reset our download count
             NoteDownloadRetries = MaxDownloadAttempts;
@@ -353,9 +353,9 @@ namespace iOS
             LayoutChanged( );
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override void ViewDidAppear( bool animated )
         {
-            base.ViewDidAppear(animated);
+            base.ViewDidAppear( animated );
 
             KeyboardAdjustManager.Activate( );
 
@@ -376,26 +376,26 @@ namespace iOS
             return new CGRect( xPos, yPos, textFrame.Width, textFrame.Height );
         }*/
 
-        public override void ViewDidDisappear(bool animated)
+        public override void ViewDidDisappear( bool animated )
         {
-            base.ViewDidDisappear(animated);
+            base.ViewDidDisappear( animated );
 
-            if ( KeyboardAdjustManager != null )
+            if( KeyboardAdjustManager != null )
             {
                 KeyboardAdjustManager.Deactivate( );
             }
         }
 
-        public override void ViewWillDisappear(bool animated)
+        public override void ViewWillDisappear( bool animated )
         {
-            base.ViewWillDisappear(animated);
+            base.ViewWillDisappear( animated );
 
             ViewResigning( );
         }
 
-        public override void OnActivated()
+        public override void OnActivated( )
         {
-            base.OnActivated();
+            base.OnActivated( );
 
             // yet another place to drop in an idle timer disable
             UIApplication.SharedApplication.IdleTimerDisabled = true;
@@ -416,16 +416,16 @@ namespace iOS
             LayoutChanged( );
         }
 
-        public override void AppOnResignActive()
+        public override void AppOnResignActive( )
         {
-            base.AppOnResignActive();
+            base.AppOnResignActive( );
 
             ViewResigning( );
         }
 
-        public override void AppWillTerminate()
+        public override void AppWillTerminate( )
         {
-            base.AppWillTerminate();
+            base.AppWillTerminate( );
 
             ViewResigning( );
         }
@@ -433,9 +433,9 @@ namespace iOS
         /// <summary>
         /// Called when the view will dissapear, or when the task sees that the app is going into the background.
         /// </summary>
-        public void ViewResigning()
+        public void ViewResigning( )
         {
-            SaveNoteState( UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height ) );
+            SaveNoteState( UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height ) );
 
             DestroyNotes( );
 
@@ -450,16 +450,16 @@ namespace iOS
             public NSString TextStream { get; set; }
             public NSString HTMLStream { get; set; }
 
-            public override string GetDataTypeIdentifierForActivity(UIActivityViewController activityViewController, NSString activityType)
+            public override string GetDataTypeIdentifierForActivity( UIActivityViewController activityViewController, NSString activityType )
             {
                 // let iOS know that we can offer it as simply as plan text.
                 return "public.plain-text";
             }
 
-            public override NSObject GetItemForActivity(UIActivityViewController activityViewController, NSString activityType)
+            public override NSObject GetItemForActivity( UIActivityViewController activityViewController, NSString activityType )
             {
                 // if it's the mail app, use HTML so it's fancy!
-                if ( activityType == UIActivityType.Mail )
+                if( activityType == UIActivityType.Mail )
                 {
                     return HTMLStream;
                 }
@@ -470,24 +470,24 @@ namespace iOS
                 }
             }
 
-            public override NSObject GetPlaceholderData(UIActivityViewController activityViewController)
+            public override NSObject GetPlaceholderData( UIActivityViewController activityViewController )
             {
                 return TextStream;
             }
         }
 
-        public void ShareNotes()
+        public void ShareNotes( )
         {
-            if ( Note != null )
+            if( Note != null )
             {
                 string htmlStream;
                 string textStream;
                 Note.GetNotesForEmail( out htmlStream, out textStream );
 
-                ExportedNoteSource noteSource = new ExportedNoteSource();
+                ExportedNoteSource noteSource = new ExportedNoteSource( );
                 noteSource.HTMLStream = new NSString( htmlStream );
                 noteSource.TextStream = new NSString( textStream );
-                var items = new NSObject[] { noteSource };
+                var items = new NSObject[ ] { noteSource };
 
                 UIActivityViewController shareController = new UIActivityViewController( items, null );
 
@@ -496,7 +496,7 @@ namespace iOS
                 shareController.SetValueForKey( new NSString( emailSubject ), new NSString( "subject" ) );
 
                 // if devices like an iPad want an anchor, set it
-                if ( shareController.PopoverPresentationController != null )
+                if( shareController.PopoverPresentationController != null )
                 {
                     shareController.PopoverPresentationController.SourceView = Task.NavToolbar;
                 }
@@ -542,7 +542,7 @@ namespace iOS
         public bool TouchingUserNote( NSSet touches, UIEvent evt )
         {
             UITouch touch = touches.AnyObject as UITouch;
-            if (touch != null && Note != null)
+            if( touch != null && Note != null )
             {
                 return Note.TouchingUserNote( touch.LocationInView( UIScrollView ).ToPointF( ) );
             }
@@ -550,9 +550,9 @@ namespace iOS
             return false;
         }
 
-        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        public override void TouchesBegan( NSSet touches, UIEvent evt )
         {
-            base.TouchesBegan(touches, evt);
+            base.TouchesBegan( touches, evt );
 
             Rock.Mobile.Util.Debug.WriteLine( "Touches Began" );
 
@@ -563,7 +563,7 @@ namespace iOS
             }
         }
 
-        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        public override void TouchesMoved( NSSet touches, UIEvent evt )
         {
             base.TouchesMoved( touches, evt );
 
@@ -604,21 +604,29 @@ namespace iOS
                         bool urlUsesRockImpersonation = false;
 
                         string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
-                        if ( string.IsNullOrEmpty( activeUrl ) == false )
+                        if( string.IsNullOrEmpty( activeUrl ) == false )
                         {
-                            SaveNoteState( UIScrollView.ContentOffset.Y / (nfloat) Math.Max( 1, UIScrollView.ContentSize.Height ) );
+                            SaveNoteState( UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height ) );
 
                             DestroyNotes( );
 
                             // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
-                            if ( urlUsesRockImpersonation )
+                            if( urlUsesRockImpersonation )
                             {
                                 MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
                             }
 
                             Task.NavToolbar.Reveal( true );
                             Task.NavToolbar.SetBackButtonEnabled( true );
-                            TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                            if( activeUrl.StartsWith( PrivateNoteConfig.Biblia_Prefix ) )
+                            {
+                                BiblePassageViewController viewController = new BiblePassageViewController( activeUrl, Task );
+                                Task.PerformSegue( this, viewController );
+                            }
+                            else
+                            {
+                                TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                            }
                         }
                     }
                 }
@@ -628,8 +636,8 @@ namespace iOS
             }
         }
 
-        [Foundation.Export("DoubleTapSelector:")]
-        public void HandleTapGesture(UITapGestureRecognizer tap)
+        [Foundation.Export( "DoubleTapSelector:" )]
+        public void HandleTapGesture( UITapGestureRecognizer tap )
         {
             if( Note != null )
             {
@@ -678,7 +686,7 @@ namespace iOS
                 // show a busy indicator
                 Indicator.StartAnimating( );
 
-                Note.TryDownloadNote( NoteUrl, StyleSheetDefaultHostDomain, forceDownload, delegate(bool result )
+                Note.TryDownloadNote( NoteUrl, StyleSheetDefaultHostDomain, forceDownload, delegate ( bool result )
                     {
                         if( result == true )
                         {
@@ -696,15 +704,15 @@ namespace iOS
         {
             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                 {
-                    UIAlertView alert = new UIAlertView();
+                    UIAlertView alert = new UIAlertView( );
                     alert.Title = title;
                     alert.Message = message;
                     alert.AddButton( GeneralStrings.Yes );
                     alert.AddButton( GeneralStrings.No );
-                    alert.Show( ); 
-                    alert.Clicked += (object sender, UIButtonEventArgs e) => 
+                    alert.Show( );
+                    alert.Clicked += ( object sender, UIButtonEventArgs e ) =>
                         {
-                            onResult( (int)e.ButtonIndex );
+                            onResult( ( int ) e.ButtonIndex );
                         };
                 } );
         }
@@ -715,21 +723,21 @@ namespace iOS
             {
                 // expect the note and its style sheet to exist.
                 NoteFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( NoteUrl );
-                MemoryStream noteData = (MemoryStream)FileCache.Instance.LoadFile( NoteFileName );
-                string noteXML = Encoding.UTF8.GetString( noteData.ToArray( ), 0, (int)noteData.Length );
+                MemoryStream noteData = ( MemoryStream ) FileCache.Instance.LoadFile( NoteFileName );
+                string noteXML = Encoding.UTF8.GetString( noteData.ToArray( ), 0, ( int ) noteData.Length );
 
                 string styleSheetUrl = Note.GetStyleSheetUrl( noteXML, StyleSheetDefaultHostDomain );
                 StyleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
-                MemoryStream styleData = (MemoryStream)FileCache.Instance.LoadFile( StyleFileName );
-                string styleXML = Encoding.UTF8.GetString( styleData.ToArray( ), 0, (int)styleData.Length );
+                MemoryStream styleData = ( MemoryStream ) FileCache.Instance.LoadFile( StyleFileName );
+                string styleXML = Encoding.UTF8.GetString( styleData.ToArray( ), 0, ( int ) styleData.Length );
 
                 Note = new Note( noteXML, styleXML );
 
-                float scrollPercentOffset = Note.Create( (float)UIScrollView.Bounds.Width, 
-                                                         (float)UIScrollView.Bounds.Height, 
-                                                         this.UIScrollView, 
-                                                         NoteFileName + PrivateNoteConfig.UserNoteSuffix, 
-                                                         DisplayMessageBox, 
+                float scrollPercentOffset = Note.Create( ( float ) UIScrollView.Bounds.Width,
+                                                         ( float ) UIScrollView.Bounds.Height,
+                                                         this.UIScrollView,
+                                                         NoteFileName + PrivateNoteConfig.UserNoteSuffix,
+                                                         DisplayMessageBox,
                                                          UpdateScrollViewHeight );
 
                 // enable scrolling
@@ -757,10 +765,10 @@ namespace iOS
                     TutorialDisplayed = true;
 
                     // wait a second before revealing the tutorial overlay
-                    System.Timers.Timer timer = new System.Timers.Timer();
+                    System.Timers.Timer timer = new System.Timers.Timer( );
                     timer.AutoReset = false;
                     timer.Interval = 750;
-                    timer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e ) =>
+                    timer.Elapsed += ( object sender, System.Timers.ElapsedEventArgs e ) =>
                         {
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                 {
@@ -774,7 +782,7 @@ namespace iOS
 
                                     AnimateTutorialScreen( true );
                                     UIScrollView.ScrollEnabled = false;
-                                });
+                                } );
                         };
                     timer.Start( );
                 }
@@ -796,7 +804,7 @@ namespace iOS
 
             // if that no longer matches our scroll view height, we need
             // to update our scroll view.
-            if ( scrollViewHeight != UIScrollView.ContentSize.Height )
+            if( scrollViewHeight != UIScrollView.ContentSize.Height )
             {
                 nfloat contentSizeDelta = UIScrollView.ContentSize.Height;
 
@@ -805,7 +813,7 @@ namespace iOS
 
                 // get the change, but clamp to 0. We want to follow them editing down, but not if they delete,
                 // which will shrink the box
-                contentSizeDelta = (nfloat)Math.Max( 0, (double)(UIScrollView.ContentSize.Height - contentSizeDelta) );
+                contentSizeDelta = ( nfloat ) Math.Max( 0, ( double ) ( UIScrollView.ContentSize.Height - contentSizeDelta ) );
 
                 // and update our scroll offset by that.
                 UIScrollView.ContentOffset = new CGPoint( 0, UIScrollView.ContentOffset.Y + contentSizeDelta );
@@ -827,17 +835,17 @@ namespace iOS
             float endVal = fadeIn ? 1.00f : 0.00f;
 
             // dont do it if the tutorial screen is already in the state we're requesting
-            if ( endVal != TutorialOverlay.Alpha )
+            if( endVal != TutorialOverlay.Alpha )
             {
-                if ( AnimatingTutorial == false )
+                if( AnimatingTutorial == false )
                 {
                     AnimatingTutorial = true;
 
                     // animate the backer (and don't let it get darker than 80%)
-                    SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( PrivateNoteConfig.MaxTutorialAlpha, endVal ), .15f, delegate(float percent, object value )
+                    SimpleAnimator_Float backerAnim = new SimpleAnimator_Float( startVal, Math.Min( PrivateNoteConfig.MaxTutorialAlpha, endVal ), .15f, delegate ( float percent, object value )
                         {
-                            TutorialBacker.Alpha = (float)value;
-                        }, 
+                            TutorialBacker.Alpha = ( float ) value;
+                        },
                         delegate
                         {
                             if( fadeIn == false )
@@ -847,10 +855,10 @@ namespace iOS
                         } );
                     backerAnim.Start( );
 
-                    SimpleAnimator_Float tutorialAnim = new SimpleAnimator_Float( startVal, endVal, .15f, delegate(float percent, object value )
+                    SimpleAnimator_Float tutorialAnim = new SimpleAnimator_Float( startVal, endVal, .15f, delegate ( float percent, object value )
                         {
-                            TutorialOverlay.Alpha = (float)value;
-                        }, 
+                            TutorialOverlay.Alpha = ( float ) value;
+                        },
                         delegate
                         {
                             if( fadeIn == false )
@@ -897,26 +905,26 @@ namespace iOS
 
                     DeleteNote( );
 
-                    // since there was an error, try redownloading the notes
-                    if( NoteDownloadRetries > 0 )
+                  // since there was an error, try redownloading the notes
+                  if( NoteDownloadRetries > 0 )
                     {
                         Rock.Mobile.Util.Debug.WriteLine( "Download error. Trying again" );
 
                         NoteDownloadRetries--;
                         PrepareCreateNotes( 0, true );
                     }
-                    else 
+                    else
                     {
-                        // we've tried as many times as we're going to. Give up and error.
-                        if( e != null )
+                      // we've tried as many times as we're going to. Give up and error.
+                      if( e != null )
                         {
                             errorMsg += "\n" + e.Message;
                         }
 
-                        if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
+                        if( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
                         {
-                            // explain that we couldn't generate notes
-                            UIAlertView alert = new UIAlertView( );
+                          // explain that we couldn't generate notes
+                          UIAlertView alert = new UIAlertView( );
                             alert.Title = "Note Error";
                             alert.Message = errorMsg;
                             alert.AddButton( "Ok" );
@@ -924,9 +932,9 @@ namespace iOS
                         }
                         else
                         {
-                            ResultView.Show( MessagesStrings.Error_Title, 
-                                             PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                             MessagesStrings.Error_Message, 
+                            ResultView.Show( MessagesStrings.Error_Title,
+                                             PrivateControlStylingConfig.Result_Symbol_Failed,
+                                             MessagesStrings.Error_Message,
                                              GeneralStrings.Retry );
                         }
                     }
