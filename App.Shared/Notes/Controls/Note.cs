@@ -968,7 +968,7 @@ namespace MobileApp
                     return nearbyControl;
                 }
 
-                public IEditableUIControl HandleMouseHover( PointF position )
+                public IEditableUIControl ControlAtPosition( PointF position )
                 {
                     IEditableUIControl consumingControl = null;
 
@@ -1004,6 +1004,11 @@ namespace MobileApp
 
                     // and return the control consuming this hover
                     return consumingControl;
+                }
+
+                public IEditableUIControl HandleMouseHover( PointF position )
+                {
+                    return ControlAtPosition( position );
                 }
 
                 public IEditableUIControl ContainerForControl( Type controlType, PointF mousePos )

@@ -72,15 +72,7 @@ namespace MobileApp
 
                 public IEditableUIControl HandleMouseDoubleClick( PointF point )
                 {
-                    if( PlatformLabel.Frame.Contains( point ) )
-                    {
-                        EditMode_Enabled = true;
-                        PlatformLabel.BackgroundColor = 0xFF222277;
-
-                        return this;
-                    }
-                    
-                    return null;
+                   return null;
                 }
 
                 public bool HandleFocusedControlKeyUp( KeyEventArgs e )

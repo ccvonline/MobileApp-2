@@ -26,7 +26,7 @@ namespace MobileApp.Shared.Notes
         IEditableUIControl HandleMouseHover( PointF mousePos );
         IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos );
         IUIControl HandleCreateControl( System.Type controlType, PointF mousePos );
-
+        
         // true when this is a "direct delete" where a child is being deleted by WinView, and
         // therefore needs to tell its parent so the parent can update layout.
         void HandleDelete( bool notifyParent ); 

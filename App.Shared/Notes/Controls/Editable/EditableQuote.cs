@@ -99,7 +99,7 @@ namespace MobileApp
                 public void SetStyleValue( EditStyling.Style style, object value )
                 {
                 }
-
+                
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
                 {
                     switch ( e.Key )

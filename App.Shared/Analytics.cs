@@ -78,11 +78,13 @@ namespace MobileApp.Shared
 
                     if (GeneralConfig.Use_Analytics == true)
                     {
-                        #if !DEBUG
-                            HockeyApp.MetricsManager.TrackEvent(Name,
+#if !DEBUG
+#if !__WIN__
+                        HockeyApp.MetricsManager.TrackEvent(Name,
                                                                 new Dictionary<string, string> { { category, action } },
                                                                 new Dictionary<string, double> () );
-                        #endif
+#endif
+#endif
                     }
                 }
             }
