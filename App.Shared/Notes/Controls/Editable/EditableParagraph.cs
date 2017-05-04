@@ -329,7 +329,9 @@ namespace MobileApp
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left - 5 );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top - 2 );
 
-                            EditMode_TextBox.Width = Frame.Width * ParentSize.Width;
+                            float availableWidth = ParentSize.Width - Frame.Left;
+
+                            EditMode_TextBox.Width = availableWidth;
                             EditMode_TextBox.Height = Frame.Height * 1.25f;
 
                             // get the full text. we can use the build HTML stream code to do this.
@@ -404,11 +406,9 @@ namespace MobileApp
 
                         // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
-                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
-                        {
-                            // Right Edge Check
-                            xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
-                        }
+
+                        // Right Edge Check
+                        xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
 
                         float currX = Frame.Left;
                         float currY = Frame.Top;

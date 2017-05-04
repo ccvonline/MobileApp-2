@@ -259,12 +259,9 @@ namespace MobileApp
                             
                          // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
-                        if ( Math.Floor( Frame.Width ) <= Math.Floor( minRequiredWidth ) )
-                        {
-                            // Right Edge Check
-                            xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
-                        }
-                        
+
+                        // Right Edge Check
+                        xPos = Math.Min( xPos, ParentSize.Width - ParentNote.Padding.Right - minRequiredWidth );
 
                         float xOffset = xPos - Frame.Left;
                         float yOffset = yPos - Frame.Top;
@@ -275,10 +272,11 @@ namespace MobileApp
                         // now update the actual width and height of the Quote based on the available width remaining
                         // our width remaining is the parent's right edge minus the control's left edge minus all padding.
                         float availableWidth = (ParentSize.Width - ParentNote.Padding.Right) - Frame.Left - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
-                        QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, availableWidth, 0 );
+                        
+                        QuoteLabel.Frame = new RectangleF( QuoteLabel.Frame.Left, QuoteLabel.Frame.Top, Math.Max( minRequiredWidth, availableWidth ), 0 );
                         QuoteLabel.SizeToFit( );
 
-                        Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, availableWidth, 0 );
+                        Citation.Frame = new RectangleF( Citation.Frame.Left, Citation.Frame.Top, Math.Max( minRequiredWidth, availableWidth ), 0 );
                         Citation.SizeToFit( );
 
                         UrlGlyph.Frame = new RectangleF( Citation.Frame.Right, Citation.Frame.Top, Math.Max( 0, (availableWidth - Citation.Frame.Right) ), 0 );
