@@ -23,6 +23,8 @@ namespace MobileApp
         {
             public class EditableQuote: Quote, IEditableUIControl
             {
+                public const string sDefaultNewQuoteText = "New Quote Body";
+
                 bool EditMode_Enabled = false;
                 EditModeTextBox EditMode_TextBox_Quote = null;
                 EditModeTextBox EditMode_TextBox_Citation = null;
@@ -181,6 +183,12 @@ namespace MobileApp
                                 EditMode_TextBox_Quote.Focus( );
                                 Keyboard.Focus( EditMode_TextBox_Quote );
                                 EditMode_TextBox_Quote.CaretIndex = EditMode_TextBox_Quote.Text.Length + 1;
+
+                                if( EditMode_TextBox_Quote.Text == sDefaultNewQuoteText )
+                                {
+                                    EditMode_TextBox_Quote.SelectAll( );
+                                    EditMode_TextBox_Citation.SelectAll( );
+                                }
                             }));
                         }
                         else

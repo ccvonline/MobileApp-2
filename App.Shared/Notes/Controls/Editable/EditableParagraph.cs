@@ -23,6 +23,8 @@ namespace MobileApp
             public class EditableParagraph : Paragraph, IEditableUIControl
             {
                 Note ParentNote { get; set; }
+
+                public const string sDefaultNewParagraphText = "New Paragraph";
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -148,38 +150,48 @@ namespace MobileApp
                             editableControl.HandleMouseHover( oobPos );
                         }
                     }
+
                     
+                    // JHM 5-8-17 - Only show hover for the children. Don't highlight the paragraph. It's pointless and distracting
                     // if we're over a child
                     if( hoveringChildControl == true )
                     {
-                        // restore the color
-                        BorderView.BackgroundColor = OrigBackgroundColor;
+                        return consumingControl;
                     }
-                    else
-                    {
-                        // otherwise, see if we're hovering over the paragraph, and if we are, highlight it
-                        RectangleF frame = GetFrame( );
-                        frame.Inflate( CornerExtensionSize, CornerExtensionSize );
+                    
+                    return null;
+                    
+                    // if we're over a child
+                    //if( hoveringChildControl == true )
+                    //{
+                    //    // restore the color
+                    //    BorderView.BackgroundColor = OrigBackgroundColor;
+                    //}
+                    //else
+                    //{
+                    //    // otherwise, see if we're hovering over the paragraph, and if we are, highlight it
+                    //    RectangleF frame = GetFrame( );
+                    //    frame.Inflate( CornerExtensionSize, CornerExtensionSize );
 
-                        // are we hovering over this control?
-                        bool mouseHovering = frame.Contains( mousePos );
-                        if( mouseHovering == true )
-                        {
-                            // take us as the consumer
-                            consumingControl = this;
+                    //    // are we hovering over this control?
+                    //    bool mouseHovering = frame.Contains( mousePos );
+                    //    if( mouseHovering == true )
+                    //    {
+                    //        // take us as the consumer
+                    //        consumingControl = this;
 
-                            // set the hover appearance
-                            BorderView.BackgroundColor = 0xFFFFFF77;
-                        }
-                        // we're NOT hovering
-                        else
-                        {
-                            // so revert the color
-                            BorderView.BackgroundColor = OrigBackgroundColor;
-                        }
-                    }
+                    //        // set the hover appearance
+                    //        BorderView.BackgroundColor = 0xFFFFFF77;
+                    //    }
+                    //    // we're NOT hovering
+                    //    else
+                    //    {
+                    //        // so revert the color
+                    //        BorderView.BackgroundColor = OrigBackgroundColor;
+                    //    }
+                    //}
 
-                    return consumingControl;
+                    //return consumingControl;
                 }
                 
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
@@ -358,6 +370,11 @@ namespace MobileApp
                                 EditMode_TextBox.Focus( );
                                 Keyboard.Focus( EditMode_TextBox );
                                 EditMode_TextBox.CaretIndex = EditMode_TextBox.Text.Length + 1;
+
+                                if( EditMode_TextBox.Text == sDefaultNewParagraphText )
+                                {
+                                    EditMode_TextBox.SelectAll( );
+                                }
                             }));
                         }
                         else

@@ -23,6 +23,8 @@ namespace MobileApp
         {
             public class EditableHeader: Header, IEditableUIControl
             {
+                public const string sDefaultHeaderTitleText = "TITLE";
+
                 bool EditMode_Enabled = false;
                 EditModeTextBox EditMode_TextBox_Title = null;
                 EditModeTextBox EditMode_TextBox_Date = null;
@@ -176,8 +178,8 @@ namespace MobileApp
                         if ( enabled == true )
                         {
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Title );
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Speaker );
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Date );
+                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Speaker );
 
                             // hide the regular text
                             mTitle.Hidden = true;
@@ -220,6 +222,13 @@ namespace MobileApp
                                 EditMode_TextBox_Title.Focus( );
                                 Keyboard.Focus( EditMode_TextBox_Title );
                                 EditMode_TextBox_Title.CaretIndex = EditMode_TextBox_Title.Text.Length + 1;
+
+                                if( EditMode_TextBox_Title.Text == sDefaultHeaderTitleText )
+                                {
+                                    EditMode_TextBox_Title.SelectAll( );
+                                    EditMode_TextBox_Date.SelectAll( );
+                                    EditMode_TextBox_Speaker.SelectAll( );
+                                }
                             }));
                         }
                         else

@@ -116,10 +116,10 @@ namespace MobileApp
                             return PlatformLabel.Editable_GetFontSize( );
                         }
 
-                        case EditStyling.Style.Underline:
-                        {
-                            return PlatformLabel.Editable_HasUnderline( );
-                        }
+                        //case EditStyling.Style.Underline:
+                        //{
+                        //    return PlatformLabel.Editable_HasUnderline( );
+                        //}
 
                         case EditStyling.Style.RevealBox:
                         {
@@ -152,21 +152,21 @@ namespace MobileApp
                             break;
                         }
 
-                        case EditStyling.Style.Underline:
-                        {
-                            bool enableUnderline = (bool) value;
+                        //case EditStyling.Style.Underline:
+                        //{
+                        //    bool enableUnderline = (bool) value;
 
-                            if( enableUnderline )
-                            {
-                                PlatformLabel.Editable_AddUnderline( );
-                            }
-                            else
-                            {
-                                PlatformLabel.Editable_RemoveUnderline( );
-                            }
+                        //    if( enableUnderline )
+                        //    {
+                        //        PlatformLabel.Editable_AddUnderline( );
+                        //    }
+                        //    else
+                        //    {
+                        //        PlatformLabel.Editable_RemoveUnderline( );
+                        //    }
 
-                            break;
-                        }
+                        //    break;
+                        //}
                     }
 
                     // first, reset our dimensions and call sizeToFit, which will
@@ -244,11 +244,13 @@ namespace MobileApp
                     bool mouseHovering = GetFrame( ).Contains( mousePos );
                     if ( mouseHovering == true )
                     {
+                        PlatformLabel.Hidden = false;
                         PlatformLabel.BackgroundColor = 0xFFFFFF77;
                         return this;
                     }
                     else
                     {
+                        PlatformLabel.Hidden = true;
                         PlatformLabel.BackgroundColor = OrigBackgroundColor;
                         return null;
                     }

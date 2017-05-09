@@ -108,7 +108,7 @@ namespace MobileApp
                     if ( controlType == typeof( EditableParagraph ) )
                     {
                         // seed the paragaph with some default text
-                        XmlTextReader reader = new XmlTextReader( new StringReader( "<P>New Paragraph</P>" ) );
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<P>" + EditableParagraph.sDefaultNewParagraphText + "</P>" ) );
                         reader.Read( );
 
                         return new EditableParagraph( parentParams, reader );
@@ -124,7 +124,7 @@ namespace MobileApp
                     else if ( controlType == typeof( EditableQuote ) )
                     {
                         // give the stack panel some back width and color so the user can see it
-                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Quote Citation=\"Citation\">New Quote Body</Quote>" ) );
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Quote Citation=\"Citation\">" + EditableQuote.sDefaultNewQuoteText + "</Quote>" ) );
                         reader.Read( );
 
                         return new EditableQuote( parentParams, reader );
