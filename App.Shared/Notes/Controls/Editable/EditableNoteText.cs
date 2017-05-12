@@ -189,6 +189,14 @@ namespace MobileApp
                     ParentControl.HandleChildStyleChanged( style, this );
                 }
 
+                public void ResetBounds( )
+                {
+                    // reset our dimensions and call sizeToFit, which will
+                    // fully recalculate our bounds assuming this should all fit on a single line
+                    PlatformLabel.Bounds = new RectangleF( 0, 0, 0, 0 );
+                    PlatformLabel.SizeToFit( );
+                }
+
                 // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
                 // used by the notes platform.
                 public MobileApp.Shared.Notes.Styles.Style GetControlStyle( )

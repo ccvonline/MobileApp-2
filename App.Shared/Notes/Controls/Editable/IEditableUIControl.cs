@@ -35,6 +35,7 @@ namespace MobileApp.Shared.Notes
         bool HandleFocusedControlKeyUp( KeyEventArgs e );
 
         PointF GetPosition( );
+        void ResetBounds( );
 
         bool IsEditing( );
         List<EditStyling.Style> GetEditStyles( );

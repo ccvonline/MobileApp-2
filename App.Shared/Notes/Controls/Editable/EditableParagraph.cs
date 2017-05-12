@@ -25,6 +25,9 @@ namespace MobileApp
                 Note ParentNote { get; set; }
 
                 public const string sDefaultNewParagraphText = "New Paragraph";
+
+                public const string sDefaultBoldFontName = "OpenSans-Bold";
+                public const string sDefaultRegularFontName = "OpenSans-Regular";
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -603,13 +606,21 @@ namespace MobileApp
                             EditableNoteText editableNoteText = childControl as EditableNoteText;
                             if ( editableNoteText != null )
                             {
-                                // create a new revealBox that has the styling and text of the noteText it's replacing.
+                                // create a new revealBox, but force the text to uppper-case and add the bold font (since this is typically what the Mobile App does)
                                 Style controlStyle = childControl.GetControlStyle( );
-                                RevealBox newRevealBox = Parser.CreateRevealBox( new CreateParams( this, Frame.Width, Frame.Height, ref controlStyle ), editableNoteText.GetText( ).Trim( ) );
+                                controlStyle.mFont = new FontParams( );
+                                controlStyle.mFont.mName = sDefaultBoldFontName;
+
+                                RevealBox newRevealBox = Parser.CreateRevealBox( new CreateParams( this, Frame.Width, Frame.Height, ref controlStyle ), editableNoteText.GetText( ).ToUpper( ).Trim( ) );
                                 newRevealBox.AddToView( ParentEditingCanvas );
-                                
+
                                 // add the new revealBox into the same spot as what it's replacing
                                 ChildControls.Insert( targetIndex, newRevealBox );
+
+                                // make sure we add a space after the reveal box, as that's required.
+                                NoteText textLabel = Parser.CreateNoteText( new CreateParams( this, Frame.Width, Frame.Height, ref mStyle ), " " );
+                                textLabel.AddToView( ParentEditingCanvas );
+                                ChildControls.Insert( targetIndex + 1, textLabel );
                             }
 
                             EditableRevealBox editableRevealBox = childControl as EditableRevealBox;
@@ -637,6 +648,11 @@ namespace MobileApp
                 public MobileApp.Shared.Notes.Styles.Style GetControlStyle( )
                 {
                     return mStyle;
+                }
+
+                public void ResetBounds( )
+                {
+                    // nothing to do
                 }
 
                 void UpdateLayout( float maxWidth, float maxHeight )
@@ -726,6 +742,10 @@ namespace MobileApp
                                 {
                                     ( (NoteText) control ).SetText( ' ' + text );
 
+                                    // since adding a blank space could trigger text wrapping on the WinLabel,
+                                    // do a bounds reset to fit the text on a single line.
+                                    ((IEditableUIControl)control).ResetBounds( );
+                                    
                                     // re-acquire the width, since we just added a space.
                                     controlFrame = control.GetFrame( );
                                 }

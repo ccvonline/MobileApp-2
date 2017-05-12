@@ -288,6 +288,10 @@ namespace MobileApp
                     return new PointF( Frame.Left, Frame.Top );
                 }
 
+                public void ResetBounds( )
+                {
+                }
+
                 public void SetPosition( float xPos, float yPos )
                 {
                     // we're not moving if we're in edit mode

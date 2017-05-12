@@ -219,6 +219,14 @@ namespace MobileApp
                     return null;
                 }
 
+                public void ResetBounds( )
+                {
+                    // reset our dimensions and call sizeToFit, which will
+                    // fully recalculate our bounds assuming this should all fit on a single line
+                    PlatformLabel.Bounds = new RectangleF( 0, 0, 0, 0 );
+                    PlatformLabel.SizeToFit( );
+                }
+
                 public void HandleDelete( bool notifyParent )
                 {
                     RemoveFromView( ParentEditingCanvas );
