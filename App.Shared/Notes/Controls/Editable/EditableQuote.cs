@@ -24,6 +24,7 @@ namespace MobileApp
             public class EditableQuote: Quote, IEditableUIControl
             {
                 public const string sDefaultNewQuoteText = "New Quote Body";
+                public const string sPlaceholderUrlText = "Optional URL";
 
                 bool EditMode_Enabled = false;
                 EditModeTextBox EditMode_TextBox_Quote = null;
@@ -125,7 +126,19 @@ namespace MobileApp
                                 // if they press return, commit the changed text.
                                 QuoteLabel.Text = EditMode_TextBox_Quote.Text;
                                 Citation.Text = EditMode_TextBox_Citation.Text;
-                                ActiveUrl = EditMode_TextBox_Url.Text;
+                                
+                                // try to set the URL
+                                string activeUrl = EditMode_TextBox_Url.Text;
+                                if( activeUrl.Trim( ) != sPlaceholderUrlText )
+                                {
+                                    // help them out by adding 'http://' if it isn't there.
+                                    if ( activeUrl.StartsWith( "http://" ) == false && activeUrl.StartsWith( PrivateConfig.PrivateNoteConfig.Biblia_Prefix ) == false )
+                                    {
+                                        activeUrl = activeUrl.Insert( 0, "http://" );
+                                    }
+
+                                    ActiveUrl = activeUrl;
+                                }
                                 
                                 EnableEditMode( false );
 
@@ -174,12 +187,12 @@ namespace MobileApp
 
 
                             // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl;
+                            EditMode_TextBox_Url.Text = ActiveUrl == null ? sPlaceholderUrlText : ActiveUrl;
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
-                            EditMode_TextBox_Url.Width = Frame.Width;
+                            EditMode_TextBox_Url.Width = availWidth;
                             EditMode_TextBox_Url.Height = 33;
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, QuoteLabel.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height + EditMode_TextBox_Citation.Height );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height + EditMode_TextBox_Citation.Height + 5 );
 
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
@@ -192,6 +205,11 @@ namespace MobileApp
                                 {
                                     EditMode_TextBox_Quote.SelectAll( );
                                     EditMode_TextBox_Citation.SelectAll( );
+                                }
+
+                                if ( EditMode_TextBox_Url.Text == sPlaceholderUrlText )
+                                {
+                                    EditMode_TextBox_Url.SelectAll( );
                                 }
                             }));
                         }

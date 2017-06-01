@@ -190,7 +190,7 @@ namespace MobileApp
                             float availableWidth = ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
 
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Title, mTitle.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Title, mTitle.Frame.Top );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Title, mTitle.Frame.Top - 10 );
 
                             EditMode_TextBox_Title.Width = availableWidth;
                             EditMode_TextBox_Title.Height = mTitle.Frame.Height;
@@ -198,18 +198,18 @@ namespace MobileApp
                             
                              // date
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Date, mDate.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top + 15 );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top );
 
                             EditMode_TextBox_Date.Width = availableWidth / 2;
-                            EditMode_TextBox_Date.Height = mDate.Frame.Height;
+                            EditMode_TextBox_Date.Height = mDate.Frame.Height + 5;
 
                             
                             // speaker
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Speaker, mDate.Frame.Left + (availableWidth / 2) );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top + 15 );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top );
 
                             EditMode_TextBox_Speaker.Width = availableWidth / 2;
-                            EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height;
+                            EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height + 5;
                             
                             
                             // assign each text box
@@ -294,18 +294,7 @@ namespace MobileApp
 
                 public void SetPosition( float xPos, float yPos )
                 {
-                    // we're not moving if we're in edit mode
-                    if( EditMode_Enabled == false )
-                    {
-                        // clamp the left/top to 0, 0 within the parent (headers can ignore padding)
-                        yPos = Math.Max( yPos, 0 );
-                        xPos = Math.Max( xPos, 0 );
-
-                        float xOffset = xPos - Frame.Left;
-                        float yOffset = yPos - Frame.Top;
-
-                        base.AddOffset( xOffset, yOffset );
-                    }
+                    // no moving a header.
                 }
                 
                 public IEditableUIControl HandleMouseDoubleClick( PointF point )

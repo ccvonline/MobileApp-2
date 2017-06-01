@@ -1033,36 +1033,54 @@ namespace MobileApp
                 }
 
 
-                public IEditableUIControl HandleCreateControl( Type controlType, PointF mousePos )
+                public void HandleCreateControl( Type controlType, PointF mousePos )
                 {
-                    // first, see if any child control can handle it.
-                    IUIControl newControl = null;
-
-                    foreach( IUIControl control in ChildControls )
+                    do
                     {
-                        IEditableUIControl editableControl = control as IEditableUIControl;
-                        if ( editableControl != null )
+                        // first, if we're creating a header, we need to make sure there isn't already one
+                        if ( typeof( EditableHeader ) == controlType )
                         {
-                            IEditableUIControl containerControl = editableControl.ContainerForControl( controlType, mousePos );
-                            if( containerControl != null )
+                            List<IUIControl> headerControls = new List<IUIControl>( );
+                            GetControlOfType<EditableHeader>( headerControls );
+
+                            // we found a header, so we're done.
+                            if ( headerControls.Count > 0 ) break;
+                        }
+                    
+                        // now see if any child wants to create it
+                        IUIControl newControl = null;
+                        foreach( IUIControl control in ChildControls )
+                        {
+                            IEditableUIControl editableControl = control as IEditableUIControl;
+                            if ( editableControl != null )
                             {
-                                newControl = containerControl.HandleCreateControl( controlType, mousePos );
-                                break;
+                                IEditableUIControl containerControl = editableControl.ContainerForControl( controlType, mousePos );
+                                if( containerControl != null )
+                                {
+                                    newControl = containerControl.HandleCreateControl( controlType, mousePos );
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    // if we got thru all our children and nobody created the control, we'll do it. (maybe.)
-                    if( newControl == null )
-                    {
-                        // create the control and add it to our immediate children
+                        // if a child handled it, we're done
+                        if( newControl != null ) break;
+
+                    
+                        // it wasn't a header, and a child didn't create it, so we will.
                         float availableWidth = Frame.Width - Padding.Right - Padding.Left;
 
-                        // if the control type is a header, and its allowed, use the full width
+                        // if the control type is a header, we want to force it to position 0
                         float workingWidth = availableWidth;
-                        if ( typeof( EditableHeader ) == controlType && mStyle.mFullWidthHeader == true )
+                        if ( typeof( EditableHeader ) == controlType )
                         {
-                            workingWidth = Frame.Width;
+                            mousePos = PointF.Empty;
+
+                            // and if its allowed, use the full width
+                            if ( mStyle.mFullWidthHeader == true )
+                            {
+                                workingWidth = Frame.Width;
+                            }
                         }
 
                         newControl = Parser.CreateEditableControl( controlType, new BaseControl.CreateParams( this, workingWidth, DeviceHeight, ref mStyle ) );
@@ -1081,9 +1099,7 @@ namespace MobileApp
                             Frame = new RectangleF( Frame.Left, Frame.Top, Frame.Width, newControl.GetFrame( ).Bottom + Padding.Bottom );
                         }
                     }
-
-                    // return the editable interface for the caller
-                    return newControl as IEditableUIControl;
+                    while( 0 != 0 );
                 }
 
                 public void HandleDeleteControl( IEditableUIControl control )

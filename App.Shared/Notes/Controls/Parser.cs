@@ -116,7 +116,7 @@ namespace MobileApp
                     else if ( controlType == typeof( EditableHeader ) )
                     {
                         // give the stack panel some back width and color so the user can see it
-                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Header> <Title>Title</Title> <Speaker>Speaker</Speaker> <Date>1-1-2018</Date> </Header>" ) );
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<Header> <Title>Title</Title> <Speaker>Speaker</Speaker> <Date>January 1st - 2nd, 2017</Date> </Header>" ) );
                         reader.Read( );
 
                         return new EditableHeader( parentParams, reader );

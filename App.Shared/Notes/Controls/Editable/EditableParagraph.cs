@@ -28,6 +28,8 @@ namespace MobileApp
 
                 public const string sDefaultBoldFontName = "OpenSans-Bold";
                 public const string sDefaultRegularFontName = "OpenSans-Regular";
+
+                public const string sPlaceholderUrlText = "Optional URL";
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -263,7 +265,16 @@ namespace MobileApp
                         }
                     }
 
-                    ActiveUrl = activeUrl;
+                    if( activeUrl.Trim( ) != sPlaceholderUrlText )
+                    {
+                        // help them out by adding 'http://' if it isn't there.
+                        if ( activeUrl.StartsWith( "http://" ) == false && activeUrl.StartsWith( PrivateConfig.PrivateNoteConfig.Biblia_Prefix ) == false )
+                        {
+                            activeUrl = activeUrl.Insert( 0, "http://" );
+                        }
+
+                        ActiveUrl = activeUrl;
+                    }
 
                     TryAddUrlGlyph( Frame.Width, Frame.Height );
                 }
@@ -361,12 +372,13 @@ namespace MobileApp
                             EditMode_TextBox.Text = textStream;
 
                             // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl;
+                            EditMode_TextBox_Url.Text = ActiveUrl == null ? sPlaceholderUrlText : ActiveUrl;
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
-                            EditMode_TextBox_Url.Width = Frame.Width;
+                            EditMode_TextBox_Url.Width = availableWidth;
                             EditMode_TextBox_Url.Height = 33;
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom );
+                            
+                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left - 5 );
+                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom + 5 );
 
                             Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
                             { 
@@ -377,6 +389,11 @@ namespace MobileApp
                                 if( EditMode_TextBox.Text == sDefaultNewParagraphText )
                                 {
                                     EditMode_TextBox.SelectAll( );
+                                }
+
+                                if ( EditMode_TextBox_Url.Text == sPlaceholderUrlText )
+                                {
+                                    EditMode_TextBox_Url.SelectAll( );
                                 }
                             }));
                         }
