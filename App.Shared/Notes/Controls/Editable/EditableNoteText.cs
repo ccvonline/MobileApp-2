@@ -6,6 +6,7 @@ using Rock.Mobile.UI;
 using System.Drawing;
 using System.Windows.Input;
 using RestSharp.Extensions.MonoHttp;
+using MobileApp.Shared.PrivateConfig;
 
 namespace MobileApp
 {
@@ -263,8 +264,8 @@ namespace MobileApp
 
                 public string Export( RectangleF parentPadding, float currYPos )
                 {
-                    // only export if there's valid text. If we're simply a blank space, we don't need to be saved.
-                    if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
+                    // only export if there's valid text. If we're simply a blank space, or a URL glyph, we don't need to be saved.
+                    if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false && PlatformLabel.Text != PrivateNoteConfig.CitationUrl_Icon )
                     {
                         // first get the text itself
                         string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text ).Trim( new char[] { ' ' } );

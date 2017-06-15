@@ -265,7 +265,7 @@ namespace MobileApp
                         }
                     }
 
-                    if( activeUrl.Trim( ) != sPlaceholderUrlText )
+                    if( activeUrl.Trim( ) != sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                     {
                         // help them out by adding 'http://' if it isn't there.
                         if ( activeUrl.StartsWith( "http://" ) == false && activeUrl.StartsWith( PrivateConfig.PrivateNoteConfig.Biblia_Prefix ) == false )
@@ -274,6 +274,10 @@ namespace MobileApp
                         }
 
                         ActiveUrl = activeUrl;
+                    }
+                    else
+                    {
+                        ActiveUrl = string.Empty;
                     }
 
                     TryAddUrlGlyph( Frame.Width, Frame.Height );
@@ -573,27 +577,30 @@ namespace MobileApp
 
                 public void HandleChildDeleted( IEditableUIControl childControl )
                 {
-                    // find this control in our list and remove it
-                    foreach( IUIControl child in ChildControls )
+                    // if any of our children are deleted, we want to delete ourselves completely.
+                    // First, remove the child that was just deleted, and then delete all other controls and ourself
+                    foreach ( IUIControl child in ChildControls )
                     {
-                        if( child.Equals( childControl ) == true )
+                        if ( child.Equals( childControl ) == true )
                         {
                             ChildControls.Remove( child );
                             break;
                         }
                     }
 
-                    // if we still have children
-                    if( ChildControls.Count > 0 )
-                    {
-                        // update our layout
-                        SetPosition( Frame.Left, Frame.Top );
-                    }
-                    else
-                    {
-                        // otherwise, delete ourselves and tell our parent
-                        HandleDelete( true );
-                    }
+                    HandleDelete( true );
+
+                    //// if we still have children
+                    //if( ChildControls.Count > 0 )
+                    //{
+                    //    // update our layout
+                    //    SetPosition( Frame.Left, Frame.Top );
+                    //}
+                    //else
+                    //{
+                    //    // otherwise, delete ourselves and tell our parent
+                    //    HandleDelete( true );
+                    //}
                 }
 
                 public void HandleChildStyleChanged( EditStyling.Style style, IEditableUIControl childControl )

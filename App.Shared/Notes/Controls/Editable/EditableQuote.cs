@@ -167,13 +167,19 @@ namespace MobileApp
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Quote );
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Citation );
 
+                            // first get the size of the control, which should be whatever's largest: the quote or citation.
+                            // we do this to prevent taking a 0 width, which it could be if the quote or citation are blank.
+                            float controlWidth = Math.Max( QuoteLabel.Frame.Width, Citation.Frame.Width );
+                            float controlHeight = Math.Max( QuoteLabel.Frame.Height, Citation.Frame.Height );
+
+
                             // position and size the textboxes
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Quote, QuoteLabel.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Quote, QuoteLabel.Frame.Top );
-
-                            float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), QuoteLabel.Frame.Width * 4 );
+                            
+                            float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), controlWidth * 4 );
                             EditMode_TextBox_Quote.Width = availWidth;
-                            EditMode_TextBox_Quote.Height = QuoteLabel.Frame.Height * 4;
+                            EditMode_TextBox_Quote.Height = controlHeight * 4;
                             
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, QuoteLabel.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height  );
@@ -419,7 +425,7 @@ namespace MobileApp
                         {
                             // on return, editing will only end, (and thus focus should clear)
                             // if there's text in the text box
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false && 
+                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false ||
                                  string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
                             {
                                 releaseFocus = true;
