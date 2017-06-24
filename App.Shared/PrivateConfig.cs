@@ -41,7 +41,7 @@ namespace MobileApp.Shared
             public const int EntityType_UserLoginId = 27;
 
             // group types (for searching in the Group Finder)
-            public const int GroupType_Neighborhood_GroupId = 49;;
+            public const int GroupType_Neighborhood_GroupId = 49;
 
             public const int GroupType_NextGenGroupId = 94;
 

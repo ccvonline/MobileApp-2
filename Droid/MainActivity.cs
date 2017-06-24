@@ -151,8 +151,8 @@ namespace Droid
 
             // Register HockeyApp
             #if !DEBUG
-            CrashManager.Register(this, GeneralConfig.Droid_HockeyApp_Id, new HockeyCrashManagerSettings() );
-                MetricsManager.Register( Application, GeneralConfig.Droid_HockeyApp_Id );
+                CrashManager.Register(this, App.Shared.SecuredValues.Droid_HockeyApp_Id, new HockeyCrashManagerSettings() );
+                MetricsManager.Register( Application, App.Shared.SecuredValues.Droid_HockeyApp_Id );
             #endif
         }
 

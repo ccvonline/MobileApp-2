@@ -40,7 +40,7 @@ namespace iOS
             #if !DEBUG
 
                 var manager = BITHockeyManager.SharedHockeyManager;
-                manager.Configure( GeneralConfig.iOS_HockeyApp_Id );
+                manager.Configure( App.Shared.SecuredValues.iOS_HockeyApp_Id );
                 manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
                 manager.StartManager();
                 manager.Authenticator.AuthenticateInstallation();
