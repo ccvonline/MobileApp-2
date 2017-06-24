@@ -27,7 +27,7 @@ namespace MobileApp
                 public RockNetworkManager( )
                 {
                     RockApi.SetRockURL( Config.GeneralConfig.RockBaseUrl );
-                    RockApi.SetAuthorizationKey( Config.GeneralConfig.RockMobileAppAuthorizationKey );
+                    RockApi.SetAuthorizationKey( App.Shared.SecuredValues.RockMobileAppAuthorizationKey );
 
                     // make sure our built in news items have their images in the cache
                     RockLaunchData.Instance.TryCacheEmbeddedNewsImages( );

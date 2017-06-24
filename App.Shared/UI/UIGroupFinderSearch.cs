@@ -36,8 +36,8 @@ namespace MobileApp.Shared.UI
         PlatformButton SearchNeighborhoodsButton { get; set; }
         Rock.Mobile.UI.PlatformButton.OnClick SearchNeighborhoodsClicked { get; set; }
 
-        PlatformButton SearchNextGenButton { get; set; }
-        Rock.Mobile.UI.PlatformButton.OnClick SearchNextGenClicked { get; set; }
+        PlatformButton SearchShortTermButton { get; set; }
+        Rock.Mobile.UI.PlatformButton.OnClick SearchShortTermClicked { get; set; }
 
         PlatformButton SearchYoungAdultsButton { get; set; }
         Rock.Mobile.UI.PlatformButton.OnClick SearchYoungAdultsClicked { get; set; }
@@ -50,7 +50,7 @@ namespace MobileApp.Shared.UI
         static float sModalOffset = 0;//15;
 
         public void Create( object masterView, RectangleF frame, Rock.Mobile.UI.PlatformButton.OnClick searchNeighborhoodsClicked, 
-                                                                 Rock.Mobile.UI.PlatformButton.OnClick searchNextGenClicked, 
+                                                                 Rock.Mobile.UI.PlatformButton.OnClick searchShortTermClicked, 
                                                                  Rock.Mobile.UI.PlatformButton.OnClick searchYoungAdultsClicked )
         {
             Backer = PlatformView.Create( );
@@ -164,22 +164,22 @@ namespace MobileApp.Shared.UI
                 };
 
 
-            // Search NextGen Button
-            SearchNextGenClicked = searchNextGenClicked;
-            SearchNextGenButton = PlatformButton.Create( );
-            SearchNextGenButton.AddAsSubview( View.PlatformNativeObject );
-            SearchNextGenButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
-            SearchNextGenButton.TextColor = ControlStylingConfig.Button_TextColor;
-            SearchNextGenButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
-            SearchNextGenButton.Text = ConnectStrings.GroupFinder_Search_NextGenGroups;
-            SearchNextGenButton.SetFont( ControlStylingConfig.Font_Regular, 14 );
-            SearchNextGenButton.SizeToFit( );
-            SearchNextGenButton.ClickEvent = ( PlatformButton b ) =>
+            // Search ShortTerm Button
+            SearchShortTermClicked = searchShortTermClicked;
+            SearchShortTermButton = PlatformButton.Create( );
+            SearchShortTermButton.AddAsSubview( View.PlatformNativeObject );
+            SearchShortTermButton.BackgroundColor = ControlStylingConfig.Button_BGColor;
+            SearchShortTermButton.TextColor = ControlStylingConfig.Button_TextColor;
+            SearchShortTermButton.CornerRadius = ControlStylingConfig.Button_CornerRadius;
+            SearchShortTermButton.Text = ConnectStrings.GroupFinder_Search_ShortTermGroups;
+            SearchShortTermButton.SetFont( ControlStylingConfig.Font_Regular, 14 );
+            SearchShortTermButton.SizeToFit( );
+            SearchShortTermButton.ClickEvent = ( PlatformButton b ) =>
             {
                 // treat the search button as if Return was pressed
                 if ( ShouldReturn( ) )
                 {
-                    SearchNextGenClicked( null );
+                    SearchShortTermClicked( null );
                 }
             };
 
@@ -203,7 +203,7 @@ namespace MobileApp.Shared.UI
             };
 
 
-            SearchNextGenButton.Hidden = true;
+            //SearchShortTermButton.Hidden = true;
             //SearchYoungAdultsButton.Hidden = true;
 
             LayoutChanged( frame );
@@ -339,9 +339,9 @@ namespace MobileApp.Shared.UI
 
             // Search Buttons
             SearchNeighborhoodsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, ZipCodeLayer.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            //SearchNextGenButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            //SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNextGenButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            SearchShortTermButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchShortTermButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            //SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
         }
 
         bool ValidateInput( )

@@ -543,11 +543,11 @@ namespace iOS
                     GetInitialGroups( PrivateGeneralConfig.GroupType_Neighborhood_GroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                     Task.NavToolbar.Reveal( true );
                 },
-                // Search NextGen Groups
+                // Search Short Term Groups
                 delegate
                 {
                     SearchPage.Hide( true );
-                    GetInitialGroups( PrivateGeneralConfig.GroupType_NextGenGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
+                    GetInitialGroups( PrivateGeneralConfig.GroupType_ShortTermGroupId, SearchPage.Street.Text, SearchPage.City.Text, SearchPage.State.Text, SearchPage.ZipCode.Text );
                     Task.NavToolbar.Reveal( true );
                 },
                 // Search Young Adults Groups

@@ -106,10 +106,16 @@ namespace MobileApp
                 /// </summary>
                 public Rock.Client.GroupLocation PrimaryAddress;
 
-                /// <summary>
-                /// List of the groups that this person is a member of. It also includes their member object
-                /// </summary>
-                public List<Rock.Client.Group> Groups { get; set; }
+                // the state of the actions someone can (and should!) take at CCV
+                public bool IsBaptised { get; set; }
+                public bool IsERA { get; set; }
+                public bool IsGiving { get; set; }
+                public bool TakenStartingPoint { get; set; }
+                public bool IsMember { get; set; }
+                public bool IsServing { get; set; }
+                public bool IsPeerLearning { get; set; }
+                public bool IsMentored { get; set; }
+                public bool IsTeaching { get; set; }
 
                 // This will return either their HOME campus if they're logged in, or their
                 // VIEWING campus if they're not.
@@ -275,21 +281,30 @@ namespace MobileApp
 
                     PrimaryFamily = new Group();
 
-                    Groups = new List<Group>( );
-
                     PrimaryAddress = new GroupLocation();
                     PrimaryAddress.GroupLocationTypeValueId = PrivateGeneralConfig.GroupLocationTypeHomeValueId;
-
-                    _CellPhoneNumber = new PhoneNumber( );
-                    SetPhoneNumberDigits( "" );
-
-                    // Don't reset the viewing campus, because we force them to pick one at
-                    // first run, and don't want to lose their choice.
-                    //ViewingCampus = 0;
+                    PrimaryAddress.IsMappedLocation = true;
 
                     // for the address location, default the country to the built in country code.
                     PrimaryAddress.Location = new Rock.Client.Location();
                     PrimaryAddress.Location.Country = MobileApp.Shared.Config.GeneralConfig.CountryCode;
+
+                    _CellPhoneNumber = new PhoneNumber( );
+                    SetPhoneNumberDigits( "" );
+
+                    IsBaptised = false;
+                    IsERA = false;
+                    IsGiving = false;
+                    TakenStartingPoint = false;
+                    IsMember = false;
+                    IsServing = false;
+                    IsPeerLearning = false;
+                    IsMentored = false;
+                    IsTeaching = false;
+
+                    // Don't reset the viewing campus, because we force them to pick one at
+                    // first run, and don't want to lose their choice.
+                    //ViewingCampus = 0;
                 }
 
                 public string PreferredName( )
@@ -475,78 +490,19 @@ namespace MobileApp
 
                 public void GetPersonData( HttpRequest.RequestResult onResult )
                 {
-                    RockMobileUser.Instance.GetProfileAndCellPhone( 
-                        delegate( System.Net.HttpStatusCode profileCode, string profileDesc )
+                    MobileAppApi.GetPersonData( UserID,
+                        delegate ( MobileAppApi.PersonData personData )
                         {
-                            // PROFILE / PHONE SUCCESS
-                            if( Util.StatusInSuccessRange( profileCode ) == true )
-                            {
-                                // get the address, which is certainly part
-                                RockMobileUser.Instance.GetFamilyAndAddress( 
-                                    delegate( System.Net.HttpStatusCode familyCode, string familyDesc )
-                                    {
-                                        // FAMILY / ADDRESS SUCCESS
-                                        if( Util.StatusInSuccessRange( familyCode ) == true )            
-                                        {
-                                            // get the groups
-                                            RockMobileUser.Instance.GetGroups( 
-                                                delegate( System.Net.HttpStatusCode groupCode, string groupDesc )
-                                                {
-                                                    // GROUP SUCCESS
-                                                    if( Util.StatusInSuccessRange( groupCode ) == true )
-                                                    {
-                                                        // Chain more calls here if needed
-                                                        if( onResult != null )
-                                                        {
-                                                            onResult( System.Net.HttpStatusCode.OK, "" );
-                                                        }
-                                                    }
-                                                    // GROUP FAIL
-                                                    else
-                                                    {
-                                                        if( onResult != null )
-                                                        {
-                                                            onResult( System.Net.HttpStatusCode.BadRequest, "" );
-                                                        }           
-                                                    }
-                                                });
-                                        }
-                                        // FAMILY / ADDRESS FAIL
-                                        else
-                                        {
-                                            if( onResult != null )
-                                            {
-                                                onResult( System.Net.HttpStatusCode.BadRequest, "" );
-                                            }
-                                        }
-                                    });
-                            }
-                            // PROFILE / PHONE FAIL
-                            else
-                            {
-                                if( onResult != null )
-                                {
-                                    onResult( profileCode, "" );
-                                }
-                            }
-                        });
-                }
-
-                void GetProfileAndCellPhone( HttpRequest.RequestResult profileResult )
-                {
-                    MobileAppApi.GetProfileAndCellPhone( UserID, 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Person person, PhoneNumber cellPhoneNumber )
-                        {
-                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                            if( personData != null )
                             {
                                 // take the person (clear out the cell numbers since we manage those seperately)
-                                Person = person;
+                                Person = personData.Person;
                                 Person.PhoneNumbers = null;
 
                                 // search for a phone number (which should match whatever we already have, unless this is a new login)
-                                if( cellPhoneNumber != null )
+                                if( personData.CellPhoneNumber != null )
                                 {
-                                    _CellPhoneNumber = cellPhoneNumber;
+                                    _CellPhoneNumber = personData.CellPhoneNumber;
 
                                     HasCellNumber = true;
                                 }
@@ -554,69 +510,47 @@ namespace MobileApp
                                 {
                                     // no longer has a phone number, so clear it
                                     _CellPhoneNumber = new PhoneNumber( );
+
                                     SetPhoneNumberDigits( "" );
 
                                     HasCellNumber = false;
                                 }
 
-                                // save!
-                                SaveToDevice( );
-                            }
-                            
-                            // notify the caller
-                            if( profileResult != null )
-                            {
-                                profileResult( statusCode, statusDescription );
-                            }
-                        } );
-                }
+                                // we're always safe to take family--it cannot be null
+                                PrimaryFamily = personData.Family;
 
-                void GetFamilyAndAddress( HttpRequest.RequestResult addressResult )
-                {
-                    MobileAppApi.GetFamilyAndAddress( Person, 
-                        delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Group family, GroupLocation familyAddress )
-                        {
-                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                            {
-                                // only take valid values
-                                if( family != null )
+                                // only take the address if it's valid. otherwise, we want
+                                // to use the default, empty one.
+                                if( personData.FamilyAddress != null )
                                 {
-                                    PrimaryFamily = family;
+                                    PrimaryAddress = personData.FamilyAddress;
                                 }
 
-                                if( familyAddress != null )
-                                {
-                                    PrimaryAddress = familyAddress;
-                                }
+                                // set the person's current actions
+                                IsBaptised = personData.IsBaptised;
+                                IsERA = personData.IsERA;
+                                IsGiving = personData.IsGiving;
+                                TakenStartingPoint = personData.TakenStartingPoint;
+                                IsMember = personData.IsMember;
+                                IsServing = personData.IsServing;
+                                IsPeerLearning = personData.IsPeerLearning;
+                                IsMentored = personData.IsMentored;
+                                IsTeaching = personData.IsTeaching;
 
                                 // save!
                                 SaveToDevice( );
-                            }
 
-                            if( addressResult != null )
-                            {
-                                addressResult( statusCode, statusDescription );
-                            }
-                        } );
-                }
-
-                void GetGroups( HttpRequest.RequestResult result )
-                {
-                    // get all the groups that this person is a member of. This will be useful for knowing
-                    // where they're at in their next steps
-                    MobileAppApi.GetPersonGroupsAndMembers( Person, 
-                        delegate(List<Rock.Client.Group> groupList) 
-                        {
-                            if( groupList != null )
-                            {
-                                // hurray we got groups.
-                                Groups = groupList;
-
-                                result( System.Net.HttpStatusCode.OK, "" );
+                                if( onResult != null )
+                                {
+                                    onResult( System.Net.HttpStatusCode.OK, "" );
+                                }
                             }
                             else
                             {
-                                result( System.Net.HttpStatusCode.BadRequest, "" );
+                                if( onResult != null )
+                                {
+                                    onResult( System.Net.HttpStatusCode.BadRequest, "" );
+                                }
                             }
                         });
                 }

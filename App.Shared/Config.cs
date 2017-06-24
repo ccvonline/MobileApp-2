@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2200;
+                public const int Version = 2210;
 
                 /// <summary>
                 /// The full name of your organization
@@ -57,11 +57,6 @@ namespace MobileApp
                 public const string CountryCode = "US";
 
                 /// <summary>
-                /// The Facebook app ID reprsenting the Facebook app that will get things on behalf of the user.
-                /// </summary>
-                public const string FBAppID = "495461873811179";
-
-                /// <summary>
                 /// iOS only, this controls what style of keyboard is used for PLATFORM textFields.
                 /// Meaning the ones dynamically created in code via Rock.Mobile. 
                 /// Any normal iOS text field needs to have its style explicitely set.
@@ -80,12 +75,6 @@ namespace MobileApp
                 #endif
 
                 /// <summary>
-                /// Defined in Rock, this should be generated ONCE at Rock's initial setup and then never changed.
-                /// It is the key the mobile app uses so Rock knows who it's talking to.
-                /// </summary>
-                public const string RockMobileAppAuthorizationKey = "hWTaZ7buziBcJQH31KCm3Pzz";
-
-                /// <summary>
                 /// The base URL to look for Notes
                 /// </summary>
                 public const string NoteBaseURL = RockBaseUrl + "api/Podcast/Category/0/mobile_app/0?NumSeries=12";
@@ -94,14 +83,6 @@ namespace MobileApp
                 /// Set to true if you wish to use Analytics
                 /// </summary>
                 public const bool Use_Analytics = true;
-
-                /// <summary>
-                ///  The iOS and Android App ID's, respectively, for HockeyApp analytics.
-                /// </summary>
-                public const string iOS_HockeyApp_Id = "b851b5a3a79142d38e3cffd3a01015f0";
-                public const string Droid_HockeyApp_Id = "81b31ba83ad3416e932bd2bd0b5d8213";
-
-				public const string Biblia_API_Key = "850223e9d11c8401d54408629fb4a0f0";
             }
 
             public class SpringboardConfig

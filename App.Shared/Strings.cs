@@ -176,7 +176,8 @@ namespace MobileApp.Shared
             public const string GroupFinder_ZipPlaceholder = "Zip";
 
             public const string GroupFinder_Search_NeighborhoodGroups = "Neighborhood Groups";
-            public const string GroupFinder_Search_NextGenGroups = "Students (Grades 7th - 12th)";
+            //public const string GroupFinder_Search_NextGenGroups = "Students (Grades 7th - 12th)";
+            public const string GroupFinder_Search_ShortTermGroups = "Short Term Groups";
             public const string GroupFinder_Search_YoungAdultGroups = "Young Adult Groups";
 
             public const string GroupFinder_DefaultState = "AZ";

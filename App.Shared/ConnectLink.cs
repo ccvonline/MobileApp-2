@@ -25,7 +25,7 @@ namespace MobileApp.Shared
                 ConnectLink link = new ConnectLink();
                 linkEntries.Add( link );
 
-                string[] engagedEntry = MobileApp.Shared.Config.ConnectConfig.GetEngagedList[ i ].GetEntry( MobileApp.Shared.Network.RockMobileUser.Instance.Groups );
+                string[] engagedEntry = MobileApp.Shared.Config.ConnectConfig.GetEngagedList[ i ].GetEntry( MobileApp.Shared.Network.RockMobileUser.Instance );
 
                 // use the "positive" list, which has the data for them BEING in the group.
                 link.Title = engagedEntry[ 0 ];

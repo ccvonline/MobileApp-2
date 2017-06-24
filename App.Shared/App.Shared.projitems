@@ -60,5 +60,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\UIGroupInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engagement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UINoteDiscGuide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SecuredValues.cs" />
   </ItemGroup>
 </Project>

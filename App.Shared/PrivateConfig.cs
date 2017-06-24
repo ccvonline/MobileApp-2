@@ -40,48 +40,14 @@ namespace MobileApp.Shared
             // entity types
             public const int EntityType_UserLoginId = 27;
 
-            // group types
-
-            // neighborhoods are weird, because there's the "sub section", and the groups, but then an "Area"
-            // above that.
-            public const int GroupType_NeighborhoodArea_GroupId = 48;
-            public const int GroupType_NeighborhoodSubSection_GroupId = 85;
-            public const int GroupType_Neighborhood_GroupId = 49;
-
-
-            public const int GroupType_NextStepsGroupId = 78;
-            public const int GroupType_NextStepsGroupSubSectionId = 82;
+            // group types (for searching in the Group Finder)
+            public const int GroupType_Neighborhood_GroupId = 49;;
 
             public const int GroupType_NextGenGroupId = 94;
-            public const int GroupType_NextGenGroupSectionId = 95;
 
             public const int GroupType_YoungAdultsGroupId = 98;
-            public const int GroupType_YoungAdultsGroupSectionId = 99;
 
-            // group type roles
-            public const int GroupTypeRole_AppGroup_MemberId = 59;
-
-            public const int GroupTypeRole_NSGroup_CoachId = 114;
-            public const int GroupTypeRole_NSGroup_AsstCoachId = 118;
-            public const int GroupTypeRole_NSGroup_CoachLeadId = 120;
-
-            public const int GroupTypeRole_NHGroup_CoachId = 50;
-            public const int GroupTypeRole_NHGroup_AsstCoachId = 51;
-            public const int GroupTypeRole_NHGroup_HostId = 52;
-
-            public const int GroupTypeRole_NHSubSection_CoachLeadId = 123;
-            public const int GroupTypeRole_NHArea_AssociatePastorId = 45;
-
-            public const int GroupTypeRole_NGGroup_CoachId = 133;
-            public const int GroupTypeRole_NGGroup_AsstCoachId = 134;
-            public const int GroupTypeRole_NGGroup_HostId = 135;
-            public const int GroupTypeRole_NGGroup_CoachLeadId = 136;
-
-            public const int GroupTypeRole_YAGroup_CoachId = 139;
-            public const int GroupTypeRole_YAGroup_AsstCoachId = 140;
-            public const int GroupTypeRole_YAGroup_HostId = 141;
-            public const int GroupTypeRole_YAGroup_CoachLeadId = 143;
-
+            public const int GroupType_ShortTermGroupId = 110;
 
             /// <summary>
             /// The URL parameter we add to websites that need to know what campus the user visits

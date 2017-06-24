@@ -19,7 +19,7 @@ namespace MobileApp.Shared
         {
             // setup the login dictionary
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters["client_id"] = MobileApp.Shared.Config.GeneralConfig.FBAppID;
+            parameters["client_id"] = App.Shared.SecuredValues.FBAppID;
             parameters["redirect_uri"] = "https://www.facebook.com/connect/login_success.html";
             parameters["response_type"] = "token";
             parameters["display"] = "touch";

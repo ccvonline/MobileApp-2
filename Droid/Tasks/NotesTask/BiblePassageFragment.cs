@@ -92,7 +92,7 @@ namespace Droid
                 string passageCitation = activeUrl.Substring( activeUrl.IndexOf( PrivateNoteConfig.Biblia_Prefix, StringComparison.CurrentCulture ) + 8 );
 
 				BibliaAddress = string.Format( "https://api.biblia.com/v1/bible/content/LEB.html?passage={0}&style=fullyFormatted&key={1}",
-				                              passageCitation, GeneralConfig.Biblia_API_Key );
+				                              passageCitation, App.Shared.SecuredValues.Biblia_API_Key );
             }
 
             public override void OnCreate( Bundle savedInstanceState )

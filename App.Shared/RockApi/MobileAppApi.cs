@@ -77,6 +77,42 @@ namespace MobileApp
             RockApi.Post_CustomEndPoint( RockApi.BaseUrl + EndPoint_Login, loginObj, resultHandler );
         }
 
+        const string EndPoint_PersonData = "api/MobileApp/PersonData?userID=";
+        public delegate void OnPersonDataResult( PersonData personData );
+        public class PersonData
+        {
+            public Person Person { get; set; }
+            public PhoneNumber CellPhoneNumber { get; set; }
+            public Group Family { get; set; }
+            public GroupLocation FamilyAddress { get; set; }
+
+            public bool IsBaptised { get; set; }
+            public bool IsERA { get; set; }
+            public bool IsGiving { get; set; }
+            public bool TakenStartingPoint { get; set; }
+            public bool IsMember { get; set; }
+            public bool IsServing { get; set; }
+            public bool IsPeerLearning { get; set; }
+            public bool IsMentored { get; set; }
+            public bool IsTeaching { get; set; }
+        }
+
+        public static void GetPersonData( string userID, OnPersonDataResult onResultHandler )
+        {
+            RockApi.Get_CustomEndPoint<PersonData>( RockApi.BaseUrl + EndPoint_PersonData + userID, delegate ( HttpStatusCode statusCode, string statusDescription, PersonData model )
+            {
+                if( Util.StatusInSuccessRange( statusCode ) == true )
+                {
+                    onResultHandler( model );
+                }
+                else
+                {
+                    onResultHandler( null );
+                }
+            } );
+        }
+
+
         const string EndPoint_GroupInfo = "api/MobileApp/GroupInfo?groupId=";
         public delegate void OnGroupSummaryResult( GroupInfo groupInfo, System.IO.MemoryStream leaderPhoto, System.IO.MemoryStream groupPhoto );
         public class GroupInfo
@@ -234,147 +270,6 @@ namespace MobileApp
                     }
                 }
            );
-        }
-
-        public delegate void OnFamilyAndAddressResult( System.Net.HttpStatusCode code, string desc, Rock.Client.Group family, Rock.Client.GroupLocation familyAddress );
-        public static void GetFamilyAndAddress( Rock.Client.Person person, OnFamilyAndAddressResult resultHandler )
-        {
-            // for the address (which implicitly is their primary residence address), first get all group locations associated with them
-            ApplicationApi.GetFamiliesOfPerson( person, 
-                delegate(System.Net.HttpStatusCode statusCode, string statusDescription, List<Rock.Client.Group> model)
-                {
-                    Rock.Client.Group family = null;
-                    Rock.Client.GroupLocation familyAddress = null;
-                    
-                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                    {
-                        // find what we'll consider their primary address.
-
-                        // look thru each group (family)
-                        foreach( Rock.Client.Group personGroup in model )
-                        {
-                            // If we find a groupType of family, that should be their primary family.
-                            if( personGroup.GroupType.Guid.ToString( ).ToLower( ) == Rock.Client.SystemGuid.GroupType.GROUPTYPE_FAMILY.ToLower( ) )
-                            {
-                                // store the family
-                                family = personGroup;
-
-                                // look at each location within the family
-                                foreach( Rock.Client.GroupLocation groupLocation in family.GroupLocations )
-                                {
-                                    // find their "Home Location" within the family group type.
-                                    if( groupLocation.GroupLocationTypeValue.Guid.ToString( ).ToLower( ) == Rock.Client.SystemGuid.DefinedValue.GROUP_LOCATION_TYPE_HOME.ToLower( ) )
-                                    {
-                                        familyAddress = groupLocation;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // notify the caller
-                    resultHandler( statusCode, statusDescription, family, familyAddress );
-                });
-        }
-
-        /// <summary>
-        /// Returns the groups the person is part of, and THEIR groupMembers only.
-        /// </summary>
-        public static void GetPersonGroupsAndMembers( Rock.Client.Person person, Rock.Mobile.Network.ApplicationApi.GroupsForPersonDelegate onResult )
-        {
-            // first get all the groups for this person
-            ApplicationApi.GetGroupsForPerson( person, 
-                delegate( List<Rock.Client.Group> groupList ) 
-                {
-                    if ( groupList != null )
-                    {
-                        // now get the group members that are THIS PERSON
-                        ApplicationApi.GetGroupMembersForPerson( person, 
-                            delegate(List<Rock.Client.GroupMember> groupMemberList) 
-                            {
-                                if( groupMemberList != null )             
-                                {
-                                    // now place each groupMember in their respective group
-                                    foreach( Rock.Client.GroupMember gm in groupMemberList )
-                                    {
-                                        // find this groupMember's group
-                                        Rock.Client.Group targetGroup = groupList.Where( g => g.Id == gm.GroupId ).SingleOrDefault( );
-                                        if( targetGroup != null )
-                                        {
-                                            if ( targetGroup.Members != null )
-                                            {
-                                                targetGroup.Members.Add( gm );
-                                            }
-                                        }
-                                    }
-                                }
-
-                                onResult( groupList );
-                            });
-                    }
-                    else
-                    {
-                        onResult( null );
-                    }
-                });
-        }
-
-        /// <summary>
-        /// Returns the phone number matching phoneTypeId, or an empty one if no match is found.
-        /// </summary>
-        /// <returns>The phone number.</returns>
-        /// <param name="phoneTypeId">Phone type identifier.</param>
-        static Rock.Client.PhoneNumber TryGetPhoneNumber( int phoneTypeId, ICollection<Rock.Client.PhoneNumber> phoneNumbers )
-        {
-            Rock.Client.PhoneNumber requestedNumber = null;
-
-            // if the user has phone numbers
-            if ( phoneNumbers != null )
-            {
-                // get an enumerator
-                IEnumerator<Rock.Client.PhoneNumber> enumerator = phoneNumbers.GetEnumerator( );
-                enumerator.MoveNext( );
-
-                // search for the phone number type requested
-                while ( enumerator.Current != null )
-                {
-                    Rock.Client.PhoneNumber phoneNumber = enumerator.Current as Rock.Client.PhoneNumber;
-
-                    // is this the right type?
-                    if ( phoneNumber.NumberTypeValueId == phoneTypeId )
-                    {
-                        requestedNumber = phoneNumber;
-                        break;
-                    }
-                    enumerator.MoveNext( );
-                }
-            }
-
-            return requestedNumber;
-        }
-
-        public delegate void OnProfileAndCellPhoneResult( System.Net.HttpStatusCode code, string desc, Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber );
-        public static void GetProfileAndCellPhone( string userID, OnProfileAndCellPhoneResult resultHandler )
-        {
-            RockApi.Get_People_ByUserName( userID, 
-                delegate(System.Net.HttpStatusCode statusCode, string statusDescription, Rock.Client.Person model)
-                {
-                    Rock.Client.PhoneNumber cellPhoneNumber = null;
-
-                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true && model != null )
-                    {
-                        // search for a phone number (which should match whatever we already have, unless this is a new login)
-                        cellPhoneNumber = TryGetPhoneNumber( PrivateGeneralConfig.CellPhoneValueId, model.PhoneNumbers );
-
-                        // now before storing the person, clear their phone list, as we need to store and manage
-                        // the number seperately.
-                        model.PhoneNumbers = null;
-                    }
-
-                    // notify the caller
-                    resultHandler( statusCode, statusDescription, model, cellPhoneNumber );
-                });
         }
 
         public static void UpdateOrAddPhoneNumber( Rock.Client.Person person, Rock.Client.PhoneNumber phoneNumber, bool isNew, HttpRequest.RequestResult<Rock.Client.PhoneNumber> resultHandler )
