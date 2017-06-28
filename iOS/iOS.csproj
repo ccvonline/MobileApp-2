@@ -69,7 +69,7 @@
     <WarningLevel>4</WarningLevel>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer: Jon Edmiston (H9Y636R8ZP)</CodesignKey>
+    <CodesignKey>iPhone Developer: Shawn Forquer (H9Y636R8ZP)</CodesignKey>
     <MtouchI18n>
     </MtouchI18n>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
@@ -414,6 +414,9 @@
     </BundleResource>
     <BundleResource Include="..\Assets\Fonts\icomoon-Regular.ttf">
       <Link>Resources\Fonts\icomoon-Regular.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\Assets\bible_niv_xml.xml">
+      <Link>Resources\bible_niv_xml.xml</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>

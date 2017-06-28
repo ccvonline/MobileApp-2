@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)RockApi\" />
     <Folder Include="$(MSBuildThisFileDirectory)UI\" />
+    <Folder Include="$(MSBuildThisFileDirectory)BibleRender\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableHeader.cs" />
@@ -61,5 +62,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Engagement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\UINoteDiscGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SecuredValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BibleRender\BibleOrg.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BibleRender\BibleNIV.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BibleRender\BibleRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BibleRender\BibleService.cs" />
   </ItemGroup>
 </Project>

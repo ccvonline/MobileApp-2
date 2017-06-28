@@ -233,7 +233,8 @@ namespace Droid
                         else if ( source == NotesPage )
                         {
                             NotesFragment.UrlClickParams clickParams = (NotesFragment.UrlClickParams)context;
-                            if (clickParams.Url.StartsWith(PrivateNoteConfig.Biblia_Prefix))
+
+                            if ( App.Shared.BibleRenderer.IsBiblePrefix( clickParams.Url ) )
                             {
                                 BiblePassagePage = new BiblePassageFragment(clickParams.Url);
                                 BiblePassagePage.ParentTask = this;

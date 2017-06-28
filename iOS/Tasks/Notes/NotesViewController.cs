@@ -618,7 +618,8 @@ namespace iOS
 
                             Task.NavToolbar.Reveal( true );
                             Task.NavToolbar.SetBackButtonEnabled( true );
-                            if( activeUrl.StartsWith( PrivateNoteConfig.Biblia_Prefix ) )
+                            
+                            if( App.Shared.BibleRenderer.IsBiblePrefix( activeUrl ) )
                             {
                                 BiblePassageViewController viewController = new BiblePassageViewController( activeUrl, Task );
                                 Task.PerformSegue( this, viewController );

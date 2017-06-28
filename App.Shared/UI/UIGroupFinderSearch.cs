@@ -203,7 +203,7 @@ namespace MobileApp.Shared.UI
             };
 
 
-            //SearchShortTermButton.Hidden = true;
+            SearchShortTermButton.Hidden = true;
             //SearchYoungAdultsButton.Hidden = true;
 
             LayoutChanged( frame );
@@ -339,9 +339,9 @@ namespace MobileApp.Shared.UI
 
             // Search Buttons
             SearchNeighborhoodsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, ZipCodeLayer.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            SearchShortTermButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchShortTermButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
-            //SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            //SearchShortTermButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            //SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchShortTermButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
+            SearchYoungAdultsButton.Frame = new RectangleF( (View.Frame.Width - buttonWidth) / 2, SearchNeighborhoodsButton.Frame.Bottom + controlSpacing, buttonWidth, layerHeight );
         }
 
         bool ValidateInput( )

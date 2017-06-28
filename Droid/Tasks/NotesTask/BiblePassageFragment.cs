@@ -20,6 +20,7 @@ using MobileApp.Shared.UI;
 using MobileApp.Shared.Strings;
 using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.Network;
+using App.Shared;
 
 namespace Droid
 {
@@ -64,7 +65,7 @@ namespace Droid
             /// The base address of the HTTP request.
             /// </summary>
             /// <value>The address for the HTTP request.</value>
-            string BibliaAddress { get; set; }
+            string BibleAddress { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether this <see cref="T:iOS.BiblePassageViewController"/> requesting bible passage.
@@ -87,19 +88,12 @@ namespace Droid
 
             public BiblePassageFragment( string activeUrl )
             {
-                // Finds the passage citation in the Bible Gateway URL and extracts it
-                // (always comes after the "?search=" token, which is 8 characters long, hence the offset).
-                string passageCitation = activeUrl.Substring( activeUrl.IndexOf( PrivateNoteConfig.Biblia_Prefix, StringComparison.CurrentCulture ) + 8 );
-
-				BibliaAddress = string.Format( "https://api.biblia.com/v1/bible/content/LEB.html?passage={0}&style=fullyFormatted&key={1}",
-				                              passageCitation, App.Shared.SecuredValues.Biblia_API_Key );
+                BibleAddress = activeUrl;
             }
 
             public override void OnCreate( Bundle savedInstanceState )
             {
                 base.OnCreate( savedInstanceState );
-
-
             }
 
             public override View OnCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
@@ -144,7 +138,10 @@ namespace Droid
             {
                 base.OnStart( );
 
-                RetrieveBiblePassage( );
+                if( RequestingBiblePassage == false )
+                {
+                    RetrieveBiblePassage( );
+                }
             }
 
             public override void OnConfigurationChanged( Android.Content.Res.Configuration newConfig )
@@ -190,61 +187,35 @@ namespace Droid
 
             void RetrieveBiblePassage( )
             {
-                ResultView.Hide( );
+               ResultView.Hide( );
 
-                BlockerView.Show( delegate
-                   {
-                       RequestingBiblePassage = true;
+               BlockerView.Show( delegate
+               {
+                  RequestingBiblePassage = true;
 
-                       RestRequest request = new RestRequest( Method.GET );
-                       HttpRequest webRequest = new HttpRequest( );
+                  BibleRenderer.RetrieveBiblePassage( BibleAddress, delegate( string htmlStream )
+                  {
+                      // if it worked, take the html stream and store it
+                      if( string.IsNullOrWhiteSpace( htmlStream ) == false )
+                      {
+                          PassageHTML = htmlStream;
+                          PassageWebView.LoadDataWithBaseURL( "", PassageHTML, "text/html", "UTF-8", "" );
+                      }
+                      else
+                      {
+                          // otherwise display an error
+                          ResultView.Show( GeneralStrings.Network_Status_FailedText,
+                                           PrivateControlStylingConfig.Result_Symbol_Failed,
+                                           GeneralStrings.Network_Result_FailedText,
+                                           GeneralStrings.Retry );
+                      }
 
-                       webRequest.ExecuteAsync<RestResponse>( BibliaAddress, request, delegate ( System.Net.HttpStatusCode statusCode, string statusDescription, RestResponse passage )
-                       {
-                           if( Util.StatusInSuccessRange( statusCode ) == true )
-                           {
+                      RequestingBiblePassage = false;
+                      BlockerView.Hide( null );
+                  });
 
-                               PassageHTML = passage.Content;
-                               string styleHeader = "<head>" +
-                               "<style type=\"text/css\">" +
-                                   "body {" +
-                                      "font-family: Arial;" +
-                                      "color: white;" +
-                                      "background-color: #1C1C1C;" +
-                                    "}" +
-                                  "</style>" +
-                                  "</head>";
-
-                               // adds the CSS header to the HTML string
-                               PassageHTML = "<html>" + styleHeader + "<body>" + PassageHTML + "<br/><br/><br/></body></html>";
-
-                               // removes the weird formatting quirks of LEB (scholarly notations) that might confuse the reader
-                               PassageHTML = Regex.Replace( PassageHTML, "<sub>.*?</sub>", String.Empty );
-                               PassageHTML = Regex.Replace( PassageHTML, "font-style:italic;", String.Empty );
-                               PassageHTML = Regex.Replace( PassageHTML, "\\*", String.Empty );
-
-                               PassageWebView.LoadDataWithBaseURL( "", PassageHTML, "text/html", "UTF-8", "" );
-
-                           }
-                           else
-                           {
-                               ResultView.Show( GeneralStrings.Network_Status_FailedText,
-                                                PrivateControlStylingConfig.Result_Symbol_Failed,
-                                                GeneralStrings.Network_Result_FailedText,
-                                                GeneralStrings.Retry );
-                           }
-
-                           RequestingBiblePassage = false;
-
-                           BlockerView.Hide( null );
-
-                       } );
-
-                   } );
+               });
             }
-
-
-
         }
     }
 }
