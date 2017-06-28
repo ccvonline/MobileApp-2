@@ -412,6 +412,9 @@
     <AndroidAsset Include="..\Assets\Fonts\icomoon-Regular.ttf">
       <Link>Assets\Fonts\icomoon-Regular.ttf</Link>
     </AndroidAsset>
+    <AndroidAsset Include="..\Assets\bible_niv_xml.xml">
+      <Link>Assets\bible_niv_xml.xml</Link>
+    </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="json.net">

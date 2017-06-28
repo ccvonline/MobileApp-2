@@ -125,16 +125,15 @@ namespace App.Shared
          string bookStr, chapterStr;
          if( FriendlyBibleUrlToParts( bibleAddress, out bookStr, out chapterStr ) )
          {
-            string assetPath = "";
-#if __IOS__
-            assetPath = Foundation.NSBundle.MainBundle.BundlePath + "/" + "bible_niv_xml.xml";
-#elif __ANDROID__
-            //assetPath = System.IO.Stream bundleStream = Rock.Mobile.PlatformSpecific.Android.Core.Context.Assets.Open( FilePath );
-#endif
-
             Book book = new Book( );
 
-            using( StreamReader sr = new StreamReader( assetPath ) )
+#if __IOS__
+            using( StreamReader sr = new StreamReader( Foundation.NSBundle.MainBundle.BundlePath + "/" + "bible_niv_xml.xml" ) )
+
+#elif __ANDROID__
+
+            using( StreamReader sr = new StreamReader( Rock.Mobile.PlatformSpecific.Android.Core.Context.Assets.Open( "bible_niv_xml.xml" ) ) )
+#endif
             {
                using( XmlTextReader reader = new XmlTextReader( sr ) )
                {
