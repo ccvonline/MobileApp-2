@@ -13,6 +13,7 @@ using System.Xml;
 using System.Windows.Media;
 using RestSharp.Extensions.MonoHttp;
 using WinNotes;
+using App.Shared;
 
 namespace MobileApp
 {
@@ -268,7 +269,7 @@ namespace MobileApp
                     if( activeUrl.Trim( ) != sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                     {
                         // help them out by adding 'http://' if it isn't there.
-                        if ( activeUrl.StartsWith( "http://" ) == false && activeUrl.StartsWith( PrivateConfig.PrivateNoteConfig.Biblia_Prefix ) == false )
+                        if ( activeUrl.StartsWith( "http://" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
                         {
                             activeUrl = activeUrl.Insert( 0, "http://" );
                         }

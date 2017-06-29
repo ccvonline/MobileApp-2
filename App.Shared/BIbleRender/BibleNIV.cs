@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -133,6 +134,8 @@ namespace App.Shared
 #elif __ANDROID__
 
             using( StreamReader sr = new StreamReader( Rock.Mobile.PlatformSpecific.Android.Core.Context.Assets.Open( "bible_niv_xml.xml" ) ) )
+#elif __WIN__ //NOTE: Not supported or needed on Windows platform
+            using( StreamReader sr = new StreamReader( "" ) )
 #endif
             {
                using( XmlTextReader reader = new XmlTextReader( sr ) )
