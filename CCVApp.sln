@@ -94,8 +94,6 @@ Global
 		$4.scope = application/xml
 		$0.TextStylePolicy = $5
 		$5.FileWidth = 120
-		$5.TabWidth = 3
-		$5.IndentWidth = 3
 		$5.inheritsSet = VisualStudio
 		$5.inheritsScope = text/plain
 		$5.scope = text/plain
