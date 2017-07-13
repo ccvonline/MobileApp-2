@@ -34,7 +34,7 @@
                     android:layout_height="30dp" />
             <!--Name Fields-->
                 <RelativeLayout
-                    android:id="@+id/name_background"
+                    android:id="@+id/firstname_background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <View
@@ -55,24 +55,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/top_border"
+                        android:layout_marginLeft="10dp"
                         android:id="@+id/nickNameText"
                         android:inputType="textPersonName"
-                        android:layout_marginLeft="10dp"
                         android:maxLines="1" />
                     <View
                         android:id="@+id/middle_border"
                         android:layout_below="@+id/nickNameText"
                         android:layout_width="match_parent"
                         android:layout_height="1dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/lastname_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <EditText
                         android:hint="Last Name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_below="@+id/middle_border"
                         android:id="@+id/lastNameText"
                         android:inputType="textPersonName"
-                        android:layout_marginLeft="10dp"
                         android:maxLines="1" />
                 </RelativeLayout>
                 <Space

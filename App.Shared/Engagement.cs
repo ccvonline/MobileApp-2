@@ -96,11 +96,15 @@ namespace MobileApp.Shared
     /// </summary>
     public class Coach_Engagement : IEngagement
     {
-        // Next Steps Coach
-        string[] Coach_Entry = { "Coach", "Access your toolbox", Config.GeneralConfig.RockBaseUrl + "ma-my-groups", "coach_thumb.png", "coach" };
+        // note - we'll use the same URL for both; it's just the wording of the entry that changes.
+        // Accessing toolboxes normally goes hand in hand with "IsTeaching", but for people < 18, they can't be 
+        // considered Teaching, but CAN still access the toolbox. The ma-coaching page will handle that.
+        
+        // Coach
+        string[] Coach_Entry = { "Coach", "Access your toolbox", Config.GeneralConfig.RockBaseUrl + "ma-coaching", "coach_thumb.png", "coach" };
 
         // Not Coach 
-        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", Config.GeneralConfig.RockBaseUrl + "ma-request-coach", "coach_thumb.png", "coach" };
+        string[] NotCoach_Entry = { "Coaches", "Learn about coaching", Config.GeneralConfig.RockBaseUrl + "ma-coaching", "coach_thumb.png", "coach" };
 
         public string[ ] GetEntry( MobileApp.Shared.Network.RockMobileUser mobileUser )
         {

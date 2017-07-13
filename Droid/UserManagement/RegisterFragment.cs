@@ -360,7 +360,7 @@ namespace Droid
 
             // validate there's text in all required fields
             uint userNameTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( UserNameText.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( UserNameText.Text ) == true )
             {
                 userNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
@@ -369,7 +369,7 @@ namespace Droid
 
             // for the password, if EITHER field is blank, that's not ok, OR if the passwords don't match, also not ok.
             uint passwordTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( (string.IsNullOrEmpty( PasswordText.Text ) == true || string.IsNullOrEmpty( ConfirmPasswordText.Text ) == true) ||
+            if ( (string.IsNullOrWhiteSpace( PasswordText.Text ) == true || string.IsNullOrWhiteSpace( ConfirmPasswordText.Text ) == true) ||
                  (PasswordText.Text != ConfirmPasswordText.Text) )
             {
                 passwordTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
@@ -380,7 +380,7 @@ namespace Droid
 
 
             uint nickNameTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( NickNameText.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( NickNameText.Text ) == true )
             {
                 nickNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
@@ -389,7 +389,7 @@ namespace Droid
 
 
             uint lastNameTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( LastNameText.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( LastNameText.Text ) == true )
             {
                 lastNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
@@ -398,13 +398,13 @@ namespace Droid
 
             // cell phone OR email is fine
             uint emailTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( EmailText.Text ) == true && string.IsNullOrEmpty( CellPhoneText.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( EmailText.Text ) == true && string.IsNullOrWhiteSpace( CellPhoneText.Text ) == true )
             {
                 emailTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
             }
             // otherwise, if they used email and didn't give it a proper format, they also fail.
-            else if ( string.IsNullOrEmpty( EmailText.Text ) == false && EmailText.Text.IsEmailFormat( ) == false )
+            else if ( string.IsNullOrWhiteSpace( EmailText.Text ) == true || EmailText.Text.IsEmailFormat( ) == false )
             {
                 emailTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;

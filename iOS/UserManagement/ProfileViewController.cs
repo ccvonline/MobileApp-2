@@ -218,7 +218,7 @@ namespace iOS
                         HideKeyboard( );   
                         
                         // if they have a gender selected, default to that.
-                        if( string.IsNullOrEmpty( Gender.Field.Text ) == false )
+                        if( string.IsNullOrWhiteSpace( Gender.Field.Text ) == false )
                         {
                             ((UIPickerView)GenderPicker.Picker).Select( RockLaunchData.Instance.Data.Genders.IndexOf( Gender.Field.Text ) - 1, 0, false );
                         }
@@ -246,7 +246,7 @@ namespace iOS
 
                         // setup the default date time to display
                         DateTime initialDate = DateTime.Now;
-                        if( string.IsNullOrEmpty( Birthdate.Field.Text ) == false )
+                        if( string.IsNullOrWhiteSpace( Birthdate.Field.Text ) == false )
                         {
                             initialDate = DateTime.Parse( Birthdate.Field.Text );
                         }
@@ -651,11 +651,28 @@ namespace iOS
         {
             bool result = true;
 
-            // the only one we really care about is email, to ensure they put a valid address
-            uint targetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( Email.Field.Text ) == false && Email.Field.Text.IsEmailFormat( ) == false )
+            // ensure that they didn't delete their first or last name
+			uint targetColor = ControlStylingConfig.BG_Layer_Color;
+			if( string.IsNullOrWhiteSpace( NickName.Field.Text ) == true )
+			{
+				targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+				result = false;
+			}
+			Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( targetColor, NickName.Background );
+
+
+			targetColor = ControlStylingConfig.BG_Layer_Color;
+			if( string.IsNullOrWhiteSpace( LastName.Field.Text ) == true )
+			{
+				targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+				result = false;
+			}
+			Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( targetColor, LastName.Background );
+
+            // if email is blank OR not in e@m.com format, reject it.
+            targetColor = ControlStylingConfig.BG_Layer_Color;
+            if( string.IsNullOrWhiteSpace( Email.Field.Text ) == true || Email.Field.Text.IsEmailFormat( ) == false )
             {
-                // if failure, only color email
                 targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
             }
@@ -679,29 +696,29 @@ namespace iOS
             RockMobileUser.Instance.SetPhoneNumberDigits( CellPhone.Field.Text.AsNumeric( ) );
 
             // Gender
-            if ( string.IsNullOrEmpty( Gender.Field.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( Gender.Field.Text ) == false )
             {
                 RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockLaunchData.Instance.Data.Genders.IndexOf( Gender.Field.Text );
             }
 
             // Birthdate
-            if ( string.IsNullOrEmpty( Birthdate.Field.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( Birthdate.Field.Text ) == false )
             {
                 RockMobileUser.Instance.SetBirthday( DateTime.Parse( Birthdate.Field.Text ) );
             }
 
             // Campus
-            if ( string.IsNullOrEmpty( HomeCampus.Field.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( HomeCampus.Field.Text ) == false )
             {
                 RockMobileUser.Instance.PrimaryFamily.CampusId = RockLaunchData.Instance.Data.CampusNameToId( HomeCampus.Field.Text );
                 RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
             }
 
             // address (make sure that all fields are set)
-            if ( string.IsNullOrEmpty( Street.Field.Text ) == false &&
-                 string.IsNullOrEmpty( City.Field.Text ) == false &&
-                 string.IsNullOrEmpty( State.Field.Text ) == false &&
-                 string.IsNullOrEmpty( Zip.Field.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( Street.Field.Text ) == false &&
+                 string.IsNullOrWhiteSpace( City.Field.Text ) == false &&
+                 string.IsNullOrWhiteSpace( State.Field.Text ) == false &&
+                 string.IsNullOrWhiteSpace( Zip.Field.Text ) == false )
             {
                 RockMobileUser.Instance.SetAddress( Street.Field.Text, City.Field.Text, State.Field.Text, Zip.Field.Text );
             }

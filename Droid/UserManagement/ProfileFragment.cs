@@ -32,8 +32,13 @@ namespace Droid
     {
         public Springboard SpringboardParent { get; set; }
 
-        EditText NickNameField { get; set; }
-        EditText LastNameField { get; set; }
+		View NickNameLayer { get; set; }
+		EditText NickNameText { get; set; }
+		uint NickNameBGColor { get; set; }
+
+		View LastNameLayer { get; set; }
+		EditText LastNameText { get; set; }
+		uint LastNameBGColor { get; set; }
 
         EditText CellPhoneField { get; set; }
 
@@ -81,22 +86,27 @@ namespace Droid
             RelativeLayout navBar = view.FindViewById<RelativeLayout>( Resource.Id.navbar_relative_layout );
             navBar.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
-            // setup the name section
-            RelativeLayout backgroundView = view.FindViewById<RelativeLayout>( Resource.Id.name_background );
-            ControlStyling.StyleBGLayer( backgroundView );
+			// setup the name section
+			NickNameLayer = view.FindViewById<RelativeLayout>( Resource.Id.firstname_background );
+			ControlStyling.StyleBGLayer( NickNameLayer );
 
-            NickNameField = backgroundView.FindViewById<EditText>( Resource.Id.nickNameText );
-            ControlStyling.StyleTextField( NickNameField, ProfileStrings.NickNamePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
-            NickNameField.AfterTextChanged += (sender, e) => { Dirty = true; };
-            NickNameField.InputType |= InputTypes.TextFlagCapWords;
+			NickNameText = NickNameLayer.FindViewById<EditText>( Resource.Id.nickNameText );
+			ControlStyling.StyleTextField( NickNameText, RegisterStrings.NickNamePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+			NickNameBGColor = ControlStylingConfig.BG_Layer_Color;
+			NickNameText.InputType |= InputTypes.TextFlagCapWords;
+            NickNameText.AfterTextChanged += ( sender, e ) => { Dirty = true; };
 
-            View borderView = backgroundView.FindViewById<View>( Resource.Id.middle_border );
-            borderView.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
+			View borderView = NickNameLayer.FindViewById<View>( Resource.Id.middle_border );
+			borderView.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_BorderColor ) );
 
-            LastNameField = backgroundView.FindViewById<EditText>( Resource.Id.lastNameText );
-            ControlStyling.StyleTextField( LastNameField, ProfileStrings.LastNamePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
-            LastNameField.AfterTextChanged += (sender, e) => { Dirty = true; };
-            LastNameField.InputType |= InputTypes.TextFlagCapWords;
+			LastNameLayer = view.FindViewById<RelativeLayout>( Resource.Id.lastname_background );
+			ControlStyling.StyleBGLayer( LastNameLayer );
+
+			LastNameText = LastNameLayer.FindViewById<EditText>( Resource.Id.lastNameText );
+			ControlStyling.StyleTextField( LastNameText, RegisterStrings.LastNamePlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+			LastNameBGColor = ControlStylingConfig.BG_Layer_Color;
+			LastNameText.InputType |= InputTypes.TextFlagCapWords;
+            LastNameText.AfterTextChanged += ( sender, e ) => { Dirty = true; };
 
 
             // setup the contact section
@@ -108,7 +118,7 @@ namespace Droid
             ControlStyling.StyleTextField( EmailField, ProfileStrings.EmailPlaceholder, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             EmailField.AfterTextChanged += (sender, e) => { Dirty = true; };
 
-            backgroundView = view.FindViewById<RelativeLayout>( Resource.Id.cellphone_background );
+            View backgroundView = view.FindViewById<RelativeLayout>( Resource.Id.cellphone_background );
             ControlStyling.StyleBGLayer( backgroundView );
 
             borderView = backgroundView.FindViewById<View>( Resource.Id.middle_border );
@@ -166,7 +176,7 @@ namespace Droid
             {
                     // setup the initial date to use ( either now, or the date in the field )
                     DateTime initialDateTime = DateTime.Now;
-                    if( string.IsNullOrEmpty( BirthdateField.Text ) == false )
+                    if( string.IsNullOrWhiteSpace( BirthdateField.Text ) == false )
                     {
                         initialDateTime = DateTime.Parse( BirthdateField.Text );
                     }
@@ -356,11 +366,29 @@ namespace Droid
         {
             bool result = true;
 
-            // the only one we really care about is email, to ensure they put a valid address
-            uint targetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrEmpty( EmailField.Text ) == false && EmailField.Text.IsEmailFormat( ) == false )
+            // validate the name fields (don't let them submit blank entries)
+			uint nickNameTargetColor = ControlStylingConfig.BG_Layer_Color;
+			if( string.IsNullOrWhiteSpace( NickNameText.Text ) == true )
+			{
+				nickNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+				result = false;
+			}
+			Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( NickNameBGColor, nickNameTargetColor, NickNameLayer, delegate { NickNameBGColor = nickNameTargetColor; } );
+
+
+			uint lastNameTargetColor = ControlStylingConfig.BG_Layer_Color;
+			if( string.IsNullOrWhiteSpace( LastNameText.Text ) == true )
+			{
+				lastNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+				result = false;
+			}
+			Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, lastNameTargetColor, LastNameLayer, delegate { LastNameBGColor = lastNameTargetColor; } );
+
+
+			// if email is blank OR not in e@m.com format, reject it.
+			uint targetColor = ControlStylingConfig.BG_Layer_Color;
+            if ( string.IsNullOrWhiteSpace( EmailField.Text ) == true || EmailField.Text.IsEmailFormat( ) == false )
             {
-                // if failure, only color email
                 targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
             }
@@ -423,8 +451,8 @@ namespace Droid
 
         void ModelToUI( )
         {
-            NickNameField.Text = RockMobileUser.Instance.Person.NickName;
-            LastNameField.Text = RockMobileUser.Instance.Person.LastName;
+            NickNameText.Text = RockMobileUser.Instance.Person.NickName;
+            LastNameText.Text = RockMobileUser.Instance.Person.LastName;
 
             EmailField.Text = RockMobileUser.Instance.Person.Email;
 
@@ -485,37 +513,37 @@ namespace Droid
             RockMobileUser.Instance.Person.Email = EmailField.Text;
 
             // Set the nickname AND first name to NickName
-            RockMobileUser.Instance.Person.NickName = NickNameField.Text;
-            RockMobileUser.Instance.Person.FirstName = NickNameField.Text;
+            RockMobileUser.Instance.Person.NickName = NickNameText.Text;
+            RockMobileUser.Instance.Person.FirstName = NickNameText.Text;
 
-            RockMobileUser.Instance.Person.LastName = LastNameField.Text;
+            RockMobileUser.Instance.Person.LastName = LastNameText.Text;
 
             // Update their cell phone.
             RockMobileUser.Instance.SetPhoneNumberDigits( CellPhoneField.Text );
 
             // Gender
-            if ( string.IsNullOrEmpty( GenderField.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( GenderField.Text ) == false )
             {
                 RockMobileUser.Instance.Person.Gender = (Rock.Client.Enums.Gender)RockLaunchData.Instance.Data.Genders.IndexOf( GenderField.Text );
             }
 
             // Birthdate
-            if ( string.IsNullOrEmpty( BirthdateField.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( BirthdateField.Text ) == false )
             {
                 RockMobileUser.Instance.SetBirthday( DateTime.Parse( BirthdateField.Text ) );
             }
 
             // Campus
-            if ( string.IsNullOrEmpty( CampusField.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( CampusField.Text ) == false )
             {
                 RockMobileUser.Instance.PrimaryFamily.CampusId = RockLaunchData.Instance.Data.CampusNameToId( CampusField.Text );
                 RockMobileUser.Instance.ViewingCampus = RockMobileUser.Instance.PrimaryFamily.CampusId.Value;
             }
 
-            if ( string.IsNullOrEmpty( StreetField.Text ) == false &&
-                 string.IsNullOrEmpty( CityField.Text ) == false &&
-                 string.IsNullOrEmpty( StateField.Text ) == false &&
-                 string.IsNullOrEmpty( ZipField.Text ) == false )
+            if ( string.IsNullOrWhiteSpace( StreetField.Text ) == false &&
+                 string.IsNullOrWhiteSpace( CityField.Text ) == false &&
+                 string.IsNullOrWhiteSpace( StateField.Text ) == false &&
+                 string.IsNullOrWhiteSpace( ZipField.Text ) == false )
             {
                 RockMobileUser.Instance.SetAddress( StreetField.Text, CityField.Text, StateField.Text, ZipField.Text );
             }
