@@ -130,7 +130,7 @@ namespace MobileApp
                                 
                                 // try to set the URL
                                 string activeUrl = EditMode_TextBox_Url.Text;
-                                if( activeUrl.Trim( ) != sPlaceholderUrlText )
+                                if( activeUrl.Trim( ) != sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                                 {
                                     // help them out by adding 'http://' if it isn't there.
                                     if ( activeUrl.StartsWith( "http://" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
@@ -139,6 +139,10 @@ namespace MobileApp
                                     }
 
                                     ActiveUrl = activeUrl;
+                                }
+                                else
+                                {
+                                    ActiveUrl = null;
                                 }
                                 
                                 EnableEditMode( false );
@@ -179,8 +183,9 @@ namespace MobileApp
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Quote, QuoteLabel.Frame.Top );
                             
                             float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), controlWidth * 4 );
+
                             EditMode_TextBox_Quote.Width = availWidth;
-                            EditMode_TextBox_Quote.Height = controlHeight * 4;
+                            EditMode_TextBox_Quote.Height = 128;
                             
                             System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, QuoteLabel.Frame.Left );
                             System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height  );

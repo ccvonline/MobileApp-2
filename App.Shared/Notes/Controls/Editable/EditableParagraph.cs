@@ -278,7 +278,7 @@ namespace MobileApp
                     }
                     else
                     {
-                        ActiveUrl = string.Empty;
+                        ActiveUrl = null;
                     }
 
                     TryAddUrlGlyph( Frame.Width, Frame.Height );
