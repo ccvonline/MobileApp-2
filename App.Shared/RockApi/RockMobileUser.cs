@@ -411,12 +411,13 @@ namespace MobileApp
                         {
                             // now attempt to get their basic info
                             Facebook.FacebookClient fbSession = new Facebook.FacebookClient( oauthResult.AccessToken );
+
                             string infoRequest = FacebookManager.Instance.CreateInfoRequest( );
 
                             fbSession.GetTaskAsync( infoRequest ).ContinueWith( t =>
                                 {
                                     // if there was no problem, we are logged in and can send this up to Rock
-                                    if ( t.IsFaulted == false || t.Exception == null )
+                                    if ( t.IsFaulted == false && t.Exception == null )
                                     {
                                         // now login via rock with the facebook credentials to verify we're good
                                         RockApi.Post_Auth_FacebookLogin( t.Result, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 

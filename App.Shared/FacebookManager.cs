@@ -32,7 +32,8 @@ namespace MobileApp.Shared
 
         public string CreateInfoRequest( )
         {
-            return "me";
+            // As of Graph API version 2.4, we must specify the fields we want.
+            return "me?fields=id,first_name,last_name,email";
         }
 
         public string GetUserID( object infoResult )

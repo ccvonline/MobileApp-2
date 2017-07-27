@@ -70,8 +70,8 @@ namespace App.Shared
             string translation, book, chapter;
             FriendlyBibleUrlToParts( bibleAddress, out translation, out book, out chapter );
 
-			   // now based on the translation, get the correct book abbreviations that the API expects
-			   GetBookAbbreviation( translation, book, delegate ( string bookAbbrev )
+			// now based on the translation, get the correct book abbreviations that the API expects
+			GetBookAbbreviation( translation, book, delegate ( string bookAbbrev )
             {
                 if( bookAbbrev != null )
                 {
