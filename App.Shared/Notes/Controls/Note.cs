@@ -349,13 +349,6 @@ namespace MobileApp
                         mStyle.mFullWidthHeader = bool.Parse( result );
                     }
                     
-                    bool usingVisualEditor = false;
-                    result = reader.GetAttribute( "VisualEditor" );
-                    if ( string.IsNullOrEmpty( result ) == false )
-                    {
-                        usingVisualEditor = bool.Parse( result );
-                    }
-
                     // begin reading the xml stream
                     bool finishedReading = false;
                     while( finishedReading == false && reader.Read( ) )
@@ -422,10 +415,8 @@ namespace MobileApp
                         }
 
 
-                        // place this next control at yOffset. 
-                        // If the note was generated visually, yOffset should be 0, because all controls are absolute. 
-                        // If the note was hand-built, yOffset should be the current noteHeight, which makes each control relative to the one above it.
-                        float yOffset = usingVisualEditor == true ? 0 : noteHeight;
+                        // place this next control at yOffset. yOffset should be the current noteHeight, which makes each control relative to the one above it.
+                        float yOffset = noteHeight;
 
                         // if it's the header and full width is specified, don't apply padding.
                         if ( control as Header != null && mStyle.mFullWidthHeader == true )
@@ -1126,7 +1117,7 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string xmlExport = "<Note VisualEditor=\"True\" StyleSheet=\"http://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
+                    string xmlExport = "<Note StyleSheet=\"http://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
 
                     // first, sort all controls by Y. That way, if something was created and then moved UP, it won't
                     // have a negative value
@@ -1147,6 +1138,45 @@ namespace MobileApp
 
                     xmlExport += "</Note>";
                     return xmlExport;
+                }
+
+                public IUIControl GetLogicalVerticalParent( IUIControl sourceControl )
+                {
+                    //// DEBUG - SORT SO WE CAN VISUALLY DRAW THINGS
+                    //ChildControls.Sort( delegate( IUIControl a, IUIControl b )
+                    //{
+                    //    if( a.GetFrame( ).Top < b.GetFrame( ).Top )
+                    //    {
+                    //        return -1;
+                    //    }
+                    //    return 1;
+                    //});
+                    //
+
+                    // Returns the control that is "truly" above the sourceControl.
+                    // This means that its bottom will be ABOVE the top of the sourceControl.
+                    // By making controls relative to their logical parent, the spacing remains consistent across
+                    // device types
+                    IUIControl nearestControl = null;
+                    float currMinDeltaY = float.MaxValue;
+
+                    // given a yPos, find the nearest control that is fully "above" this control
+                    // and return its bottom position.
+                    foreach( IUIControl child in ChildControls )
+                    {
+                        // skip the control LOOKING for its parent.
+                        if ( child != sourceControl )
+                        {
+                            float deltaY = sourceControl.GetFrame( ).Top - child.GetFrame( ).Bottom;
+                            if ( deltaY >= 0 && deltaY < currMinDeltaY )
+                            {
+                                currMinDeltaY = deltaY;
+                                nearestControl = child;
+                            }
+                        }
+                    }
+
+                    return nearestControl;
                 }
 #endif
             }

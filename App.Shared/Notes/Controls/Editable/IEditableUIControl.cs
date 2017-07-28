@@ -18,6 +18,15 @@ namespace MobileApp.Shared.Notes
             Alignment
         }
     }
+    
+    /// <summary>
+    ///  Values used by the IEditableUIControls
+    /// </summary>
+    public static class EditableConfig
+    {
+        public const uint sDebugColor = 0x0000FF77;
+        public const string sPlaceholderUrlText = "Optional URL";
+    }
 
     public interface IEditableUIControl
     {
@@ -57,6 +66,8 @@ namespace MobileApp.Shared.Notes
         void HandleChildDeleted( IEditableUIControl childControl );
 
         void SetPosition( float xPos, float yPos );
+
+        void ToggleDebugRect( bool enabled );
     }
 }
 #endif

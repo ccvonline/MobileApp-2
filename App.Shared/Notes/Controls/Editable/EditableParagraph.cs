@@ -29,8 +29,6 @@ namespace MobileApp
 
                 public const string sDefaultBoldFontName = "OpenSans-Bold";
                 public const string sDefaultRegularFontName = "OpenSans-Regular";
-
-                public const string sPlaceholderUrlText = "Optional URL";
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -266,7 +264,7 @@ namespace MobileApp
                         }
                     }
 
-                    if( activeUrl.Trim( ) != sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
+                    if( activeUrl.Trim( ) != EditableConfig.sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                     {
                         // help them out by adding 'http://' if it isn't there.
                         if ( activeUrl.StartsWith( "http://" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
@@ -377,7 +375,7 @@ namespace MobileApp
                             EditMode_TextBox.Text = textStream;
 
                             // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl == null ? sPlaceholderUrlText : ActiveUrl;
+                            EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
                             EditMode_TextBox_Url.Width = availableWidth;
                             EditMode_TextBox_Url.Height = 33;
@@ -396,7 +394,7 @@ namespace MobileApp
                                     EditMode_TextBox.SelectAll( );
                                 }
 
-                                if ( EditMode_TextBox_Url.Text == sPlaceholderUrlText )
+                                if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
                                 {
                                     EditMode_TextBox_Url.SelectAll( );
                                 }
@@ -875,8 +873,16 @@ namespace MobileApp
                     float controlLeftPos = Frame.Left;
                     float controlTopPos = Frame.Top;
                     
-                     // for vertical, it's relative to the control above it, so just make it relative to that
-                    controlTopPos -= currYPos;
+                    // for vertical, it's relative to the control above it, so just make it relative to that
+                    IUIControl logicalParent = ParentNote.GetLogicalVerticalParent( this );
+                    if ( logicalParent != null )
+                    {
+                        controlTopPos -= logicalParent.GetFrame( ).Bottom;
+                    }
+                    else
+                    {
+                        controlTopPos -= currYPos;
+                    }
 
                     // for horizontal, it just needs to remove padding, since it'll be re-applied on load
                     controlLeftPos -= parentPadding.Left;
@@ -916,6 +922,20 @@ namespace MobileApp
                     xml += "</P>";
 
                     return xml;
+                }
+
+                public void ToggleDebugRect( bool enabled )
+                {
+                    // set the hover appearance
+                    if( enabled && OrigBackgroundColor != EditableConfig.sDebugColor )
+                    {
+                        OrigBackgroundColor = BorderView.BackgroundColor;
+                        BorderView.BackgroundColor = EditableConfig.sDebugColor;
+                    }
+                    else if ( enabled == false )
+                    {
+                        BorderView.BackgroundColor = OrigBackgroundColor;
+                    }
                 }
             }
         }

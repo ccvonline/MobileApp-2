@@ -25,7 +25,6 @@ namespace MobileApp
             public class EditableQuote: Quote, IEditableUIControl
             {
                 public const string sDefaultNewQuoteText = "New Quote Body";
-                public const string sPlaceholderUrlText = "Optional URL";
 
                 bool EditMode_Enabled = false;
                 EditModeTextBox EditMode_TextBox_Quote = null;
@@ -130,7 +129,7 @@ namespace MobileApp
                                 
                                 // try to set the URL
                                 string activeUrl = EditMode_TextBox_Url.Text;
-                                if( activeUrl.Trim( ) != sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
+                                if( activeUrl.Trim( ) != EditableConfig.sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                                 {
                                     // help them out by adding 'http://' if it isn't there.
                                     if ( activeUrl.StartsWith( "http://" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
@@ -199,7 +198,7 @@ namespace MobileApp
 
 
                             // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl == null ? sPlaceholderUrlText : ActiveUrl;
+                            EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
                             ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
                             EditMode_TextBox_Url.Width = availWidth;
                             EditMode_TextBox_Url.Height = 33;
@@ -219,7 +218,7 @@ namespace MobileApp
                                     EditMode_TextBox_Citation.SelectAll( );
                                 }
 
-                                if ( EditMode_TextBox_Url.Text == sPlaceholderUrlText )
+                                if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
                                 {
                                     EditMode_TextBox_Url.SelectAll( );
                                 }
@@ -524,9 +523,17 @@ namespace MobileApp
                     // start by setting our position to our global position, and then we'll translate.
                     float controlLeftPos = Frame.Left;
                     float controlTopPos = Frame.Top;
-                    
-                     // for vertical, it's relative to the control above it, so just make it relative to that
-                    controlTopPos -= currYPos;
+
+                    // for vertical, it's relative to the control above it, so just make it relative to that
+                    IUIControl logicalParent = ParentNote.GetLogicalVerticalParent( this );
+                    if ( logicalParent != null )
+                    {
+                        controlTopPos -= logicalParent.GetFrame( ).Bottom;
+                    }
+                    else
+                    {
+                        controlTopPos -= currYPos;
+                    }
 
                     // for horizontal, it just needs to remove padding, since it'll be re-applied on load
                     controlLeftPos -= parentPadding.Left;
@@ -550,6 +557,20 @@ namespace MobileApp
                     // and the content
                     xml += encodedQuote + "</Q>";
                     return xml;
+                }
+
+                public void ToggleDebugRect( bool enabled )
+                {
+                    // set the hover appearance
+                    if( enabled && OrigBackgroundColor != EditableConfig.sDebugColor )
+                    {
+                        OrigBackgroundColor = BorderView.BackgroundColor;
+                        BorderView.BackgroundColor = EditableConfig.sDebugColor;
+                    }
+                    else if ( enabled == false )
+                    {
+                        BorderView.BackgroundColor = OrigBackgroundColor;
+                    }
                 }
             }
         }

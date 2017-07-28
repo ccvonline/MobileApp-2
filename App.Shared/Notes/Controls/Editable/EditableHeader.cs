@@ -421,6 +421,20 @@ namespace MobileApp
                               "<Date>" + encodedDate + "</Date>" +
                            "</Header>";
                 }
+
+                public void ToggleDebugRect( bool enabled )
+                {
+                    // set the hover appearance
+                    if( enabled && OrigBackgroundColor != EditableConfig.sDebugColor )
+                    {
+                        OrigBackgroundColor = BorderView.BackgroundColor;
+                        BorderView.BackgroundColor = EditableConfig.sDebugColor;
+                    }
+                    else if ( enabled == false )
+                    {
+                        BorderView.BackgroundColor = OrigBackgroundColor;
+                    }
+                }
             }
         }
     }

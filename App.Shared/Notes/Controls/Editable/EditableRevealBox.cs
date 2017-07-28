@@ -277,6 +277,11 @@ namespace MobileApp
                         return string.Empty;
                     }
                 }
+
+                public void ToggleDebugRect( bool enabled )
+                {
+                    // rely on parent for this
+                }
             }
         }
     }
