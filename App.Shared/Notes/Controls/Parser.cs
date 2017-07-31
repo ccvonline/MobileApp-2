@@ -61,7 +61,11 @@ namespace MobileApp
                     }
                     else if ( TextInput.ElementTagMatches( reader.Name ) )
                     {
+#if __WIN__
+                        return new EditableTextInput( parentParams, reader );
+#else
                         return new TextInput( parentParams, reader );
+#endif
                     }
                     else if ( Header.ElementTagMatches( reader.Name ) )
                     {
@@ -107,7 +111,6 @@ namespace MobileApp
                 {
                     if ( controlType == typeof( EditableParagraph ) )
                     {
-                        // seed the paragaph with some default text
                         XmlTextReader reader = new XmlTextReader( new StringReader( "<P>" + EditableParagraph.sDefaultNewParagraphText + "</P>" ) );
                         reader.Read( );
 
@@ -115,7 +118,6 @@ namespace MobileApp
                     }
                     else if ( controlType == typeof( EditableHeader ) )
                     {
-                        // give the stack panel some back width and color so the user can see it
                         XmlTextReader reader = new XmlTextReader( new StringReader( "<Header> <Title>Title</Title> <Speaker>Speaker</Speaker> <Date>January 1st - 2nd, 2017</Date> </Header>" ) );
                         reader.Read( );
 
@@ -123,11 +125,17 @@ namespace MobileApp
                     }
                     else if ( controlType == typeof( EditableQuote ) )
                     {
-                        // give the stack panel some back width and color so the user can see it
                         XmlTextReader reader = new XmlTextReader( new StringReader( "<Quote Citation=\"Citation\">" + EditableQuote.sDefaultNewQuoteText + "</Quote>" ) );
                         reader.Read( );
 
                         return new EditableQuote( parentParams, reader );
+                    }
+                    else if ( controlType == typeof( EditableTextInput ) )
+                    {
+                        XmlTextReader reader = new XmlTextReader( new StringReader( "<TextInput Height=\"300\"></TextInput>" ) );
+                        reader.Read( );
+
+                        return new EditableTextInput( parentParams, reader );
                     }
 
                     return null;

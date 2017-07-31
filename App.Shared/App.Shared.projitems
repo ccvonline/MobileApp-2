@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableParagraph.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableQuote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableRevealBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\EditableTextInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\Editable\IEditableUIControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockApi\RockMobileUser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notes\Controls\BaseControl.cs" />
