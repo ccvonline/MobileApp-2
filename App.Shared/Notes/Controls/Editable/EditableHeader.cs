@@ -101,24 +101,144 @@ namespace MobileApp
                 {
                 }
 
+                public bool IsEditing( )
+                {
+                    return EditMode_Enabled;
+                }
+
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
+                {
+                    // for controls with textBoxes used for editing, we need
+                    // to be consistent with how it will handle input.
+                    bool releaseFocus = false;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        {
+                            // on return, release focus and try to save changes
+                            releaseFocus = true;
+
+                            EditMode_End( true );
+                            break;
+                        }
+
+                        case Key.Escape:
+                        {
+                            // on escape, always release focus
+                            releaseFocus = true;
+
+                            EditMode_End( false );
+                            break;
+                        }
+                    }
+
+                    return releaseFocus;
+                }
+
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
                 {
                     switch ( e.Key )
                     {
                         case System.Windows.Input.Key.Escape:
                         {
-                            EnableEditMode( false );
+                            EditMode_End( false );
                             break;
                         }
 
                         case System.Windows.Input.Key.Return:
+                        {
+                            EditMode_End( true );
+                            break;
+                        }
+                    }
+                }
+
+                private void EditMode_Begin( )
+                {
+                    if ( EditMode_Enabled == false )
+                    {
+                        EditMode_Enabled = true;
+
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Title );
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Date );
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Speaker );
+
+                        // hide the regular text
+                        mTitle.Hidden = true;
+                        mSpeaker.Hidden = true;
+                        mDate.Hidden = true;
+
+                        // position and size the textboxes
+                        float availableWidth = ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
+
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Title, mTitle.Frame.Left );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Title, mTitle.Frame.Top - 10 );
+
+                        EditMode_TextBox_Title.Width = availableWidth;
+                        EditMode_TextBox_Title.Height = mTitle.Frame.Height;
+
+                            
+                        // date
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Date, mDate.Frame.Left );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top );
+
+                        EditMode_TextBox_Date.Width = availableWidth / 2;
+                        EditMode_TextBox_Date.Height = mDate.Frame.Height + 5;
+
+                            
+                        // speaker
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Speaker, mDate.Frame.Left + (availableWidth / 2) );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top );
+
+                        EditMode_TextBox_Speaker.Width = availableWidth / 2;
+                        EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height + 5;
+                            
+                            
+                        // assign each text box
+                        EditMode_TextBox_Title.Text = mTitle.Text.Trim( ' ' );
+                        EditMode_TextBox_Speaker.Text = mSpeaker.Text.Trim( ' ' );
+                        EditMode_TextBox_Date.Text = mDate.Text.Trim( ' ' );
+
+                        Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
+                        { 
+                            EditMode_TextBox_Title.Focus( );
+                            Keyboard.Focus( EditMode_TextBox_Title );
+                            EditMode_TextBox_Title.CaretIndex = EditMode_TextBox_Title.Text.Length + 1;
+
+                            if( EditMode_TextBox_Title.Text == sDefaultHeaderTitleText )
+                            {
+                                EditMode_TextBox_Title.SelectAll( );
+                                EditMode_TextBox_Date.SelectAll( );
+                                EditMode_TextBox_Speaker.SelectAll( );
+                            }
+                        }));
+                    }
+                }
+
+                private void EditMode_End( bool saveChanges )
+                {
+                    // end edit mode without storing the changes
+                    if ( EditMode_Enabled == true )
+                    {
+                        EditMode_Enabled = false;
+
+                        // unhide the regular controls
+                        mTitle.Hidden = false;
+                        mSpeaker.Hidden = false;
+                        mDate.Hidden = false;
+
+                        // exit enable mode. We know the parent is a canvas because of the design
+                        (EditMode_TextBox_Title.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Title );
+                        (EditMode_TextBox_Speaker.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Speaker );
+                        (EditMode_TextBox_Date.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Date );
+
+                        if( saveChanges )
                         {
                             // only allow editing to end if there's text in all text boxes
                             if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Title.Text ) == false && 
                                  string.IsNullOrWhiteSpace( EditMode_TextBox_Speaker.Text ) == false && 
                                  string.IsNullOrWhiteSpace( EditMode_TextBox_Date.Text ) == false )
                             {
-                                // if they press return, commit the changed text.
                                 mTitle.Text = EditMode_TextBox_Title.Text;
                                 mTitle.Frame = new RectangleF( 0, 0, ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2), 0 );
                                 mTitle.SizeToFit( );
@@ -131,9 +251,6 @@ namespace MobileApp
                                 mDate.Frame = new RectangleF( );
                                 mDate.SizeToFit( );
                                 
-                                EnableEditMode( false );
-                                    
-
                                 // offset the controls according to our layout
                                 mTitle.Position = new PointF( Frame.X + Padding.Left + BorderPaddingPx, 
                                                               Frame.Y + Padding.Top + BorderPaddingPx );
@@ -163,92 +280,10 @@ namespace MobileApp
                                 BorderView.Frame = Frame;
                                 SetDebugFrame( Frame );
                             }
-                            
-                            break;
                         }
                     }
                 }
-
-                private void EnableEditMode( bool enabled )
-                {
-                    // don't allow setting the mode to what it's already set to
-                    if( enabled != EditMode_Enabled )
-                    {
-                        // enter enable mode
-                        if ( enabled == true )
-                        {
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Title );
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Date );
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Speaker );
-
-                            // hide the regular text
-                            mTitle.Hidden = true;
-                            mSpeaker.Hidden = true;
-                            mDate.Hidden = true;
-
-                            // position and size the textboxes
-                            float availableWidth = ParentSize.Width - Padding.Left - Padding.Width - (BorderPaddingPx * 2);
-
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Title, mTitle.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Title, mTitle.Frame.Top - 10 );
-
-                            EditMode_TextBox_Title.Width = availableWidth;
-                            EditMode_TextBox_Title.Height = mTitle.Frame.Height;
-
-                            
-                             // date
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Date, mDate.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Date, mDate.Frame.Top );
-
-                            EditMode_TextBox_Date.Width = availableWidth / 2;
-                            EditMode_TextBox_Date.Height = mDate.Frame.Height + 5;
-
-                            
-                            // speaker
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Speaker, mDate.Frame.Left + (availableWidth / 2) );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Speaker, mSpeaker.Frame.Top );
-
-                            EditMode_TextBox_Speaker.Width = availableWidth / 2;
-                            EditMode_TextBox_Speaker.Height = mSpeaker.Frame.Height + 5;
-                            
-                            
-                            // assign each text box
-                            EditMode_TextBox_Title.Text = mTitle.Text.Trim( ' ' );
-                            EditMode_TextBox_Speaker.Text = mSpeaker.Text.Trim( ' ' );
-                            EditMode_TextBox_Date.Text = mDate.Text.Trim( ' ' );
-
-                            Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
-                            { 
-                                EditMode_TextBox_Title.Focus( );
-                                Keyboard.Focus( EditMode_TextBox_Title );
-                                EditMode_TextBox_Title.CaretIndex = EditMode_TextBox_Title.Text.Length + 1;
-
-                                if( EditMode_TextBox_Title.Text == sDefaultHeaderTitleText )
-                                {
-                                    EditMode_TextBox_Title.SelectAll( );
-                                    EditMode_TextBox_Date.SelectAll( );
-                                    EditMode_TextBox_Speaker.SelectAll( );
-                                }
-                            }));
-                        }
-                        else
-                        {
-                            // unhide the regular controls
-                            mTitle.Hidden = false;
-                            mSpeaker.Hidden = false;
-                            mDate.Hidden = false;
-
-                            // exit enable mode. We know the parent is a canvas because of the design
-                            (EditMode_TextBox_Title.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Title );
-                            (EditMode_TextBox_Speaker.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Speaker );
-                            (EditMode_TextBox_Date.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Date );
-                        }
-
-                        // store the change
-                        EditMode_Enabled = enabled;
-                    }
-                }
-
+                
                 // Sigh. This is NOT the EditStyle referred to above. This is the Note Styling object
                 // used by the notes platform.
                 public MobileApp.Shared.Notes.Styles.Style GetControlStyle( )
@@ -304,7 +339,7 @@ namespace MobileApp
                     if ( frame.Contains( point ) )
                     {
                         // notify the caller we're consuming, and turn on edit mode
-                        EnableEditMode( true );
+                        EditMode_Begin( );
 
                         return this;
                     }
@@ -322,43 +357,6 @@ namespace MobileApp
                     }
 
                     return null;
-                }
-
-                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
-                {
-                    // for controls with textBoxes used for editing, we need
-                    // to be consistent with how it will handle input.
-                    bool releaseFocus = false;
-                    switch( e.Key )
-                    {
-                        case Key.Return:
-                        {
-                            // on return, editing will only end, (and thus focus should clear)
-                            // if there's text in the text box
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Title.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Speaker.Text ) == false && 
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Date.Text ) == false )
-                            {
-                                releaseFocus = true;
-                            }
-
-                            break;
-                        }
-
-                        case Key.Escape:
-                        {
-                            // on escape, always release focus
-                            releaseFocus = true;
-                            break;
-                        }
-                    }
-
-                    return releaseFocus;
-                }
-
-                public bool IsEditing( )
-                {
-                    return EditMode_Enabled;
                 }
 
                 public IEditableUIControl ContainerForControl( System.Type controlType, PointF mousePos )

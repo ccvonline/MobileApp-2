@@ -83,41 +83,6 @@ namespace MobileApp
                     base.AddToView( obj );
                 }
 
-                public bool IsEditing( )
-                {
-                    return EditMode_Enabled;
-                }
-
-                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
-                {
-                    // for controls with textBoxes used for editing, we need
-                    // to be consistent with how it will handle input.
-                    bool releaseFocus = false;
-                    switch( e.Key )
-                    {
-                        case Key.Return:
-                        {
-                            // on return, editing will only end, (and thus focus should clear)
-                            // if there's text in the text box
-                            if( string.IsNullOrWhiteSpace( EditMode_TextBox.Text ) == false )
-                            {
-                                releaseFocus = true;
-                            }
-
-                            break;
-                        }
-
-                        case Key.Escape:
-                        {
-                            // on escape, always release focus
-                            releaseFocus = true;
-                            break;
-                        }
-                    }
-
-                    return releaseFocus;
-                }
-
                 public IEditableUIControl HandleMouseHover( PointF mousePos )
                 {
                     IEditableUIControl consumingControl = null;
@@ -197,6 +162,40 @@ namespace MobileApp
 
                     //return consumingControl;
                 }
+
+                public bool IsEditing( )
+                {
+                    return EditMode_Enabled;
+                }
+
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
+                {
+                    // for controls with textBoxes used for editing, we need
+                    // to be consistent with how it will handle input.
+                    bool releaseFocus = false;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        {
+                            // on return, release focus and try to save changes
+                            releaseFocus = true;
+
+                            EditMode_End( true );
+                            break;
+                        }
+
+                        case Key.Escape:
+                        {
+                            // on escape, always release focus
+                            releaseFocus = true;
+
+                            EditMode_End( false );
+                            break;
+                        }
+                    }
+
+                    return releaseFocus;
+                }
                 
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
                 {
@@ -204,18 +203,93 @@ namespace MobileApp
                     {
                         case System.Windows.Input.Key.Escape:
                         {
-                            EnableEditMode( false );
+                            EditMode_End( false );
                             break;
                         }
 
                         case System.Windows.Input.Key.Return:
                         {
-                            // if they press return, commit the changed text.
+                            EditMode_End( true );
+                            break;
+                        }
+                    }
+                }
+
+                private void EditMode_Begin( )
+                {
+                    if ( EditMode_Enabled == false )
+                    {
+                        EditMode_Enabled = true;
+
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox );
+
+                        // position and size the textbox
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left - 5 );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top - 2 );
+
+                        float availableWidth = ParentSize.Width - Frame.Left;
+
+                        EditMode_TextBox.Width = availableWidth;
+                        EditMode_TextBox.Height = Frame.Height * 1.25f;
+
+                        // get the full text. we can use the build HTML stream code to do this.
+                        string htmlStream = string.Empty;
+                        string textStream = string.Empty;
+                        BuildHTMLContent( ref htmlStream, ref textStream, new List<IUIControl>( ) );
+
+                        // if the last character is a URL glyph, remove it
+                        textStream = textStream.Trim( new char[] { ' ', PrivateNoteConfig.CitationUrl_Icon[0] } );
+
+                        // assign the text
+                        EditMode_TextBox.Text = textStream;
+
+                        // and now the URL support
+                        EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
+                        EditMode_TextBox_Url.Width = availableWidth;
+                        EditMode_TextBox_Url.Height = 33;
+                            
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left - 5 );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom + 5 );
+
+                        Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
+                        { 
+                            EditMode_TextBox.Focus( );
+                            Keyboard.Focus( EditMode_TextBox );
+                            EditMode_TextBox.CaretIndex = EditMode_TextBox.Text.Length + 1;
+
+                            if( EditMode_TextBox.Text == sDefaultNewParagraphText )
+                            {
+                                EditMode_TextBox.SelectAll( );
+                            }
+
+                            if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
+                            {
+                                EditMode_TextBox_Url.SelectAll( );
+                            }
+                        }));
+                    }
+                }
+
+                private void EditMode_End( bool saveChanges )
+                {
+                    // end edit mode without storing the changes
+                    if ( EditMode_Enabled == true )
+                    {
+                        EditMode_Enabled = false;
+
+                        // exit enable mode. We know the parent is a canvas because of the design
+                        (EditMode_TextBox.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox );
+                        (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
+
+
+                        if( saveChanges )
+                        {
+                            // only store changes if they put valid text in the box
                             if ( string.IsNullOrWhiteSpace( EditMode_TextBox.Text ) == false )
                             {
+                                // set the text
                                 SetText( EditMode_TextBox.Text, EditMode_TextBox_Url.Text );
-
-                                EnableEditMode( false );
 
                                 SetPosition( Frame.Left, Frame.Top );
 
@@ -225,12 +299,10 @@ namespace MobileApp
                                     control.AddToView( ParentEditingCanvas );
                                 }
                             }
-                            
-                            break;
                         }
                     }
                 }
-
+                
                 // Takes a string and replaces the content of the paragraph with it.
                 private void SetText( string text, string activeUrl )
                 {
@@ -321,7 +393,7 @@ namespace MobileApp
                     if ( frame.Contains( point ) )
                     {
                         // notify the caller we're consuming, and turn on edit mode
-                        EnableEditMode( true );
+                        EditMode_Begin( );
                         return this;
                     }
 
@@ -342,74 +414,6 @@ namespace MobileApp
                     }
 
                     return null;
-                }
-
-                private void EnableEditMode( bool enabled )
-                {
-                    // don't allow setting the mode to what it's already set to
-                    if( enabled != EditMode_Enabled )
-                    {
-                        // enter enable mode
-                        if ( enabled == true )
-                        {
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox );
-
-                            // position and size the textbox
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox, Frame.Left - 5 );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox, Frame.Top - 2 );
-
-                            float availableWidth = ParentSize.Width - Frame.Left;
-
-                            EditMode_TextBox.Width = availableWidth;
-                            EditMode_TextBox.Height = Frame.Height * 1.25f;
-
-                            // get the full text. we can use the build HTML stream code to do this.
-                            string htmlStream = string.Empty;
-                            string textStream = string.Empty;
-                            BuildHTMLContent( ref htmlStream, ref textStream, new List<IUIControl>( ) );
-
-                            // if the last character is a URL glyph, remove it
-                            textStream = textStream.Trim( new char[] { ' ', PrivateNoteConfig.CitationUrl_Icon[0] } );
-
-                            // assign the text
-                            EditMode_TextBox.Text = textStream;
-
-                            // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
-                            EditMode_TextBox_Url.Width = availableWidth;
-                            EditMode_TextBox_Url.Height = 33;
-                            
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, Frame.Left - 5 );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, Frame.Bottom + 5 );
-
-                            Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
-                            { 
-                                EditMode_TextBox.Focus( );
-                                Keyboard.Focus( EditMode_TextBox );
-                                EditMode_TextBox.CaretIndex = EditMode_TextBox.Text.Length + 1;
-
-                                if( EditMode_TextBox.Text == sDefaultNewParagraphText )
-                                {
-                                    EditMode_TextBox.SelectAll( );
-                                }
-
-                                if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
-                                {
-                                    EditMode_TextBox_Url.SelectAll( );
-                                }
-                            }));
-                        }
-                        else
-                        {
-                            // exit enable mode. We know the parent is a canvas because of the design
-                            (EditMode_TextBox.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox );
-                            (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
-                        }
-
-                        // store the change
-                        EditMode_Enabled = enabled;
-                    }
                 }
 
                 public PointF GetPosition( )

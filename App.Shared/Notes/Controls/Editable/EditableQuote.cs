@@ -106,6 +106,40 @@ namespace MobileApp
                 public void ResetBounds( )
                 {
                 }
+
+                public bool IsEditing( )
+                {
+                    return EditMode_Enabled;
+                }
+
+                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
+                {
+                    // for controls with textBoxes used for editing, we need
+                    // to be consistent with how it will handle input.
+                    bool releaseFocus = false;
+                    switch( e.Key )
+                    {
+                        case Key.Return:
+                        {
+                            // on return, release focus and try to save changes
+                            releaseFocus = true;
+
+                            EditMode_End( true );
+                            break;
+                        }
+
+                        case Key.Escape:
+                        {
+                            // on escape, always release focus
+                            releaseFocus = true;
+
+                            EditMode_End( false );
+                            break;
+                        }
+                    }
+
+                    return releaseFocus;
+                }
                 
                 private void EditMode_TextBox_KeyUp( object sender, System.Windows.Input.KeyEventArgs e )
                 {
@@ -113,13 +147,111 @@ namespace MobileApp
                     {
                         case System.Windows.Input.Key.Escape:
                         {
-                            EnableEditMode( false );
+                            EditMode_End( false );
                             break;
                         }
 
                         case System.Windows.Input.Key.Return:
                         {
-                            // editing can end as long as ONE of the two has text
+                            EditMode_End( true );
+                            break;
+                        }
+                    }
+                }
+
+                private void EditMode_Begin( )
+                {
+                    if( EditMode_Enabled == false )
+                    {
+                        EditMode_Enabled = true;
+
+                        // hide the normal controls
+                        QuoteLabel.Hidden = true;
+                        Citation.Hidden = true;
+                        BorderView.Hidden = true;
+                        UrlGlyph.Hidden = true;
+
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Quote );
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Citation );
+
+                        // first get the size of the control, which should be whatever's largest: the quote or citation.
+                        // we do this to prevent taking a 0 width, which it could be if the quote or citation are blank.
+                        float controlWidth = Math.Max( QuoteLabel.Frame.Width, Citation.Frame.Width );
+                        float controlHeight = Math.Max( QuoteLabel.Frame.Height, Citation.Frame.Height );
+
+
+                        // position and size the textboxes
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Quote, QuoteLabel.Frame.Left );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Quote, QuoteLabel.Frame.Top );
+                            
+                        float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), controlWidth * 4 );
+
+                        EditMode_TextBox_Quote.Width = availWidth;
+                        EditMode_TextBox_Quote.Height = 128;
+                            
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, QuoteLabel.Frame.Left );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height  );
+
+                        EditMode_TextBox_Citation.Width = availWidth;
+                        EditMode_TextBox_Citation.Height = Citation.Frame.Height;
+                            
+                        // assign each text box
+                        EditMode_TextBox_Quote.Text = QuoteLabel.Text.Trim( ' ' );
+                        EditMode_TextBox_Citation.Text = Citation.Text.Trim( ' ' );
+
+
+                        // and now the URL support
+                        EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
+                        ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
+                        EditMode_TextBox_Url.Width = availWidth;
+                        EditMode_TextBox_Url.Height = 33;
+                        System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, QuoteLabel.Frame.Left );
+                        System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height + EditMode_TextBox_Citation.Height + 5 );
+
+
+                        Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate ( )
+                        {
+                            EditMode_TextBox_Quote.Focus( );
+                            Keyboard.Focus( EditMode_TextBox_Quote );
+                            EditMode_TextBox_Quote.CaretIndex = EditMode_TextBox_Quote.Text.Length + 1;
+
+                            if ( EditMode_TextBox_Quote.Text == sDefaultNewQuoteText )
+                            {
+                                EditMode_TextBox_Quote.SelectAll( );
+                                EditMode_TextBox_Citation.SelectAll( );
+                            }
+
+                            if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
+                            {
+                                EditMode_TextBox_Url.SelectAll( );
+                            }
+                        } ) );
+                    }
+                }
+                
+                private void EditMode_End( bool saveChanges )
+                {
+                    // end edit mode without storing the changes
+                    if( EditMode_Enabled == true )
+                    {
+                        EditMode_Enabled = false;
+
+                        // unhide the normal controls
+                        QuoteLabel.Hidden = false;
+                        Citation.Hidden = false;
+                        BorderView.Hidden = false;
+                        UrlGlyph.Hidden = false;
+
+                        // exit enable mode. We know the parent is a canvas because of the design
+                        (EditMode_TextBox_Quote.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Quote );
+                        (EditMode_TextBox_Citation.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Citation );
+                        (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
+
+
+                        // save changes only if they wanted to AND there's valid text to save
+                        // editing can end as long as ONE of the two has text
+                        if( saveChanges )
+                        {
                             if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false ||
                                  string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
                             {
@@ -143,103 +275,11 @@ namespace MobileApp
                                 {
                                     ActiveUrl = null;
                                 }
-                                
-                                EnableEditMode( false );
 
                                 // update the position, which also effects layout
                                 SetPosition( Frame.Left, Frame.Top );
                             }
-                            break;
-                        }
-                    }
-                }
-
-                private void EnableEditMode( bool enabled )
-                {
-                    // don't allow setting the mode to what it's already set to
-                    if( enabled != EditMode_Enabled )
-                    {
-                        // enter enable mode
-                        if ( enabled == true )
-                        {
-                            // hide the normal controls
-                            QuoteLabel.Hidden = true;
-                            Citation.Hidden = true;
-                            BorderView.Hidden = true;
-                            UrlGlyph.Hidden = true;
-
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Quote );
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Citation );
-
-                            // first get the size of the control, which should be whatever's largest: the quote or citation.
-                            // we do this to prevent taking a 0 width, which it could be if the quote or citation are blank.
-                            float controlWidth = Math.Max( QuoteLabel.Frame.Width, Citation.Frame.Width );
-                            float controlHeight = Math.Max( QuoteLabel.Frame.Height, Citation.Frame.Height );
-
-
-                            // position and size the textboxes
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Quote, QuoteLabel.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Quote, QuoteLabel.Frame.Top );
-                            
-                            float availWidth = Math.Min( (ParentSize.Width - QuoteLabel.Frame.Left), controlWidth * 4 );
-
-                            EditMode_TextBox_Quote.Width = availWidth;
-                            EditMode_TextBox_Quote.Height = 128;
-                            
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Citation, QuoteLabel.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Citation, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height  );
-
-                            EditMode_TextBox_Citation.Width = availWidth;
-                            EditMode_TextBox_Citation.Height = Citation.Frame.Height;
-                            
-                            // assign each text box
-                            EditMode_TextBox_Quote.Text = QuoteLabel.Text.Trim( ' ' );
-                            EditMode_TextBox_Citation.Text = Citation.Text.Trim( ' ' );
-
-
-                            // and now the URL support
-                            EditMode_TextBox_Url.Text = ActiveUrl == null ? EditableConfig.sPlaceholderUrlText : ActiveUrl;
-                            ParentEditingCanvas.Children.Add( EditMode_TextBox_Url );
-                            EditMode_TextBox_Url.Width = availWidth;
-                            EditMode_TextBox_Url.Height = 33;
-                            System.Windows.Controls.Canvas.SetLeft( EditMode_TextBox_Url, QuoteLabel.Frame.Left );
-                            System.Windows.Controls.Canvas.SetTop( EditMode_TextBox_Url, QuoteLabel.Frame.Top + EditMode_TextBox_Quote.Height + EditMode_TextBox_Citation.Height + 5 );
-
-
-                            Dispatcher.CurrentDispatcher.BeginInvoke( DispatcherPriority.Input, new Action( delegate() 
-                            { 
-                                EditMode_TextBox_Quote.Focus( );
-                                Keyboard.Focus( EditMode_TextBox_Quote );
-                                EditMode_TextBox_Quote.CaretIndex = EditMode_TextBox_Quote.Text.Length + 1;
-
-                                if( EditMode_TextBox_Quote.Text == sDefaultNewQuoteText )
-                                {
-                                    EditMode_TextBox_Quote.SelectAll( );
-                                    EditMode_TextBox_Citation.SelectAll( );
-                                }
-
-                                if ( EditMode_TextBox_Url.Text == EditableConfig.sPlaceholderUrlText )
-                                {
-                                    EditMode_TextBox_Url.SelectAll( );
-                                }
-                            }));
-                        }
-                        else
-                        {
-                            // unhide the normal controls
-                            QuoteLabel.Hidden = false;
-                            Citation.Hidden = false;
-                            BorderView.Hidden = false;
-                            UrlGlyph.Hidden = false;
-
-                            // exit enable mode. We know the parent is a canvas because of the design
-                            (EditMode_TextBox_Quote.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Quote );
-                            (EditMode_TextBox_Citation.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Citation );
-                            (EditMode_TextBox_Url.Parent as System.Windows.Controls.Canvas).Children.Remove( EditMode_TextBox_Url );
-                        }
-
-                        // store the change
-                        EditMode_Enabled = enabled;
+                        }   
                     }
                 }
 
@@ -296,8 +336,8 @@ namespace MobileApp
                         // until it can't wrap any more. Then, we'll clamp its movement to the parent's edge.
 
                         // Get the width of the widest child, which is always the citation plus glyph.
-                        float minRequiredWidth = Citation.Frame.Width + UrlGlyph.Frame.Width + (BorderPaddingPx * 2) + Padding.Left + Padding.Width;
-                            
+                        float minRequiredWidth = UrlGlyph.Frame.Width + (BorderPaddingPx * 2) + Padding.Left + Padding.Width;
+                        
                          // now, if the control cannot wrap any further, we want to clamp its movement
                         // to the parent's right edge
 
@@ -399,7 +439,7 @@ namespace MobileApp
                     if ( frame.Contains( point ) )
                     {
                         // notify the caller we're consuming, and turn on edit mode
-                        EnableEditMode( true );
+                        EditMode_Begin( );
 
                         return this;
                     }
@@ -418,43 +458,7 @@ namespace MobileApp
 
                     return null;
                 }
-
-                public bool HandleFocusedControlKeyUp( KeyEventArgs e )
-                {
-                    // for controls with textBoxes used for editing, we need
-                    // to be consistent with how it will handle input.
-                    bool releaseFocus = false;
-                    switch( e.Key )
-                    {
-                        case Key.Return:
-                        {
-                            // on return, editing will only end, (and thus focus should clear)
-                            // if there's text in the text box
-                            if ( string.IsNullOrWhiteSpace( EditMode_TextBox_Quote.Text ) == false ||
-                                 string.IsNullOrWhiteSpace( EditMode_TextBox_Citation.Text ) == false )
-                            {
-                                releaseFocus = true;
-                            }
-
-                            break;
-                        }
-
-                        case Key.Escape:
-                        {
-                            // on escape, always release focus
-                            releaseFocus = true;
-                            break;
-                        }
-                    }
-
-                    return releaseFocus;
-                }
-
-                public bool IsEditing( )
-                {
-                    return EditMode_Enabled;
-                }
-
+                
                 public void HandleDelete( bool notifyParent )
                 {
                     RemoveFromView( ParentEditingCanvas );
