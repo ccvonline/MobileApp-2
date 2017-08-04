@@ -14,6 +14,7 @@ using System.Windows.Media;
 using RestSharp.Extensions.MonoHttp;
 using WinNotes;
 using App.Shared;
+using System.IO;
 
 namespace MobileApp
 {
@@ -29,6 +30,8 @@ namespace MobileApp
 
                 public const string sDefaultBoldFontName = "OpenSans-Bold";
                 public const string sDefaultRegularFontName = "OpenSans-Regular";
+
+                public const string sBulletChar = "•";
                 
                 System.Windows.Controls.Canvas ParentEditingCanvas { get; set; }
                 
@@ -45,8 +48,6 @@ namespace MobileApp
                 // the size (in pixels) to extend the paragraph's frame
                 // for mouse interaction
                 const float CornerExtensionSize = 5;
-
-                bool ExportPercentage { get; set; }
                                 
                 public EditableParagraph( CreateParams parentParams, XmlReader reader ) : base( parentParams, reader )
                 {
@@ -515,9 +516,19 @@ namespace MobileApp
                 {
                     switch( style )
                     {
-                        case EditStyling.Style.Alignment:
+                        case EditStyling.Style.BoldParagraph:
                         {
-                            return ExportPercentage;
+                            return true;
+                        }
+
+                        case EditStyling.Style.UnderlineParagraph:
+                        {
+                            return true;
+                        }
+
+                        case EditStyling.Style.BulletParagraph:
+                        {
+                            return true;
                         }
                     }
 
@@ -528,11 +539,69 @@ namespace MobileApp
                 {
                     switch( style )
                     {
-                        case EditStyling.Style.Alignment:
+                        case EditStyling.Style.BoldParagraph:
                         {
-                            bool usePercent = (bool)value;
+                            // force all children to bold
+                            foreach( IUIControl child in ChildControls )
+                            {
+                                IEditableUIControl editableChild = child as IEditableUIControl;
+                                if( editableChild != null )
+                                {
+                                    editableChild.SetStyleValue( EditStyling.Style.FontName, EditableParagraph.sDefaultBoldFontName );
+                                }
+                            }
+                            break;
+                        }
 
-                            ExportPercentage = usePercent;
+                        case EditStyling.Style.BulletParagraph:
+                        {
+                            // create a noteText with the bullet, and then insert it       
+                            XmlTextReader reader = new XmlTextReader( new StringReader( "<NT>" + sBulletChar + "</NT>" ) );
+                            reader.Read( );
+
+                            IUIControl bulletText = Parser.TryParseControl( new CreateParams( this, ParentSize.Width, ParentSize.Height, ref mStyle ), reader );
+                            
+                            ChildControls.Insert( 0, bulletText );
+
+                            SetPosition( Frame.Left, Frame.Top );
+
+                            bulletText.AddToView( ParentEditingCanvas );
+
+                            break;
+                        }
+
+                        case EditStyling.Style.UnderlineParagraph:
+                        {
+                            // to underline the whole thing, we need to make it one big NoteText.
+                            // we'll gather all the text, convert it to a single NoteText with Underlined Attribute,
+                            // remove the existing children, and replace them with the new single underlined one.
+
+                            // get the full text. we can use the build HTML stream code to do this.
+                            string htmlStream = string.Empty;
+                            string textStream = string.Empty;
+                            BuildHTMLContent( ref htmlStream, ref textStream, new List<IUIControl>( ) );
+
+                            // if the last character is a URL glyph, remove it
+                            textStream = textStream.Trim( new char[] { ' ', PrivateNoteConfig.CitationUrl_Icon[0] } );
+                                
+                            XmlTextReader reader = new XmlTextReader( new StringReader( "<NT Underlined=\"True\">" + textStream + "</NT>" ) );
+                            reader.Read( );
+
+                            IUIControl noteText = Parser.TryParseControl( new CreateParams( this, ParentSize.Width, ParentSize.Height, ref mStyle ), reader );
+
+                            foreach ( IUIControl control in ChildControls )
+                            {
+                                control.RemoveFromView( ParentEditingCanvas );
+                            }
+                            ChildControls.Clear( );
+
+                            
+                            ChildControls.Add( noteText );
+
+                            SetPosition( Frame.Left, Frame.Top );
+
+                            noteText.AddToView( ParentEditingCanvas );
+
                             break;
                         }
                     }
@@ -541,7 +610,7 @@ namespace MobileApp
                 public List<EditStyling.Style> GetEditStyles( )
                 {
                     List<EditStyling.Style> styleList = new List<EditStyling.Style>( );
-                    styleList.Add( EditStyling.Style.Alignment );
+                    styleList.Add( EditStyling.Style.BoldParagraph );
 
                     return styleList;
                 }
@@ -894,15 +963,9 @@ namespace MobileApp
                     string xml = "<P ";
 
                     string attributes = "";
-                    //if ( ExportPercentage )
-                    {
-                        controlLeftPos /= (ParentSize.Width - parentPadding.Left - parentPadding.Right);
-                        attributes += string.Format( "Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
-                    }
-                    //else
-                    //{
-                    //    attributes += string.Format( "Left=\"{0}\"", controlLeftPos );
-                    //}
+                    controlLeftPos /= (ParentSize.Width - parentPadding.Left - parentPadding.Right);
+                    attributes += string.Format( "Left=\"{0:#0.00}%\"", controlLeftPos * 100 );
+                    
 
                     attributes += string.Format( " Top=\"{0}\"", controlTopPos );
                     

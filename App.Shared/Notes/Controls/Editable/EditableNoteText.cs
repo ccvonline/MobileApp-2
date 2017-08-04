@@ -110,7 +110,10 @@ namespace MobileApp
                     styles.Add( EditStyling.Style.FontSize );
                     styles.Add( EditStyling.Style.RevealBox );
                     styles.Add( EditStyling.Style.Underline );
-                    
+                    styles.Add( EditStyling.Style.BoldParagraph );
+                    styles.Add( EditStyling.Style.UnderlineParagraph );
+                    styles.Add( EditStyling.Style.BulletParagraph );
+
                     return styles;
                 }
 
@@ -138,6 +141,22 @@ namespace MobileApp
                             // here, we're basically saying "no, we're not a reveal box" so the system
                             // knows to upgrade us.
                             return false;
+                        }
+
+                        case EditStyling.Style.BoldParagraph:
+                        {
+                            // for bolding the paragraph, forward this to the parent to see if it supports it
+                            return ParentControl.GetStyleValue( style );
+                        }
+
+                        case EditStyling.Style.UnderlineParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
+                        }
+
+                        case EditStyling.Style.BulletParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
                         }
                     }
 
@@ -177,6 +196,26 @@ namespace MobileApp
                                 PlatformLabel.Editable_RemoveUnderline( );
                             }
 
+                            break;
+                        }
+
+                        case EditStyling.Style.BoldParagraph:
+                        {
+                            // for bolding the paragraph, forward this to the parent
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
+
+                        case EditStyling.Style.UnderlineParagraph:
+                        {
+                            // for underlining the paragraph, forward this to the parent
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
+
+                        case EditStyling.Style.BulletParagraph:
+                        {
+                            ParentControl.SetStyleValue( style, value );
                             break;
                         }
                     }
