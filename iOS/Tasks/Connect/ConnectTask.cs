@@ -115,16 +115,16 @@ namespace iOS
                         else
                         {
                             List<ConnectLink> engagedEntries = ConnectLink.BuildGetEngagedList( );
-
                             ConnectLink connectLink = engagedEntries.Where( e => e.Command_Keyword == arguments[ 1 ] ).SingleOrDefault( );
+
                             if( connectLink != null )
                             {
                                 // clear out the stack and push the main connect page onto the stack
                                 ParentViewController.ClearViewControllerStack( );
                                 ParentViewController.PushViewController( MainPageVC, false );
 
-                                // now go to the requested URL
-                                TaskWebViewController.HandleUrl( false, true, connectLink.Url, this, MainPageVC, false, false, false );
+                                // now go to the requested URL (and do not animate it--that could allow a race condition if this action is called rapidly
+                                TaskWebViewController.HandleUrl( false, true, connectLink.Url, this, MainPageVC, false, false, false, false );
                             }
                         }
                     }

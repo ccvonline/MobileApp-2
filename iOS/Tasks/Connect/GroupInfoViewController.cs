@@ -9,12 +9,13 @@ using CoreGraphics;
 using System.Drawing;
 using Rock.Mobile.PlatformSpecific.iOS.UI;
 using MobileApp.Shared.Strings;
+using MobileApp;
 
 namespace iOS
 {
     public class GroupInfoViewController : TaskUIViewController
     {
-        public GroupFinder.GroupEntry GroupEntry { get; set; }
+        public MobileAppApi.GroupSearchResult GroupEntry { get; set; }
 
         UIGroupInfo GroupInfoView { get; set; }
 
@@ -84,12 +85,12 @@ namespace iOS
             GroupFinderJoinViewController joinController = new GroupFinderJoinViewController();
 
             // set the group info
-            GroupFinder.GroupEntry currGroup = GroupEntry;
-            joinController.GroupTitle = currGroup.Title;
+            MobileAppApi.GroupSearchResult currGroup = GroupEntry;
+            joinController.GroupTitle = currGroup.Name;
             joinController.MeetingTime = string.IsNullOrEmpty( currGroup.MeetingTime ) == false ? currGroup.MeetingTime : ConnectStrings.GroupFinder_ContactForTime;
             joinController.GroupID = currGroup.Id;
 
-            joinController.Distance = string.Format( "{0:##.0} {1}", currGroup.Distance, ConnectStrings.GroupFinder_MilesSuffix );
+            joinController.Distance = string.Format( "{0:##.0} {1}", currGroup.DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
             /*if ( row == 0 )
             {
                 joinController.Distance += " " + ConnectStrings.GroupFinder_ClosestTag;

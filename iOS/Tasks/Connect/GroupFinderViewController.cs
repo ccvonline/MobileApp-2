@@ -18,6 +18,7 @@ using Rock.Mobile.Animation;
 using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
 using MobileApp.Shared.PrivateConfig;
+using MobileApp;
 
 namespace iOS
 {
@@ -41,6 +42,7 @@ namespace iOS
                 public UILabel Title { get; set; }
                 public UILabel MeetingTime { get; set; }
                 public UILabel Distance { get; set; }
+                public UILabel Childcare { get; set; }
                 public UIButton JoinButton { get; set; }
 
                 public UIView Seperator { get; set; }
@@ -70,6 +72,13 @@ namespace iOS
                     Distance.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
                     Distance.BackgroundColor = UIColor.Clear;
                     AddSubview( Distance );
+
+					Childcare = new UILabel( );
+					Childcare.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
+					Childcare.Layer.AnchorPoint = CGPoint.Empty;
+					Childcare.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
+					Childcare.BackgroundColor = UIColor.Clear;
+					AddSubview( Childcare );
 
                     JoinButton = UIButton.FromType( UIButtonType.Custom );
                     JoinButton.TouchUpInside += (object sender, EventArgs e) => { TableSource.RowButtonClicked( RowIndex ); };
@@ -168,7 +177,7 @@ namespace iOS
                     cell.RowIndex = indexPath.Row;
 
                     // Create the title
-                    cell.Title.Text = Parent.GroupEntries[ indexPath.Row ].Title;
+                    cell.Title.Text = Parent.GroupEntries[ indexPath.Row ].Name;
                     cell.Title.SizeToFit( );
 
                     // Meeting time - If it isn't set, just blank it out and we wont' show anything for that row.
@@ -183,22 +192,59 @@ namespace iOS
                     cell.MeetingTime.SizeToFit( );
 
                     // Distance
-                    cell.Distance.Text = string.Format( "{0:##.0} {1}", Parent.GroupEntries[ indexPath.Row ].Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                    cell.Distance.Text = string.Format( "{0:##.0} {1}", Parent.GroupEntries[ indexPath.Row ].DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
                     if ( indexPath.Row == 0 )
                     {
                         cell.Distance.Text += " " + ConnectStrings.GroupFinder_ClosestTag;
                     }
                     cell.Distance.SizeToFit( );
 
-                    // Position the Title & Address in the center to the right of the image
-                    cell.Title.Frame = new CGRect( 10, 5, cell.Frame.Width - 55, cell.Title.Frame.Height );
-                    cell.MeetingTime.Frame = new CGRect( 10, cell.Title.Frame.Bottom, cell.Frame.Width - 5, cell.MeetingTime.Frame.Height + 5 );
-                    cell.Distance.Frame = new CGRect( 10, cell.MeetingTime.Frame.Bottom - 6, cell.Frame.Width - 5, cell.Distance.Frame.Height + 5 );
 
-                    // add the seperator to the bottom
-                    cell.Seperator.Frame = new CGRect( 0, cell.Distance.Frame.Bottom + 5, cell.Bounds.Width, 1 );
+                    // Childcare
+                    // For this, we'll always put the text, so that we can get the height and have consistent row heights.
+                    // however, we'll hide it if there actually isn't childcare
+                    bool offersChildcare = false;
+                    if( string.IsNullOrWhiteSpace( Parent.GroupEntries[ indexPath.Row ].Filters ) == false )
+                    {
+                        offersChildcare = Parent.GroupEntries[ indexPath.Row ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter );
+                    }
+                    cell.Childcare.Text = ConnectStrings.GroupFinder_OffersChildcare;
+                    cell.Childcare.SizeToFit( );
 
-                    PendingCellHeight = cell.Seperator.Frame.Bottom;
+                    // pick a nice magic number for the cell height
+                    PendingCellHeight = 105.0f;
+
+                    // first, always put the title at the top
+                    cell.Title.Frame = new CGRect( 10, 1, cell.Frame.Width - 55, cell.Title.Frame.Height + 5 );
+
+                    // jhm 8-9-17 - disabling centering of the details, cause it looks weird.
+                    nfloat heightOffset = 0;
+                    cell.Childcare.Hidden = !offersChildcare;
+
+                    // get the available space for the details
+                    /*nfloat detailsSpace = PendingCellHeight - cell.Title.Frame.Bottom - 5;
+
+                    // determine the total height of all details
+                    nfloat detailsHeight = cell.MeetingTime.Frame.Height + cell.Distance.Frame.Height + cell.Childcare.Frame.Height;
+
+                    if( offersChildcare )
+                    {
+                        heightOffset = (detailsSpace - detailsHeight) / 2;
+
+                        cell.Childcare.Hidden = false;
+                    }
+                    else
+                    {
+                        heightOffset = (detailsSpace - (detailsHeight - cell.Childcare.Frame.Height) ) / 2;
+
+                        cell.Childcare.Hidden = true;
+                    }*/
+
+                    cell.MeetingTime.Frame = new CGRect( 10, cell.Title.Frame.Bottom + heightOffset, cell.Frame.Width - 5, cell.MeetingTime.Frame.Height );
+                    cell.Distance.Frame = new CGRect( 10, cell.MeetingTime.Frame.Bottom, cell.Frame.Width - 5, cell.Distance.Frame.Height );
+                    cell.Childcare.Frame = new CGRect( 10, cell.Distance.Frame.Bottom, cell.Frame.Width - 5, cell.Distance.Frame.Height );
+
+                    cell.Seperator.Frame = new CGRect( 0, PendingCellHeight - 1, cell.Bounds.Width, 1 );
 
                     cell.JoinButton.Frame = new CGRect( cell.Bounds.Width - cell.JoinButton.Bounds.Width, 
                         ( PendingCellHeight - cell.JoinButton.Bounds.Height ) / 2, 
@@ -318,8 +364,8 @@ namespace iOS
             }
         }
 
-        List<GroupFinder.GroupEntry> GroupEntries { get; set; }
-        GroupFinder.GroupEntry SourceLocation { get; set; }
+        List<MobileAppApi.GroupSearchResult> GroupEntries { get; set; }
+        MobileAppApi.GroupSearchResult SourceLocation { get; set; }
 
         public bool GroupListUpdated { get; set; }
 
@@ -463,7 +509,7 @@ namespace iOS
 
             // setup everything except positioning, which will happen in LayoutChanged()
             SourceLocation = null;
-            GroupEntries = new List<GroupFinder.GroupEntry>();
+            GroupEntries = new List<MobileAppApi.GroupSearchResult>();
 
             SearchAddressButton = UIButton.FromType( UIButtonType.System );
             ScrollView.AddSubview( SearchAddressButton );
@@ -641,12 +687,12 @@ namespace iOS
                 sourceAnnotation.Subtitle = "";
                 annotations.Add( sourceAnnotation );
 
-                foreach ( GroupFinder.GroupEntry entry in GroupEntries )
+                foreach ( MobileAppApi.GroupSearchResult entry in GroupEntries )
                 {
                     MKPointAnnotation annotation = new MKPointAnnotation();
                     annotation.SetCoordinate( new CLLocationCoordinate2D( entry.Latitude, entry.Longitude ) );
-                    annotation.Title = entry.Title;
-                    annotation.Subtitle = string.Format( "{0:##.0} {1}", entry.Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                    annotation.Title = entry.Name;
+                    annotation.Subtitle = string.Format( "{0:##.0} {1}", entry.DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
                     annotations.Add( annotation );
                 }
                 MapView.ShowAnnotations( annotations.ToArray( ), true );
@@ -723,7 +769,7 @@ namespace iOS
 
         IMKAnnotation TableRowToMapAnnotation( int row )
         {
-            GroupFinder.GroupEntry selectedGroup = GroupEntries[ row ];
+            MobileAppApi.GroupSearchResult selectedGroup = GroupEntries[ row ];
             CLLocationCoordinate2D selectedCoord = new CLLocationCoordinate2D( selectedGroup.Latitude, selectedGroup.Longitude );
 
             // given the row index of a group entry, return its associated annotation
@@ -748,7 +794,7 @@ namespace iOS
             for ( int i = 0; i < GroupEntries.Count; i++ )
             {
                 // find the row index by matching coordinates
-                GroupFinder.GroupEntry currGroup = GroupEntries[ i ];
+                MobileAppApi.GroupSearchResult currGroup = GroupEntries[ i ];
                 CLLocationCoordinate2D currCoord = new CLLocationCoordinate2D( currGroup.Latitude, currGroup.Longitude );
 
                 if ( marker.Coordinate.Latitude == currCoord.Latitude &&
@@ -854,7 +900,7 @@ namespace iOS
 
                         // request groups from CurrGroupIndex thru CurrGroupIndex + NumRequestedGroups
                         GroupFinder.GetGroups( groupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
-                            delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                            delegate( MobileAppApi.GroupSearchResult sourceLocation, List<MobileAppApi.GroupSearchResult> groupEntries, bool result )
                             {
                                 BlockerView.Hide( delegate
                                     {
@@ -915,7 +961,7 @@ namespace iOS
                 BlockerView.Show( delegate
                     {
                         GroupFinder.GetGroups( GroupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
-                            delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                            delegate( MobileAppApi.GroupSearchResult sourceLocation, List<MobileAppApi.GroupSearchResult> groupEntries, bool result )
                             {
                                 BlockerView.Hide( delegate
                                     {

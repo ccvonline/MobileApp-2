@@ -219,7 +219,15 @@ namespace iOS
         /// <summary>
         /// Handles taking a URL and either launching it externally or within a webView, with or without impersonation token info. (Showing an embedded web page OR launching Safari)
         /// </summary>
-        public static void HandleUrl( bool launchExternalBrowser, bool includeImpersonationToken, string url, Task parentTask, UIViewController currController, bool disableIdleTimer, bool webViewControlsNavbar, bool webviewHidesNavbarOnScroll )
+        public static void HandleUrl( bool launchExternalBrowser, 
+                                      bool includeImpersonationToken, 
+                                      string url, 
+                                      Task parentTask, 
+                                      UIViewController currController, 
+                                      bool disableIdleTimer, 
+                                      bool webViewControlsNavbar, 
+                                      bool webviewHidesNavbarOnScroll, 
+                                      bool animateSeguePresentation = true )
         {
             // run the url through our processor to see if it needs to be manipulated
             string processedUrl = Rock.Mobile.Util.URL.Override.ProcessURLOverrides( url );
@@ -278,7 +286,7 @@ namespace iOS
             else
             {
                 TaskWebViewController viewController = new TaskWebViewController( processedUrl, parentTask, includeImpersonationToken, disableIdleTimer, webViewControlsNavbar, webviewHidesNavbarOnScroll );
-                parentTask.PerformSegue( currController, viewController );
+                parentTask.PerformSegue( currController, viewController, animateSeguePresentation );
             }
         }
 

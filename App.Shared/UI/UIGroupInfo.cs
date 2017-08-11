@@ -18,31 +18,27 @@ namespace MobileApp.Shared.UI
     {
         public PlatformView View { get; set; }
 
-        GroupFinder.GroupEntry GroupEntry { get; set; }
+        MobileAppApi.GroupSearchResult GroupEntry { get; set; }
 
         PlatformLabel GroupTitle { get; set; }
+        PlatformLabel MeetingTime { get; set; }
+        PlatformLabel ChildcareProvided { get; set; }
 
-        PlatformImageView LeaderImage { get; set; }
-        PlatformView LeaderImageLayer { get; set; }
-        bool LeaderImageValid { get; set; }
-
-        PlatformImageView GroupImage { get; set; }
-        PlatformView GroupImageLayer { get; set; }
-        bool GroupImageValid { get; set; }
-
-        PlatformLabel LeaderDescHeader { get; set; }
-        PlatformLabel LeaderDesc { get; set; }
-        PlatformView LeaderDescLayer { get; set; }
+        PlatformImageView FamilyImage { get; set; }
+        PlatformView FamilyImageLayer { get; set; }
+        bool FamilyImageValid { get; set; }
 
         PlatformLabel GroupDescHeader { get; set; }
         PlatformLabel GroupDesc { get; set; }
         PlatformView GroupDescLayer { get; set; }
 
-        PlatformLabel MeetingTime { get; set; }
+		PlatformLabel ChildDescHeader { get; set; }
+		PlatformLabel ChildDesc { get; set; }
+		PlatformView ChildDescLayer { get; set; }
 
-        PlatformLabel ChildDescHeader { get; set; }
-        PlatformLabel ChildDesc { get; set; }
-        PlatformView ChildDescLayer { get; set; }
+		PlatformImageView GroupImage { get; set; }
+		PlatformView GroupImageLayer { get; set; }
+		bool GroupImageValid { get; set; }
 
         PlatformButton JoinButton { get; set; }
 
@@ -69,36 +65,41 @@ namespace MobileApp.Shared.UI
             View.BackgroundColor = ControlStylingConfig.BackgroundColor;
             View.AddAsSubview( masterView );
 
+            // Group Title
             GroupTitle = PlatformLabel.Create( );
             GroupTitle.AddAsSubview( masterView );
             GroupTitle.SetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Large_FontSize );
             GroupTitle.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
             GroupTitle.TextAlignment = TextAlignment.Center;
 
-            // Leader Image and Layer
-            LeaderImageLayer = PlatformView.Create( );
-            LeaderImageLayer.AddAsSubview( masterView );
-            LeaderImageLayer.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
-            LeaderImageLayer.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
-            LeaderImageLayer.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
+			// Meeting Time
+			MeetingTime = PlatformLabel.Create( );
+			MeetingTime.AddAsSubview( masterView );
+			MeetingTime.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
+			MeetingTime.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
+			MeetingTime.TextAlignment = TextAlignment.Center;
 
-            LeaderImage = PlatformImageView.Create( );
-            LeaderImage.AddAsSubview( masterView );
-            LeaderImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
-            LeaderImage.BackgroundColor = 0;
+			// Childcare Provided
+			ChildcareProvided = PlatformLabel.Create( );
+			ChildcareProvided.AddAsSubview( masterView );
+			ChildcareProvided.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
+			ChildcareProvided.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
+			ChildcareProvided.TextAlignment = TextAlignment.Center;
 
 
-            // Group Image and Layer
-            GroupImageLayer = PlatformView.Create( );
-            GroupImageLayer.AddAsSubview( masterView );
-            GroupImageLayer.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
-            GroupImageLayer.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
-            GroupImageLayer.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
 
-            GroupImage = PlatformImageView.Create( );
-            GroupImage.AddAsSubview( masterView );
-            GroupImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
-            GroupImage.BackgroundColor = 0;
+            // Family Image and Layer
+            FamilyImageLayer = PlatformView.Create( );
+            FamilyImageLayer.AddAsSubview( masterView );
+            FamilyImageLayer.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
+            FamilyImageLayer.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
+            FamilyImageLayer.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
+
+            FamilyImage = PlatformImageView.Create( );
+            FamilyImage.AddAsSubview( masterView );
+            FamilyImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+            FamilyImage.BackgroundColor = 0;
+
 
             // Group Desc
             GroupDescLayer = PlatformView.Create( );
@@ -122,36 +123,6 @@ namespace MobileApp.Shared.UI
             GroupDescHeader.Text = ConnectStrings.GroupInfo_AboutGroup;
 
 
-            // Leader Desc
-            LeaderDescLayer = PlatformView.Create( );
-            LeaderDescLayer.AddAsSubview( masterView );
-            LeaderDescLayer.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
-            LeaderDescLayer.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
-            LeaderDescLayer.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
-
-            LeaderDesc = PlatformLabel.Create( );
-            LeaderDesc.AddAsSubview( masterView );
-            LeaderDesc.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
-            LeaderDesc.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
-            LeaderDesc.TextAlignment = TextAlignment.Center;
-
-            // Leader Desc Header
-            LeaderDescHeader = PlatformLabel.Create( );
-            LeaderDescHeader.AddAsSubview( masterView );
-            LeaderDescHeader.TextAlignment = TextAlignment.Center;
-            LeaderDescHeader.SetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
-            LeaderDescHeader.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
-            LeaderDescHeader.Text = ConnectStrings.GroupInfo_AboutLeader;
-
-
-            // Meeting Time
-            MeetingTime = PlatformLabel.Create( );
-            MeetingTime.AddAsSubview( masterView );
-            MeetingTime.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
-            MeetingTime.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
-            MeetingTime.TextAlignment = TextAlignment.Center;
-
-
             // Childcare Desc
             ChildDescLayer = PlatformView.Create( );
             ChildDescLayer.AddAsSubview( masterView );
@@ -172,6 +143,20 @@ namespace MobileApp.Shared.UI
             ChildDescHeader.SetFont( ControlStylingConfig.Font_Bold, ControlStylingConfig.Medium_FontSize );
             ChildDescHeader.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
             ChildDescHeader.Text = ConnectStrings.GroupInfo_AboutChildcare;
+
+
+			// Group Image and Layer
+			GroupImageLayer = PlatformView.Create( );
+			GroupImageLayer.AddAsSubview( masterView );
+			GroupImageLayer.BackgroundColor = ControlStylingConfig.BG_Layer_Color;
+			GroupImageLayer.BorderColor = ControlStylingConfig.BG_Layer_BorderColor;
+			GroupImageLayer.BorderWidth = ControlStylingConfig.BG_Layer_BorderWidth;
+
+			GroupImage = PlatformImageView.Create( );
+			GroupImage.AddAsSubview( masterView );
+			GroupImage.ImageScaleType = PlatformImageView.ScaleType.ScaleAspectFit;
+			GroupImage.BackgroundColor = 0;
+
 
             // Join Button
             JoinButton = PlatformButton.Create( );
@@ -194,7 +179,7 @@ namespace MobileApp.Shared.UI
         public void Destroy( )
         {
             // free image resources for Android's sake.
-            LeaderImage.Destroy( );
+            FamilyImage.Destroy( );
             GroupImage.Destroy( );
         }
 
@@ -203,7 +188,7 @@ namespace MobileApp.Shared.UI
             return JoinButton.Frame.Bottom;
         }
 
-        public void DisplayView( GroupFinder.GroupEntry groupEntry, HttpRequest.RequestResult resultHandler )
+        public void DisplayView( MobileAppApi.GroupSearchResult groupEntry, HttpRequest.RequestResult resultHandler )
         {
             // store the group and callback so that if it fails we can let them tap 'retry' and try again
             GroupEntry = groupEntry;
@@ -222,27 +207,27 @@ namespace MobileApp.Shared.UI
             BlockerView.Show( delegate 
                 {
                     MobileAppApi.GetGroupSummary( GroupEntry.Id,
-                        delegate( MobileAppApi.GroupInfo groupInfo, System.IO.MemoryStream leaderPhoto, System.IO.MemoryStream groupPhoto ) 
+                        delegate( MobileAppApi.GroupInfo groupInfo, System.IO.MemoryStream familyPhoto, System.IO.MemoryStream groupPhoto ) 
                         {
                             try
                             {
                                 IsDownloading = false;
-                                
-                                // setup the leader image
-                                LeaderImage.Image = leaderPhoto;
+
+                                // setup the family image
+                                FamilyImage.Image = familyPhoto;
 
                                 float imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
-                                LeaderImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
+                                FamilyImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
 
                                 // if we had a valid image stream, dispose of it now
-                                if( leaderPhoto != null )
+                                if( familyPhoto != null )
                                 {
-                                    LeaderImageValid = true;
-                                    leaderPhoto.Dispose( );
+                                    FamilyImageValid = true;
+                                    familyPhoto.Dispose( );
                                 }
                                 else
                                 {
-                                    LeaderImageValid = false;
+                                    FamilyImageValid = false;
                                 }
 
                                 // setup the group image
@@ -262,41 +247,39 @@ namespace MobileApp.Shared.UI
                                     GroupImageValid = false;
                                 }
 
-                                // set the group title
-                                GroupTitle.Text = GroupEntry.Title;
+								// set the details for the group (distance, meeting time, etc)
 
-                                // set the details for the group (distance, meeting time, etc)
-                                LeaderDesc.Text = groupInfo.LeaderInformation;
-                                GroupDesc.Text = groupInfo.Description;
-                                ChildDesc.Text = groupInfo.Children;
+								// set the group title
+								GroupTitle.Text = GroupEntry.Name;
 
-                                // put 'no info provided' for empty ones.
-                                if( string.IsNullOrWhiteSpace( LeaderDesc.Text ) == true )
-                                {
-                                    LeaderDesc.Text = ConnectStrings.GroupInfo_NoInfoProvided;
-                                }
+								if( string.IsNullOrWhiteSpace( GroupEntry.MeetingTime ) == false )
+								{
+									MeetingTime.Text = GroupEntry.MeetingTime;
+								}
+								else
+								{
+									MeetingTime.Text = ConnectStrings.GroupFinder_ContactForTime;
+								}
 
-                                if( string.IsNullOrWhiteSpace( GroupDesc.Text ) == true )
-                                {
-                                    GroupDesc.Text = ConnectStrings.GroupInfo_NoInfoProvided;
-                                }
+								// add the distance
+								MeetingTime.Text += "\n" + string.Format( "{0:##.0} {1}", GroupEntry.DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
 
-                                if( string.IsNullOrWhiteSpace( ChildDesc.Text ) == true )
+                                // childcare provided header
+                                if( string.IsNullOrWhiteSpace( groupInfo.Filters ) == false && groupInfo.Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter ) )
                                 {
-                                    ChildDesc.Text = ConnectStrings.GroupInfo_NoInfoProvided;
-                                }
-                                
-                                if( string.IsNullOrEmpty( GroupEntry.MeetingTime ) == false )
-                                {
-                                    MeetingTime.Text = GroupEntry.MeetingTime;
+                                    ChildcareProvided.Text = ConnectStrings.GroupFinder_OffersChildcare;
                                 }
                                 else
                                 {
-                                    MeetingTime.Text = ConnectStrings.GroupFinder_ContactForTime;
+                                    ChildcareProvided.Text = string.Empty;
                                 }
+                                
+                                // childcare description (if its blank, it'll be hidden)
+                                ChildDesc.Text = groupInfo.ChildcareDesc;
 
-                                // add the distance
-                                MeetingTime.Text += "\n" + string.Format( "{0:##.0} {1}", GroupEntry.Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                                // group description (if its blank, it'll be hidden)
+                                GroupDesc.Text = groupInfo.Description;
+                                
 
                                 BlockerView.Hide( );
 
@@ -324,16 +307,12 @@ namespace MobileApp.Shared.UI
             GroupImage.Hidden = hidden;
             GroupImageLayer.Hidden = hidden;
 
-            LeaderImage.Hidden = hidden;
-            LeaderImageLayer.Hidden = hidden;
+            FamilyImage.Hidden = hidden;
+            FamilyImageLayer.Hidden = hidden;
 
             GroupDescHeader.Hidden = hidden;
             GroupDescLayer.Hidden = hidden;
             GroupDesc.Hidden = hidden;
-
-            LeaderDescHeader.Hidden = hidden;
-            LeaderDescLayer.Hidden = hidden;
-            LeaderDesc.Hidden = hidden;
 
             MeetingTime.Hidden = hidden;
 
@@ -373,56 +352,26 @@ namespace MobileApp.Shared.UI
                 MeetingTime.SizeToFit( );
                 MeetingTime.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, MeetingTime.Bounds.Height );
 
-                float nextYPos = MeetingTime.Frame.Bottom + sectionSpacing;
+                float nextYPos = MeetingTime.Frame.Bottom;
 
-                // layout the leader's description header (IF there's a description or image)
-                if ( string.IsNullOrEmpty( LeaderDesc.Text ) == false || LeaderImageValid == true )
+                // layout the childcare banner
+                if( string.IsNullOrWhiteSpace( ChildcareProvided.Text ) == false )
                 {
-                    // display and position the header
-                    LeaderDescHeader.Hidden = false;
-                    LeaderDescHeader.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset, View.Frame.Width - textRightInset, 0 );
-                    LeaderDescHeader.SizeToFit( );
-                    LeaderDescHeader.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, LeaderDescHeader.Bounds.Height );
-                    nextYPos = LeaderDescHeader.Frame.Bottom;
+                    ChildcareProvided.Hidden = false;
+                    ChildcareProvided.Frame = new RectangleF( textLeftInset, MeetingTime.Frame.Bottom, View.Frame.Width - textRightInset, 0 );
+                    ChildcareProvided.SizeToFit( );
+                    ChildcareProvided.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, ChildcareProvided.Bounds.Height );
 
-                    // now try the image
-                    if( LeaderImageValid == true )
-                    {
-                        // setup padding for the image
-                        float imageTopPadding = textTopInset * 2;
-                        float imageBotPadding = textBotInset * 2;
-                        float leaderImageLayerHeight = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
-
-                        LeaderImage.Hidden = false;
-                        LeaderImage.Position = new PointF( (View.Frame.Width - LeaderImage.Frame.Width) / 2, nextYPos + imageTopPadding );
-
-                        LeaderImageLayer.Hidden = false;
-                        LeaderImageLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, leaderImageLayerHeight + imageBotPadding );
-
-                        nextYPos = LeaderImageLayer.Frame.Bottom + sectionSpacing;
-                    }
-
-                    // finally try to layout the leader's description next
-                    if( string.IsNullOrEmpty( LeaderDesc.Text ) == false )
-                    {
-                        LeaderDesc.Hidden = false;
-                        LeaderDesc.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset, View.Frame.Width - textRightInset, 0 );
-                        LeaderDesc.SizeToFit( );
-                        LeaderDesc.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, LeaderDesc.Bounds.Height );
-
-                        LeaderDescLayer.Hidden = false;
-                        LeaderDescLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, LeaderDesc.Frame.Height + textBotInset );
-
-                        nextYPos = LeaderDescLayer.Frame.Bottom + textBotInset + sectionSpacing;
-                    }
-
-                    // regardless of which (or both) of the above displayed, add an additional sectionSpacing
-                    // so that the next major section, GroupDesc, has more spacing.
-                    nextYPos += sectionSpacing;
+                    nextYPos = ChildcareProvided.Frame.Bottom;
                 }
+                else
+                {
+                    ChildcareProvided.Hidden = true;
+                }
+                nextYPos += sectionSpacing;
 
                 // layout the group description header (IF there's a description or group photo)
-                if( string.IsNullOrEmpty( GroupDesc.Text ) == false || GroupImageValid == true )
+                if( string.IsNullOrWhiteSpace( GroupDesc.Text ) == false || FamilyImageValid == true )
                 {
                     // display and position the header
                     GroupDescHeader.Hidden = false;
@@ -431,25 +380,25 @@ namespace MobileApp.Shared.UI
                     GroupDescHeader.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, GroupDescHeader.Bounds.Height );
                     nextYPos = GroupDescHeader.Frame.Bottom;
 
-                    // now try the image
-                    if( GroupImageValid == true )
-                    {
-                        // setup padding for the image
-                        float imageTopPadding = textTopInset * 2;
-                        float imageBotPadding = textBotInset * 2;
-                        float groupImageLayerHeight = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Group_ImageSize );
+					// now try the image
+					if( FamilyImageValid == true )
+					{
+						// setup padding for the image
+						float imageTopPadding = textTopInset * 2;
+						float imageBotPadding = textBotInset * 2;
+						float leaderImageLayerHeight = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
 
-                        GroupImage.Hidden = false;
-                        GroupImage.Position = new PointF( (View.Frame.Width - GroupImage.Frame.Width) / 2, nextYPos + imageTopPadding );
+						FamilyImage.Hidden = false;
+						FamilyImage.Position = new PointF( ( View.Frame.Width - FamilyImage.Frame.Width ) / 2, nextYPos + imageTopPadding );
 
-                        GroupImageLayer.Hidden = false;
-                        GroupImageLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, groupImageLayerHeight + imageBotPadding );
+						FamilyImageLayer.Hidden = false;
+						FamilyImageLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, leaderImageLayerHeight + imageBotPadding );
 
-                        nextYPos = GroupImageLayer.Frame.Bottom + sectionSpacing;
-                    }
+						nextYPos = FamilyImageLayer.Frame.Bottom + sectionSpacing;
+					}
 
-                    // finally try to layout the group description
-                    if( string.IsNullOrEmpty( GroupDesc.Text ) == false )
+                    // try to layout the group description
+                    if( string.IsNullOrWhiteSpace( GroupDesc.Text ) == false )
                     {
                         GroupDesc.Hidden = false;
                         GroupDesc.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset, View.Frame.Width - textRightInset, 0 );
@@ -462,13 +411,30 @@ namespace MobileApp.Shared.UI
                         nextYPos = GroupDescLayer.Frame.Bottom + textBotInset + sectionSpacing;
                     }
 
+					// now try the image
+					if( GroupImageValid == true )
+					{
+						// setup padding for the image
+						float imageTopPadding = textTopInset * 2;
+						float imageBotPadding = textBotInset * 2;
+						float groupImageLayerHeight = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Group_ImageSize );
+
+						GroupImage.Hidden = false;
+						GroupImage.Position = new PointF( ( View.Frame.Width - GroupImage.Frame.Width ) / 2, nextYPos + imageTopPadding );
+
+						GroupImageLayer.Hidden = false;
+						GroupImageLayer.Frame = new RectangleF( 0, nextYPos, View.Frame.Width, groupImageLayerHeight + imageBotPadding );
+
+						nextYPos = GroupImageLayer.Frame.Bottom + sectionSpacing;
+					}
+
                     // regardless of which (or both) of the above displayed, add an additional sectionSpacing
                     // so that the next major section, ChildDesc, has more spacing.
                     nextYPos += sectionSpacing;
                 }
 
                 // layout the child info header
-                if( string.IsNullOrEmpty( ChildDesc.Text ) == false )
+                if( string.IsNullOrWhiteSpace( ChildDesc.Text ) == false )
                 {
                     ChildDescHeader.Hidden = false;
                     ChildDescHeader.Frame = new RectangleF( textLeftInset, nextYPos + textTopInset, View.Frame.Width - textRightInset, 0 );

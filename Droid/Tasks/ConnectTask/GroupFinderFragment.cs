@@ -25,6 +25,7 @@ using Android.Gms.Maps.Model;
 using MobileApp.Shared.UI;
 using Android.Views.InputMethods;
 using MobileApp.Shared.PrivateConfig;
+using MobileApp;
 
 namespace Droid
 {
@@ -100,7 +101,7 @@ namespace Droid
                         // that had it hidden for "tap for 10 more"
 
                         messageItem.JoinButton.Visibility = ViewStates.Visible;
-                        messageItem.Title.Text = ParentFragment.GroupEntries[ position ].Title;
+                        messageItem.Title.Text = ParentFragment.GroupEntries[ position ].Name;
 
                         // if there's a meeting time set, display it. Otherwise we won't display that row
                         messageItem.MeetingTime.Visibility = ViewStates.Visible;
@@ -114,17 +115,28 @@ namespace Droid
                         }
 
                         // if this is the nearest group, add a label saying so
-                        messageItem.Distance.Text = string.Format( "{0:##.0} {1}", ParentFragment.GroupEntries[ position ].Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                        messageItem.Distance.Text = string.Format( "{0:##.0} {1}", ParentFragment.GroupEntries[ position ].DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
                         if ( position == 0 )
                         {
                             messageItem.Distance.Text += " " + ConnectStrings.GroupFinder_ClosestTag;
                         }
+
+                        if( string.IsNullOrWhiteSpace( ParentFragment.GroupEntries[ position ].Filters ) == false && 
+                            ParentFragment.GroupEntries[ position ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter ) )
+						{
+							messageItem.Childcare.Text = ConnectStrings.GroupFinder_OffersChildcare;
+						}
+						else
+						{
+                            messageItem.Childcare.Text = string.Empty;
+						}
                     }
                     // otherwise it's the "10 more" row
                     else
                     {
                         messageItem.Title.Text = ConnectStrings.GroupFinder_10More;
                         messageItem.Distance.Text = string.Empty;
+                        messageItem.Childcare.Text = string.Empty;
                         messageItem.JoinButton.Visibility = ViewStates.Gone;
                         messageItem.MeetingTime.Text = string.Empty;
                     }
@@ -158,6 +170,7 @@ namespace Droid
                 public TextView Title { get; set; }
                 public TextView MeetingTime { get; set; }
                 public TextView Distance { get; set; }
+                public TextView Childcare { get; set; }
 
                 public Button JoinButton { get; set; }
 
@@ -229,6 +242,13 @@ namespace Droid
                     Distance.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor ) );
                     TitleLayout.AddView( Distance );
 
+					Childcare = new TextView( Rock.Mobile.PlatformSpecific.Android.Core.Context );
+					Childcare.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent );
+					Childcare.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
+					Childcare.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+					Childcare.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor ) );
+					TitleLayout.AddView( Childcare );
+
                     // add our own custom seperator at the bottom
                     View seperator = new View( Rock.Mobile.PlatformSpecific.Android.Core.Context );
                     seperator.LayoutParameters = new LinearLayout.LayoutParams( ViewGroup.LayoutParams.MatchParent, 0 );
@@ -258,9 +278,9 @@ namespace Droid
                 public TextView SearchResultPrefix { get; set; }
 
                 View Seperator { get; set; }
-                public List<GroupFinder.GroupEntry> GroupEntries { get; set; }
+                public List<MobileAppApi.GroupSearchResult> GroupEntries { get; set; }
                 public List<Android.Gms.Maps.Model.Marker> MarkerList { get; set; }
-                public GroupFinder.GroupEntry SourceLocation { get; set; }
+                public MobileAppApi.GroupSearchResult SourceLocation { get; set; }
 
                 // store the values they type in so that if they leave the page and return, we can re-populate them.
                 string StreetValue { get; set; }
@@ -297,9 +317,9 @@ namespace Droid
                         return null;
                     }
 
-                    GroupEntries = new List<GroupFinder.GroupEntry>();
+                    GroupEntries = new List<MobileAppApi.GroupSearchResult>();
                     MarkerList = new List<Android.Gms.Maps.Model.Marker>();
-                    SourceLocation = new GroupFinder.GroupEntry();
+                    SourceLocation = new MobileAppApi.GroupSearchResult();
 
                     // limit the address to 90% of the screen so it doesn't conflict with the progress bar.
                     Point displaySize = new Point( );
@@ -721,8 +741,8 @@ namespace Droid
                                 markerOptions = new Android.Gms.Maps.Model.MarkerOptions();
                                 pos = new Android.Gms.Maps.Model.LatLng( GroupEntries[ i ].Latitude, GroupEntries[ i ].Longitude );
                                 markerOptions.SetPosition( pos );
-                                markerOptions.SetTitle( GroupEntries[ i ].Title );
-                                markerOptions.SetSnippet( string.Format( "{0:##.0} {1}", GroupEntries[ i ].Distance, ConnectStrings.GroupFinder_MilesSuffix ) );
+                                markerOptions.SetTitle( GroupEntries[ i ].Name );
+                                markerOptions.SetSnippet( string.Format( "{0:##.0} {1}", GroupEntries[ i ].DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix ) );
 
                                 builder.Include( pos );
 
@@ -793,7 +813,7 @@ namespace Droid
                                 CurrGroupIndex = 0;
 
                                 GroupFinder.GetGroups( groupTypeId, streetValue, cityValue, stateValue, zipValue, CurrGroupIndex, NumRequestedGroups,
-                                    delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                                    delegate( MobileAppApi.GroupSearchResult sourceLocation, List<MobileAppApi.GroupSearchResult> groupEntries, bool result )
                                     {
                                         BlockerView.Hide( delegate
                                             {
@@ -837,7 +857,7 @@ namespace Droid
                         BlockerView.Show( delegate
                             {
                                 GroupFinder.GetGroups( GroupTypeId, StreetValue, CityValue, StateValue, ZipValue, CurrGroupIndex, NumRequestedGroups,
-                                    delegate( GroupFinder.GroupEntry sourceLocation, List<GroupFinder.GroupEntry> groupEntries, bool result )
+                                    delegate( MobileAppApi.GroupSearchResult sourceLocation, List<MobileAppApi.GroupSearchResult> groupEntries, bool result )
                                     {
                                         BlockerView.Hide( delegate
                                             {

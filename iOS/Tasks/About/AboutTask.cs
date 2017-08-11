@@ -32,7 +32,7 @@ namespace iOS
             parentViewController.PushViewController(MainPageVC, false);
 
             // and immediately handle the URL
-            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, true, false );
+            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, true, false, false );
         }
 
         public override bool WantOverrideBackButton (ref bool enabled)

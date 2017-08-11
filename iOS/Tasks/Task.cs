@@ -44,7 +44,7 @@ namespace iOS
         /// </summary>
         /// <param name="sourceViewController">Source view controller.</param>
         /// <param name="destinationViewController">Destination view controller.</param>
-        public void PerformSegue( UIViewController sourceViewController, UIViewController destinationViewController )
+        public void PerformSegue( UIViewController sourceViewController, UIViewController destinationViewController, bool animated = true )
         {
             // take this opportunity to give the presenting view controller a pointer to the active task
             // so it can receive callbacks.
@@ -54,7 +54,7 @@ namespace iOS
                 throw new InvalidCastException( "View Controllers used by Activities must be of type TaskUIViewController" );
             }
 
-            ParentViewController.PushViewController( destinationViewController, true );
+            ParentViewController.PushViewController( destinationViewController, animated );
         }
 
         /// <summary>

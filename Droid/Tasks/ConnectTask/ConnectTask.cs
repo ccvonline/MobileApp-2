@@ -6,6 +6,7 @@ using MobileApp.Shared;
 using MobileApp.Shared.PrivateConfig;
 using System.Collections.Generic;
 using System.Linq;
+using MobileApp;
 
 namespace Droid
 {
@@ -157,7 +158,7 @@ namespace Droid
                             // turn off auto-show search so that if the user presses 'back', we don't pop it up again.
                             GroupFinder.ShowSearchOnAppear = false;
                             
-                            MobileApp.Shared.GroupFinder.GroupEntry entry = (MobileApp.Shared.GroupFinder.GroupEntry)context;
+                            MobileAppApi.GroupSearchResult entry = (MobileAppApi.GroupSearchResult )context;
 
                             GroupInfo.GroupEntry = entry;
 
@@ -165,10 +166,10 @@ namespace Droid
                         }
                         else if ( source == GroupInfo )
                         {
-                            MobileApp.Shared.GroupFinder.GroupEntry entry = (MobileApp.Shared.GroupFinder.GroupEntry)context;
+                            MobileAppApi.GroupSearchResult entry = (MobileAppApi.GroupSearchResult )context;
 
-                            JoinGroup.GroupTitle = entry.Title;
-                            JoinGroup.Distance = string.Format( "{0:##.0} {1}", entry.Distance, ConnectStrings.GroupFinder_MilesSuffix );
+                            JoinGroup.GroupTitle = entry.Name;
+                            JoinGroup.Distance = string.Format( "{0:##.0} {1}", entry.DistanceFromSource, ConnectStrings.GroupFinder_MilesSuffix );
                             JoinGroup.GroupID = entry.Id;
                             JoinGroup.MeetingTime = string.IsNullOrEmpty( entry.MeetingTime) == false ? entry.MeetingTime : ConnectStrings.GroupFinder_ContactForTime;
 

@@ -112,7 +112,7 @@ namespace MobileApp.Shared
             // ex: messages/read would be the ReadNotes page.
             public const string App_URL_Page_GroupFinder = "connect";
             public const string App_URL_Page_Read = "read";
-            public const string App_URL_Page_Toolbox = "toolbox";
+            public const string App_URL_Page_Toolbox = "coach";
 
             public const string App_URL_Execute_CampusChanged = "campusChanged";
             public const string App_URL_Execute_ReloadNews = "reloadNews";
@@ -522,6 +522,12 @@ namespace MobileApp.Shared
             /// Image to use for the group finder thumbnail image
             /// </summary>
             public const string GroupFinder_IconImage = "groupfinder_thumb.png";
+
+            /// <summary>
+            /// Childcare Provided filter--this needs to stay in sync with the Mobile App endpoint.
+            /// If a group offers childcare, this filter will be in the Filters string list
+            /// </summary>
+            public const string GroupFinder_Childcare_Filter = "Childcare Provided";
 
             /// <summary>
             /// Banner to display at the top of the Connect Page

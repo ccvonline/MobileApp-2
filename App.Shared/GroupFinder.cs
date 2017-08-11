@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Rock.Mobile.Util.Strings;
-using MobileApp.Shared.Network;
-using System.Collections;
-using MobileApp.Shared.Strings;
-using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.Network;
-using MobileApp;
-using System.Linq;
+
 
 namespace MobileApp.Shared
 {
@@ -17,31 +11,10 @@ namespace MobileApp.Shared
         {
         }
 
-        public class GroupEntry
-        {
-            public string Title { get; set; }
-            public string Address { get; set; }
-
-            //public string Day { get; set; }
-            //public string Time { get; set; }
-
-            public string MeetingTime { get; set; }
-
-            public string NeighborhoodArea { get; set; }
-
-            public double Distance { get; set; }
-            public double Latitude { get; set; }
-            public double Longitude { get; set; }
-
-            public int Id { get; set; }
-            public int GroupTypeId { get; set; }
-        }
-
-        public delegate void GetGroupsComplete( GroupEntry sourceLocation, List<GroupEntry> groupEntry, bool result );
+        public delegate void GetGroupsComplete( MobileAppApi.GroupSearchResult sourceLocation, List<MobileAppApi.GroupSearchResult> groupEntry, bool result );
         public static void GetGroups( int groupTypeId, string street, string city, string state, string zip, int skip, int top, GetGroupsComplete onCompletion )
         {
-            List<GroupEntry> groupEntries = new List<GroupEntry>();
-            GroupEntry sourceLocation = new GroupEntry( );
+            MobileAppApi.GroupSearchResult sourceLocation = new MobileAppApi.GroupSearchResult( );
 
             // first convert the address into a location object
             RockApi.Get_Locations_FromAddress( street, city, state, zip, 
@@ -57,64 +30,22 @@ namespace MobileApp.Shared
                         sourceLocation.Latitude = model.Latitude.Value;
                         sourceLocation.Longitude = model.Longitude.Value;
 
-                        // now get the groups
-                        MobileAppApi.GetPublicGroupsByLocation( groupTypeId, model.Id, skip, top,
-                            delegate(System.Net.HttpStatusCode groupStatusCode, string groupStatusDescription, List<Rock.Client.Group> rockGroupList )
+                        MobileAppApi.GetPublicGroupsByLocation( groupTypeId, model.Id, skip, top, delegate ( List<MobileAppApi.GroupSearchResult> searchResults )
                             {
-                                bool result = false;
-
-                                if ( Rock.Mobile.Network.Util.StatusInSuccessRange( groupStatusCode ) == true )
+                                if( searchResults != null )
                                 {
-                                    result = true;
-
-                                    // go through each small group
-                                    foreach ( Rock.Client.Group smallGroup in rockGroupList )
-                                    {
-                                        // only take public groups
-                                        if ( smallGroup.IsPublic == true )
-                                        {
-                                            // get the group location out of the small group enumerator
-                                            IEnumerator enumerator = smallGroup.GroupLocations.GetEnumerator( );
-                                            enumerator.MoveNext( );
-                                            Rock.Client.Location location = ( (Rock.Client.GroupLocation)enumerator.Current ).Location;
-
-                                            // and of course, each group has a location
-                                            GroupEntry entry = new GroupEntry();
-                                            entry.Title = smallGroup.Name;
-                                            entry.Address = location.Street1 + "\n" + location.City + ", " + location.State + " " + location.PostalCode.Substring( 0, Math.Max( 0, location.PostalCode.IndexOf( '-' ) ) );
-                                            entry.NeighborhoodArea = smallGroup.Name;
-                                            entry.Id = smallGroup.Id;
-                                            entry.GroupTypeId = groupTypeId;
-
-                                            // get the distance 
-                                            entry.Distance = location.Distance;
-                                            entry.Latitude = location.Latitude.Value;
-                                            entry.Longitude = location.Longitude.Value;
-
-                                            // get the meeting schedule if it's available
-                                            if ( smallGroup.Schedule != null )
-                                            {
-                                                entry.MeetingTime = smallGroup.Schedule.FriendlyScheduleText;
-                                            }
-
-                                            // make sure the group hasn't already been added.
-                                            GroupEntry duplicateGroup = groupEntries.Where( g => g.Id == entry.Id ).SingleOrDefault( );
-
-                                            if( duplicateGroup == null )
-                                            {
-                                                groupEntries.Add( entry );
-                                            }
-                                        }
-                                    }
+                                    onCompletion( sourceLocation, searchResults, true );
                                 }
-
-                                // our network delegate has been invoked and compelted, so now call whoever called us.
-                                onCompletion( sourceLocation, groupEntries, result );
+                                else
+                                {
+                                    // pass on empty list on failure
+                                    onCompletion( sourceLocation, new List<MobileAppApi.GroupSearchResult>(), false );
+                                }
                             } );
                     }
                     else
                     {
-                        onCompletion( sourceLocation, groupEntries, Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ? true : false );
+                        onCompletion( sourceLocation, new List<MobileAppApi.GroupSearchResult>( ), Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true ? true : false );
                     }
                 } );
         }

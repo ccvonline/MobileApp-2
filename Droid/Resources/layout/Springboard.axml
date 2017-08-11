@@ -67,6 +67,26 @@
                         android:layout_width="wrap_content" />
                 </RelativeLayout>
             <!--End "Welcome: Jered"-->
+            <!--Relative layout that wraps the "Access Toolbox" with a button surrounding it-->
+                <RelativeLayout
+                    android:layout_marginTop="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="center_horizontal">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/access_toolbox_button" />
+                    <TextView
+                        android:id="@+id/access_toolbox_label"
+                        android:text="Access Toolbox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content" />
+                </RelativeLayout>
+            <!--End "Access Toolbox"-->
             </LinearLayout>
             <LinearLayout
                 android:layout_below="@+id/springboard_profile_image_container"
@@ -77,7 +97,6 @@
             <!--Definition for a springboard element-->
                 <RelativeLayout
                     android:id="@+id/springboard_news_frame"
-                    android:layout_marginTop="40dp"
                     android:layout_height="45dp"
                     android:layout_width="match_parent">
                     <Button
@@ -85,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF1EA;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"
@@ -119,7 +138,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF15C;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"
@@ -153,7 +172,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF1EA;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"
@@ -187,7 +206,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF124;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"
@@ -221,7 +240,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF0EE;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"
@@ -255,7 +274,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button" />
                     <TextView
-                        android:text=""
+                        android:text="&#xF05A;"
                         android:layout_height="wrap_content"
                         android:layout_width="25dp"
                         android:id="@+id/icon"

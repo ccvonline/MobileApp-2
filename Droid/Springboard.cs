@@ -125,6 +125,9 @@ namespace Droid
         protected TextView ProfileName { get; set; }
         protected TextView ViewProfileLabel { get; set; }
 
+		protected Button AccessToolboxButton { get; set; }
+		protected TextView AccessToolboxLabel { get; set; }
+
         protected int ActiveElementIndex { get; set; }
 
         //bool DisplayingModalFragment { get; set; }
@@ -408,6 +411,29 @@ namespace Droid
             ViewProfileLabel.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
             ViewProfileLabel.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
 
+
+			// setup our access toolbox button, which will only show and work if the user is logged in and a coach
+            AccessToolboxButton = view.FindViewById<Button>( Resource.Id.access_toolbox_button );
+			AccessToolboxButton.Click += ( object sender, EventArgs e ) =>
+				{
+					HandleAppURL( PrivateGeneralConfig.App_URL_Scheme +
+								  PrivateGeneralConfig.App_URL_Commands_Goto + "/" +
+								  PrivateGeneralConfig.App_URL_Task_Connect + "/" +
+								  PrivateGeneralConfig.App_URL_Page_Toolbox );
+				};
+			AccessToolboxButton.SetTypeface( fontFace, TypefaceStyle.Normal );
+			AccessToolboxButton.SetTextSize( Android.Util.ComplexUnitType.Dip, PrivateSpringboardConfig.ProfileSymbolFontSize );
+			AccessToolboxButton.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Springboard_InActiveElementTextColor ) );
+			AccessToolboxButton.LayoutParameters.Width = ( int ) Rock.Mobile.Graphics.Util.UnitToPx( 140 );
+			AccessToolboxButton.LayoutParameters.Height = ( int ) Rock.Mobile.Graphics.Util.UnitToPx( 140 );
+			AccessToolboxButton.SetBackgroundColor( Color.Transparent );
+		    
+			// setup the textView for rendering "Access Toolbox"
+            AccessToolboxLabel = view.FindViewById<TextView>( Resource.Id.access_toolbox_label );
+			AccessToolboxLabel.SetTextColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Springboard_InActiveElementTextColor ) );
+			AccessToolboxLabel.SetTypeface( Rock.Mobile.PlatformSpecific.Android.Graphics.FontManager.Instance.GetFont( ControlStylingConfig.Font_Light ), TypefaceStyle.Normal );
+			AccessToolboxLabel.SetTextSize( Android.Util.ComplexUnitType.Dip, ControlStylingConfig.Small_FontSize );
+            AccessToolboxLabel.Text = SpringboardStrings.AccessToolbox;
 
             // get the size of the display. We will use this rather than Resources.DeviceManager because this
             // is absolute and won't change based on orientation
@@ -1110,6 +1136,10 @@ namespace Droid
 
         protected void UpdateLoginState( )
         {
+			// assume they aren't coaching
+			AccessToolboxLabel.Visibility = ViewStates.Invisible;
+			AccessToolboxButton.Enabled = false;
+            
             // are we logged in?
             if( RockMobileUser.Instance.LoggedIn )
             {
@@ -1120,6 +1150,13 @@ namespace Droid
 
                 // refresh the viewing campus
                 RefreshCampusSelection( );
+
+                // are we a coach?
+                if( RockMobileUser.Instance.IsTeaching )
+                {
+					AccessToolboxLabel.Visibility = ViewStates.Visible;
+					AccessToolboxButton.Enabled = true;
+                }
             }
             else
             {

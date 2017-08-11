@@ -25,6 +25,7 @@ using Android.Gms.Maps.Model;
 using MobileApp.Shared.UI;
 using Android.Telephony;
 using System.Drawing;
+using MobileApp;
 
 namespace Droid
 {
@@ -34,7 +35,7 @@ namespace Droid
         {
             public class GroupInfoFragment : TaskFragment
             {
-                public GroupFinder.GroupEntry GroupEntry { get; set; }
+                public MobileAppApi.GroupSearchResult GroupEntry { get; set; }
 
                 UIGroupInfo GroupInfoView { get; set; }
 

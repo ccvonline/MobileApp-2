@@ -64,6 +64,7 @@ namespace MobileApp.Shared
             public const string LoggedOut_Promo = "Tap to Personalize";
 
             public const string ViewProfile = "View Profile";
+            public const string AccessToolbox = "Access Toolbox";
 
             public const string Element_News_Title = "News";
             public const string Element_Connect_Title = "Next Steps";
@@ -175,10 +176,10 @@ namespace MobileApp.Shared
             public const string GroupFinder_StatePlaceholder = "State";
             public const string GroupFinder_ZipPlaceholder = "Zip";
 
-            public const string GroupFinder_Search_NeighborhoodGroups = "Neighborhood Groups";
+            public const string GroupFinder_Search_NeighborhoodGroups = "Search Groups";
             //public const string GroupFinder_Search_NextGenGroups = "Students (Grades 7th - 12th)";
             public const string GroupFinder_Search_ShortTermGroups = "Short Term Groups";
-            public const string GroupFinder_Search_YoungAdultGroups = "Young Adult Groups";
+            public const string GroupFinder_Search_YoungAdultGroups = "Search Young Adult Groups";
 
             public const string GroupFinder_DefaultState = "AZ";
 
@@ -195,6 +196,8 @@ namespace MobileApp.Shared
             public const string GroupFinder_MilesSuffix = "Miles";
             public const string GroupFinder_ClosestTag = "(Closest group to you)";
             public const string GroupFinder_ContactForTime = "Contact for Meeting Time";
+            public const string GroupFinder_OffersChildcare = "Childcare Provided";
+            public const string GroupFinder_NoChildcareAvailable = "No Childcare Available";
 
             public const string GroupFinder_Neighborhood = "Groups Nearest You";
             public const string GroupFinder_JoinLabel = "Join";
@@ -267,7 +270,7 @@ namespace MobileApp.Shared
             public const string UserNote_Prefix = "My Note - ";
 
             public const string DiscussionGuide_Header = "Discussion Guide";
-            public const string DiscussionGuide_Desc = "Discussion Guides offer a deeper dive into the message. Use these for further studying with your Young Adult or Neighborhood Group.";
+            public const string DiscussionGuide_Desc = "Discussion Guides offer a deeper dive into the message. Use these for further studying with your group.";
 
         }
 

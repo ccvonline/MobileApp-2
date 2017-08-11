@@ -9,6 +9,8 @@ using System.Linq;
 using Rock.Client;
 using MobileApp.Shared.Strings;
 using Rock.Mobile.Util.Strings;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MobileApp
 {
@@ -59,10 +61,33 @@ namespace MobileApp
             RockApi.Get_Categories_GetChildren_1( resultHandler );
         }
 
-        public static void GetPublicGroupsByLocation( int groupTypeId, int locationId, int skip, int top, HttpRequest.RequestResult< List<Rock.Client.Group> > resultHandler )
+
+        const string EndPoint_GroupsByLocation = "api/MobileApp/GroupsByLocation";
+        public delegate void OnGroupsByLocationResult( List<GroupSearchResult> groupResults );
+        public class GroupSearchResult
         {
-            string oDataFilter = string.Format( "?locationId={0}&groupTypeId={1}&sortByDistance=true&$skip={2}&$top={3}&$filter=IsPublic eq true", locationId, groupTypeId, skip, top );
-            RockApi.Get_Groups_ByLocation( oDataFilter, resultHandler );
+            public int Id;
+            public double Latitude;
+            public double Longitude;
+            public string Name;
+            public double DistanceFromSource;
+            public string MeetingTime;
+            public string Filters;
+        };
+        public static void GetPublicGroupsByLocation( int groupTypeId, int locationId, int skip, int top, OnGroupsByLocationResult resultHandler )
+        {
+            string queryParams = string.Format( "?locationId={0}&groupTypeId={1}&skip={2}&top={3}&publicOnly=true", locationId, groupTypeId, skip, top );
+            RockApi.Get_CustomEndPoint<JArray>( RockApi.BaseUrl + EndPoint_GroupsByLocation + queryParams, delegate( HttpStatusCode statusCode, string statusDescription, JArray model )
+             {
+				 if( Util.StatusInSuccessRange( statusCode ) == true )
+				 {
+                    resultHandler( model.ToObject<List<GroupSearchResult>>( ) );
+				 }
+				 else
+				 {
+					resultHandler( null );
+				 }
+             } );
         }
 
         const string EndPoint_Login = "api/MobileApp/Login";
@@ -118,16 +143,17 @@ namespace MobileApp
         public class GroupInfo
         {
             public string Description { get; set; }
-            public string LeaderInformation { get; set; }
-            public string Children { get; set; }
+            public string ChildcareDesc { get; set; }
 
-            public int CoachPhotoId { get; set; }
+            public Guid FamilyPhotoGuid { get; set; }
             public Guid GroupPhotoGuid { get; set; }
+
+            public string Filters { get; set; }
         }
 
         public static void GetGroupSummary( int groupId, OnGroupSummaryResult onResultHandler )
         {
-            System.IO.MemoryStream leaderPhoto = null;
+            System.IO.MemoryStream familyPhoto = null;
 
             // first, get the group info
             RockApi.Get_CustomEndPoint<GroupInfo>( RockApi.BaseUrl + EndPoint_GroupInfo + groupId, delegate( HttpStatusCode statusCode, string statusDescription, GroupInfo model ) 
@@ -136,7 +162,7 @@ namespace MobileApp
                     {
                         // get an image size appropriate for the device.
                         uint imageRes = (uint)Rock.Mobile.Graphics.Util.UnitToPx( 512 );
-                        RockApi.Get_GetImage( model.CoachPhotoId, imageRes, null, delegate(HttpStatusCode imageCode, string imageDescription, System.IO.MemoryStream imageStream ) 
+                        RockApi.Get_GetImage( model.FamilyPhotoGuid, imageRes, null, delegate(HttpStatusCode imageCode, string imageDescription, System.IO.MemoryStream imageStream ) 
                             {
                                 // if the image didn't return successfully, just null it out.
                                 if( Rock.Mobile.Network.Util.StatusInSuccessRange( imageCode ) == false )
@@ -147,10 +173,10 @@ namespace MobileApp
                                 {
                                     // otherwise, copy it. We must copy it because the imageStream
                                     // will be going out of scope when we make the next Get_GetImage async call.
-                                    leaderPhoto = new System.IO.MemoryStream( );
+                                    familyPhoto = new System.IO.MemoryStream( );
 
-                                    imageStream.CopyTo( leaderPhoto );
-                                    leaderPhoto.Position = 0;
+                                    imageStream.CopyTo( familyPhoto );
+                                    familyPhoto.Position = 0;
                                 }
 
                                 // now try for the group photo
@@ -168,7 +194,7 @@ namespace MobileApp
                                         //leaderPhoto.Position = 0;
 
                                         // return ok whether they have a images or not (since they're not required)
-                                        onResultHandler( model, leaderPhoto, groupImageStream );
+                                        onResultHandler( model, familyPhoto, groupImageStream );
                                     });
 
                                 

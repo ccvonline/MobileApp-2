@@ -361,6 +361,9 @@ namespace iOS
         UIButton ViewProfileButton { get; set; }
         UILabel ViewProfileLabel { get; set; }
 
+		UIButton ViewToolboxButton { get; set; }
+		UILabel ViewToolboxLabel { get; set; }
+
         UIScrollViewWrapper ScrollView { get; set; }
 
         public override void ViewDidLoad()
@@ -446,12 +449,19 @@ namespace iOS
             UserNameField = new UILabel();
             ScrollView.AddSubview( UserNameField );
 
-
             ViewProfileButton = new UIButton();
             ScrollView.AddSubview( ViewProfileButton );
 
             ViewProfileLabel = new UILabel();
             ScrollView.AddSubview( ViewProfileLabel );
+
+
+			ViewToolboxButton = new UIButton( );
+			ScrollView.AddSubview( ViewToolboxButton );
+
+			ViewToolboxLabel = new UILabel( );
+			ScrollView.AddSubview( ViewToolboxLabel );
+            ViewToolboxLabel.Text = SpringboardStrings.AccessToolbox;
         
 
             Elements.Add( new SpringboardElement( this, new NewsTask( "NewsStoryboard_iPhone" )      , NewsElement    , SpringboardConfig.Element_News_Icon    , SpringboardStrings.Element_News_Title ) );
@@ -561,6 +571,15 @@ namespace iOS
                             PresentModalViewController( LoginViewController );
                         }
                     }
+                };
+
+            // Setup coach toolbox access
+            ViewToolboxButton.TouchUpInside += ( object sender, EventArgs e ) =>
+                {
+                    HandleAppURL( PrivateGeneralConfig.App_URL_Scheme +
+                                      PrivateGeneralConfig.App_URL_Commands_Goto + "/" +
+                                      PrivateGeneralConfig.App_URL_Task_Connect + "/" +
+                                      PrivateGeneralConfig.App_URL_Page_Toolbox );
                 };
 
             // set the viewing campus now that their profile has loaded (if they have already done the OOBE)
@@ -1224,12 +1243,26 @@ namespace iOS
             ViewProfileButton.Layer.AnchorPoint = CGPoint.Empty;
             ViewProfileButton.Layer.Position = new CGPoint( 0, WelcomeField.Frame.Y );
             ViewProfileButton.Bounds = new CGRect( 0, 0, View.Frame.Width, totalHeight );
+            //ViewProfileButton.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( 0xFF000077 );
 
+
+			// wrap the view toolbox button around the "View Toolbox" label only
+			ViewToolboxButton.SetTitle( "", UIControlState.Normal );
+			ViewToolboxButton.Layer.AnchorPoint = CGPoint.Empty;
+			ViewToolboxButton.Layer.Position = new CGPoint( 0, ViewProfileButton.Frame.Bottom + 10 );
+			ViewToolboxButton.Bounds = new CGRect( 0, 0, View.Frame.Width, ViewToolboxLabel.Frame.Height * 2 );
+			//ViewToolboxButton.BackgroundColor = UIColor.Green;
+
+			ViewToolboxLabel.Layer.AnchorPoint = CGPoint.Empty;
+			ViewToolboxLabel.Font = FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
+			ViewToolboxLabel.SizeToFit( );
+			ViewToolboxLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Springboard_InActiveElementTextColor );
+			ViewToolboxLabel.Layer.Position = new CGPoint( EditPictureButton.Layer.Position.X + ( ( EditPictureButton.Bounds.Width - ViewToolboxLabel.Bounds.Width ) / 2 ), ViewProfileButton.Frame.Bottom + 10 );
 
             
             // HERE IS WHERE WE ORDER THE SPRINGBOARD ITEMS 
             NewsElement.Layer.AnchorPoint = CGPoint.Empty;
-            NewsElement.Layer.Position = new CGPoint( 0, ViewProfileButton.Frame.Bottom + 40 );
+            NewsElement.Layer.Position = new CGPoint( 0, ViewToolboxButton.Frame.Bottom + 10 );
 
             MessagesElement.Layer.AnchorPoint = CGPoint.Empty;
             MessagesElement.Layer.Position = new CGPoint( 0, NewsElement.Frame.Bottom );
@@ -1289,6 +1322,10 @@ namespace iOS
 
         protected void UpdateLoginState( )
         {
+            // assume they aren't coaching
+            ViewToolboxLabel.Hidden = true;
+            ViewToolboxButton.Enabled = false;
+
             // are we logged in?
             if( RockMobileUser.Instance.LoggedIn )
             {
@@ -1296,6 +1333,13 @@ namespace iOS
                 WelcomeField.Text = SpringboardStrings.LoggedIn_Prefix;
                 UserNameField.Text = RockMobileUser.Instance.PreferredName( );
                 ViewProfileLabel.Text = SpringboardStrings.ViewProfile;
+
+                // if they're teaching, let them access their toolbox
+                if( RockMobileUser.Instance.IsTeaching )
+                {
+                    ViewToolboxLabel.Hidden = false;
+                    ViewToolboxButton.Enabled = true;
+                }
             }
             else
             {

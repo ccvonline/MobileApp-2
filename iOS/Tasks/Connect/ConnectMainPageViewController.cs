@@ -305,7 +305,7 @@ namespace iOS
                     linkEntry = GetEngagedEntries[ rowIndex ];
                 }
 
-                // did they pick something valid?
+				// did they pick something valid?
                 if ( linkEntry != null )
                 {
                     // GroupFinder is unique in that it doesn't use a webView.
