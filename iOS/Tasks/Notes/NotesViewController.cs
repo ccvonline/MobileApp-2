@@ -452,7 +452,7 @@ namespace iOS
 
             public override string GetDataTypeIdentifierForActivity( UIActivityViewController activityViewController, NSString activityType )
             {
-                // let iOS know that we can offer it as simply as plan text.
+                // let iOS know that we can offer it as simply as plain text.
                 return "public.plain-text";
             }
 
@@ -552,9 +552,9 @@ namespace iOS
 
         public override void TouchesBegan( NSSet touches, UIEvent evt )
         {
-            base.TouchesBegan( touches, evt );
-
             Rock.Mobile.Util.Debug.WriteLine( "Touches Began" );
+
+            base.TouchesBegan( touches, evt );
 
             UITouch touch = touches.AnyObject as UITouch;
             if( touch != null )
@@ -565,9 +565,9 @@ namespace iOS
 
         public override void TouchesMoved( NSSet touches, UIEvent evt )
         {
-            base.TouchesMoved( touches, evt );
-
             Rock.Mobile.Util.Debug.WriteLine( "Touches MOVED" );
+
+            base.TouchesMoved( touches, evt );
 
             UITouch touch = touches.AnyObject as UITouch;
             if( touch != null )
@@ -581,16 +581,16 @@ namespace iOS
 
         public override void TouchesEnded( NSSet touches, UIEvent evt )
         {
-            base.TouchesEnded( touches, evt );
-
             Rock.Mobile.Util.Debug.WriteLine( "Touches Ended" );
+
+            // for base.TouchesEnded, we do not want to call that FIRST if we're destroying the notes and switching to another page within the App.
 
             // if the tutorial is showing, all we want to do is hide it.
             // If we process input, it's possible they'll tap thru it to a URL, which will
             // switch pages and cause a lot of user confustion
             if( TutorialShowing( ) )
             {
-                AnimateTutorialScreen( false );
+				AnimateTutorialScreen( false );
             }
             else
             {
@@ -606,27 +606,45 @@ namespace iOS
                         string activeUrl = Note.TouchesEnded( touch.LocationInView( UIScrollView ).ToPointF( ), out urlLaunchesExternalBrowser, out urlUsesRockImpersonation );
                         if( string.IsNullOrEmpty( activeUrl ) == false )
                         {
-                            SaveNoteState( UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height ) );
-
-                            DestroyNotes( );
-
-                            // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
-                            if( urlUsesRockImpersonation )
+                            // see if the task should handle it (as in its a redirect within the app)
+                            if( SpringboardViewController.IsAppURL( activeUrl ) == true )
                             {
-                                MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
-                            }
+                                // HACK JHM 9-1-2017: We don't currently have the ability to transition from a landscape Note to a portrait Task.
+                                // Because of that, they either need to be on an iPad, or have their phone in portrait mode. This isn't ideal,
+                                // but without adding support for landscape->portrait, we don't have any other choice.
+                                if( SpringboardViewController.SupportsLandscapeWide( ) == true || SpringboardViewController.IsDevicePortrait( ) == true )
+                                {
+                                    SaveNoteState( UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height ) );
+                                    DestroyNotes( );
 
-                            Task.NavToolbar.Reveal( true );
-                            Task.NavToolbar.SetBackButtonEnabled( true );
-                            
-                            if( App.Shared.BibleRenderer.IsBiblePrefix( activeUrl ) )
-                            {
-                                BiblePassageViewController viewController = new BiblePassageViewController( activeUrl, Task );
-                                Task.PerformSegue( this, viewController );
+                                    // if the url uses the rock impersonation token, it's safe to assume they tapped the takeaway.
+                                    if( urlUsesRockImpersonation )
+                                    {
+                                        MessageAnalytic.Instance.Trigger( MessageAnalytic.Takeaway, activeUrl );
+                                    }
+
+                                    Task.HandleAppURL( activeUrl );
+                                }
                             }
                             else
                             {
-                                TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                                // cleanup the notes before leaving
+								SaveNoteState( UIScrollView.ContentOffset.Y / ( nfloat ) Math.Max( 1, UIScrollView.ContentSize.Height ) );
+								DestroyNotes( );
+
+                                // if not, it's either a websie or bible verse
+								Task.NavToolbar.Reveal( true );
+								Task.NavToolbar.SetBackButtonEnabled( true );
+
+                                if( App.Shared.BibleRenderer.IsBiblePrefix( activeUrl ) )
+                                {
+                                    BiblePassageViewController viewController = new BiblePassageViewController( activeUrl, Task );
+                                    Task.PerformSegue( this, viewController );
+                                }
+                                else
+                                {
+                                    TaskWebViewController.HandleUrl( urlLaunchesExternalBrowser, urlUsesRockImpersonation, activeUrl, Task, this, true, false, false );
+                                }
                             }
                         }
                     }
@@ -635,6 +653,10 @@ namespace iOS
                 // when a touch is released, re-enabled scrolling
                 UIScrollView.ScrollEnabled = true;
             }
+
+            // Process TouchesEnded AFTER handling locally- we need to do this
+            // in case the Note above wants to switch to another activity within the app.
+            base.TouchesEnded( touches, evt );
         }
 
         [Foundation.Export( "DoubleTapSelector:" )]

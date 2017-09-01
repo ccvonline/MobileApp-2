@@ -234,7 +234,11 @@ namespace Droid
                         {
                             NotesFragment.UrlClickParams clickParams = (NotesFragment.UrlClickParams)context;
 
-                            if ( App.Shared.BibleRenderer.IsBiblePrefix( clickParams.Url ) )
+							if( Springboard.IsAppURL( clickParams.Url ) == true )
+							{
+								NavbarFragment.HandleAppURL( clickParams.Url );
+							}
+                            else if ( App.Shared.BibleRenderer.IsBiblePrefix( clickParams.Url ) )
                             {
                                 BiblePassagePage = new BiblePassageFragment(clickParams.Url);
                                 BiblePassagePage.ParentTask = this;

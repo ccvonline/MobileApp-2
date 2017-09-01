@@ -418,7 +418,7 @@ namespace MobileApp.Shared.UI
 
         void PerformWelcome( )
         {
-            CreateCampusButtons( );
+            //CreateCampusButtons( );
 
             SimpleAnimator_Float anim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate(float percent, object value )
                 {
@@ -435,8 +435,12 @@ namespace MobileApp.Shared.UI
                             // do this ON the UI thread
                             Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                             {
-                                //AnimateRegSeperator( );
-                                EnterNextState( OOBE_State.CampusIntro );
+								//EnterNextState( OOBE_State.CampusIntro );
+                                
+                                // HACK: Force Peoria Campus, and they can change it later.
+								OnClick( 1, true );
+
+								EnterNextState( OOBE_State.AccountChoice );
                             });
                         };
                     timer.Start( );
@@ -444,7 +448,7 @@ namespace MobileApp.Shared.UI
             anim.Start( );
         }
 
-        void PerformCampusIntro( )
+        /*void PerformCampusIntro( )
         {
             LayoutChanged( View.Frame );
 
@@ -538,13 +542,83 @@ namespace MobileApp.Shared.UI
                         });
                 } );
             animDown.Start( SimpleAnimator.Style.CurveEaseIn );
-        }
+        }*/
 
         void PerformAccountChoice( )
         {
-            // fade out the campus choices and header.
-            bool accountFadeInBegan = false;
-            SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, 0.00f, 1.10f, delegate(float percent, object value )
+			LayoutChanged( View.Frame );
+
+			// Fade OUT the welcome
+			SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, .15f, 2.00f, delegate ( float percent, object value )
+			{
+				WelcomeLabel.Opacity = ( float ) value;
+			}, null );
+			animDown.Start( );
+
+			// Move UP the welcome
+			SimpleAnimator_PointF posAnim = new SimpleAnimator_PointF( WelcomeLabel.Position, new PointF( WelcomeLabel.Position.X, View.Frame.Height * WelcomeHeightPerc ), 1.75f,
+				delegate ( float posPercent, object posValue )
+				{
+					WelcomeLabel.Position = ( PointF ) posValue;
+				},
+				delegate
+				{
+					// once moving up the welcome is done, kick off a timer that will fade in the
+					// campus header.
+					System.Timers.Timer timer = new System.Timers.Timer( );
+					timer.Interval = 1000;
+					timer.AutoReset = false;
+					timer.Elapsed += ( object sender, System.Timers.ElapsedEventArgs e ) =>
+					{
+						// do this ON the UI thread
+						Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+						{
+							// make sure we only begin fading in the account stuff ONCE, and not
+							// for each button animating.
+							Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
+							{
+								LayoutChanged( View.Frame );
+							} );
+
+							// now fade in Register
+							SimpleAnimator_Float regAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate ( float percent, object value )
+							{
+								RegisterButton.Opacity = ( float ) value;
+							},
+							delegate
+							{
+                				// now Login
+                				SimpleAnimator_Float loginAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate ( float percent, object value )
+								{
+									LoginButton.Opacity = ( float ) value;
+								},
+								delegate
+								{
+                					// finally skip
+                					SimpleAnimator_Float skipAnim = new SimpleAnimator_Float( 0.00f, 1.00f, .50f, delegate ( float percent, object value )
+									{
+										SkipButton.Opacity = ( float ) value;
+									},
+									delegate
+									{
+										EnterNextState( OOBE_State.WaitForAccountChoice );
+										AnimateRegSeperator( );
+									} );
+									skipAnim.Start( );
+								} );
+								loginAnim.Start( );
+							} );
+							regAnim.Start( );
+						} );
+					};
+					timer.Start( );
+
+				} );
+			posAnim.Start( SimpleAnimator.Style.CurveEaseOut );
+
+			
+
+            /*SimpleAnimator_Float animDown = new SimpleAnimator_Float( 1.00f, 0.00f, 1.10f, delegate(float percent, object value )
                 {
                     // take either the lowered alpha value OR the current opacity. That way if
                     // the header is already faded out we won't do anything.
@@ -600,7 +674,7 @@ namespace MobileApp.Shared.UI
                     }
 
                 } );
-            animDown.Start( SimpleAnimator.Style.CurveEaseIn );
+            animDown.Start( SimpleAnimator.Style.CurveEaseIn );*/
         }
 
         void AnimateRegSeperator( )
@@ -655,7 +729,7 @@ namespace MobileApp.Shared.UI
                     break;
                 }
 
-                case OOBE_State.CampusIntro:
+                /*case OOBE_State.CampusIntro:
                 {
                     PerformCampusIntro( );
                     break;
@@ -671,7 +745,7 @@ namespace MobileApp.Shared.UI
                 {
                     // just wait for them to pick
                     break;
-                }
+                }*/
 
                 case OOBE_State.AccountChoice:
                 {
