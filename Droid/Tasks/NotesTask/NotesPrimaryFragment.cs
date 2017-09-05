@@ -102,55 +102,45 @@ namespace Droid
                             primaryItem.Billboard.SetImageBitmap( ParentFragment.ImageMainPlaceholder );
                         }
 
-                        // verify there are messages to show
-                        if ( ParentFragment.SeriesEntries[ 0 ].Series.Messages.Count > 0 )
+                        Series.Message latestMessage = ParentFragment.SeriesEntries[ 0 ].Series.GetLatestMessage( );
+
+                        primaryItem.Title.Text = latestMessage.Name;
+                        if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || latestMessage.Private == true )
                         {
-                            Series.Message latestMessage = ParentFragment.SeriesEntries[ 0 ].Series.GetLatestMessage( );
+                            primaryItem.Title.Text += " (Private)";
+                        }
 
-                            primaryItem.Title.Text = latestMessage.Name;
-                            if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || latestMessage.Private == true )
-                            {
-                                primaryItem.Title.Text += " (Private)";
-                            }
+                        primaryItem.Speaker.Text = latestMessage.Speaker;
+                        primaryItem.Date.Text = latestMessage.Date;
 
-                            primaryItem.Speaker.Text = latestMessage.Speaker;
-                            primaryItem.Date.Text = latestMessage.Date;
-
-                            // toggle the Take Notes button
-                            if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) == true )
-                            {
-                                primaryItem.ToggleTakeNotesButton( false );
-                            }
-                            else
-                            {
-                                primaryItem.ToggleTakeNotesButton( true );
-                            }
-
-                            // toggle the Watch button
-                            if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) == true )
-                            {
-                                primaryItem.ToggleWatchButton( false );
-                            }
-                            else
-                            {
-                                primaryItem.ToggleWatchButton( true );
-                            }
-
-                            // toggle the DiscussionGuide button
-                            if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) == true )
-                            {
-                                primaryItem.ToggleDiscussionGuideButton( false );
-                            }
-                            else
-                            {
-                                primaryItem.ToggleDiscussionGuideButton( true );
-                            }
+                        // toggle the Take Notes button
+                        if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) == true )
+                        {
+                            primaryItem.ToggleTakeNotesButton( false );
                         }
                         else
                         {
-                            primaryItem.ToggleTakeNotesButton( false );
+                            primaryItem.ToggleTakeNotesButton( true );
+                        }
+
+                        // toggle the Watch button
+                        if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) == true )
+                        {
                             primaryItem.ToggleWatchButton( false );
+                        }
+                        else
+                        {
+                            primaryItem.ToggleWatchButton( true );
+                        }
+
+                        // toggle the DiscussionGuide button
+                        if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) == true )
+                        {
                             primaryItem.ToggleDiscussionGuideButton( false );
+                        }
+                        else
+                        {
+                            primaryItem.ToggleDiscussionGuideButton( true );
                         }
                     }
 

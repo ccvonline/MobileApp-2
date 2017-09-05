@@ -365,7 +365,7 @@ namespace MobileApp.Shared
                 else
                 {
                     // this should NEVER happen, but better than crashing.
-                    return new Message( );
+                    return new Message( "Uknown", "Unknown", DateTime.Now.ToShortDateString( ), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty );
                 }
             }
 

@@ -1093,7 +1093,11 @@ namespace Droid
                     // yes, if it's a weekend and we're at church (that part will come later)
                     if ( DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday )
                     {
-                        if ( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 && RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ] != null )
+						// make sure there's a series to parse, and a message within that series (if this is a new series, and no messages have been added,
+						// Messages[0] would throw an exception.)
+						if( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 &&
+							RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages.Count > 0 &&
+							RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ] != null )
                         {
                             // lastly, ensure there's a valid note for the message
                             if ( string.IsNullOrEmpty( RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl ) == false )

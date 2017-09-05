@@ -400,107 +400,98 @@ namespace iOS
                     cell.Image.Image = SeriesEntries[ 0 ].mBillboard != null ? SeriesEntries[ 0 ].mBillboard : ImageMainPlaceholder;
 
                     // Create the title
-                    if ( SeriesEntries[ 0 ].Series.Messages.Count > 0 )
+                    Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
+                    
+                    cell.Title.Text = latestMessage.Name;
+                    if( SeriesEntries[ 0 ].Series.Private == true || 
+                        latestMessage.Private == true )
                     {
-                        Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
-                        
-                        cell.Title.Text = latestMessage.Name;
-                        if( SeriesEntries[ 0 ].Series.Private == true || 
-                            latestMessage.Private == true )
-                        {
-                            cell.Title.Text += " (Private)";
-                        }
-                        cell.Title.SizeToFit( );
-                        cell.Title.Frame = new CGRect( 10, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 10, cell.Title.Frame.Height );
+                        cell.Title.Text += " (Private)";
+                    }
+                    cell.Title.SizeToFit( );
+                    cell.Title.Frame = new CGRect( 10, cell.Image.Frame.Bottom + 5, cell.Frame.Width - 10, cell.Title.Frame.Height );
 
 
-                        // Date & Speaker
-                        cell.Date.Text = latestMessage.Date;
-                        cell.Date.SizeToFit( );
-                        cell.Date.Frame = new CGRect( 10, 
-                                                      cell.Title.Frame.Bottom - 7, 
-                                                      cell.Date.Bounds.Width, 
-                                                      cell.Date.Bounds.Height );
+                    // Date & Speaker
+                    cell.Date.Text = latestMessage.Date;
+                    cell.Date.SizeToFit( );
+                    cell.Date.Frame = new CGRect( 10, 
+                                                  cell.Title.Frame.Bottom - 7, 
+                                                  cell.Date.Bounds.Width, 
+                                                  cell.Date.Bounds.Height );
 
-                        cell.Speaker.Text = latestMessage.Speaker;
-                        cell.Speaker.SizeToFit( );
-                        cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 10, 
-                                                         cell.Title.Frame.Bottom - 7, 
-                                                         cell.Speaker.Bounds.Width, 
-                                                         cell.Speaker.Bounds.Height );
-
-
-                        // Position the Watch Button and icon
-                        cell.WatchButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 6, cell.WatchButton.Bounds.Height + 10 );
-                        cell.WatchButton.Layer.Position = new CGPoint( -5, cell.Speaker.Frame.Bottom + 7 );
+                    cell.Speaker.Text = latestMessage.Speaker;
+                    cell.Speaker.SizeToFit( );
+                    cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 10, 
+                                                     cell.Title.Frame.Bottom - 7, 
+                                                     cell.Speaker.Bounds.Width, 
+                                                     cell.Speaker.Bounds.Height );
 
 
-                        nfloat labelTotalWidth = cell.WatchButtonIcon.Bounds.Width + cell.WatchButtonLabel.Bounds.Width + 5;
-                        cell.WatchButtonIcon.Layer.Position = new CGPoint( (cell.WatchButton.Bounds.Width - labelTotalWidth) / 2 + (cell.WatchButtonIcon.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
-                        cell.WatchButtonLabel.Layer.Position = new CGPoint( cell.WatchButtonIcon.Frame.Right + (cell.WatchButtonLabel.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
+                    // Position the Watch Button and icon
+                    cell.WatchButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 6, cell.WatchButton.Bounds.Height + 10 );
+                    cell.WatchButton.Layer.Position = new CGPoint( -5, cell.Speaker.Frame.Bottom + 7 );
 
 
-                        // Position the Take Notes icon and button
-                        cell.TakeNotesButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 5, cell.TakeNotesButton.Bounds.Height + 10 );
-                        cell.TakeNotesButton.Layer.Position = new CGPoint( (cell.Bounds.Width + 5) - cell.TakeNotesButton.Bounds.Width, cell.Speaker.Frame.Bottom + 7 );
-
-                        labelTotalWidth = cell.TakeNotesButtonIcon.Bounds.Width + cell.TakeNotesButtonLabel.Bounds.Width + 5;
-                        cell.TakeNotesButtonIcon.Layer.Position = new CGPoint( (cell.TakeNotesButton.Bounds.Width - labelTotalWidth) / 2 + (cell.TakeNotesButtonIcon.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
-                        cell.TakeNotesButtonLabel.Layer.Position = new CGPoint( cell.TakeNotesButtonIcon.Frame.Right + (cell.TakeNotesButtonLabel.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
+                    nfloat labelTotalWidth = cell.WatchButtonIcon.Bounds.Width + cell.WatchButtonLabel.Bounds.Width + 5;
+                    cell.WatchButtonIcon.Layer.Position = new CGPoint( (cell.WatchButton.Bounds.Width - labelTotalWidth) / 2 + (cell.WatchButtonIcon.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
+                    cell.WatchButtonLabel.Layer.Position = new CGPoint( cell.WatchButtonIcon.Frame.Right + (cell.WatchButtonLabel.Bounds.Width / 2), cell.WatchButton.Bounds.Height / 2 );
 
 
-                        // Position the Discussion Guide icon and button
-                        cell.DiscussionGuideButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width + 6, cell.DiscussionGuideButton.Bounds.Height + 10 );
-                        cell.DiscussionGuideButton.Layer.Position = new CGPoint( -5, cell.TakeNotesButton.Frame.Bottom );
+                    // Position the Take Notes icon and button
+                    cell.TakeNotesButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width / 2 + 5, cell.TakeNotesButton.Bounds.Height + 10 );
+                    cell.TakeNotesButton.Layer.Position = new CGPoint( (cell.Bounds.Width + 5) - cell.TakeNotesButton.Bounds.Width, cell.Speaker.Frame.Bottom + 7 );
 
-                        labelTotalWidth = cell.DiscussionGuideButtonIcon.Bounds.Width + cell.DiscussionGuideButtonLabel.Bounds.Width + 5;
-                        cell.DiscussionGuideButtonIcon.Layer.Position = new CGPoint( (cell.DiscussionGuideButton.Bounds.Width - labelTotalWidth) / 2 + (cell.DiscussionGuideButtonIcon.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
-                        cell.DiscussionGuideButtonLabel.Layer.Position = new CGPoint( cell.DiscussionGuideButtonIcon.Frame.Right + (cell.DiscussionGuideButtonLabel.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
-
-
-                        // Position the Bottom Banner
-                        cell.BottomBanner.Bounds = new CGRect( 0, 0, cell.Bounds.Width, cell.BottomBanner.Bounds.Height + 10 );
-                        cell.BottomBanner.Layer.Position = new CGPoint( 0, cell.DiscussionGuideButton.Frame.Bottom - 1 );
-
-                        // Watch Button & Labels
-                        // disable the button if there's no watch URL
-                        if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) )
-                        {
-                            cell.ToggleWatchButton( false );
-                        }
-                        else
-                        {
-                            cell.ToggleWatchButton( true );
-                        }
+                    labelTotalWidth = cell.TakeNotesButtonIcon.Bounds.Width + cell.TakeNotesButtonLabel.Bounds.Width + 5;
+                    cell.TakeNotesButtonIcon.Layer.Position = new CGPoint( (cell.TakeNotesButton.Bounds.Width - labelTotalWidth) / 2 + (cell.TakeNotesButtonIcon.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
+                    cell.TakeNotesButtonLabel.Layer.Position = new CGPoint( cell.TakeNotesButtonIcon.Frame.Right + (cell.TakeNotesButtonLabel.Bounds.Width / 2), cell.TakeNotesButton.Bounds.Height / 2 );
 
 
-                        // Take Notes Button & Labels
-                        // disable the button if there's no note URL
-                        if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) )
-                        {
-                            cell.ToggleTakeNotesButton( false );
-                        }
-                        else
-                        {
-                            cell.ToggleTakeNotesButton( true );
-                        }
+                    // Position the Discussion Guide icon and button
+                    cell.DiscussionGuideButton.Bounds = new CGRect( 0, 0, cell.Bounds.Width + 6, cell.DiscussionGuideButton.Bounds.Height + 10 );
+                    cell.DiscussionGuideButton.Layer.Position = new CGPoint( -5, cell.TakeNotesButton.Frame.Bottom );
 
-                        // DiscussionGuide Button & Labels
-                        // disable the button if there's no note URL
-                        if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) )
-                        {
-                            cell.ToggleDiscussionGuideButton( false );
-                        }
-                        else
-                        {
-                            cell.ToggleDiscussionGuideButton( true );
-                        }
+                    labelTotalWidth = cell.DiscussionGuideButtonIcon.Bounds.Width + cell.DiscussionGuideButtonLabel.Bounds.Width + 5;
+                    cell.DiscussionGuideButtonIcon.Layer.Position = new CGPoint( (cell.DiscussionGuideButton.Bounds.Width - labelTotalWidth) / 2 + (cell.DiscussionGuideButtonIcon.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
+                    cell.DiscussionGuideButtonLabel.Layer.Position = new CGPoint( cell.DiscussionGuideButtonIcon.Frame.Right + (cell.DiscussionGuideButtonLabel.Bounds.Width / 2), cell.DiscussionGuideButton.Bounds.Height / 2 );
+
+
+                    // Position the Bottom Banner
+                    cell.BottomBanner.Bounds = new CGRect( 0, 0, cell.Bounds.Width, cell.BottomBanner.Bounds.Height + 10 );
+                    cell.BottomBanner.Layer.Position = new CGPoint( 0, cell.DiscussionGuideButton.Frame.Bottom - 1 );
+
+                    // Watch Button & Labels
+                    // disable the button if there's no watch URL
+                    if ( string.IsNullOrWhiteSpace( latestMessage.WatchUrl ) )
+                    {
+                        cell.ToggleWatchButton( false );
                     }
                     else
                     {
-                        cell.ToggleWatchButton( false );
+                        cell.ToggleWatchButton( true );
+                    }
+
+
+                    // Take Notes Button & Labels
+                    // disable the button if there's no note URL
+                    if ( string.IsNullOrWhiteSpace( latestMessage.NoteUrl ) )
+                    {
                         cell.ToggleTakeNotesButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleTakeNotesButton( true );
+                    }
+
+                    // DiscussionGuide Button & Labels
+                    // disable the button if there's no note URL
+                    if ( string.IsNullOrWhiteSpace( latestMessage.DiscussionGuideUrl ) )
+                    {
                         cell.ToggleDiscussionGuideButton( false );
+                    }
+                    else
+                    {
+                        cell.ToggleDiscussionGuideButton( true );
                     }
                 }
 
