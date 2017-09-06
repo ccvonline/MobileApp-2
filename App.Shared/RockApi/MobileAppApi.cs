@@ -124,7 +124,7 @@ namespace MobileApp
 
         public static void GetPersonData( string userID, OnPersonDataResult onResultHandler )
         {
-            RockApi.Get_CustomEndPoint<PersonData>( RockApi.BaseUrl + EndPoint_PersonData + userID, delegate ( HttpStatusCode statusCode, string statusDescription, PersonData model )
+            RockApi.Get_CustomEndPoint<PersonData>( RockApi.BaseUrl + EndPoint_PersonData + System.Net.WebUtility.UrlEncode( userID ), delegate ( HttpStatusCode statusCode, string statusDescription, PersonData model )
             {
                 if( Util.StatusInSuccessRange( statusCode ) == true )
                 {
