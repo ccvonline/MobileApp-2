@@ -121,14 +121,22 @@ namespace Droid
                             messageItem.Distance.Text += " " + ConnectStrings.GroupFinder_ClosestTag;
                         }
 
-                        if( string.IsNullOrWhiteSpace( ParentFragment.GroupEntries[ position ].Filters ) == false && 
-                            ParentFragment.GroupEntries[ position ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter ) )
+                        messageItem.Childcare.Text = string.Empty;
+                        if( string.IsNullOrWhiteSpace( ParentFragment.GroupEntries[ position ].Filters ) == false )
 						{
-							messageItem.Childcare.Text = ConnectStrings.GroupFinder_OffersChildcare;
-						}
-						else
-						{
-                            messageItem.Childcare.Text = string.Empty;
+                            if( ParentFragment.GroupEntries[ position ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter ) )
+                            {
+							    messageItem.Childcare.Text = ConnectStrings.GroupFinder_OffersChildcare;
+                            }
+
+                            if( ParentFragment.GroupEntries[ position ].Filters.Contains( PrivateConnectConfig.GroupFinder_YoungAdults_Filter ) )
+                            {
+                                if( messageItem.Childcare.Text.Length > 0 )
+                                {
+                                    messageItem.Childcare.Text += ", ";
+                                }
+                                messageItem.Childcare.Text += ConnectStrings.GroupFinder_YoungAdults;
+                            }
 						}
                     }
                     // otherwise it's the "10 more" row

@@ -42,7 +42,7 @@ namespace iOS
                 public UILabel Title { get; set; }
                 public UILabel MeetingTime { get; set; }
                 public UILabel Distance { get; set; }
-                public UILabel Childcare { get; set; }
+                public UILabel Filters { get; set; }
                 public UIButton JoinButton { get; set; }
 
                 public UIView Seperator { get; set; }
@@ -73,12 +73,12 @@ namespace iOS
                     Distance.BackgroundColor = UIColor.Clear;
                     AddSubview( Distance );
 
-					Childcare = new UILabel( );
-					Childcare.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
-					Childcare.Layer.AnchorPoint = CGPoint.Empty;
-					Childcare.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
-					Childcare.BackgroundColor = UIColor.Clear;
-					AddSubview( Childcare );
+                    Filters = new UILabel( );
+                    Filters.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Small_FontSize );
+                    Filters.Layer.AnchorPoint = CGPoint.Empty;
+                    Filters.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Label_TextColor );
+                    Filters.BackgroundColor = UIColor.Clear;
+                    AddSubview( Filters );
 
                     JoinButton = UIButton.FromType( UIButtonType.Custom );
                     JoinButton.TouchUpInside += (object sender, EventArgs e) => { TableSource.RowButtonClicked( RowIndex ); };
@@ -200,16 +200,25 @@ namespace iOS
                     cell.Distance.SizeToFit( );
 
 
-                    // Childcare
-                    // For this, we'll always put the text, so that we can get the height and have consistent row heights.
-                    // however, we'll hide it if there actually isn't childcare
-                    bool offersChildcare = false;
+                    // Childcare and Young Adults
+                    cell.Filters.Text = string.Empty;
                     if( string.IsNullOrWhiteSpace( Parent.GroupEntries[ indexPath.Row ].Filters ) == false )
                     {
-                        offersChildcare = Parent.GroupEntries[ indexPath.Row ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter );
+                        if( Parent.GroupEntries[ indexPath.Row ].Filters.Contains( PrivateConnectConfig.GroupFinder_Childcare_Filter ) )
+                        {
+                            cell.Filters.Text = ConnectStrings.GroupFinder_OffersChildcare;
+                        }
+
+                        if(  Parent.GroupEntries[ indexPath.Row ].Filters.Contains( PrivateConnectConfig.GroupFinder_YoungAdults_Filter ) )
+                        {
+                            if( cell.Filters.Text.Length > 0 )
+                            {
+                                cell.Filters.Text += ", ";
+                            }
+                            cell.Filters.Text += ConnectStrings.GroupFinder_YoungAdults;
+                        }
                     }
-                    cell.Childcare.Text = ConnectStrings.GroupFinder_OffersChildcare;
-                    cell.Childcare.SizeToFit( );
+                    cell.Filters.SizeToFit( );
 
                     // pick a nice magic number for the cell height
                     PendingCellHeight = 105.0f;
@@ -217,32 +226,10 @@ namespace iOS
                     // first, always put the title at the top
                     cell.Title.Frame = new CGRect( 10, 1, cell.Frame.Width - 55, cell.Title.Frame.Height + 5 );
 
-                    // jhm 8-9-17 - disabling centering of the details, cause it looks weird.
-                    nfloat heightOffset = 0;
-                    cell.Childcare.Hidden = !offersChildcare;
 
-                    // get the available space for the details
-                    /*nfloat detailsSpace = PendingCellHeight - cell.Title.Frame.Bottom - 5;
-
-                    // determine the total height of all details
-                    nfloat detailsHeight = cell.MeetingTime.Frame.Height + cell.Distance.Frame.Height + cell.Childcare.Frame.Height;
-
-                    if( offersChildcare )
-                    {
-                        heightOffset = (detailsSpace - detailsHeight) / 2;
-
-                        cell.Childcare.Hidden = false;
-                    }
-                    else
-                    {
-                        heightOffset = (detailsSpace - (detailsHeight - cell.Childcare.Frame.Height) ) / 2;
-
-                        cell.Childcare.Hidden = true;
-                    }*/
-
-                    cell.MeetingTime.Frame = new CGRect( 10, cell.Title.Frame.Bottom + heightOffset, cell.Frame.Width - 5, cell.MeetingTime.Frame.Height );
+                    cell.MeetingTime.Frame = new CGRect( 10, cell.Title.Frame.Bottom, cell.Frame.Width - 5, cell.MeetingTime.Frame.Height );
                     cell.Distance.Frame = new CGRect( 10, cell.MeetingTime.Frame.Bottom, cell.Frame.Width - 5, cell.Distance.Frame.Height );
-                    cell.Childcare.Frame = new CGRect( 10, cell.Distance.Frame.Bottom, cell.Frame.Width - 5, cell.Distance.Frame.Height );
+                    cell.Filters.Frame = new CGRect( 10, cell.Distance.Frame.Bottom, cell.Frame.Width - 5, cell.Distance.Frame.Height );
 
                     cell.Seperator.Frame = new CGRect( 0, PendingCellHeight - 1, cell.Bounds.Width, 1 );
 

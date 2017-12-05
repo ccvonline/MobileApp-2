@@ -534,6 +534,7 @@
     <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_ipad_landscape_2x.png" />
     <ImageAsset Include="Resources\Images.xcassets\LaunchImage.launchimage\splash_combo_iphone4.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Icon-83.5%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\iTunesArtwork%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork%402x" />

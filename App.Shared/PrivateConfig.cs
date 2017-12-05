@@ -529,6 +529,8 @@ namespace MobileApp.Shared
             /// </summary>
             public const string GroupFinder_Childcare_Filter = "Childcare Provided";
 
+            public const string GroupFinder_YoungAdults_Filter = "Young Adults";
+
             /// <summary>
             /// Banner to display at the top of the Connect Page
             /// </summary>

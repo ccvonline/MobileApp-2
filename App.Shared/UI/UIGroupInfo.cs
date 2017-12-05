@@ -23,6 +23,7 @@ namespace MobileApp.Shared.UI
         PlatformLabel GroupTitle { get; set; }
         PlatformLabel MeetingTime { get; set; }
         PlatformLabel ChildcareProvided { get; set; }
+        PlatformLabel YoungAdults { get; set; }
 
         PlatformImageView FamilyImage { get; set; }
         PlatformView FamilyImageLayer { get; set; }
@@ -80,11 +81,18 @@ namespace MobileApp.Shared.UI
 			MeetingTime.TextAlignment = TextAlignment.Center;
 
 			// Childcare Provided
-			ChildcareProvided = PlatformLabel.Create( );
+            ChildcareProvided = PlatformLabel.Create( );
 			ChildcareProvided.AddAsSubview( masterView );
 			ChildcareProvided.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
 			ChildcareProvided.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
 			ChildcareProvided.TextAlignment = TextAlignment.Center;
+
+            // Young Adults
+            YoungAdults = PlatformLabel.Create( );
+            YoungAdults.AddAsSubview( masterView );
+            YoungAdults.SetFont( ControlStylingConfig.Font_Light, ControlStylingConfig.Medium_FontSize );
+            YoungAdults.TextColor = ControlStylingConfig.TextField_ActiveTextColor;
+            YoungAdults.TextAlignment = TextAlignment.Center;
 
 
 
@@ -273,6 +281,16 @@ namespace MobileApp.Shared.UI
                                 {
                                     ChildcareProvided.Text = string.Empty;
                                 }
+
+                                // young adults header
+                                if( string.IsNullOrWhiteSpace( groupInfo.Filters ) == false && groupInfo.Filters.Contains( PrivateConnectConfig.GroupFinder_YoungAdults_Filter ) )
+                                {
+                                    YoungAdults.Text = ConnectStrings.GroupFinder_YoungAdults;
+                                }
+                                else
+                                {
+                                    YoungAdults.Text = string.Empty;
+                                }
                                 
                                 // childcare description (if its blank, it'll be hidden)
                                 ChildDesc.Text = groupInfo.ChildcareDesc;
@@ -303,6 +321,9 @@ namespace MobileApp.Shared.UI
         void HideControls( bool hidden )
         {
             GroupTitle.Hidden = hidden;
+
+            ChildcareProvided.Hidden = hidden;
+            YoungAdults.Hidden = hidden;
 
             GroupImage.Hidden = hidden;
             GroupImageLayer.Hidden = hidden;
@@ -358,7 +379,7 @@ namespace MobileApp.Shared.UI
                 if( string.IsNullOrWhiteSpace( ChildcareProvided.Text ) == false )
                 {
                     ChildcareProvided.Hidden = false;
-                    ChildcareProvided.Frame = new RectangleF( textLeftInset, MeetingTime.Frame.Bottom, View.Frame.Width - textRightInset, 0 );
+                    ChildcareProvided.Frame = new RectangleF( textLeftInset, nextYPos, View.Frame.Width - textRightInset, 0 );
                     ChildcareProvided.SizeToFit( );
                     ChildcareProvided.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, ChildcareProvided.Bounds.Height );
 
@@ -367,6 +388,21 @@ namespace MobileApp.Shared.UI
                 else
                 {
                     ChildcareProvided.Hidden = true;
+                }
+
+                // layout the young adults banner
+                if( string.IsNullOrWhiteSpace( YoungAdults.Text ) == false )
+                {
+                    YoungAdults.Hidden = false;
+                    YoungAdults.Frame = new RectangleF( textLeftInset, nextYPos, View.Frame.Width - textRightInset, 0 );
+                    YoungAdults.SizeToFit( );
+                    YoungAdults.Bounds = new RectangleF( 0, 0, View.Frame.Width - textRightInset, YoungAdults.Bounds.Height );
+
+                    nextYPos = YoungAdults.Frame.Bottom;
+                }
+                else
+                {
+                    YoungAdults.Hidden = true;
                 }
                 nextYPos += sectionSpacing;
 

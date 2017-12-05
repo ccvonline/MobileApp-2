@@ -204,7 +204,7 @@ namespace MobileApp.Shared.UI
 
 
             SearchShortTermButton.Hidden = true;
-            //SearchYoungAdultsButton.Hidden = true;
+            SearchYoungAdultsButton.Hidden = true;
 
             LayoutChanged( frame );
         }

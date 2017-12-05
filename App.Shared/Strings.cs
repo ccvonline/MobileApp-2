@@ -197,6 +197,7 @@ namespace MobileApp.Shared
             public const string GroupFinder_ClosestTag = "(Closest group to you)";
             public const string GroupFinder_ContactForTime = "Contact for Meeting Time";
             public const string GroupFinder_OffersChildcare = "Childcare Provided";
+            public const string GroupFinder_YoungAdults = "Young Adults";
             public const string GroupFinder_NoChildcareAvailable = "No Childcare Available";
 
             public const string GroupFinder_Neighborhood = "Groups Nearest You";

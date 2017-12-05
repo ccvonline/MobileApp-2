@@ -25,7 +25,7 @@ namespace MobileApp
                 /// </summary>
                 public static bool News_Override_Item = false;
 
-                public const string News_Override_ReferenceURL = "http://ccv.church/soakedmobileinvite";
+                public const string News_Override_ReferenceURL = "https://rock.ccv.church/page/1630";
                 public const bool News_Override_IncludeImpersonationToken = true;
                 public const bool News_Override_ReferenceUrlLaunchesBrowser = false;
             }
@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2250;
+                public const int Version = 2262;
 
                 /// <summary>
                 /// The full name of your organization
