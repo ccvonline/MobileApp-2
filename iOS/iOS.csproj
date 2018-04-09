@@ -118,9 +118,6 @@
     <Reference Include="Facebook">
       <HintPath>..\Components\facebook-sdk-6.2.2\lib\ios-unified\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="iOSLocalytics">
-      <HintPath>..\Libs\iOSLocalytics.dll</HintPath>
-    </Reference>
     <Reference Include="HockeySDK">
       <HintPath>..\packages\HockeySDK.Xamarin.4.1.1\lib\Xamarin.iOS10\HockeySDK.dll</HintPath>
     </Reference>
