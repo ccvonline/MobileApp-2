@@ -105,14 +105,17 @@ namespace iOS
             this.NavigationItem.SetLeftBarButtonItem( new UIBarButtonItem( SpringboardRevealButton ), false );
             //
 
-            // set the title image for the bar
-            string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
-            UIImage titleImage = new UIImage( imagePath );
-            this.NavigationItem.TitleView = new UIImageView( titleImage );
-            this.NavigationItem.TitleView.SizeToFit( );
+            // set the title image for the bar if there's no safe area defined. (A safe area is like, say, the notch for iPhone X)
+            if ( UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top == 0 )
+            {
+                string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
+                UIImage titleImage = new UIImage( imagePath );
+                this.NavigationItem.TitleView = new UIImageView( titleImage );
+                this.NavigationItem.TitleView.SizeToFit( );
 
-            nfloat delta = (NavigationController.NavigationBar.Bounds.Height - titleImage.Size.Height) / 2;
-            NavigationController.NavigationBar.SetTitleVerticalPositionAdjustment( -delta, UIBarMetrics.Default );
+                nfloat delta = (NavigationController.NavigationBar.Bounds.Height - titleImage.Size.Height) / 2;
+                NavigationController.NavigationBar.SetTitleVerticalPositionAdjustment( -delta, UIBarMetrics.Default );
+            }
 
             // Now create the sub-navigation, which includes
             // the NavToolbar used to let the user navigate

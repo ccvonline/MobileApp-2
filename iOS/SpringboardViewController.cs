@@ -1009,8 +1009,15 @@ namespace iOS
 
         public override bool PrefersStatusBarHidden()
         {
-            // don't show the status bar when running this app.
+            // allow the status bar on iPhone X devices
+            if ( UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone && UIScreen.MainScreen.Bounds.Height >= 812 )
+            {
+                return false;
+            }
+
+            // but not on anything else
             return true;
+
         }
 
         public override UIStatusBarStyle PreferredStatusBarStyle()
@@ -1125,7 +1132,7 @@ namespace iOS
 
             View.Bounds = new CGRect( View.Bounds.Left, View.Bounds.Top, TraitSize.Width, TraitSize.Height );
 
-            ScrollView.Frame = View.Frame;
+            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, View.Frame.Right, View.Frame.Bottom );
 
             // if the OOBE isn't running, do everything normal
             if ( IsOOBERunning == false )

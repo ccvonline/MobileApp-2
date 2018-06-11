@@ -117,11 +117,15 @@ namespace iOS
 
             HeaderView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
-            string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
-            LogoView = new UIImageView( new UIImage( imagePath ) );
-            LogoView.SizeToFit( );
-            LogoView.Layer.AnchorPoint = CGPoint.Empty;
-            HeaderView.AddSubview( LogoView );
+            // set the title image for the bar if there's no safe area defined. (A safe area is like, say, the notch for iPhone X)
+            if ( UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top == 0 )
+            {
+                string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
+                LogoView = new UIImageView( new UIImage( imagePath ) );
+                LogoView.SizeToFit( );
+                LogoView.Layer.AnchorPoint = CGPoint.Empty;
+                HeaderView.AddSubview( LogoView );
+            }
 
             ScrollView = new UIScrollViewWrapper();
 
@@ -499,7 +503,10 @@ namespace iOS
             HeaderView.Layer.ShadowOpacity = .23f;
             HeaderView.Layer.ShadowPath = shadowPath.CGPath;
 
-            LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+            if( LogoView != null )
+            {
+                LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+            }
 
             BirthdatePicker.LayoutChanged( );
             GenderPicker.LayoutChanged( );

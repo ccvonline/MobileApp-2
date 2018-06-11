@@ -206,18 +206,22 @@ namespace iOS
                         Springboard.ResignModelViewController( this, null );
                     }
                 };
-            
+
             // setup the fake header
             HeaderView = new UIView( );
             View.AddSubview( HeaderView );
             HeaderView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
-            imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
-            LogoView = new UIImageView( new UIImage( imagePath ) );
-            LogoView.SizeToFit( );
-            LogoView.Layer.AnchorPoint = CGPoint.Empty;
+            // set the title image for the bar if there's no safe area defined. (A safe area is like, say, the notch for iPhone X)
+            if ( UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top == 0 )
+            {
+                imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
+                LogoView = new UIImageView( new UIImage( imagePath ) );
+                LogoView.SizeToFit( );
+                LogoView.Layer.AnchorPoint = CGPoint.Empty;
 
-            HeaderView.AddSubview( LogoView );
+                HeaderView.AddSubview( LogoView );
+            }
         }
 
         public override void ViewDidLayoutSubviews( )
@@ -230,8 +234,10 @@ namespace iOS
             UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .10f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
             PasswordField.SetFrame( new CGRect( UserNameField.Background.Frame.Left, UserNameField.Background.Frame.Bottom, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
 
-            //LoginButton.Frame = new CGRect( View.Frame.Left + 10, PasswordField.Background.Frame.Bottom + 20, View.Bounds.Width / 2 - 10, ControlStyling.ButtonHeight );
-            LoginButton.Frame = new CGRect( ( ScrollView.Bounds.Width - LoginButton.Bounds.Width) / 2, PasswordField.Background.Frame.Bottom + 20, FBImageView.Bounds.Width * 2, ControlStyling.ButtonHeight );
+            // use the facebook image's button width, as it looks good.
+            nfloat buttonWidth = FBImageView.Bounds.Width;
+
+            LoginButton.Frame = new CGRect( ( ScrollView.Bounds.Width - buttonWidth) / 2, PasswordField.Background.Frame.Bottom + 20, buttonWidth, ControlStyling.ButtonHeight );
             LoginResult.SetFrame( new CGRect( UserNameField.Background.Frame.Left, LoginButton.Frame.Bottom + 20, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
 
 
@@ -240,9 +246,7 @@ namespace iOS
 
 
             // setup the "Register or Facebook"
-            //nfloat combinedWidth = RegisterButton.Bounds.Width + OrSpacerLabel.Bounds.Width + FacebookLogin.Bounds.Width;
-
-            RegisterButton.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, AdditionalOptions.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
+            RegisterButton.Frame = new CGRect( (View.Bounds.Width - buttonWidth) / 2, AdditionalOptions.Frame.Bottom + 5, buttonWidth, ControlStyling.ButtonHeight );
             OrSpacerLabel.Frame = new CGRect( (View.Bounds.Width - OrSpacerLabel.Bounds.Width) / 2, RegisterButton.Frame.Bottom + 5, OrSpacerLabel.Bounds.Width, FBImageView.Bounds.Height );
             FacebookLogin.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, OrSpacerLabel.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
 
@@ -260,7 +264,12 @@ namespace iOS
             HeaderView.Layer.ShadowOpacity = .23f;
             HeaderView.Layer.ShadowPath = shadowPath.CGPath;
 
-            LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+            // the logo may not exist if we're on a display with a notch
+            if( LogoView != null )
+            {
+                LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+            }
+
             FBImageView.Layer.Position = new CoreGraphics.CGPoint( FacebookLogin.Bounds.Width / 2, FacebookLogin.Bounds.Height / 2 );
 
             if ( WebLayout != null )
@@ -287,6 +296,8 @@ namespace iOS
 
             UserNameField.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
             PasswordField.Background.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BG_Layer_Color );
+
+            ScrollView.ContentOffset = CGPoint.Empty;
         }
 
         public override void ViewDidAppear(bool animated)

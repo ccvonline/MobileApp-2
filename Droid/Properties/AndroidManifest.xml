@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.2.6" android:versionCode="2262">
-	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ccvonline.CCVMobileApp" android:versionName="2.2.7" android:versionCode="2271">
+	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26" />
 	<application android:name="com.ccvonline.CCVMobileApp" android:label="CCV Mobile" android:icon="@drawable/icon" android:theme="@style/MobileTheme">
 		<!---Get your API Key for Google Maps at console.developers.google.com-->
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyD4qLNNF7MeD7QpUr57el_x8ZGnaginC3M" />

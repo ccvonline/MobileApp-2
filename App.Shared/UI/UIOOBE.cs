@@ -228,7 +228,7 @@ namespace MobileApp.Shared.UI
             ImageBG.Destroy( );
         }
 
-        static float WelcomeHeightPerc = .01f;
+        static float WelcomeHeightPerc = .11f;
         public void LayoutChanged( RectangleF frame )
         {
             View.Frame = new RectangleF( frame.Left, frame.Top, frame.Width, frame.Height );
