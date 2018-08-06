@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2271;
+                public const int Version = 2281;
 
                 /// <summary>
                 /// The full name of your organization
@@ -69,8 +69,8 @@ namespace MobileApp
                 /// </summary>
                 #if DEBUG
                 //public const string RockBaseUrl = "http://rock.ccv.church/";
-                public const string RockBaseUrl = "http://dev.ccv.church/";
-                //public const string RockBaseUrl = "http://10.211.55.3:50345/";
+                public const string RockBaseUrl = "http://olddev.ccv.church/";
+                //public const string RockBaseUrl = "http://10.211.55.4:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
                 #endif
@@ -210,7 +210,7 @@ namespace MobileApp
                 /// <summary>
                 /// The url to take a user to for giving.
                 /// </summary>
-                public const string GiveUrl = "http://my.ccv.church/ma-give";
+                public const string GiveUrl = "https://ccv.church/ma-give";
             }
 
             public class ControlStylingConfig

@@ -291,6 +291,7 @@ namespace MobileApp.Shared
 
             public const string CreatePrayer_FirstNamePlaceholderText = "First Name";
             public const string CreatePrayer_LastNamePlaceholderText = "Last Name";
+            public const string CreatePrayer_EmailPlaceholderText = "Email Address";
             public const string CreatePrayer_SubmitButtonText = "Submit";
             public const string CreatePrayer_CategoryButtonText = "Category";
             public const string CreatePrayer_AnonymousSwitchLabel = "";

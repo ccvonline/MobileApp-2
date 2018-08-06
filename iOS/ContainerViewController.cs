@@ -106,7 +106,15 @@ namespace iOS
             //
 
             // set the title image for the bar if there's no safe area defined. (A safe area is like, say, the notch for iPhone X)
-            if ( UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top == 0 )
+            nfloat safeAreaTopInset = 0;
+
+            // Make sure they're on iOS 11 before checking for insets. This is only needed for iPhone X anyways, which shipped with iOS 11.
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
+            }
+
+            if ( safeAreaTopInset == 0 )
             {
                 string imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
                 UIImage titleImage = new UIImage( imagePath );

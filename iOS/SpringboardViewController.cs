@@ -1132,7 +1132,14 @@ namespace iOS
 
             View.Bounds = new CGRect( View.Bounds.Left, View.Bounds.Top, TraitSize.Width, TraitSize.Height );
 
-            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, View.Frame.Right, View.Frame.Bottom );
+            nfloat safeAreaTopInset = 0;
+
+            // Make sure they're on iOS 11 before checking for insets. This is only needed for iPhone X anyways, which shipped with iOS 11.
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
+            }
+            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom );
 
             // if the OOBE isn't running, do everything normal
             if ( IsOOBERunning == false )

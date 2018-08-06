@@ -24,6 +24,7 @@ using Rock.Mobile.IO;
 using MobileApp.Shared.UI;
 using Droid.Tasks.Notes;
 using MobileApp.Shared.PrivateConfig;
+using Rock.Mobile.Util.Strings;
 
 namespace Droid
 {
@@ -63,11 +64,15 @@ namespace Droid
                 RelativeLayout LastNameBGLayer { get; set; }
                 uint LastNameBGColor { get; set; }
 
+                EditText EmailText { get; set; }
+                RelativeLayout EmailBGLayer { get; set; }
+                uint EmailBGColor { get; set; }
+
                 EditText RequestText { get; set; }
                 RelativeLayout RequestBGLayer { get; set; }
                 uint RequestBGColor { get; set; }
 
-                Switch AnonymousSwitch { get; set; }
+                //Switch AnonymousSwitch { get; set; }
                 Switch PublicSwitch { get; set; }
 
                 Spinner Spinner { get; set; }
@@ -102,6 +107,9 @@ namespace Droid
                     LastNameBGLayer = view.FindViewById<RelativeLayout>( Resource.Id.last_name_background );
                     ControlStyling.StyleBGLayer( LastNameBGLayer );
 
+                    EmailBGLayer = view.FindViewById<RelativeLayout>( Resource.Id.email_background );
+                    ControlStyling.StyleBGLayer( EmailBGLayer );
+
                     // setup the prayer request background
                     RequestBGLayer = view.FindViewById<RelativeLayout>( Resource.Id.prayerRequest_background );
                     ControlStyling.StyleBGLayer( RequestBGLayer );
@@ -126,13 +134,18 @@ namespace Droid
                     LastNameBGColor = ControlStylingConfig.BG_Layer_Color;
                     LastNameText.InputType |= Android.Text.InputTypes.TextFlagCapWords;
 
+                    EmailText = (EditText)view.FindViewById<EditText>( Resource.Id.prayer_create_emailText );
+                    ControlStyling.StyleTextField( EmailText, PrayerStrings.CreatePrayer_EmailPlaceholderText, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+                    EmailBGColor = ControlStylingConfig.BG_Layer_Color;
+                    EmailText.InputType |= Android.Text.InputTypes.TextFlagCapWords;
+
                     RequestText = (EditText)view.FindViewById<EditText>( Resource.Id.prayer_create_requestText );
                     ControlStyling.StyleTextField( RequestText, PrayerStrings.CreatePrayer_PrayerRequest, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
                     RequestBGColor = ControlStylingConfig.BG_Layer_Color;
                     RequestText.InputType |= Android.Text.InputTypes.TextFlagCapSentences;
 
 
-                    AnonymousSwitch = (Switch)view.FindViewById<Switch>( Resource.Id.postAnonymousSwitch );
+                    /*AnonymousSwitch = (Switch)view.FindViewById<Switch>( Resource.Id.postAnonymousSwitch );
                     AnonymousSwitch.Checked = false;
                     AnonymousSwitch.CheckedChange += (object sender, CompoundButton.CheckedChangeEventArgs e ) =>
                     {
@@ -156,13 +169,13 @@ namespace Droid
                             // set the colors back to neutral
                             Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( FirstNameBGColor, ControlStylingConfig.BG_Layer_Color, FirstNameBGLayer, delegate { FirstNameBGColor = ControlStylingConfig.BG_Layer_Color; } );
                             Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, ControlStylingConfig.BG_Layer_Color, LastNameBGLayer, delegate { LastNameBGColor = ControlStylingConfig.BG_Layer_Color; } );
-                    };
+                    };*/
 
                     PublicSwitch = (Switch)view.FindViewById<Switch>( Resource.Id.makePublicSwitch );
                     PublicSwitch.Checked = false;
 
-                    TextView postAnonymousLabel = view.FindViewById<TextView>( Resource.Id.postAnonymous );
-                    ControlStyling.StyleUILabel( postAnonymousLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+                    //TextView postAnonymousLabel = view.FindViewById<TextView>( Resource.Id.postAnonymous );
+                    //ControlStyling.StyleUILabel( postAnonymousLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
 
                     TextView publicLabel = view.FindViewById<TextView>( Resource.Id.makePublic );
                     ControlStyling.StyleUILabel( publicLabel, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
@@ -201,11 +214,13 @@ namespace Droid
 
                             FirstNameText.Enabled = false;
                             LastNameText.Enabled = false;
+                            EmailText.Enabled = false;
                             RequestText.Enabled = false;
 
                             // setup the request
                             prayerRequest.FirstName = FirstNameText.Text;
                             prayerRequest.LastName = LastNameText.Text;
+                            prayerRequest.Email = EmailText.Text;
 
                             int? personAliasId = null;
                             if ( MobileApp.Shared.Network.RockMobileUser.Instance.Person.PrimaryAliasId.HasValue )
@@ -221,7 +236,7 @@ namespace Droid
                             prayerRequest.Guid = Guid.NewGuid( );
                             prayerRequest.IsPublic = PublicSwitch.Checked;
                             prayerRequest.IsApproved = false;
-                            prayerRequest.CreatedByPersonAliasId = AnonymousSwitch.Checked == true ? null : personAliasId;
+                            prayerRequest.CreatedByPersonAliasId = /*AnonymousSwitch.Checked == true ? null :*/ personAliasId;
 
                             ParentTask.OnClick( this, 0, prayerRequest );
                         }
@@ -234,7 +249,7 @@ namespace Droid
 
                     // Update the name background color
                     uint targetNameColor = ControlStylingConfig.BG_Layer_Color;
-                    if( string.IsNullOrEmpty( FirstNameText.Text ) && AnonymousSwitch.Checked == false )
+                    if( string.IsNullOrEmpty( FirstNameText.Text ) /*&& AnonymousSwitch.Checked == false*/ )
                     {
                         targetNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                         result = false;
@@ -242,14 +257,23 @@ namespace Droid
                     Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( FirstNameBGColor, targetNameColor, FirstNameBGLayer, delegate { FirstNameBGColor = targetNameColor; } );
 
 
-                    // if they left the name field blank and didn't turn on Anonymous, flag the field.
+                    // if they left the name field blank, flag the field.
                     uint targetLastNameColor = ControlStylingConfig.BG_Layer_Color; 
-                    if( string.IsNullOrEmpty( LastNameText.Text ) && AnonymousSwitch.Checked == false )
+                    if( string.IsNullOrEmpty( LastNameText.Text ) /*&& AnonymousSwitch.Checked == false*/ )
                     {
                         targetLastNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                         result = false;
                     }
                     Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( LastNameBGColor, targetLastNameColor, LastNameBGLayer, delegate { LastNameBGColor = targetLastNameColor; } );
+
+                    // if they email blank or put something invalid, flag the field
+                    uint targetEmailColor = ControlStylingConfig.BG_Layer_Color; 
+                    if( (string.IsNullOrEmpty( EmailText.Text ) || EmailText.Text.IsEmailFormat( ) == false) /*&& AnonymousSwitch.Checked == false*/ )
+                    {
+                        targetEmailColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+                        result = false;
+                    }
+                    Rock.Mobile.PlatformSpecific.Android.UI.Util.AnimateViewColor( EmailBGColor, targetEmailColor, EmailBGLayer, delegate { EmailBGColor = targetEmailColor; } );
 
 
                     // Update the prayer background color
@@ -311,6 +335,7 @@ namespace Droid
                     {
                         FirstNameText.Text = RockMobileUser.Instance.Person.NickName;
                         LastNameText.Text = RockMobileUser.Instance.Person.LastName;
+                        EmailText.Text = RockMobileUser.Instance.Person.Email;
                     }
                 }
             }

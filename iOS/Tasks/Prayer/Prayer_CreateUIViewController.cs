@@ -15,6 +15,7 @@ using Rock.Mobile.IO;
 using MobileApp.Shared.UI;
 using Rock.Mobile.PlatformSpecific.Util;
 using MobileApp.Shared.PrivateConfig;
+using Rock.Mobile.Util.Strings;
 
 namespace iOS
 {
@@ -47,8 +48,10 @@ namespace iOS
 
         StyledTextField LastName { get; set; }
 
+        StyledTextField Email { get; set; }
+
         UILabel MakePublicLabel { get; set; }
-        UILabel PostAnonymouslyLabel { get; set; }
+        //UILabel PostAnonymouslyLabel { get; set; }
 
         UIView PrayerRequestLayer { get; set; }
         UILabel PrayerRequestPlaceholder { get; set; }
@@ -99,6 +102,13 @@ namespace iOS
             ScrollView.AddSubview( LastName.Background );
             ControlStyling.StyleTextField( LastName.Field, PrayerStrings.CreatePrayer_LastNamePlaceholderText, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             ControlStyling.StyleBGLayer( LastName.Background );
+
+            Email = new StyledTextField();
+            ScrollView.AddSubview( Email.Background );
+            Email.Field.AutocapitalizationType = UITextAutocapitalizationType.None;
+            Email.Field.AutocorrectionType = UITextAutocorrectionType.No;
+            ControlStyling.StyleTextField( Email.Field, PrayerStrings.CreatePrayer_EmailPlaceholderText, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+            ControlStyling.StyleBGLayer( Email.Background );
 
 
             PrayerRequestLayer = new UIView();
@@ -184,13 +194,13 @@ namespace iOS
             UISwitchAnonymous = new UISwitch();
             SwitchBackground.AddSubview( UISwitchAnonymous );
 
-            PostAnonymouslyLabel = new UILabel();
-            SwitchBackground.AddSubview( PostAnonymouslyLabel );
+            //PostAnonymouslyLabel = new UILabel();
+            //SwitchBackground.AddSubview( PostAnonymouslyLabel );
             //PostAnonymouslyLabel.TextColor = UIColor.White;
 
 
             // Setup the anonymous switch
-            PostAnonymouslyLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+            /*PostAnonymouslyLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
             PostAnonymouslyLabel.Text = PrayerStrings.CreatePrayer_PostAnonymously;
             PostAnonymouslyLabel.TextColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.TextField_ActiveTextColor );
             UISwitchAnonymous.OnTintColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.Switch_OnColor );
@@ -218,7 +228,7 @@ namespace iOS
                     // reset the background colors
                     Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( ControlStylingConfig.BG_Layer_Color, FirstName.Background );
                     Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( ControlStylingConfig.BG_Layer_Color, LastName.Background );
-                };
+                };*/
 
             // setup the public switch
             MakePublicLabel.Font = Rock.Mobile.PlatformSpecific.iOS.Graphics.FontManager.GetFont( ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
@@ -265,6 +275,7 @@ namespace iOS
 
                         prayerRequest.FirstName = FirstName.Field.Text;
                         prayerRequest.LastName = LastName.Field.Text;
+                        prayerRequest.Email = Email.Field.Text;
 
                         // see if there's a person alias ID to use.
                         int? personAliasId = null;
@@ -281,7 +292,7 @@ namespace iOS
                         prayerRequest.IsPublic = UIPublicSwitch.On; // use the public switch's state to determine whether it's a public prayer or not.
                         prayerRequest.Guid = Guid.NewGuid( );
                         prayerRequest.IsApproved = false;
-                        prayerRequest.CreatedByPersonAliasId = UISwitchAnonymous.On == true ? null : personAliasId;
+                        prayerRequest.CreatedByPersonAliasId = /*UISwitchAnonymous.On == true ? null :*/ personAliasId;
 
                         // launch the post view controller
                         Prayer_PostUIViewController postPrayerVC = new Prayer_PostUIViewController();
@@ -297,9 +308,8 @@ namespace iOS
             bool result = true;
 
             // Update the first name background color
-            // if they left the name field blank and didn't turn on Anonymous, flag the field.
             uint targetNameColor = ControlStylingConfig.BG_Layer_Color; 
-            if ( string.IsNullOrEmpty( FirstName.Field.Text ) && UISwitchAnonymous.On == false )
+            if ( string.IsNullOrEmpty( FirstName.Field.Text ) /*&& UISwitchAnonymous.On == false*/ )
             {
                 targetNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
@@ -308,14 +318,22 @@ namespace iOS
 
 
             // Update the LAST name background color
-            // if they left the name field blank and didn't turn on Anonymous, flag the field.
             uint targetLastNameColor = ControlStylingConfig.BG_Layer_Color; 
-            if ( string.IsNullOrEmpty( LastName.Field.Text ) && UISwitchAnonymous.On == false )
+            if ( string.IsNullOrEmpty( LastName.Field.Text ) /*&& UISwitchAnonymous.On == false*/ )
             {
                 targetLastNameColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
             }
             Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( targetLastNameColor, LastName.Background );
+
+            // Update the email background color
+            uint targetEmailColor = ControlStylingConfig.BG_Layer_Color; 
+            if ( (string.IsNullOrEmpty( Email.Field.Text ) || Email.Field.Text.IsEmailFormat( ) == false) /*&& UISwitchAnonymous.On == false*/ )
+            {
+                targetEmailColor = ControlStylingConfig.BadInput_BG_Layer_Color;
+                result = false;
+            }
+            Rock.Mobile.PlatformSpecific.iOS.UI.Util.AnimateViewColor( targetEmailColor, Email.Background );
 
 
             // Update the prayer background color
@@ -391,6 +409,7 @@ namespace iOS
                 PrayerRequest.ResignFirstResponder( );
                 FirstName.Field.ResignFirstResponder( );
                 LastName.Field.ResignFirstResponder( );
+                Email.Field.ResignFirstResponder( );
             }
 
             PickerAdjustManager.TogglePicker( enabled );
@@ -501,6 +520,7 @@ namespace iOS
             {
                 FirstName.Field.Text = RockMobileUser.Instance.Person.NickName;
                 LastName.Field.Text = RockMobileUser.Instance.Person.LastName;
+                Email.Field.Text = RockMobileUser.Instance.Person.Email;
             }
 
             // monitor for text field being edited, and keyboard show/hide notitications
@@ -521,8 +541,9 @@ namespace iOS
 
             FirstName.SetFrame( new CGRect( -10, 25, View.Bounds.Width + 20, 33 ) );
             LastName.SetFrame( new CGRect( -10, FirstName.Background.Frame.Bottom, View.Bounds.Width + 20, 33 ) );
+            Email.SetFrame( new CGRect( -10, LastName.Background.Frame.Bottom, View.Bounds.Width + 20, 33 ) );
 
-            PrayerRequestLayer.Frame = new CGRect( -10, LastName.Background.Frame.Bottom + 20, View.Bounds.Width + 20, 200 );
+            PrayerRequestLayer.Frame = new CGRect( -10, Email.Background.Frame.Bottom + 20, View.Bounds.Width + 20, 200 );
             PrayerRequestPlaceholder.Frame = new CGRect( 20, 0, View.Bounds.Width - 20, 33 );
             PrayerRequest.Frame = new CGRect( 20, 3, View.Bounds.Width - 20, 200 );
 
@@ -531,14 +552,14 @@ namespace iOS
             CategoryButton.Frame = new CGRect( 20, 0, View.Bounds.Width - 20, 40 );
 
 
-            SwitchBackground.Frame = new CGRect( -10, CategoryLayer.Frame.Bottom + 20, View.Bounds.Width + 20, 88 );
-            PostAnonymouslyLabel.Frame = new CGRect( 20, 6, View.Bounds.Width - 10, 33 );
+            SwitchBackground.Frame = new CGRect( -10, CategoryLayer.Frame.Bottom + 20, View.Bounds.Width + 20, 44 );
+            //PostAnonymouslyLabel.Frame = new CGRect( 20, 6, View.Bounds.Width - 10, 33 );
 
             UISwitchAnonymous.Frame = new CGRect( View.Bounds.Width- 10 - UISwitchAnonymous.Bounds.Width, 6, UISwitchAnonymous.Bounds.Width, UISwitchAnonymous.Bounds.Height );
 
 
-            MakePublicLabel.Frame = new CGRect( 20, PostAnonymouslyLabel.Frame.Bottom + 10, View.Bounds.Width - 10, 33 );
-            UIPublicSwitch.Frame = new CGRect( View.Bounds.Width- 10 - UIPublicSwitch.Bounds.Width, PostAnonymouslyLabel.Frame.Bottom + 10, UIPublicSwitch.Bounds.Width, UIPublicSwitch.Bounds.Height );
+            MakePublicLabel.Frame = new CGRect( 20, 6/*PostAnonymouslyLabel.Frame.Bottom + 10*/, View.Bounds.Width - 10, 33 );
+            UIPublicSwitch.Frame = new CGRect( View.Bounds.Width- 10 - UIPublicSwitch.Bounds.Width, 6/*PostAnonymouslyLabel.Frame.Bottom + 10*/, UIPublicSwitch.Bounds.Width, UIPublicSwitch.Bounds.Height );
 
             SubmitButton.Frame = new CGRect( 20, SwitchBackground.Frame.Bottom + 20, View.Bounds.Width - 40, SubmitButton.Bounds.Height );
 
@@ -551,6 +572,7 @@ namespace iOS
         {
             FirstName.Field.Enabled = enabled;
             LastName.Field.Enabled = enabled;
+            Email.Field.Enabled = enabled;
 
             PrayerRequest.Editable = enabled;
 
@@ -572,6 +594,7 @@ namespace iOS
                 // ensure that tapping anywhere outside a text field will hide the keyboard
                 FirstName.Field.ResignFirstResponder( );
                 LastName.Field.ResignFirstResponder( );
+                Email.Field.ResignFirstResponder( );
                 PrayerRequest.ResignFirstResponder( );
             }
         }

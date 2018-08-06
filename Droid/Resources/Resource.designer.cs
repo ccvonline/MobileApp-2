@@ -1781,8 +1781,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b0085
 			public const int cancelButton = 2131427461;
 			
-			// aapt resource value: 0x7f0b00a7
-			public const int categorySpinner = 2131427495;
+			// aapt resource value: 0x7f0b00a9
+			public const int categorySpinner = 2131427497;
 			
 			// aapt resource value: 0x7f0b00bb
 			public const int cellPhoneText = 2131427515;
@@ -1844,8 +1844,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b00b9
 			public const int emailAddressText = 2131427513;
 			
-			// aapt resource value: 0x7f0b00b8
-			public const int email_background = 2131427512;
+			// aapt resource value: 0x7f0b00a4
+			public const int email_background = 2131427492;
 			
 			// aapt resource value: 0x7f0b0014
 			public const int end = 2131427348;
@@ -1868,8 +1868,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b00a0
 			public const int first_name_background = 2131427488;
 			
-			// aapt resource value: 0x7f0b00b4
-			public const int firstname_background = 2131427508;
+			// aapt resource value: 0x7f0b00b5
+			public const int firstname_background = 2131427509;
 			
 			// aapt resource value: 0x7f0b0086
 			public const int fragment_container = 2131427462;
@@ -1952,14 +1952,14 @@ namespace Droid
 			// aapt resource value: 0x7f0b0071
 			public const int label_version = 2131427441;
 			
-			// aapt resource value: 0x7f0b00b7
-			public const int lastNameText = 2131427511;
+			// aapt resource value: 0x7f0b00b8
+			public const int lastNameText = 2131427512;
 			
 			// aapt resource value: 0x7f0b00a2
 			public const int last_name_background = 2131427490;
 			
-			// aapt resource value: 0x7f0b00b6
-			public const int lastname_background = 2131427510;
+			// aapt resource value: 0x7f0b00b7
+			public const int lastname_background = 2131427511;
 			
 			// aapt resource value: 0x7f0b0009
 			public const int listMode = 2131427337;
@@ -1988,8 +1988,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b00ab
 			public const int makePublic = 2131427499;
 			
-			// aapt resource value: 0x7f0b00ac
-			public const int makePublicSwitch = 2131427500;
+			// aapt resource value: 0x7f0b00ad
+			public const int makePublicSwitch = 2131427501;
 			
 			// aapt resource value: 0x7f0b002a
 			public const int match_parent = 2131427370;
@@ -2048,8 +2048,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b0098
 			public const int news_primary_list = 2131427480;
 			
-			// aapt resource value: 0x7f0b00b5
-			public const int nickNameText = 2131427509;
+			// aapt resource value: 0x7f0b00b6
+			public const int nickNameText = 2131427510;
 			
 			// aapt resource value: 0x7f0b000e
 			public const int none = 2131427342;
@@ -2084,14 +2084,14 @@ namespace Droid
 			// aapt resource value: 0x7f0b00c4
 			public const int personal_background = 2131427524;
 			
-			// aapt resource value: 0x7f0b00a9
-			public const int postAnonymous = 2131427497;
+			// aapt resource value: 0x7f0b00ac
+			public const int postAnonymousSwitch = 2131427500;
 			
-			// aapt resource value: 0x7f0b00aa
-			public const int postAnonymousSwitch = 2131427498;
+			// aapt resource value: 0x7f0b00a6
+			public const int prayerRequest_background = 2131427494;
 			
-			// aapt resource value: 0x7f0b00a4
-			public const int prayerRequest_background = 2131427492;
+			// aapt resource value: 0x7f0b00a5
+			public const int prayer_create_emailText = 2131427493;
 			
 			// aapt resource value: 0x7f0b00a1
 			public const int prayer_create_firstNameText = 2131427489;
@@ -2099,14 +2099,14 @@ namespace Droid
 			// aapt resource value: 0x7f0b00a3
 			public const int prayer_create_lastNameText = 2131427491;
 			
-			// aapt resource value: 0x7f0b00a5
-			public const int prayer_create_requestText = 2131427493;
+			// aapt resource value: 0x7f0b00a7
+			public const int prayer_create_requestText = 2131427495;
 			
-			// aapt resource value: 0x7f0b00ad
-			public const int prayer_create_submitButton = 2131427501;
+			// aapt resource value: 0x7f0b00ae
+			public const int prayer_create_submitButton = 2131427502;
 			
-			// aapt resource value: 0x7f0b00b2
-			public const int prayer_primary_activityIndicator = 2131427506;
+			// aapt resource value: 0x7f0b00b3
+			public const int prayer_primary_activityIndicator = 2131427507;
 			
 			// aapt resource value: 0x7f0b0025
 			public const int production = 2131427365;
@@ -2144,17 +2144,17 @@ namespace Droid
 			// aapt resource value: 0x7f0b009f
 			public const int relative_background = 2131427487;
 			
-			// aapt resource value: 0x7f0b00b3
-			public const int relative_layout = 2131427507;
+			// aapt resource value: 0x7f0b00b4
+			public const int relative_layout = 2131427508;
 			
-			// aapt resource value: 0x7f0b00b0
-			public const int resultSymbol = 2131427504;
+			// aapt resource value: 0x7f0b00b1
+			public const int resultSymbol = 2131427505;
 			
 			// aapt resource value: 0x7f0b007f
 			public const int result_background = 2131427455;
 			
-			// aapt resource value: 0x7f0b00b1
-			public const int retryButton = 2131427505;
+			// aapt resource value: 0x7f0b00b2
+			public const int retryButton = 2131427506;
 			
 			// aapt resource value: 0x7f0b0026
 			public const int sandbox = 2131427366;
@@ -2219,8 +2219,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b0011
 			public const int showTitle = 2131427345;
 			
-			// aapt resource value: 0x7f0b00a6
-			public const int spinner_background = 2131427494;
+			// aapt resource value: 0x7f0b00a8
+			public const int spinner_background = 2131427496;
 			
 			// aapt resource value: 0x7f0b0007
 			public const int split_action_bar = 2131427335;
@@ -2270,8 +2270,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b00c2
 			public const int state_border = 2131427522;
 			
-			// aapt resource value: 0x7f0b00ae
-			public const int status_background = 2131427502;
+			// aapt resource value: 0x7f0b00af
+			public const int status_background = 2131427503;
 			
 			// aapt resource value: 0x7f0b00bd
 			public const int streetAddressText = 2131427517;
@@ -2285,8 +2285,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b0050
 			public const int submit_area = 2131427408;
 			
-			// aapt resource value: 0x7f0b00a8
-			public const int switch_background = 2131427496;
+			// aapt resource value: 0x7f0b00aa
+			public const int switch_background = 2131427498;
 			
 			// aapt resource value: 0x7f0b000b
 			public const int tabMode = 2131427339;
@@ -2294,8 +2294,8 @@ namespace Droid
 			// aapt resource value: 0x7f0b0022
 			public const int terrain = 2131427362;
 			
-			// aapt resource value: 0x7f0b00af
-			public const int text = 2131427503;
+			// aapt resource value: 0x7f0b00b0
+			public const int text = 2131427504;
 			
 			// aapt resource value: 0x7f0b006c
 			public const int text_headline = 2131427436;
