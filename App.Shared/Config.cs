@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2281;
+                public const int Version = 2290;
 
                 /// <summary>
                 /// The full name of your organization

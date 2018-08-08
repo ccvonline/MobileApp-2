@@ -103,7 +103,7 @@ namespace MobileApp
         }
 
         const string EndPoint_PersonData = "api/MobileApp/PersonData?userID=";
-        public delegate void OnPersonDataResult( PersonData personData );
+        public delegate void OnPersonDataResult( PersonData personData, HttpStatusCode statusCode );
         public class PersonData
         {
             public Person Person { get; set; }
@@ -128,11 +128,11 @@ namespace MobileApp
             {
                 if( Util.StatusInSuccessRange( statusCode ) == true )
                 {
-                    onResultHandler( model );
+                    onResultHandler( model, statusCode );
                 }
                 else
                 {
-                    onResultHandler( null );
+                    onResultHandler( null, statusCode );
                 }
             } );
         }

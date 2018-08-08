@@ -99,6 +99,11 @@ namespace iOS
             base.ViewDidAppear(animated);
         }
 
+        public override UIStatusBarStyle PreferredStatusBarStyle()
+        {
+            return Springboard.PreferredStatusBarStyle( );
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();

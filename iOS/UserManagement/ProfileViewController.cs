@@ -95,6 +95,11 @@ namespace iOS
             return Springboard.PrefersStatusBarHidden();
         }
 
+        public override UIStatusBarStyle PreferredStatusBarStyle()
+        {
+            return Springboard.PreferredStatusBarStyle( );
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

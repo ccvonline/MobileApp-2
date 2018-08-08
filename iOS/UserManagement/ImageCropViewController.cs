@@ -124,6 +124,11 @@ namespace iOS
             return Springboard.PrefersStatusBarHidden();
         }
 
+        public override UIStatusBarStyle PreferredStatusBarStyle()
+        {
+            return Springboard.PreferredStatusBarStyle( );
+        }
+
         UIToolbar Toolbar { get; set; }
         UIView ButtonContainer { get; set; }
 

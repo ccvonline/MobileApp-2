@@ -92,6 +92,7 @@ namespace iOS
             ScrollView.Parent = this;
             ScrollView.Layer.AnchorPoint = CGPoint.Empty;
             ScrollView.Bounds = View.Bounds;
+            //ScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( 0x0000FFFF );
             View.AddSubview( ScrollView );
 
             UserNameField = new StyledTextField();
@@ -207,10 +208,6 @@ namespace iOS
                     }
                 };
 
-            // setup the fake header
-            HeaderView = new UIView( );
-            View.AddSubview( HeaderView );
-            HeaderView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
 
             // set the title image for the bar if there's no safe area defined. (A safe area is like, say, the notch for iPhone X)
             nfloat safeAreaTopInset = 0;
@@ -221,8 +218,13 @@ namespace iOS
                 safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
             }
 
+            // setup the fake header if they're not on a device with save zones (iphone x)
             if ( safeAreaTopInset == 0 )
             {
+                HeaderView = new UIView( );
+                View.AddSubview( HeaderView );
+                HeaderView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor );
+
                 imagePath = NSBundle.MainBundle.BundlePath + "/" + PrivatePrimaryNavBarConfig.LogoFile_iOS;
                 LogoView = new UIImageView( new UIImage( imagePath ) );
                 LogoView.SizeToFit( );
@@ -236,8 +238,24 @@ namespace iOS
         {
             base.ViewDidLayoutSubviews( );
 
-            ScrollView.Layer.Position = new CGPoint( 0, HeaderView.Frame.Bottom );
+            // only move down the scrollview if there's a header
+            if( HeaderView != null )
+            {
+                ScrollView.Layer.Position = new CGPoint( 0, HeaderView.Frame.Bottom );
+            }
+
             ScrollView.Bounds = View.Bounds;
+
+            nfloat safeAreaTopInset = 0;
+            nfloat safeAreaBotInset = 0;
+
+            // Make sure they're on iOS 11 before checking for insets. This is only needed for iPhone X anyways, which shipped with iOS 11.
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
+                safeAreaBotInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
+            }
+            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom - (safeAreaBotInset + safeAreaTopInset) );
 
             UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .10f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
             PasswordField.SetFrame( new CGRect( UserNameField.Background.Frame.Left, UserNameField.Background.Frame.Bottom, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
@@ -262,32 +280,38 @@ namespace iOS
 
             CancelButton.Frame = new CGRect( ( View.Frame.Width - CancelButton.Frame.Width ) / 2, FacebookLogin.Frame.Bottom + 20, CancelButton.Frame.Width, CancelButton.Frame.Height );
 
-            HeaderView.Frame = new CGRect( View.Frame.Left, View.Frame.Top, View.Frame.Width, StyledTextField.StyledFieldHeight );
-
-            // setup the header shadow
-            UIBezierPath shadowPath = UIBezierPath.FromRect( HeaderView.Bounds );
-            HeaderView.Layer.MasksToBounds = false;
-            HeaderView.Layer.ShadowColor = UIColor.Black.CGColor;
-            HeaderView.Layer.ShadowOffset = new CoreGraphics.CGSize( 0.0f, .0f );
-            HeaderView.Layer.ShadowOpacity = .23f;
-            HeaderView.Layer.ShadowPath = shadowPath.CGPath;
-
-            // the logo may not exist if we're on a display with a notch
-            if( LogoView != null )
+            nfloat headerHeight = 0;
+            if( HeaderView != null )
             {
-                LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+                HeaderView.Frame = new CGRect( View.Frame.Left, ScrollView.Frame.Top, View.Frame.Width, StyledTextField.StyledFieldHeight );
+
+                // setup the header shadow
+                UIBezierPath shadowPath = UIBezierPath.FromRect( HeaderView.Bounds );
+                HeaderView.Layer.MasksToBounds = false;
+                HeaderView.Layer.ShadowColor = UIColor.Black.CGColor;
+                HeaderView.Layer.ShadowOffset = new CoreGraphics.CGSize( 0.0f, .0f );
+                HeaderView.Layer.ShadowOpacity = .23f;
+                HeaderView.Layer.ShadowPath = shadowPath.CGPath;
+
+                // the logo may not exist if we're on a display with a notch
+                if( LogoView != null )
+                {
+                    LogoView.Layer.Position = new CoreGraphics.CGPoint( (HeaderView.Bounds.Width - LogoView.Bounds.Width) / 2, 0 );
+                }
+
+                headerHeight = HeaderView.Bounds.Height;
             }
 
             FBImageView.Layer.Position = new CoreGraphics.CGPoint( FacebookLogin.Bounds.Width / 2, FacebookLogin.Bounds.Height / 2 );
 
             if ( WebLayout != null )
             {
-                WebLayout.LayoutChanged( View.Frame );
+                WebLayout.LayoutChanged( new CGRect( 0, 0, ScrollView.Frame.Width, ScrollView.Frame.Height ) );
             }
 
             BlockerView.SetBounds( View.Frame.ToRectF( ) );
 
-            ScrollView.ContentSize = new CGSize( View.Bounds.Width, Math.Max( View.Bounds.Height * 1.02f, CancelButton.Frame.Bottom + 20 + HeaderView.Bounds.Height ) );
+            ScrollView.ContentSize = new CGSize( View.Bounds.Width, Math.Max( ScrollView.Bounds.Height * 1.02f, CancelButton.Frame.Bottom + 20 + headerHeight ) );
         }
 
         public override void ViewWillAppear(bool animated)
@@ -358,6 +382,11 @@ namespace iOS
             return Springboard.PrefersStatusBarHidden();
         }
 
+        public override UIStatusBarStyle PreferredStatusBarStyle()
+        {
+            return Springboard.PreferredStatusBarStyle( );
+        }
+
         public void TryRockBind()
         {
             if( ValidateInput( ) )
@@ -401,15 +430,18 @@ namespace iOS
             RockMobileUser.Instance.BindFacebookAccount( delegate(string fromUri, Facebook.FacebookClient session) 
             {
                     // it's ready, so create a webView that will take them to the FBLogin page
-                    WebLayout = new WebLayout( View.Frame );
+                    WebLayout = new WebLayout( ScrollView.Frame );
                     WebLayout.DeleteCacheAndCookies( );
 
-                    View.AddSubview( WebLayout.ContainerView );
+                    ScrollView.AddSubview( WebLayout.ContainerView );
 
                     // set it totally transparent so we can fade it in
-                    WebLayout.ContainerView.BackgroundColor = UIColor.Black;
+                    //WebLayout.ContainerView.BackgroundColor = UIColor.Green;
                     WebLayout.ContainerView.Layer.Opacity = 0.00f;
                     WebLayout.SetCancelButtonColor( ControlStylingConfig.TextField_PlaceholderTextColor );
+                    WebLayout.LayoutChanged( new CGRect( 0, 0, ScrollView.Frame.Width, ScrollView.Frame.Height ) );
+                    
+                    View.SetNeedsLayout( );
 
                     // do a nice fade-in
                     SimpleAnimator_Float floatAnimator = new SimpleAnimator_Float( 0.00f, 1.00f, .25f, 
@@ -441,6 +473,8 @@ namespace iOS
                                         else if ( RockMobileUser.Instance.HasFacebookResponse( url, session ) )
                                         {
                                             // it is, continue the bind process
+                                            BlockerView.Show();
+
                                             WebLayout.ContainerView.RemoveFromSuperview( );
                                             RockMobileUser.Instance.FacebookCredentialResult( url, session, BindComplete );
 

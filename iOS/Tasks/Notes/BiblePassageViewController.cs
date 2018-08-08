@@ -125,6 +125,14 @@ namespace iOS
 				} );
 		}
 
+        public override void ViewDidLayoutSubviews( )
+        {
+            base.ViewDidLayoutSubviews( );
+
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
+            Rock.Mobile.Util.Debug.WriteLine( "Turning idle timer OFF" );
+        }
+
 		public override void ViewWillAppear( bool animated )
 		{
 			base.ViewWillAppear( animated );
@@ -139,11 +147,6 @@ namespace iOS
             {
                 RetrieveBiblePassage( );
             }
-		}
-
-		public override void ViewDidAppear( bool animated )
-		{
-            base.ViewDidAppear( animated );
 		}
 
 		public override void LayoutChanged( )
@@ -197,29 +200,47 @@ namespace iOS
             });
 		}
 
+        public override void ViewDidAppear( bool animated )
+        {
+            base.ViewDidAppear( animated );
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
+        }
+
 
 		public override void OnActivated( )
 		{
 			base.OnActivated( );
+
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
 			LayoutChanged( );
 		}
 
 		public override void WillEnterForeground( )
 		{
 			base.OnActivated( );
+
+            UIApplication.SharedApplication.IdleTimerDisabled = true;
 			LayoutChanged( );
 		}
 
+        public override void ViewWillDisappear( bool animated )
+        {
+            base.ViewWillDisappear( animated );
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
+        }
+
 		public override void AppOnResignActive( )
 		{
-		}
+            base.AppOnResignActive();
 
-		public override void AppDidEnterBackground( )
-		{
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
 		}
 
 		public override void AppWillTerminate( )
 		{
+            base.AppWillTerminate();
+
+            UIApplication.SharedApplication.IdleTimerDisabled = false;
 		}
 	}
 }

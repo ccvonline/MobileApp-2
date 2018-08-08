@@ -12,6 +12,7 @@ using MobileApp.Shared.PrivateConfig;
 using Rock.Mobile.IO;
 using MobileApp;
 using System.Linq;
+using System.Net;
 
 namespace MobileApp
 {
@@ -492,7 +493,7 @@ namespace MobileApp
                 public void GetPersonData( HttpRequest.RequestResult onResult )
                 {
                     MobileAppApi.GetPersonData( UserID,
-                        delegate ( MobileAppApi.PersonData personData )
+                        delegate ( MobileAppApi.PersonData personData, HttpStatusCode statusCode )
                         {
                             if( personData != null )
                             {
@@ -540,18 +541,11 @@ namespace MobileApp
 
                                 // save!
                                 SaveToDevice( );
-
-                                if( onResult != null )
-                                {
-                                    onResult( System.Net.HttpStatusCode.OK, "" );
-                                }
                             }
-                            else
+                            
+                            if( onResult != null )
                             {
-                                if( onResult != null )
-                                {
-                                    onResult( System.Net.HttpStatusCode.BadRequest, "" );
-                                }
+                                onResult( statusCode, "" );
                             }
                         });
                 }
