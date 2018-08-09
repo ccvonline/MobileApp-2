@@ -822,10 +822,11 @@ namespace Droid
                 AlertDialog.Builder builder = new AlertDialog.Builder( Activity );
                 builder.SetTitle( SpringboardStrings.ProfilePicture_SourceTitle );
 
+                //JHM: 8-8-18 - Disabling camera usage, because Android changed v7+ to require FileProvider, and since the app is going to be replaced, there's no point in doing the work.
                 Java.Lang.ICharSequence [] strings = new Java.Lang.ICharSequence[]
                     {
                         new Java.Lang.String( SpringboardStrings.ProfilePicture_SourcePhotoLibrary ),
-                        new Java.Lang.String( SpringboardStrings.ProfilePicture_SourceCamera ),
+                        //new Java.Lang.String( SpringboardStrings.ProfilePicture_SourceCamera ),
                         new Java.Lang.String( GeneralStrings.Cancel )
                     };
 
@@ -850,7 +851,7 @@ namespace Droid
                                     }
 
                                     // Camera
-                                    case 1:
+                                    /*case 1:
                                     {
                                         if( Rock.Mobile.Media.PlatformCamera.Instance.IsAvailable( ) )
                                         {
@@ -896,7 +897,7 @@ namespace Droid
                                             DisplayError( SpringboardStrings.Camera_Error_Title, SpringboardStrings.Camera_Error_Message );
                                         }
                                         break;
-                                    }
+                                    }*/
 
                                     // Cancel
                                     case 2:
