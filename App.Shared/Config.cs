@@ -25,7 +25,7 @@ namespace MobileApp
                 /// </summary>
                 public static bool News_Override_Item = false;
 
-                public const string News_Override_ReferenceURL = "https://rock.ccv.church/page/1630";
+                public const string News_Override_ReferenceURL = "app://nextsteps/connect";
                 public const bool News_Override_IncludeImpersonationToken = true;
                 public const bool News_Override_ReferenceUrlLaunchesBrowser = false;
             }
@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2290;
+                public const int Version = 2300;
 
                 /// <summary>
                 /// The full name of your organization
@@ -69,7 +69,7 @@ namespace MobileApp
                 /// </summary>
                 #if DEBUG
                 //public const string RockBaseUrl = "http://rock.ccv.church/";
-                public const string RockBaseUrl = "http://olddev.ccv.church/";
+                public const string RockBaseUrl = "http://dev.ccv.church/";
                 //public const string RockBaseUrl = "http://10.211.55.4:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";

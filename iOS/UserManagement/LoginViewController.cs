@@ -231,6 +231,7 @@ namespace iOS
                 LogoView.Layer.AnchorPoint = CGPoint.Empty;
 
                 HeaderView.AddSubview( LogoView );
+                HeaderView.SizeToFit( );
             }
         }
 
@@ -238,14 +239,10 @@ namespace iOS
         {
             base.ViewDidLayoutSubviews( );
 
-            // only move down the scrollview if there's a header
-            if( HeaderView != null )
-            {
-                ScrollView.Layer.Position = new CGPoint( 0, HeaderView.Frame.Bottom );
-            }
-
+            nfloat headerHeight = 0;
             ScrollView.Bounds = View.Bounds;
 
+            // see if there's a safe area due to this being a "notch" device
             nfloat safeAreaTopInset = 0;
             nfloat safeAreaBotInset = 0;
 
@@ -255,35 +252,11 @@ namespace iOS
                 safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
                 safeAreaBotInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
             }
-            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom - (safeAreaBotInset + safeAreaTopInset) );
 
-            UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .10f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
-            PasswordField.SetFrame( new CGRect( UserNameField.Background.Frame.Left, UserNameField.Background.Frame.Bottom, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
-
-            // use the facebook image's button width, as it looks good.
-            nfloat buttonWidth = FBImageView.Bounds.Width;
-
-            LoginButton.Frame = new CGRect( ( ScrollView.Bounds.Width - buttonWidth) / 2, PasswordField.Background.Frame.Bottom + 20, buttonWidth, ControlStyling.ButtonHeight );
-            LoginResult.SetFrame( new CGRect( UserNameField.Background.Frame.Left, LoginButton.Frame.Bottom + 20, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
-
-
-
-            AdditionalOptions.Frame = new CGRect( (View.Bounds.Width - AdditionalOptions.Bounds.Width) / 2, LoginResult.Background.Frame.Bottom + 10, AdditionalOptions.Bounds.Width, ControlStyling.ButtonHeight );
-
-
-            // setup the "Register or Facebook"
-            RegisterButton.Frame = new CGRect( (View.Bounds.Width - buttonWidth) / 2, AdditionalOptions.Frame.Bottom + 5, buttonWidth, ControlStyling.ButtonHeight );
-            OrSpacerLabel.Frame = new CGRect( (View.Bounds.Width - OrSpacerLabel.Bounds.Width) / 2, RegisterButton.Frame.Bottom + 5, OrSpacerLabel.Bounds.Width, FBImageView.Bounds.Height );
-            FacebookLogin.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, OrSpacerLabel.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
-
-            //
-
-            CancelButton.Frame = new CGRect( ( View.Frame.Width - CancelButton.Frame.Width ) / 2, FacebookLogin.Frame.Bottom + 20, CancelButton.Frame.Width, CancelButton.Frame.Height );
-
-            nfloat headerHeight = 0;
-            if( HeaderView != null )
+            // if there's no top safe area, there WILL be a header, so adjust for it.
+            if( safeAreaTopInset == 0 )
             {
-                HeaderView.Frame = new CGRect( View.Frame.Left, ScrollView.Frame.Top, View.Frame.Width, StyledTextField.StyledFieldHeight );
+                HeaderView.Frame = new CGRect( View.Frame.Left, 0, View.Frame.Width, StyledTextField.StyledFieldHeight );
 
                 // setup the header shadow
                 UIBezierPath shadowPath = UIBezierPath.FromRect( HeaderView.Bounds );
@@ -300,7 +273,35 @@ namespace iOS
                 }
 
                 headerHeight = HeaderView.Bounds.Height;
+
+                // only move down the scrollview if there's a header
+                ScrollView.Frame = new CGRect( View.Frame.Left, HeaderView.Frame.Bottom, View.Frame.Right, View.Frame.Bottom - headerHeight );
             }
+            else
+            {
+                // otherwise, there's a safe area, so no header. We should therefore adjust the scrollview to be at the top of the window.
+                ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom - (safeAreaBotInset + safeAreaTopInset) );
+            }
+
+
+            UserNameField.SetFrame( new CGRect( -10, View.Frame.Height * .10f, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
+            PasswordField.SetFrame( new CGRect( UserNameField.Background.Frame.Left, UserNameField.Background.Frame.Bottom, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
+
+            // use the facebook image's button width, as it looks good.
+            nfloat buttonWidth = FBImageView.Bounds.Width;
+
+            LoginButton.Frame = new CGRect( ( ScrollView.Bounds.Width - buttonWidth) / 2, PasswordField.Background.Frame.Bottom + 20, buttonWidth, ControlStyling.ButtonHeight );
+            LoginResult.SetFrame( new CGRect( UserNameField.Background.Frame.Left, LoginButton.Frame.Bottom + 20, View.Frame.Width + 20, StyledTextField.StyledFieldHeight ) );
+
+            AdditionalOptions.Frame = new CGRect( (View.Bounds.Width - AdditionalOptions.Bounds.Width) / 2, LoginResult.Background.Frame.Bottom + 10, AdditionalOptions.Bounds.Width, ControlStyling.ButtonHeight );
+
+            // setup the "Register or Facebook"
+            RegisterButton.Frame = new CGRect( (View.Bounds.Width - buttonWidth) / 2, AdditionalOptions.Frame.Bottom + 5, buttonWidth, ControlStyling.ButtonHeight );
+            OrSpacerLabel.Frame = new CGRect( (View.Bounds.Width - OrSpacerLabel.Bounds.Width) / 2, RegisterButton.Frame.Bottom + 5, OrSpacerLabel.Bounds.Width, FBImageView.Bounds.Height );
+            FacebookLogin.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, OrSpacerLabel.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
+            //
+
+            CancelButton.Frame = new CGRect( ( View.Frame.Width - CancelButton.Frame.Width ) / 2, FacebookLogin.Frame.Bottom + 20, CancelButton.Frame.Width, CancelButton.Frame.Height );
 
             FBImageView.Layer.Position = new CoreGraphics.CGPoint( FacebookLogin.Bounds.Width / 2, FacebookLogin.Bounds.Height / 2 );
 
@@ -438,7 +439,7 @@ namespace iOS
                     // set it totally transparent so we can fade it in
                     //WebLayout.ContainerView.BackgroundColor = UIColor.Green;
                     WebLayout.ContainerView.Layer.Opacity = 0.00f;
-                    WebLayout.SetCancelButtonColor( ControlStylingConfig.TextField_PlaceholderTextColor );
+                    //WebLayout.SetCancelButtonColor( ControlStylingConfig.TextField_PlaceholderTextColor );
                     WebLayout.LayoutChanged( new CGRect( 0, 0, ScrollView.Frame.Width, ScrollView.Frame.Height ) );
                     
                     View.SetNeedsLayout( );

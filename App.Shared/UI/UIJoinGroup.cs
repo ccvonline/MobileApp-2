@@ -341,7 +341,7 @@ namespace MobileApp.Shared.UI
                         {
                             ResultView.Show( RegisterStrings.RegisterStatus_Failed, 
                                 PrivateControlStylingConfig.Result_Symbol_Failed, 
-                                string.Format( ConnectStrings.JoinGroup_RegisterFailed, GroupTitle.Text ),
+                                ConnectStrings.JoinGroup_RegisterFailed,
                                 GeneralStrings.Done );
                         }
                     } );

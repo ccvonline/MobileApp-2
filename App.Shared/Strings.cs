@@ -40,7 +40,8 @@ namespace MobileApp.Shared
             };
 
             public const string Network_Status_FailedText = "Oops";
-            public const string Network_Result_FailedText = "There was a problem communicating with the internet. Check your network settings and try again";
+            //public const string Network_Result_FailedText = "There was a problem communicating with the internet. Check your network settings and try again";
+            public const string Network_Result_FailedText = "We're currently experiencing higher than usual traffic. Please try again.";
         }
 
         public class SpringboardStrings
@@ -118,7 +119,7 @@ namespace MobileApp.Shared
             public const string RegisterStatus_Failed = "Small Issue";
 
             public const string RegisterResult_Success = "All set! You're now registered with CCV.";
-            public const string RegisterResult_Failed = "Looks like there was a problem registering. Make sure you're connected to the internet and try again.";
+            public const string RegisterResult_Failed = "We're currently experiencing higher than usual traffic. Please try again.";
             public const string RegisterResult_LoginUsed = "This username is already taken. Please try a different one.";
             public const string RegisterResult_PersonAlreadyExists = "This person has already been registered. If you believe this is you, visit our website to recover your account.";
             public const string RegisterResult_BadLogin = "CreateLoginError";
@@ -127,7 +128,7 @@ namespace MobileApp.Shared
         public class ProfileStrings
         {
             public const string ProfileErrorTitle = "Profile";
-            public const string ProfileErrorDesc = "There was a problem downloading your profile. Check your network settings and try again.";
+            public const string ProfileErrorDesc = "We're currently experiencing higher than usual traffic. Please try again.";
             
             public const string SubmitChangesTitle = "Submit Changes?";
             public const string LogoutTitle = "Log Out?";
@@ -185,7 +186,7 @@ namespace MobileApp.Shared
 
             public const string GroupFinder_GroupsFound = "Groups Nearest Your Location";
             public const string GroupFinder_NoGroupsFound = "No Groups Found Near Your Location";
-            public const string GroupFinder_NetworkError = "Network problem. Please try again.";
+            public const string GroupFinder_NetworkError = "We're currently experiencing higher than usual traffic. Please try again.";
 
             public const string GroupFinder_SearchButtonLabel = "Touch to Search an Address";
 
@@ -218,25 +219,25 @@ namespace MobileApp.Shared
             public const string JoinGroup_JoinButtonLabel = "Join Group";
 
             public const string GroupInfo_Failed = "Small Issue";
-            public const string GroupInfoResult_Failed = "Looks like there was a problem viewing this group. Make sure you're connected to the internet and try again.";
+            public const string GroupInfoResult_Failed = "We're currently experiencing higher than usual traffic. Please try again.";
             public const string GroupInfo_AboutLeader = "About This Leader";
             public const string GroupInfo_AboutGroup = "About This Group";
             public const string GroupInfo_AboutChildcare = "About Childcare";
             public const string GroupInfo_NoInfoProvided = "Contact leader for details.";
 
             public const string JoinGroup_RegisterSuccess = "You're registered with {0}. Expect to be contacted in the next few days.";
-            public const string JoinGroup_RegisterFailed = "There was a problem registering for {0}. Check your network settings and try again.";
+            public const string JoinGroup_RegisterFailed = "We're currently experiencing higher than usual traffic. Please try again.";
         }
 
         public class MessagesStrings
         {
             public const string Series_Error_Title = "Messages";
-            public const string Series_Error_Message = "There was a problem downloading message series. Check your network settings and try again.";
+            public const string Series_Error_Message = "We're currently experiencing higher than usual traffic. Please try again.";
 
             public const string Error_Title = "Messages";
-            public const string Error_Message = "There was a problem downloading the message. Check your network settings and try again.";
+            public const string Error_Message = "We're currently experiencing higher than usual traffic. Please try again.";
 
-            public const string Error_Watch_Playback = "There was a problem playing this content. Check your network settings and try again.";
+            public const string Error_Watch_Playback = "We're currently experiencing higher than usual traffic. Please try again.";
 
             public const string Watch_Share_Subject = "Invitation: Watch this Video from " + Config.GeneralConfig.OrganizationShortName;
 
@@ -279,8 +280,8 @@ namespace MobileApp.Shared
         {
             public const string Error_Title = "Prayer";
 
-            public const string Error_Retrieve_Message = "There was a problem getting prayer requests. Check your network settings and try again.";
-            public const string Error_Submit_Message = "There was a problem submitting your prayer request. Check your network settings and try again.";
+            public const string Error_Retrieve_Message = "We're currently experiencing higher than usual traffic. Please try again.";
+            public const string Error_Submit_Message = "We're currently experiencing higher than usual traffic. Please try again.";
 
             public const string ViewPrayer_StatusText_Retrieving = "Getting Prayer Requests";
             public const string ViewPrayer_StatusText_Failed = "Oops";
@@ -305,7 +306,7 @@ namespace MobileApp.Shared
             public const string PostPrayer_Status_SuccessText = "Submitted";
             public const string PostPrayer_Status_FailedText = "Oops";
             public const string PostPrayer_Result_SuccessText = "Prayer posted successfully. As soon as it is approved you'll see it in the Prayer Requests.";
-            public const string PostPrayer_Result_FailedText = "Looks like there was a problem submitting your request. Tap below to try again, or go back to make changes.";
+            public const string PostPrayer_Result_FailedText = "We're currently experiencing higher than usual traffic. Please try again.";
         }
     }
 }
