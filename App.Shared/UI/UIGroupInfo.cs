@@ -221,15 +221,15 @@ namespace MobileApp.Shared.UI
                             {
                                 IsDownloading = false;
 
-                                // setup the family image
-                                FamilyImage.Image = familyPhoto;
-
-                                float imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
-                                FamilyImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
-
-                                // if we had a valid image stream, dispose of it now
                                 if( familyPhoto != null )
                                 {
+                                    // setup the family image
+                                    FamilyImage.Image = familyPhoto;
+
+                                    float imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Leader_ImageSize );
+                                    FamilyImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
+
+                                    // if we had a valid image stream, dispose of it now
                                     FamilyImageValid = true;
                                     familyPhoto.Dispose( );
                                 }
@@ -239,19 +239,19 @@ namespace MobileApp.Shared.UI
                                 }
 
                                 // setup the group image
-                                GroupImage.Image = groupPhoto;
-
-                                imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Group_ImageSize );
-                                GroupImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
-
-                                // if we had a valid image stream, dispose of it now
                                 if( groupPhoto != null )
                                 {
+                                    GroupImage.Image = groupPhoto;
+
+                                    float imageSize = Rock.Mobile.Graphics.Util.UnitToPx( PrivateConnectConfig.GroupInfo_Group_ImageSize );
+                                    GroupImage.Bounds = new RectangleF( 0, 0, imageSize, imageSize );
+
                                     GroupImageValid = true;
                                     groupPhoto.Dispose( );
                                 }
                                 else
                                 {
+                                    // if we had a valid image stream, dispose of it now
                                     GroupImageValid = false;
                                 }
 
