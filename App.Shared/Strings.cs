@@ -121,7 +121,8 @@ namespace MobileApp.Shared
             public const string RegisterResult_Success = "All set! You're now registered with CCV.";
             public const string RegisterResult_Failed = "We're currently experiencing higher than usual traffic. Please try again.";
             public const string RegisterResult_LoginUsed = "This username is already taken. Please try a different one.";
-            public const string RegisterResult_PersonAlreadyExists = "This person has already been registered. If you believe this is you, visit our website to recover your account.";
+            public const string RegisterResult_PersonAlreadyExistsNoLogin = "This person already exists, but has no Username attached. Please visit our website and click 'Create Account' to setup a Username and Password.";
+            public const string RegisterResult_PersonAlreadyExistsWithLogin = "This person already exists and has a Username. Please visit our website and click 'Recover Account' to retrieve your Username and Password.";
             public const string RegisterResult_BadLogin = "CreateLoginError";
         }
 

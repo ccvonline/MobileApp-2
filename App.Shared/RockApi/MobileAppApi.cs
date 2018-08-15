@@ -279,15 +279,20 @@ namespace MobileApp
                     {
                         resultHandler(statusCode, statusDescription);
                     }
-                    // Person already exists in Rock (so they should use the website)
-                    else if (HttpStatusCode.Conflict == statusCode)
-                    {
-                        resultHandler(statusCode, RegisterStrings.RegisterResult_PersonAlreadyExists );
-                    }
                     // Login already exists
                     else if (HttpStatusCode.Unauthorized == statusCode)
                     {
                         resultHandler(statusCode, RegisterStrings.RegisterResult_LoginUsed );
+                    }
+                    // Person already exists in Rock (with no login)
+                    else if (HttpStatusCode.Conflict == statusCode)
+                    {
+                        resultHandler(statusCode, RegisterStrings.RegisterResult_PersonAlreadyExistsNoLogin );
+                    }
+                    // Person already exists in Rock (WITH a login)
+                    else if (HttpStatusCode.NotAcceptable == statusCode)
+                    {
+                        resultHandler(statusCode, RegisterStrings.RegisterResult_PersonAlreadyExistsWithLogin );
                     }
                     // Random failure
                     else

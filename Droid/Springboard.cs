@@ -748,6 +748,11 @@ namespace Droid
             {
                 // remove the modal fragment
                 FragmentTransaction ft = FragmentManager.BeginTransaction( );
+
+                if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O) {
+                    ft.SetReorderingAllowed( false  );
+                } 
+
                 ft.SetTransition( FragmentTransit.FragmentFade );
                 ft.Remove( VisibleModalFragment );
                 ft.Commit( );
