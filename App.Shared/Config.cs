@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2300;
+                public const int Version = 2310;
 
                 /// <summary>
                 /// The full name of your organization
@@ -69,7 +69,7 @@ namespace MobileApp
                 /// </summary>
                 #if DEBUG
                 //public const string RockBaseUrl = "http://rock.ccv.church/";
-                public const string RockBaseUrl = "http://dev.ccv.church/";
+                public const string RockBaseUrl = "http://jereddev.ccv.church/";
                 //public const string RockBaseUrl = "http://10.211.55.4:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";
@@ -133,12 +133,10 @@ namespace MobileApp
                         string.Empty,
 
                         // Reference URL
-                        "http://rock.ccv.church/apps",
+                        "https://ccv.church/mobile-apps",
 
                         // Image Names
-                        "upgrade_news_main",
-
-                        "upgrade_news_header",
+                        "upgrade_news_main"
                     };
             }
 

@@ -217,7 +217,7 @@ namespace iOS
                 //nfloat imageHeight = cell.ContentView.Layer.Contents.Height;
 
                 //nfloat aspectRatio = (float) (imageHeight / imageWidth);
-                nfloat aspectRatio = PrivateNewsConfig.NewsBannerAspectRatio;
+                nfloat aspectRatio = PrivateNewsConfig.NewsMainAspectRatio;
                 cell.Bounds = new CGRect( 0, 0, tableView.Bounds.Width, tableView.Bounds.Width * aspectRatio );
                 cell.PrivateOverlay.Frame = new CGRect( 0, 0, tableView.Bounds.Width, 30 );
 
@@ -480,18 +480,18 @@ namespace iOS
                 if ( SpringboardViewController.SupportsLandscapeWide( ) && i == 0 )
                 {
                     NewsEntry newsEntry = News[ i ];
-                    if ( TryLoadCachedImage( newsEntry, newsEntry.News.HeaderImageName ) == false )
+                    if ( TryLoadCachedImage( newsEntry, newsEntry.News.ImageName ) == false )
                     {
                         // it failed, so download it and try again.
                         string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
-                        FileCache.Instance.DownloadFileToCache( newsEntry.News.HeaderImageURL + widthParam, newsEntry.News.HeaderImageName, null,
+                        FileCache.Instance.DownloadFileToCache( newsEntry.News.ImageURL + widthParam, newsEntry.News.ImageName, null,
                             delegate
                             {
                                 Rock.Mobile.Threading.Util.PerformOnUIThread( delegate
                                     {
                                         if ( IsVisible == true )
                                         {
-                                            TryLoadCachedImage( newsEntry, newsEntry.News.HeaderImageName );
+                                            TryLoadCachedImage( newsEntry, newsEntry.News.ImageName );
                                         }
                                     } );
                             } );

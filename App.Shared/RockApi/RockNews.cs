@@ -20,9 +20,6 @@ namespace MobileApp
                 public string ImageURL { get; set; }
                 public string ImageName { get; set; }
 
-                public string HeaderImageURL { get; set; }
-                public string HeaderImageName { get; set; }
-
                 public bool ReferenceUrlLaunchesBrowser { get; set; }
 
                 public bool IncludeImpersonationToken { get; set; }
@@ -46,9 +43,7 @@ namespace MobileApp
                                  bool referenceUrlLaunchesBrowser, 
                                  bool includeImpersonationToken, 
                                  string imageUrl, 
-                                 string imageName, 
-                                 string headerImageUrl, 
-                                 string headerImageName, 
+                                 string imageName,  
                                  List<Guid> campusGuids )
                 {
                     Title = title;
@@ -63,9 +58,6 @@ namespace MobileApp
 
                     ImageURL = imageUrl;
                     ImageName = imageName;
-
-                    HeaderImageURL = headerImageUrl;
-                    HeaderImageName = headerImageName;
 
                     CampusGuids = campusGuids;
                 }
@@ -85,9 +77,6 @@ namespace MobileApp
 
                     ImageURL = rhs.ImageURL;
                     ImageName = rhs.ImageName;
-
-                    HeaderImageURL = rhs.HeaderImageURL;
-                    HeaderImageName = rhs.HeaderImageName;
 
                     CampusGuids = rhs.CampusGuids;
 

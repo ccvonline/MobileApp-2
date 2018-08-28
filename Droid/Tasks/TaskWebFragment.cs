@@ -183,7 +183,9 @@ namespace Droid
 
             void ProcessUrl( )
             {
-                if ( string.IsNullOrEmpty( Url ) == false )
+                // make sure the page is still active. If they browsed away fast enough, 
+                // this will fire on the UI thread AFTER the fragment is destroyed.
+                if ( IsActive == true && string.IsNullOrEmpty( Url ) == false )
                 {
                     // do they want the impersonation token?
                     if ( IncludeImpersonationToken )
@@ -192,20 +194,25 @@ namespace Droid
                         MobileAppApi.TryGetImpersonationToken( 
                             delegate( string impersonationToken )
                             {
-                                // append the mobile platform
-                                string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, PrivateGeneralConfig.MobilePlatform );
-
-                                // also include their campus. this is personal data as well.
-                                fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
-                                // if we got it, append it and load
-                                if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                                // one more active check, because we fetched the Impersonation Token which
+                                // suspended our thread and allowed the OS to potentially tear down this fragment.
+                                if( IsActive == true )
                                 {
-                                    fullUrl += "&" + impersonationToken;
-                                }
+                                    // append the mobile platform
+                                    string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, PrivateGeneralConfig.MobilePlatform );
 
-                                Console.WriteLine( "Browsing to {0}", fullUrl );
-                                WebLayout.LoadUrl( fullUrl, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                                    // also include their campus. this is personal data as well.
+                                    fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
+                                    // if we got it, append it and load
+                                    if ( string.IsNullOrEmpty( impersonationToken ) == false )
+                                    {
+                                        fullUrl += "&" + impersonationToken;
+                                    }
+
+                                    Console.WriteLine( "Browsing to {0}", fullUrl );
+                                    WebLayout.LoadUrl( fullUrl, PrivateGeneralConfig.ExternalUrlToken, PageLoaded );
+                                }
                             });
                     }
                     else

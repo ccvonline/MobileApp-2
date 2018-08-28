@@ -75,6 +75,7 @@
     <Reference Include="Facebook">
       <HintPath>..\packages\facebook-sdk-6.2.2\lib\android\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -211,9 +212,6 @@
     <AndroidAsset Include="..\Assets\starting_point_thumb.png">
       <Link>Assets\starting_point_thumb.png</Link>
     </AndroidAsset>
-    <AndroidAsset Include="..\Assets\placeholder_news_details.png">
-      <Link>Assets\placeholder_news_details.png</Link>
-    </AndroidAsset>
     <AndroidAsset Include="..\Assets\placeholder_news_main.png">
       <Link>Assets\placeholder_news_main.png</Link>
     </AndroidAsset>
@@ -264,9 +262,6 @@
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\share_thumb.png">
       <Link>Assets\share_thumb.png</Link>
-    </AndroidAsset>
-    <AndroidAsset Include="..\Assets\upgrade_news_header%403x.png">
-      <Link>Assets\upgrade_news_header.png</Link>
     </AndroidAsset>
     <AndroidAsset Include="..\Assets\upgrade_news_main%403x.png">
       <Link>Assets\upgrade_news_main.png</Link>

@@ -89,6 +89,11 @@ namespace Droid
                                 }
                             }
 
+                            if ( RockLaunchData.Instance.Data.PECampaign != null )
+                            {
+                                News.Insert( 0, RockLaunchData.Instance.Data.PECampaign );
+                            }
+
                             // if they need to upgrade, push that news item to the top
                             if( RockLaunchData.Instance.Data.NeedsUpgrade )
                             {
@@ -192,8 +197,8 @@ namespace Droid
                                                          MainPage.News[ buttonId ].News.ReferenceURL,
                                                          MainPage.News[ buttonId ].News.ReferenceUrlLaunchesBrowser,
                                                          MainPage.News[ buttonId ].News.IncludeImpersonationToken,
-                                                         MainPage.News[ buttonId ].News.HeaderImageName,
-                                                         MainPage.News[ buttonId ].News.HeaderImageURL );
+                                                         MainPage.News[ buttonId ].News.ImageName,
+                                                         MainPage.News[ buttonId ].News.ImageURL );
 
                                 PresentFragment( DetailsPage, true );
                             }

@@ -26,11 +26,29 @@ namespace MobileApp
             public List<KeyValuePair<string, int>> PrayerCategories { get; set; }
             public int MobileAppVersion { get; set; }
         }
-
         public static void Get_LaunchData( HttpRequest.RequestResult<LaunchData> resultHandler )
         {
             // pull down launch data for the mobile app
             RockApi.Get_CustomEndPoint<LaunchData>( RockApi.BaseUrl + EndPoint_LaunchData, resultHandler );
+        }
+
+        const string EndPoint_DefaultCampaign = "api/PersonalizationEngine/DefaultCampaign/?";
+        const string EndPoint_RelevantCampaign = "api/PersonalizationEngine/RelevantCampaign/?";
+        public static void GetPECampaign( int? personId, HttpRequest.RequestResult<JObject> resultHandler )
+        {
+            // if they're logged in, get the relevant campaign to them
+            string endPoint = string.Empty;
+            if( personId.HasValue )
+            {
+                endPoint = EndPoint_RelevantCampaign + "personId=" + personId.Value + "&";
+            }
+            else
+            {
+                // otherwise get a default one
+                endPoint = EndPoint_DefaultCampaign;
+            }
+
+            RockApi.Get_CustomEndPoint<JObject>( RockApi.BaseUrl + endPoint + "campaignTypeList=MobileApp", resultHandler );
         }
 
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )

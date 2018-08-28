@@ -99,11 +99,11 @@ namespace Droid
                     ( (LinearLayout)view ).AddView( ImageBanner, 0 );
 
                     int width = NavbarFragment.GetCurrentContainerDisplayWidth( );
-                    int height = (int)System.Math.Ceiling( width * PrivateNewsConfig.NewsBannerAspectRatio );
+                    int height = (int)System.Math.Ceiling( width * PrivateNewsConfig.NewsMainAspectRatio );
                     ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( width, height );
 
                     TextView title = view.FindViewById<TextView>( Resource.Id.news_details_title );
-                    title.Text = Title.ToUpper( );
+                    title.Text = Title?.ToUpper( );
                     title.SetSingleLine( );
                     title.Ellipsize = Android.Text.TextUtils.TruncateAt.End;
                     title.SetMaxLines( 1 );

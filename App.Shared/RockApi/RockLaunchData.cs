@@ -9,6 +9,7 @@ using MobileApp.Shared.Config;
 using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.Util.Strings;
+using Newtonsoft.Json.Linq;
 
 namespace MobileApp
 {
@@ -33,7 +34,7 @@ namespace MobileApp
                     public LaunchData( )
                     {
                         //ALWAYS INCREMENT THIS IF UPDATING THE MODEL
-                        ClientModelVersion = 2;
+                        ClientModelVersion = 3;
                         //
 
                         Campuses = new List<Rock.Client.Campus>( );
@@ -67,9 +68,6 @@ namespace MobileApp
                             "",
                             NewsConfig.UpgradeNews[ 3 ],
 
-                            "",
-                            NewsConfig.UpgradeNews[ 4 ],
-
                             new List<System.Guid>( ) );
                     }
 
@@ -81,21 +79,17 @@ namespace MobileApp
                         // cache the compiled in main and header images so the News system can get them transparently
                         #if __IOS__
                         string mainImageName;
-                        string headerImageName;
                         if( UIKit.UIScreen.MainScreen.Scale > 1 )
                         {
                             mainImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.ImageName, UIKit.UIScreen.MainScreen.Scale );
-                            headerImageName = string.Format( "{0}/{1}@{2}x.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.HeaderImageName, UIKit.UIScreen.MainScreen.Scale );
                         }
                         else
                         {
                             mainImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.ImageName );
-                            headerImageName = string.Format( "{0}/{1}.png", Foundation.NSBundle.MainBundle.BundlePath, UpgradeNewsItem.HeaderImageName );
                         }
 
                         #elif __ANDROID__
                         string mainImageName = UpgradeNewsItem.ImageName + ".png";
-                        string headerImageName = UpgradeNewsItem.HeaderImageName + ".png";
                         #else
                         string mainImageName = string.Empty;
                         string headerImageName = string.Empty;
@@ -107,15 +101,6 @@ namespace MobileApp
                             MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( mainImageName );
                             stream.Position = 0;
                             FileCache.Instance.SaveFile( stream, UpgradeNewsItem.ImageName, FileCache.CacheFileNoExpiration );
-                            stream.Dispose( );
-                        }
-
-                        // cache the header image if it's not already there
-                        if( FileCache.Instance.FileExists( UpgradeNewsItem.HeaderImageName ) == false )
-                        {
-                            MemoryStream stream = Rock.Mobile.IO.AssetConvert.AssetToStream( headerImageName );
-                            stream.Position = 0;
-                            FileCache.Instance.SaveFile( stream, UpgradeNewsItem.HeaderImageName, FileCache.CacheFileNoExpiration );
                             stream.Dispose( );
                         }
                     }
@@ -188,6 +173,11 @@ namespace MobileApp
                     /// </summary>
                     /// <value>The news.</value>
                     public List<RockNews> News { get; set; }
+
+                    /// <summary>
+                    /// The campaign to display to a user based on their persona
+                    /// </summary>
+                    public RockNews PECampaign { get; set; }
 
                     /// <summary>
                     /// The core object that stores info about the sermon notes.
@@ -267,7 +257,7 @@ namespace MobileApp
                 /// If for some reason one of these fails, they will be called independantly by the appropriate systems
                 /// (So if NoteDB fails, GetNoteDB will be called by Messages when the user taps on it)
                 /// </summary>
-                public void GetLaunchData( HttpRequest.RequestResult launchDataResult )
+                public void GetLaunchData( int? personId, HttpRequest.RequestResult launchDataResult )
                 {
                     Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData" );
 
@@ -293,15 +283,19 @@ namespace MobileApp
                                 // now get the news.
                                 GetNews( delegate 
                                 {
-                                    // chain any other required launch data actions here.
-                                    Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData DONE" );
-
-                                    // notify the caller now that we're done
-                                    if( launchDataResult != null )
+                                    // now get the campaign for the user
+                                    GetPECampaign( personId, delegate
                                     {
-                                        // send OK, because whether we failed or not, the caller doessn't need to care.
-                                        launchDataResult( System.Net.HttpStatusCode.OK, "" );
-                                    }
+                                        // chain any other required launch data actions here.
+                                        Rock.Mobile.Util.Debug.WriteLine( "Get LaunchData DONE" );
+
+                                        // notify the caller now that we're done
+                                        if( launchDataResult != null )
+                                        {
+                                            // send OK, because whether we failed or not, the caller doessn't need to care.
+                                            launchDataResult( System.Net.HttpStatusCode.OK, "" );
+                                        }
+                                    });
                                 });
                             }
                             else
@@ -313,8 +307,85 @@ namespace MobileApp
                                     launchDataResult( System.Net.HttpStatusCode.BadGateway, "" );
                                 }
                             }
-                        });
-                    
+                        });   
+                }
+
+                void GetPECampaign( int? personId, HttpRequest.RequestResult resultCallback )
+                {
+                    MobileAppApi.GetPECampaign( personId,
+                           delegate( System.Net.HttpStatusCode statusCode, string statusDescription, JObject campaignBlob )
+                           {
+                                // convert the blob to a news item
+                                if( resultCallback != null )
+                                {
+                                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                                    {
+                                       JObject contentBlob = JObject.Parse( campaignBlob["ContentJson"].ToString( ) );
+                                        
+                                       // check first for mobile specific versions of the content 
+                                       // (note the use of the ? conditional member access)
+                                       string title = contentBlob[ "mobile-app-title" ]?.ToString( );
+                                       if ( String.IsNullOrWhiteSpace( title ) == true )
+                                       {
+                                           title = contentBlob["title"]?.ToString( );
+                                       }
+
+                                       string body = contentBlob[ "mobile-app-body" ]?.ToString( );
+                                       if( String.IsNullOrWhiteSpace( body ) == true )
+                                       {
+                                           body = contentBlob[ "body" ]?.ToString( );
+                                       }
+
+                                       
+                                       string linkUrl = contentBlob[ "mobile-app-link" ]?.ToString( );
+                                       if ( String.IsNullOrWhiteSpace( linkUrl ) == true )
+                                       {
+                                           linkUrl = contentBlob[ "link" ]?.ToString( );
+                                       }
+
+                                       // make sure the detail url has a valid scheme / domain, and isn't just a relative url
+                                       if( linkUrl?.StartsWith( "/", StringComparison.CurrentCulture ) == true )
+                                       {
+                                           linkUrl = GeneralConfig.RockBaseUrl + linkUrl;
+                                       }
+
+                                       // convert the campaign into a news item blob we can render
+                                       string imgUrl = contentBlob[ "mobile-app-img"]?.ToString( );
+                                       string imageUrl = GeneralConfig.RockBaseUrl + imgUrl;
+
+                                       // strip the query param for the imageUrl, and use the version argument to control the versioning of the file.
+                                       // This way, we can cache the image forever, and only update the image when it's actually changed on the server.
+                                       // Example: https://rock.ccv.church/images/share.jpg?v=0 will save to the device as "share0.bin"
+                                       // If v=0 becomes v=1, that will then turn into a new filename on the device and cause it to update.
+                                       Uri imageUri = new Uri( imageUrl );                                    
+                                       var queryParams = System.Web.HttpUtility.ParseQueryString( imageUri.Query );
+                                       string imageVersion = queryParams.Get( "v" );
+
+                                       bool detailUrlLaunchesBrowser = false;
+                                       bool includeImpersonationToken = true;
+                                       bool mobileAppSkipDetailsPage = false;
+
+                                       RockNews newsItem = new RockNews( title,
+                                                                         body,
+                                                                         linkUrl,
+                                                                         mobileAppSkipDetailsPage,
+                                                                         detailUrlLaunchesBrowser,
+                                                                         includeImpersonationToken,
+                                                                         imageUrl,
+                                                                         title?.ToLower( ) + imageVersion + ".bin",
+                                                                         new List<Guid>( ) ); //support all campuses
+
+
+                                       Data.PECampaign = newsItem;
+                                    }
+                                    else
+                                    {
+                                       Rock.Mobile.Util.Debug.WriteLine( string.Format( "Getting PE campaigned failed: {0}", statusCode ) );
+                                    }
+
+                                   resultCallback( statusCode, statusDescription );
+                               }
+                           });
                 }
 
                 void GetNews( HttpRequest.RequestResult resultCallback )
@@ -353,10 +424,6 @@ namespace MobileApp
                                                 string featuredGuid = item.AttributeValues[ currKey ].Value;
                                                 string imageUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + featuredGuid;
 
-                                                currKey = "PromotionImage";
-                                                string bannerGuid = item.AttributeValues[ currKey ].Value;
-                                                string bannerUrl = GeneralConfig.RockBaseUrl + "GetImage.ashx?Guid=" + bannerGuid;
-
                                                 currKey = "DetailsURL";
                                                 string detailUrl = item.AttributeValues[ currKey ].Value;
 
@@ -393,9 +460,7 @@ namespace MobileApp
                                                                                   detailUrlLaunchesBrowser,
                                                                                   includeImpersonationToken,
                                                                                   imageUrl, 
-                                                                                  featuredGuid.AsLegalFilename( ) + ".png",
-                                                                                  bannerUrl, 
-                                                                                  bannerGuid.AsLegalFilename( ) + ".png",
+                                                                                  featuredGuid.AsLegalFilename( ) + ".bin",
                                                                                   campusGuids );
 
 

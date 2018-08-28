@@ -70,14 +70,14 @@ namespace MobileApp
                                                     {
                                                         // failure or not, server syncing is finished, so let's go ahead and 
                                                         // get launch data.
-                                                        RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
+                                                        RockLaunchData.Instance.GetLaunchData( RockMobileUser.Instance.Person.Id, LaunchDataReceived );
                                                     });
                                             });
                                     }
                                     else
                                     {
                                         Rock.Mobile.Util.Debug.WriteLine( "Not Logged In. Skipping sync." );
-                                        RockLaunchData.Instance.GetLaunchData( LaunchDataReceived );
+                                        RockLaunchData.Instance.GetLaunchData( null, LaunchDataReceived );
                                     }
                                 }
                                 else

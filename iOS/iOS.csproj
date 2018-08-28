@@ -125,6 +125,7 @@
     <Reference Include="Facebook">
       <HintPath>..\packages\facebook-sdk-6.2.2\lib\ios-unified\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Assets\spot_mask.png">
@@ -144,9 +145,6 @@
     </BundleResource>
     <BundleResource Include="..\Assets\starting_point_thumb.png">
       <Link>Resources\starting_point_thumb.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\placeholder_news_details.png">
-      <Link>Resources\placeholder_news_details.png</Link>
     </BundleResource>
     <BundleResource Include="..\Assets\placeholder_news_main.png">
       <Link>Resources\placeholder_news_main.png</Link>
@@ -261,15 +259,6 @@
     </BundleResource>
     <BundleResource Include="..\Assets\upgrade_news_main%403x.png">
       <Link>Resources\upgrade_news_main%403x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\upgrade_news_header.png">
-      <Link>Resources\upgrade_news_header.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\upgrade_news_header%402x.png">
-      <Link>Resources\upgrade_news_header%402x.png</Link>
-    </BundleResource>
-    <BundleResource Include="..\Assets\upgrade_news_header%403x.png">
-      <Link>Resources\upgrade_news_header%403x.png</Link>
     </BundleResource>
     <BundleResource Include="..\Assets\Fonts\Bevan-Regular.ttf">
       <Link>Resources\Fonts\Bevan-Regular.ttf</Link>

@@ -71,25 +71,24 @@ namespace iOS
             View.AddSubview( ImageBanner );
 
             // do we have the real image?
-            if( TryLoadHeaderImage( NewsItem.HeaderImageName ) == false )
+            if( TryLoadHeaderImage( NewsItem.ImageName ) == false )
             {
                 // no, so use a placeholder and request the actual image
                 ImageBanner.Image = new UIImage( NSBundle.MainBundle.BundlePath + "/" + PrivateGeneralConfig.NewsDetailsPlaceholder );
 
                 // resize the image to fit the width of the device
-                //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
-                nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
+                nfloat imageAspect = PrivateNewsConfig.NewsMainAspectRatio;
                 ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
                 // request!
                 string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
-                FileCache.Instance.DownloadFileToCache( NewsItem.HeaderImageURL + widthParam, NewsItem.HeaderImageName, null,
+                FileCache.Instance.DownloadFileToCache( NewsItem.ImageURL + widthParam, NewsItem.ImageName, null,
                     delegate
                     {
                         Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {
                             if( IsVisible == true )
                             {
-                                TryLoadHeaderImage( NewsItem.HeaderImageName );
+                                TryLoadHeaderImage( NewsItem.ImageName );
                             }
                         });
                     } );
@@ -152,22 +151,21 @@ namespace iOS
                 MemoryStream imageStream = null;
                 try
                 {
-                    imageStream = (MemoryStream)FileCache.Instance.LoadFile( NewsItem.HeaderImageName );
+                    imageStream = (MemoryStream)FileCache.Instance.LoadFile( NewsItem.ImageName );
 
                     NSData imageData = NSData.FromStream( imageStream );
                     ImageBanner.Image = new UIImage( imageData );
 
                     // resize the image to fit the width of the device
-                    //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
-                    nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
+                    nfloat imageAspect = PrivateNewsConfig.NewsMainAspectRatio;
                     ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
                     success = true;
                 }
                 catch( Exception )
                 {
-                    FileCache.Instance.RemoveFile( NewsItem.HeaderImageName );
-                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing.", NewsItem.HeaderImageName ) );
+                    FileCache.Instance.RemoveFile( NewsItem.ImageName );
+                    Rock.Mobile.Util.Debug.WriteLine( string.Format( "Image {0} is corrupt. Removing.", NewsItem.ImageName ) );
                 }
                 imageStream.Dispose( );
             }
@@ -202,8 +200,7 @@ namespace iOS
             float textVertPadding = 50;
 
             // resize the image to fit the width of the device
-            //nfloat imageAspect = ImageBanner.Image.Size.Height / ImageBanner.Image.Size.Width;
-            nfloat imageAspect = PrivateNewsConfig.NewsBannerAspectRatio;
+            nfloat imageAspect = PrivateNewsConfig.NewsMainAspectRatio;
             ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
 
             // adjust the news title to have padding on the left and right.

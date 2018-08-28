@@ -68,7 +68,7 @@ namespace MobileApp.Shared
             /// These are the names of placeholder images. They should not need to change.
             /// </summary>
             public const string NewsMainPlaceholder = "placeholder_news_main.png";
-            public const string NewsDetailsPlaceholder = "placeholder_news_details.png";
+            public const string NewsDetailsPlaceholder = "placeholder_news_main.png";
 
             /// <summary>
             /// Actions sent via our super basic "event" system.
@@ -337,12 +337,6 @@ namespace MobileApp.Shared
             /// <summary>
             /// The height of news image banners
             /// </summary>
-            public const float NewsBannerWidth = 1242;
-            public const float NewsBannerHeight = 699;
-
-            public const float NewsBannerAspectRatio = NewsBannerHeight / NewsBannerWidth;
-
-
             public const float NewsMainWidth = 1242;
             public const float NewsMainHeight = 801;
 
