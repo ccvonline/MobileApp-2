@@ -82,7 +82,9 @@ namespace iOS
 
                 // request!
                 string widthParam = string.Format( "&width={0}", View.Bounds.Width * UIScreen.MainScreen.Scale );
-                FileCache.Instance.DownloadFileToCache( NewsItem.ImageURL + widthParam, NewsItem.ImageName, null,
+                string requestUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( NewsItem.ImageURL, widthParam );
+
+                FileCache.Instance.DownloadFileToCache( requestUrl, NewsItem.ImageName, null,
                     delegate
                     {
                         Rock.Mobile.Threading.Util.PerformOnUIThread( delegate {

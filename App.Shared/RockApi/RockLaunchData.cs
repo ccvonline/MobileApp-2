@@ -349,9 +349,12 @@ namespace MobileApp
                                            linkUrl = GeneralConfig.RockBaseUrl + linkUrl;
                                        }
 
-                                       // convert the campaign into a news item blob we can render
+                                       // get the url for the image
                                        string imgUrl = contentBlob[ "mobile-app-img"]?.ToString( );
                                        string imageUrl = GeneralConfig.RockBaseUrl + imgUrl;
+
+
+                                       // For the image, we'll cache it using the campaign's title as the filename, plus a version number.
 
                                        // strip the query param for the imageUrl, and use the version argument to control the versioning of the file.
                                        // This way, we can cache the image forever, and only update the image when it's actually changed on the server.
@@ -359,7 +362,11 @@ namespace MobileApp
                                        // If v=0 becomes v=1, that will then turn into a new filename on the device and cause it to update.
                                        Uri imageUri = new Uri( imageUrl );                                    
                                        var queryParams = System.Web.HttpUtility.ParseQueryString( imageUri.Query );
-                                       string imageVersion = queryParams.Get( "v" );
+                                       string imageVersion = queryParams.Get( "v" ) ?? "0";
+
+                                       // build the image filename
+                                       string imageCacheFileName = (title ?? "campaign-img") + imageVersion + ".bin";
+                                       imageCacheFileName = imageCacheFileName.Replace( " ", "" ).ToLower( );
 
                                        bool detailUrlLaunchesBrowser = false;
                                        bool includeImpersonationToken = true;
@@ -372,7 +379,7 @@ namespace MobileApp
                                                                          detailUrlLaunchesBrowser,
                                                                          includeImpersonationToken,
                                                                          imageUrl,
-                                                                         title?.ToLower( ) + imageVersion + ".bin",
+                                                                         imageCacheFileName,
                                                                          new List<Guid>( ) ); //support all campuses
 
 

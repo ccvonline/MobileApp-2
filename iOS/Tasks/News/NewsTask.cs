@@ -73,7 +73,13 @@ namespace iOS
                             }
                         }
                     }
-                    
+
+                    // if a campaign is downloaded, display it to them.
+                    if( RockLaunchData.Instance.Data.PECampaign != null )
+                    {
+                        News.Insert( 0, RockLaunchData.Instance.Data.PECampaign );
+                    }
+
                     // if they need to upgrade, push that news item to the top
                     if( RockLaunchData.Instance.Data.NeedsUpgrade )
                     {

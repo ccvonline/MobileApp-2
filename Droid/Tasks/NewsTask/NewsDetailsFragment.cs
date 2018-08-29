@@ -158,7 +158,9 @@ namespace Droid
                     {
                         // use the placeholder and request the image download
                         string widthParam = string.Format( "&width={0}", NavbarFragment.GetContainerDisplayWidth_Landscape( ) );
-                        FileCache.Instance.DownloadFileToCache( HeaderImageURL + widthParam, HeaderImageName, null,
+                        string requestUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( HeaderImageURL, widthParam );
+
+                        FileCache.Instance.DownloadFileToCache( requestUrl, HeaderImageName, null,
                             delegate
                             {
                                 TryLoadBanner( HeaderImageName );
