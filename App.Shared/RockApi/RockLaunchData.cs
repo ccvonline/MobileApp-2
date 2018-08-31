@@ -313,15 +313,17 @@ namespace MobileApp
                 void GetPECampaign( int? personId, HttpRequest.RequestResult resultCallback )
                 {
                     MobileAppApi.GetPECampaign( personId,
-                           delegate( System.Net.HttpStatusCode statusCode, string statusDescription, JObject campaignBlob )
+                           delegate( System.Net.HttpStatusCode statusCode, string statusDescription, JArray responseBlob )
                            {
-                                // convert the blob to a news item
-                                if( resultCallback != null )
-                                {
-                                    if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                                    {
+                               if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
+                               {
+                                   //attempt to parse the response into a single item. If this fails, we'll stop and return nothing. 
+                                   try
+                                   {
+
+                                       JObject campaignBlob = responseBlob.First?.ToObject<JObject>( );
                                        JObject contentBlob = JObject.Parse( campaignBlob["ContentJson"].ToString( ) );
-                                        
+
                                        // check first for mobile specific versions of the content 
                                        // (note the use of the ? conditional member access)
                                        string title = contentBlob[ "mobile-app-title" ]?.ToString( );
@@ -385,12 +387,17 @@ namespace MobileApp
 
                                        Data.PECampaign = newsItem;
                                     }
-                                    else
+                                    catch
                                     {
-                                       Rock.Mobile.Util.Debug.WriteLine( string.Format( "Getting PE campaigned failed: {0}", statusCode ) );
-                                    }
-
-                                   resultCallback( statusCode, statusDescription );
+                                       //something about the response was bad. Rather than crash the entire app, let's just fail here.
+                                       Rock.Mobile.Util.Debug.WriteLine( statusDescription = string.Format( "Getting PE campaigned failed: {0}", statusCode ) );
+                                       statusCode = System.Net.HttpStatusCode.InternalServerError;
+                                   }
+                                   
+                                   if ( resultCallback != null )
+                                   {
+                                      resultCallback( statusCode, statusDescription );
+                                   }
                                }
                            });
                 }

@@ -69,7 +69,7 @@ namespace MobileApp
                 /// </summary>
                 #if DEBUG
                 //public const string RockBaseUrl = "http://rock.ccv.church/";
-                public const string RockBaseUrl = "http://jereddev.ccv.church/";
+                public const string RockBaseUrl = "https://jereddev.ccv.church/";
                 //public const string RockBaseUrl = "http://10.211.55.4:50345/";
                 #else
                 public const string RockBaseUrl = "http://rock.ccv.church/";

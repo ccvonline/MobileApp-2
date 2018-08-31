@@ -32,23 +32,17 @@ namespace MobileApp
             RockApi.Get_CustomEndPoint<LaunchData>( RockApi.BaseUrl + EndPoint_LaunchData, resultHandler );
         }
 
-        const string EndPoint_DefaultCampaign = "api/PersonalizationEngine/DefaultCampaign/?";
-        const string EndPoint_RelevantCampaign = "api/PersonalizationEngine/RelevantCampaign/?";
-        public static void GetPECampaign( int? personId, HttpRequest.RequestResult<JObject> resultHandler )
+        const string EndPoint_Campaign = "api/PersonalizationEngine/Campaign/?";
+        public static void GetPECampaign( int? personId, HttpRequest.RequestResult<JArray> resultHandler )
         {
-            // if they're logged in, get the relevant campaign to them
-            string endPoint = string.Empty;
+            // if they're logged in, add their personId
+            string endPoint = EndPoint_Campaign;
             if( personId.HasValue )
             {
-                endPoint = EndPoint_RelevantCampaign + "personId=" + personId.Value + "&";
-            }
-            else
-            {
-                // otherwise get a default one
-                endPoint = EndPoint_DefaultCampaign;
+                endPoint += "personId=" + personId.Value + "&";
             }
 
-            RockApi.Get_CustomEndPoint<JObject>( RockApi.BaseUrl + endPoint + "campaignTypeList=MobileApp", resultHandler );
+            RockApi.Get_CustomEndPoint<JArray>( RockApi.BaseUrl + endPoint + "campaignTypeList=MobileApp", resultHandler );
         }
 
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )
