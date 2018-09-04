@@ -393,13 +393,13 @@ namespace MobileApp
                                        Rock.Mobile.Util.Debug.WriteLine( statusDescription = string.Format( "Getting PE campaigned failed: {0}", statusCode ) );
                                        statusCode = System.Net.HttpStatusCode.InternalServerError;
                                    }
-                                   
-                                   if ( resultCallback != null )
-                                   {
-                                      resultCallback( statusCode, statusDescription );
-                                   }
                                }
-                           });
+
+                               if( resultCallback != null )
+                               {
+                                   resultCallback( statusCode, statusDescription );
+                               }
+                           } );
                 }
 
                 void GetNews( HttpRequest.RequestResult resultCallback )
