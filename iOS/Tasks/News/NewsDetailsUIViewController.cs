@@ -27,6 +27,7 @@ namespace iOS
         UIImageView ImageBanner { get; set; }
         UIButton LearnMoreButton { get; set; }
 
+        UIButton DetailsBannerButton { get; set; }
 
 		public NewsDetailsUIViewController( ) : base ( )
 		{
@@ -96,6 +97,16 @@ namespace iOS
                     } );
             }
 
+            DetailsBannerButton = new UIButton( );
+            View.AddSubview( DetailsBannerButton );
+
+            DetailsBannerButton.Frame = ImageBanner.Frame;
+
+            DetailsBannerButton.TouchUpInside += (object sender, EventArgs e) => 
+                {
+                    Handle_LearnMore( );
+                };
+
             // if we're in developer mode, add the start / end times for this promotion
             if ( MobileApp.Shared.Network.RockLaunchData.Instance.Data.DeveloperModeEnabled == true )
             {
@@ -108,40 +119,49 @@ namespace iOS
             View.AddSubview( LearnMoreButton );
             LearnMoreButton.TouchUpInside += (object sender, EventArgs e) => 
                 {
-                    // if this is an app-url, then let the task (which forwards it to the springboard) handle it.
-                    if( SpringboardViewController.IsAppURL( NewsItem.ReferenceURL ) == true )
-                    {
-                        Task.HandleAppURL( NewsItem.ReferenceURL );
-                    }
-                    else
-                    {
-                        // copy the news item's relevant members. That way, if we're running in debug,
-                        // and they want to override the news item, we can do that below.
-                        string newsUrl = NewsItem.ReferenceURL;
-                        bool newsImpersonation = NewsItem.IncludeImpersonationToken;
-                        bool newsExternalBrowser = NewsItem.ReferenceUrlLaunchesBrowser;
-
-                        // If we're running a debug build, see if we should override the news
-                        #if DEBUG
-                        if( DebugConfig.News_Override_Item == true )
-                        {
-                            newsUrl = DebugConfig.News_Override_ReferenceURL;
-                            newsImpersonation = DebugConfig.News_Override_IncludeImpersonationToken;
-                            newsExternalBrowser = DebugConfig.News_Override_ReferenceUrlLaunchesBrowser;
-                        }
-                        #endif
-
-                        TaskWebViewController.HandleUrl( newsExternalBrowser, newsImpersonation, newsUrl, Task, this, false, false, false );
-                    }
+                    Handle_LearnMore( );
                 };
 
             // if there's no URL associated with this news item, hide the learn more button.
-            if ( string.IsNullOrEmpty( NewsItem.ReferenceURL ) == true )
+            if ( string.IsNullOrWhiteSpace( NewsItem.ReferenceURL ) == true )
             {
                 LearnMoreButton.Hidden = true;
             }
             ControlStyling.StyleButton( LearnMoreButton, NewsStrings.LearnMore, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
             LearnMoreButton.SizeToFit( );
+        }
+
+        protected void Handle_LearnMore( )
+        {
+            // don't process the link if there's no ReferenceURL
+            if( string.IsNullOrWhiteSpace( NewsItem.ReferenceURL ) == false )
+            {
+                // if this is an app-url, then let the task (which forwards it to the springboard) handle it.
+                if( SpringboardViewController.IsAppURL( NewsItem.ReferenceURL ) == true )
+                {
+                    Task.HandleAppURL( NewsItem.ReferenceURL );
+                }
+                else
+                {
+                    // copy the news item's relevant members. That way, if we're running in debug,
+                    // and they want to override the news item, we can do that below.
+                    string newsUrl = NewsItem.ReferenceURL;
+                    bool newsImpersonation = NewsItem.IncludeImpersonationToken;
+                    bool newsExternalBrowser = NewsItem.ReferenceUrlLaunchesBrowser;
+
+                    // If we're running a debug build, see if we should override the news
+    #if DEBUG
+                    if( DebugConfig.News_Override_Item == true )
+                    {
+                        newsUrl = DebugConfig.News_Override_ReferenceURL;
+                        newsImpersonation = DebugConfig.News_Override_IncludeImpersonationToken;
+                        newsExternalBrowser = DebugConfig.News_Override_ReferenceUrlLaunchesBrowser;
+                    }
+    #endif
+
+                    TaskWebViewController.HandleUrl( newsExternalBrowser, newsImpersonation, newsUrl, Task, this, false, false, false );
+                }
+            }
         }
 
         public bool TryLoadHeaderImage( string imageName )
@@ -204,6 +224,9 @@ namespace iOS
             // resize the image to fit the width of the device
             nfloat imageAspect = PrivateNewsConfig.NewsMainAspectRatio;
             ImageBanner.Frame = new CGRect( 0, 0, View.Bounds.Width, View.Bounds.Width * imageAspect );
+
+            // fit the banner button around the image
+            DetailsBannerButton.Frame = ImageBanner.Frame;
 
             // adjust the news title to have padding on the left and right.
             NewsTitle.Frame = new CGRect( textHorzPadding, ImageBanner.Frame.Bottom + ((textVertPadding - NewsTitle.Frame.Height) / 2), View.Bounds.Width - (textHorzPadding * 2), NewsTitle.Bounds.Height );
