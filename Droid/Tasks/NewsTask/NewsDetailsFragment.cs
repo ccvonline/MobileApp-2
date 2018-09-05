@@ -95,12 +95,25 @@ namespace Droid
                     view.SetBackgroundColor( Rock.Mobile.UI.Util.GetUIColor( ControlStylingConfig.BackgroundColor ) );
 
                     // set the banner
+                    RelativeLayout headerImageLayout = view.FindViewById<RelativeLayout>( Resource.Id.news_details_header_image_layout );
+
                     ImageBanner = new Rock.Mobile.PlatformSpecific.Android.Graphics.AspectScaledImageView( Activity );
-                    ( (LinearLayout)view ).AddView( ImageBanner, 0 );
+                    headerImageLayout.AddView( ImageBanner, 0 );
 
                     int width = NavbarFragment.GetCurrentContainerDisplayWidth( );
                     int height = (int)System.Math.Ceiling( width * PrivateNewsConfig.NewsMainAspectRatio );
-                    ImageBanner.LayoutParameters = new LinearLayout.LayoutParams( width, height );
+                    ImageBanner.LayoutParameters = new RelativeLayout.LayoutParams( width, height );
+
+                    // set the button
+                    Button headerButton = view.FindViewById<Button>( Resource.Id.news_details_header_image_button );
+                    headerButton.LayoutParameters = new RelativeLayout.LayoutParams( width, height );
+                    headerButton.Click += (object sender, EventArgs e) => 
+                        { 
+                            if ( string.IsNullOrWhiteSpace( ReferenceURL ) == false )
+                            {
+                                ParentTask.OnClick( this, headerButton.Id );
+                            }
+                        };
 
                     TextView title = view.FindViewById<TextView>( Resource.Id.news_details_title );
                     title.Text = Title?.ToUpper( );
@@ -135,7 +148,7 @@ namespace Droid
                     ControlStyling.StyleButton( launchUrlButton, NewsStrings.LearnMore, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
 
                     // hide the button if there's no reference URL.
-                    if ( string.IsNullOrEmpty( ReferenceURL ) == true )
+                    if ( string.IsNullOrWhiteSpace( ReferenceURL ) == true )
                     {
                         launchUrlButton.Visibility = ViewStates.Gone;
                     }

@@ -206,7 +206,7 @@ namespace Droid
                         else if ( source == DetailsPage )
                         {
                             // otherwise visit the reference URL
-                            if ( buttonId == Resource.Id.news_details_launch_url )
+                            if ( buttonId == Resource.Id.news_details_launch_url || buttonId == Resource.Id.news_details_header_image_button )
                             {
                                 // if this is an app url, handle it internally
                                 if( Springboard.IsAppURL( DetailsPage.ReferenceURL ) == true )
