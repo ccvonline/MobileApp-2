@@ -10,6 +10,7 @@ using Rock.Mobile.IO;
 using MobileApp;
 using Rock.Mobile.Util.Strings;
 using Newtonsoft.Json.Linq;
+using MobileApp.Shared.PrivateConfig;
 
 namespace MobileApp
 {
@@ -321,29 +322,17 @@ namespace MobileApp
                                    try
                                    {
 
-                                       JObject campaignBlob = responseBlob.First?.ToObject<JObject>( );
-                                       JObject contentBlob = JObject.Parse( campaignBlob["ContentJson"].ToString( ) );
+                                       JObject jBlob = responseBlob.First?.ToObject<JObject>( );
+                                       JObject contentBlob = JObject.Parse( jBlob[ "ContentJson"].ToString( ) );
+                                       JObject campaignBlob = JObject.Parse( contentBlob[ PrivateGeneralConfig.PersonalizationEngine_MobileAppNewsFeed_Key ].ToString( ) );
 
                                        // check first for mobile specific versions of the content 
                                        // (note the use of the ? conditional member access)
-                                       string title = contentBlob[ "mobile-app-title" ]?.ToString( );
-                                       if ( String.IsNullOrWhiteSpace( title ) == true )
-                                       {
-                                           title = contentBlob["title"]?.ToString( );
-                                       }
+                                       string title = campaignBlob[ "title" ]?.ToString( );
 
-                                       string body = contentBlob[ "mobile-app-body" ]?.ToString( );
-                                       if( String.IsNullOrWhiteSpace( body ) == true )
-                                       {
-                                           body = contentBlob[ "body" ]?.ToString( );
-                                       }
+                                       string body = campaignBlob[ "body" ]?.ToString( );
 
-                                       
-                                       string linkUrl = contentBlob[ "mobile-app-link" ]?.ToString( );
-                                       if ( String.IsNullOrWhiteSpace( linkUrl ) == true )
-                                       {
-                                           linkUrl = contentBlob[ "link" ]?.ToString( );
-                                       }
+                                       string linkUrl = campaignBlob[ "link" ]?.ToString( );
 
                                        // make sure the detail url has a valid scheme / domain, and isn't just a relative url
                                        if( linkUrl?.StartsWith( "/", StringComparison.CurrentCulture ) == true )
@@ -352,7 +341,7 @@ namespace MobileApp
                                        }
 
                                        // get the url for the image
-                                       string imgUrl = contentBlob[ "mobile-app-img"]?.ToString( );
+                                       string imgUrl = campaignBlob[ "img"]?.ToString( );
                                        string imageUrl = GeneralConfig.RockBaseUrl + imgUrl;
 
 

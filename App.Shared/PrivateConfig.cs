@@ -116,6 +116,8 @@ namespace MobileApp.Shared
 
             public const string App_URL_Execute_CampusChanged = "campusChanged";
             public const string App_URL_Execute_ReloadNews = "reloadNews";
+
+            public const string PersonalizationEngine_MobileAppNewsFeed_Key = "MobileAppNewsFeed";
         }
 
         public class PrivateSpringboardConfig

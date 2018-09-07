@@ -42,7 +42,7 @@ namespace MobileApp
                 endPoint += "personId=" + personId.Value + "&";
             }
 
-            RockApi.Get_CustomEndPoint<JArray>( RockApi.BaseUrl + endPoint + "campaignTypeList=MobileApp", resultHandler );
+            RockApi.Get_CustomEndPoint<JArray>( RockApi.BaseUrl + endPoint + "campaignTypeList=" + PrivateGeneralConfig.PersonalizationEngine_MobileAppNewsFeed_Key, resultHandler );
         }
 
         public static void GetNews( HttpRequest.RequestResult< List<Rock.Client.ContentChannelItem> > resultHandler )
