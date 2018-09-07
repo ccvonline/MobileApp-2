@@ -25,7 +25,7 @@ namespace MobileApp
                 /// </summary>
                 public static bool News_Override_Item = false;
 
-                public const string News_Override_ReferenceURL = "app://nextsteps/connect";
+                public const string News_Override_ReferenceURL = "app://goto/nextsteps/connect";
                 public const bool News_Override_IncludeImpersonationToken = true;
                 public const bool News_Override_ReferenceUrlLaunchesBrowser = false;
             }
@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2310;
+                public const int Version = 2320;
 
                 /// <summary>
                 /// The full name of your organization

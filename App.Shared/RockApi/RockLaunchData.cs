@@ -322,17 +322,24 @@ namespace MobileApp
                                    try
                                    {
 
-                                       JObject jBlob = responseBlob.First?.ToObject<JObject>( );
-                                       JObject contentBlob = JObject.Parse( jBlob[ "ContentJson"].ToString( ) );
-                                       JObject campaignBlob = JObject.Parse( contentBlob[ PrivateGeneralConfig.PersonalizationEngine_MobileAppNewsFeed_Key ].ToString( ) );
+                                       JObject campaignBlob = responseBlob.First?.ToObject<JObject>( );
+                                       JObject contentBlob = JObject.Parse( campaignBlob[ "ContentJson"].ToString( ) );
+                                       JObject mobileAppNewsFeedBlob = JObject.Parse( contentBlob[ PrivateGeneralConfig.PersonalizationEngine_MobileAppNewsFeed_Key ].ToString( ) );
 
-                                       // check first for mobile specific versions of the content 
-                                       // (note the use of the ? conditional member access)
-                                       string title = campaignBlob[ "title" ]?.ToString( );
+                                       // get the NAME of the campaign (different than the title displayed) - Note that we get this from CAMPAIGN blob.
+                                       string campaignName = campaignBlob[ "Name" ]?.ToString( );
 
-                                       string body = campaignBlob[ "body" ]?.ToString( );
+                                       // try getting values for each piece of the campaign
+                                       string title = mobileAppNewsFeedBlob[ "title" ]?.ToString( );
+                                       string body = mobileAppNewsFeedBlob[ "body" ]?.ToString( );
+                                       string linkUrl = mobileAppNewsFeedBlob[ "link" ]?.ToString( );
+                                       string skipDetailsPageStr = mobileAppNewsFeedBlob[ "skip-details-page" ]?.ToString( );
+                                       string imgUrl = mobileAppNewsFeedBlob[ "img" ]?.ToString( );
 
-                                       string linkUrl = campaignBlob[ "link" ]?.ToString( );
+
+                                       // now parse data as needed
+                                       bool skipDetailsPage = false;
+                                       bool.TryParse( skipDetailsPageStr, out skipDetailsPage );
 
                                        // make sure the detail url has a valid scheme / domain, and isn't just a relative url
                                        if( linkUrl?.StartsWith( "/", StringComparison.CurrentCulture ) == true )
@@ -340,10 +347,8 @@ namespace MobileApp
                                            linkUrl = GeneralConfig.RockBaseUrl + linkUrl;
                                        }
 
-                                       // get the url for the image
-                                       string imgUrl = campaignBlob[ "img"]?.ToString( );
+                                       // get the url for the image       
                                        string imageUrl = GeneralConfig.RockBaseUrl + imgUrl;
-
 
                                        // For the image, we'll cache it using the campaign's title as the filename, plus a version number.
 
@@ -356,17 +361,17 @@ namespace MobileApp
                                        string imageVersion = queryParams.Get( "v" ) ?? "0";
 
                                        // build the image filename
-                                       string imageCacheFileName = (title ?? "campaign-img") + imageVersion + ".bin";
+                                       string imageCacheFileName = ( campaignName ?? "campaign-img") + imageVersion + ".bin";
                                        imageCacheFileName = imageCacheFileName.Replace( " ", "" ).ToLower( );
 
                                        bool detailUrlLaunchesBrowser = false;
                                        bool includeImpersonationToken = true;
-                                       bool mobileAppSkipDetailsPage = false;
+                                       
 
                                        RockNews newsItem = new RockNews( title,
                                                                          body,
                                                                          linkUrl,
-                                                                         mobileAppSkipDetailsPage,
+                                                                         skipDetailsPage,
                                                                          detailUrlLaunchesBrowser,
                                                                          includeImpersonationToken,
                                                                          imageUrl,
