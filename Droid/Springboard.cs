@@ -299,14 +299,6 @@ namespace Droid
                 });
         }
 
-        void PerformTaskAction( string command, string[] arguments )
-        {
-            foreach( SpringboardElement element in Elements )
-            {
-                element.Task.PerformAction( command, arguments );
-            }
-        }
-
         public void RegisterNewUser( )
         {
             // we want to specially allow the registration to appear while Login is showing,
@@ -527,6 +519,11 @@ namespace Droid
             return false;
         }
 
+        string Command_Keyword( )
+        {
+            return PrivateGeneralConfig.App_URL_Task_Springboard;
+        }
+
         public void HandleAppURL( string url )
         {
             if( IsAppURL( url ) )
@@ -542,11 +539,17 @@ namespace Droid
 
                     string[] arguments = url.Split( '/' );
 
-                    foreach( SpringboardElement element in Elements )
+                    // if this is NOT the springboard, activate the correct element
+                    if( Command_Keyword( ) != arguments[ 0 ] )
                     {
-                        if( element.Task.Command_Keyword( ) == arguments[ 0 ] )
+                        foreach( SpringboardElement element in Elements )
                         {
-                            ActivateElement( element );
+                            // as soon as we find a match, stop. We don't want to activate multiple elements
+                            if( element.Task.Command_Keyword( ) == arguments[ 0 ] )
+                            {
+                                ActivateElement( element );
+                                break;
+                            }
                         }
                     }
 
@@ -564,6 +567,37 @@ namespace Droid
 
                     // and handle it
                     PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, arguments );
+                }
+            }
+        }
+
+        void PerformTaskAction( string command, string[ ] arguments )
+        {
+            // let the springboard have a shot
+            PerformAction( command, arguments );
+
+            foreach( SpringboardElement element in Elements )
+            {
+                element.Task.PerformAction( command, arguments );
+            }
+        }
+
+        void PerformAction( string command, string[ ] arguments )
+        {
+            switch( command )
+            {
+                // is this a goto command?
+                case PrivateGeneralConfig.App_URL_Commands_Goto:
+                {
+                    // make sure the argument is for us
+                    if( arguments[ 0 ] == Command_Keyword( ) && arguments.Length > 1 )
+                    {
+                        if( PrivateGeneralConfig.App_URL_Page_Login == arguments[ 1 ] )
+                        {
+                            StartModalFragment( LoginFragment, true );
+                        }
+                    }
+                    break;
                 }
             }
         }

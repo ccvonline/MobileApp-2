@@ -96,10 +96,16 @@ namespace MobileApp.Shared
                 };
 
 
+            //Examples for launching a section of the UI
+            //app://goto/nextsteps/connect
+            //app://goto/messages/read
+            //app://goto/springboard/login
+
             public const string App_URL_Commands_Goto = "goto";
             public const string App_URL_Commands_Execute = "execute";
 
             // define the core task string keywords
+            public const string App_URL_Task_Springboard = "springboard";
             public const string App_URL_Task_News = "news";
             public const string App_URL_Task_Notes = "messages";
             public const string App_URL_Task_Give = "give";
@@ -110,6 +116,7 @@ namespace MobileApp.Shared
             // define the core page string keywords (the tasks use these to know which page within the task)
             // Ex: news/read would be the news details page. 
             // ex: messages/read would be the ReadNotes page.
+            public const string App_URL_Page_Login = "login";
             public const string App_URL_Page_GroupFinder = "connect";
             public const string App_URL_Page_Read = "read";
             public const string App_URL_Page_Toolbox = "coach";
