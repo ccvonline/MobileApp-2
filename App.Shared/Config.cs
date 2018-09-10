@@ -25,7 +25,7 @@ namespace MobileApp
                 /// </summary>
                 public static bool News_Override_Item = false;
 
-                public const string News_Override_ReferenceURL = "app://goto/nextsteps/connect";
+                public const string News_Override_ReferenceURL = "app://goto/springboard/login";
                 public const bool News_Override_IncludeImpersonationToken = true;
                 public const bool News_Override_ReferenceUrlLaunchesBrowser = false;
             }

@@ -360,7 +360,7 @@ namespace Droid
 
             // validate there's text in all required fields
             uint userNameTargetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrWhiteSpace( UserNameText.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( UserNameText.Text ) == true || UserNameText.Text.NeedsTrim( ) )
             {
                 userNameTargetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;

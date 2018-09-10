@@ -340,7 +340,7 @@ namespace iOS
 
             // validate there's text in all required fields
             uint targetColor = ControlStylingConfig.BG_Layer_Color;
-            if ( string.IsNullOrWhiteSpace( UserNameText.Field.Text ) == true )
+            if ( string.IsNullOrWhiteSpace( UserNameText.Field.Text ) == true || UserNameText.Field.Text.NeedsTrim( ) )
             {
                 targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
@@ -351,7 +351,7 @@ namespace iOS
             // for the password, if EITHER field is blank, that's not ok, OR if the passwords don't match, also not ok.
             targetColor = ControlStylingConfig.BG_Layer_Color;
             if ( (string.IsNullOrWhiteSpace( PasswordText.Field.Text ) == true || string.IsNullOrWhiteSpace( ConfirmPasswordText.Field.Text ) == true) ||
-                ( PasswordText.Field.Text != ConfirmPasswordText.Field.Text ) )
+                 ( PasswordText.Field.Text != ConfirmPasswordText.Field.Text ) )
             {
                 targetColor = ControlStylingConfig.BadInput_BG_Layer_Color;
                 result = false;
