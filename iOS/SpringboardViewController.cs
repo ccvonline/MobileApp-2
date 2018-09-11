@@ -819,45 +819,52 @@ namespace iOS
         {
             if( IsAppURL( url ) )
             {
-                // skip past the scheme
-                url = url.Substring( PrivateGeneralConfig.App_URL_Scheme.Length );
-
-                // GOTO COMMAND
-                if( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Goto, StringComparison.InvariantCultureIgnoreCase ) == true )
+                try
                 {
-                    // strip the command off
-                    url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Goto.Length + 1 );
+                    // skip past the scheme
+                    url = url.Substring( PrivateGeneralConfig.App_URL_Scheme.Length );
 
-                    string[] arguments = url.Split( '/' );
-
-                    // if this is NOT the springboard, activate the correct element
-                    if ( Command_Keyword( ) != arguments[ 0] )
+                    // GOTO COMMAND
+                    if( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Goto, StringComparison.InvariantCultureIgnoreCase ) == true )
                     {
-                        foreach( SpringboardElement element in Elements )
+                        // strip the command off
+                        url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Goto.Length + 1 );
+
+                        string[] arguments = url.Split( '/' );
+
+                        // if this is NOT the springboard, activate the correct element
+                        if ( Command_Keyword( ) != arguments[ 0] )
                         {
-                            // as soon as we find a match, stop. We don't want to activate multiple elements
-                            if( element.Task.Command_Keyword( ) == arguments[ 0 ] )
+                            foreach( SpringboardElement element in Elements )
                             {
-                                ActivateElement( element, true );
-                                break;
+                                // as soon as we find a match, stop. We don't want to activate multiple elements
+                                if( element.Task.Command_Keyword( ) == arguments[ 0 ] )
+                                {
+                                    ActivateElement( element, true );
+                                    break;
+                                }
                             }
                         }
+
+                        // provide the full argument URL so that only the task that cares about this will use it.
+                        // (it's possible two tasks might have a "read" argument, so by sending "messages/read" all other tasks will know to ignore it) 
+                        PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Goto, arguments );
                     }
+                    // EXECUTE COMMAND
+                    else if ( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Execute, StringComparison.InvariantCultureIgnoreCase ) )
+                    {
+                        // strip the command off
+                        url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Execute.Length + 1 );
 
-                    // provide the full argument URL so that only the task that cares about this will use it.
-                    // (it's possible two tasks might have a "read" argument, so by sending "messages/read" all other tasks will know to ignore it) 
-                    PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Goto, arguments );
+                        string[] arguments = url.Split( '/' );
+
+                        // and handle it
+                        PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, arguments );
+                    }
                 }
-                // EXECUTE COMMAND
-                else if ( url.StartsWith( PrivateGeneralConfig.App_URL_Commands_Execute, StringComparison.InvariantCultureIgnoreCase ) )
+                catch
                 {
-                    // strip the command off
-                    url = url.Substring( PrivateGeneralConfig.App_URL_Commands_Execute.Length + 1 );
-
-                    string[] arguments = url.Split( '/' );
-
-                    // and handle it
-                    PerformTaskAction( PrivateGeneralConfig.App_URL_Commands_Execute, arguments );
+                    // nothing necessary if this fails. we just want to guard against malformed URLs
                 }
             }
         }
