@@ -116,6 +116,7 @@ namespace MobileApp.Shared
             // define the core page string keywords (the tasks use these to know which page within the task)
             // Ex: news/read would be the news details page. 
             // ex: messages/read would be the ReadNotes page.
+            public const string App_URL_Page_Messages_Root = "messages_root";
             public const string App_URL_Page_Login = "login";
             public const string App_URL_Page_GroupFinder = "connect";
             public const string App_URL_Page_Read = "read";

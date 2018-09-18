@@ -44,7 +44,7 @@ namespace MobileApp.Shared
                     {
                         // first, is this series private? If so it's going away,
                         // so there's no point in processing its messages
-                        if ( singleSeries.Private == true )
+                        if ( singleSeries.SeriesPrivate == true )
                         {
                             privateSeries.Add( singleSeries );
                         }
@@ -293,8 +293,19 @@ namespace MobileApp.Shared
                 /// If true, this will only be displayed if the user has 'refresh notes' enabled.
                 /// This allows notes to be worked on without the public seeing them.
                 /// </summary>
-                [SerializeAs(Name = "Private")]
-                public bool Private { get; protected set; }
+                bool _Private;
+                public bool Private
+                {
+                    get
+                    {
+                        return _Private;
+                    }
+
+                    protected set
+                    {
+                        _Private = value;
+                    }
+                }
             }
 
             public Series( )
@@ -475,8 +486,20 @@ namespace MobileApp.Shared
             /// If true, this will only be displayed if the user has 'refresh notes' enabled.
             /// This allows notes to be worked on without the public seeing them.
             /// </summary>
-            [SerializeAs(Name = "Private")]
-            public bool Private { get; protected set; }
+            //[SerializeAs(Name = "Private")]
+            bool _SeriesPrivate;
+            public bool SeriesPrivate 
+            { 
+                get 
+                {
+                    return _SeriesPrivate;
+                }
+
+                protected set
+                {
+                    _SeriesPrivate = value;
+                }
+            }
 
             /// <summary>
             /// List of all the messages within this series

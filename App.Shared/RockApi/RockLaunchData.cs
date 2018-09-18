@@ -544,7 +544,7 @@ namespace MobileApp
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Got NoteDB info." );
                                 Data.NoteDB = noteModel;
-                                Data.NoteDB.ProcessPrivateNotes( Instance.Data.DeveloperModeEnabled );
+                                Data.NoteDB.ProcessPrivateNotes( false );
                                 Data.NoteDB.MakeURLsAbsolute( );
                                 Data.NoteDBTimeStamp = DateTime.Now;
 
