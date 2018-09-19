@@ -101,6 +101,9 @@ namespace MobileApp.Shared
             //app://goto/messages/read
             //app://goto/springboard/login
 
+            //We can also go to the root of any page by doing
+            //app://goto/AREA/root
+
             public const string App_URL_Commands_Goto = "goto";
             public const string App_URL_Commands_Execute = "execute";
 
@@ -114,9 +117,6 @@ namespace MobileApp.Shared
             public const string App_URL_Task_About = "more";
 
             // define the core page string keywords (the tasks use these to know which page within the task)
-            // Ex: news/read would be the news details page. 
-            // ex: messages/read would be the ReadNotes page.
-            public const string App_URL_Page_Messages_Root = "messages_root";
             public const string App_URL_Page_Login = "login";
             public const string App_URL_Page_GroupFinder = "connect";
             public const string App_URL_Page_Read = "read";
