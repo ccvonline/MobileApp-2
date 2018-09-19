@@ -105,7 +105,7 @@ namespace Droid
                         Series.Message latestMessage = ParentFragment.SeriesEntries[ 0 ].Series.GetLatestMessage( );
 
                         primaryItem.Title.Text = latestMessage.Name;
-                        if( ParentFragment.SeriesEntries[ 0 ].Series.Private == true || latestMessage.Private == true )
+                        if( ParentFragment.SeriesEntries[ 0 ].Series.SeriesPrivate == true || latestMessage.Private == true )
                         {
                             primaryItem.Title.Text += " (Private)";
                         }
@@ -185,7 +185,7 @@ namespace Droid
                         }
 
                         seriesItem.Title.Text = ParentFragment.SeriesEntries[ position ].Series.SeriesName;
-                        if ( ParentFragment.SeriesEntries[ position ].Series.Private == true )
+                        if ( ParentFragment.SeriesEntries[ position ].Series.SeriesPrivate == true )
                         {
                             seriesItem.Title.Text += " (Private)";    
                         }

@@ -90,8 +90,13 @@ namespace Droid
                             // make sure the argument is for us (and it wants more than just our root page)
                             if( arguments[ 0 ] == Command_Keyword( ) && arguments.Length > 1 )
                             {
+                                // if they want the "root_messages" page, we support that.
+                                if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Messages_Root )
+                                {
+                                    // nothing needs to happen because we will land here by way of the element becoming active.
+                                }
                                 // if they want a "read" page, we support that.
-                                if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Read )
+                                else if( arguments[ 1 ] == PrivateGeneralConfig.App_URL_Page_Read )
                                 {
                                     if ( RockLaunchData.Instance.Data.NoteDB.SeriesList.Count > 0 )
                                     {

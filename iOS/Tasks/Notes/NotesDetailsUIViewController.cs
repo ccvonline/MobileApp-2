@@ -353,7 +353,7 @@ namespace iOS
 
                 // Title
                 cell.Title.Text = Series.SeriesName;
-                if ( Series.Private == true )
+                if ( Series.SeriesPrivate == true )
                 {
                     cell.Title.Text += " (Private)";
                 }
@@ -410,7 +410,7 @@ namespace iOS
 
                     // Create the title
                     cell.Title.Text = Series.Messages[ row ].Name;
-                    if ( Series.Private == true ||
+                    if ( Series.SeriesPrivate == true ||
                          Series.Messages[ row ].Private == true )
                     {
                         cell.Title.Text += " (Private)";

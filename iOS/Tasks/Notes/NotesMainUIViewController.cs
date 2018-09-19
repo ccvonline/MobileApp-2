@@ -403,7 +403,7 @@ namespace iOS
                     Series.Message latestMessage = SeriesEntries[ 0 ].Series.GetLatestMessage( );
                     
                     cell.Title.Text = latestMessage.Name;
-                    if( SeriesEntries[ 0 ].Series.Private == true || 
+                    if( SeriesEntries[ 0 ].Series.SeriesPrivate == true || 
                         latestMessage.Private == true )
                     {
                         cell.Title.Text += " (Private)";
@@ -534,7 +534,7 @@ namespace iOS
 
                 // Create the title
                 cell.Title.Text = SeriesEntries[ row ].Series.SeriesName;
-                if ( SeriesEntries[ row ].Series.Private == true )
+                if ( SeriesEntries[ row ].Series.SeriesPrivate == true )
                 {
                     cell.Title.Text += " (Private)";    
                 }
