@@ -46,46 +46,6 @@ namespace MobileApp.Shared.UI
                     break;
                 }
 
-                case "never gonna give you up":
-                {
-                    didTrigger = true;
-
-                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/ra.mp4" );
-                    break;
-                }
-
-                case "gotta get down on friday":
-                {
-                    didTrigger = true;
-
-                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/friday.mp4" );
-                    break;
-                }
-
-                case "what else have you worked on?":
-                {
-                    didTrigger = true;
-
-                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/untamed.mp4" );
-                    break;
-                }
-
-                case "do you like turtles?":
-                {
-                    didTrigger = true;
-
-                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/turtles.mp4" );
-                    break;
-                }
-
-                case "goat in the water!":
-                {
-                    didTrigger = true;
-
-                    DoVideo( trigger, arg1, arg2, arg3, arg4, "http://www.jeredmcferron.com/files/piggoat.mp4" );
-                    break;
-                }
-
                 case "i want a pony":
                 {
                     didTrigger = true;

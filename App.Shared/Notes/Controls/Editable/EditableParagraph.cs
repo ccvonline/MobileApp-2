@@ -339,10 +339,10 @@ namespace MobileApp
 
                     if( activeUrl.Trim( ) != EditableConfig.sPlaceholderUrlText && string.IsNullOrWhiteSpace( activeUrl ) == false )
                     {
-                        // help them out by adding 'http://' if it isn't there.
-                        if ( activeUrl.StartsWith( "http://" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
+                        // help them out by adding 'https://' if it isn't there.
+                        if ( activeUrl.StartsWith( "https" ) == false && BibleRenderer.IsBiblePrefix( activeUrl ) == false )
                         {
-                            activeUrl = activeUrl.Insert( 0, "http://" );
+                            activeUrl = activeUrl.Insert( 0, "https://" );
                         }
 
                         ActiveUrl = activeUrl;

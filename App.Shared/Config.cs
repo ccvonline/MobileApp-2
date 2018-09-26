@@ -68,11 +68,11 @@ namespace MobileApp
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
                 #if DEBUG
-                public const string RockBaseUrl = "http://rock.ccv.church/";
+                public const string RockBaseUrl = "https://dev.ccv.church/";
                 //public const string RockBaseUrl = "https://jereddev.ccv.church/";
-                //public const string RockBaseUrl = "http://10.211.55.4:50345/";
+                //public const string RockBaseUrl = "https://10.211.55.4:44347/";
                 #else
-                public const string RockBaseUrl = "http://rock.ccv.church/";
+                public const string RockBaseUrl = "https://rock.ccv.church/";
                 #endif
 
                 /// <summary>

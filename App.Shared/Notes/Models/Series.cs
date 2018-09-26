@@ -125,27 +125,27 @@ namespace MobileApp.Shared
                 public void MakeURLsAbsolute( string hostDomain )
                 {
                     // for any URL that isn't absolute, prefix the host domain
-                    if ( _AudioUrl != null && _AudioUrl.Contains( "http://" ) == false )
+                    if ( _AudioUrl != null && _AudioUrl.StartsWith( "http" ) == false )
                     {
                         _AudioUrl = _AudioUrl.Insert( 0, hostDomain );
                     }
 
-                    if ( _NoteUrl != null && _NoteUrl.Contains( "http://" ) == false )
+                    if ( _NoteUrl != null && _NoteUrl.StartsWith( "http" ) == false )
                     {
                         _NoteUrl = _NoteUrl.Insert( 0, hostDomain );
                     }
 
-                    if ( _WatchUrl != null && _WatchUrl.Contains( "http://" ) == false )
+                    if ( _WatchUrl != null && _WatchUrl.StartsWith( "http" ) == false )
                     {
                         _WatchUrl = _WatchUrl.Insert( 0, hostDomain );
                     }
 
-                    if ( _ShareUrl != null && _ShareUrl.Contains( "http://" ) == false )
+                    if ( _ShareUrl != null && _ShareUrl.StartsWith( "http" ) == false )
                     {
                         _ShareUrl = _ShareUrl.Insert( 0, hostDomain );
                     }
 
-                    if( _DiscussionGuideUrl != null && _DiscussionGuideUrl.Contains( "http://" ) == false )
+                    if( _DiscussionGuideUrl != null && _DiscussionGuideUrl.StartsWith( "http" ) == false )
                     {
                         _DiscussionGuideUrl = _DiscussionGuideUrl.Insert( 0, hostDomain );
                     }
@@ -327,12 +327,12 @@ namespace MobileApp.Shared
 
             public void MakeURLsAbsolute( string hostDomain )
             {
-                if ( _BillboardUrl != null && _BillboardUrl.Contains( "http://" ) == false )
+                if ( _BillboardUrl != null && _BillboardUrl.StartsWith( "http" ) == false )
                 {
                     _BillboardUrl = _BillboardUrl.Insert( 0, hostDomain );
                 }
 
-                if ( _ThumbnailUrl != null && _ThumbnailUrl.Contains( "http://" ) == false )
+                if ( _ThumbnailUrl != null && _ThumbnailUrl.StartsWith( "http" ) == false )
                 {
                     _ThumbnailUrl = _ThumbnailUrl.Insert( 0, hostDomain );
                 }

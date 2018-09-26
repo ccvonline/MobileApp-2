@@ -105,7 +105,7 @@ namespace MobileApp.Shared
             RestRequest request = new RestRequest( Method.GET );
             request.RequestFormat = DataFormat.Xml;
 
-            string requestUrl = string.Format( "http://vimeo.com/api/v2/video/{0}.xml", videoId );
+            string requestUrl = string.Format( "https://vimeo.com/api/v2/video/{0}.xml", videoId );
             HttpRequest.ExecuteAsync<VimeoVideo>( requestUrl, request, delegate(System.Net.HttpStatusCode statusCode, string statusDescription, VimeoVideo model) 
                 {
                     if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )

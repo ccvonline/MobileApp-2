@@ -88,7 +88,7 @@ namespace MobileApp.Shared
                 { 
                     //PDFs only need to redirect on Android
                     #if __ANDROID__
-                    { ".pdf", ExternalUrlToken + "http://docs.google.com/gview?embedded=true&url={0}" },
+                    { ".pdf", ExternalUrlToken + "https://docs.google.com/gview?embedded=true&url={0}" },
                     #endif
 
                     // any reference to the CCV give site should redirect externally. Avoids in-app donations

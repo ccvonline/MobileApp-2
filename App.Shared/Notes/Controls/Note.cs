@@ -182,7 +182,7 @@ namespace MobileApp
                                     }
 
                                     // if the style sheet URL is relative, add the default domain (which comes from the note DB) to make it absolute
-                                    if ( styleSheetUrl.Contains( "http://" ) == false )
+                                    if ( styleSheetUrl.StartsWith( "http" ) == false )
                                     {
                                         if ( string.IsNullOrEmpty( styleSheetDefaultHostDomain ) == true )
                                         {
@@ -1117,7 +1117,7 @@ namespace MobileApp
 
                 public string Export( )
                 {
-                    string xmlExport = "<Note StyleSheet=\"http://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
+                    string xmlExport = "<Note StyleSheet=\"https://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
 
                     // first, sort all controls by Y. That way, if something was created and then moved UP, it won't
                     // have a negative value
