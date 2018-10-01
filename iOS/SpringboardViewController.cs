@@ -1180,7 +1180,7 @@ namespace iOS
             {
                 safeAreaTopInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top;
             }
-            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom );
+            ScrollView.Frame = new CGRect( View.Frame.Left, View.Frame.Top + safeAreaTopInset, View.Frame.Right, View.Frame.Bottom - safeAreaTopInset );
 
             // if the OOBE isn't running, do everything normal
             if ( IsOOBERunning == false )
@@ -1344,14 +1344,14 @@ namespace iOS
             // so basically, if the springboard is too large for the device and needs to scroll,
             // put campus selection under the "More" element.
             CampusSelectionText.Layer.AnchorPoint = CGPoint.Empty;
-            if ( BottomSeperator.Frame.Bottom >= View.Frame.Height )
+            if ( BottomSeperator.Frame.Bottom >= ScrollView.Frame.Height )
             {
                 CampusSelectionText.Layer.Position = new CGPoint( 10, BottomSeperator.Frame.Bottom + 25 );
             }
             // if it is NOT too large, place it at the bottom of the screen
             else
             {
-                CampusSelectionText.Layer.Position = new CGPoint( 10, View.Frame.Height - CampusSelectionText.Frame.Height - 10 );
+                CampusSelectionText.Layer.Position = new CGPoint( 10, ScrollView.Frame.Height - CampusSelectionText.Frame.Height - 10 );
             }
 
             UpdateCampusViews( );
