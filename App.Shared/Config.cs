@@ -67,13 +67,12 @@ namespace MobileApp
                 /// <summary>
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
-                #if DEBUG
+#if DEBUG
                 public const string RockBaseUrl = "https://dev.ccv.church/";
-                //public const string RockBaseUrl = "https://jereddev.ccv.church/";
                 //public const string RockBaseUrl = "https://10.211.55.4:44347/";
-                #else
+#else
                 public const string RockBaseUrl = "https://rock.ccv.church/";
-                #endif
+#endif
 
                 /// <summary>
                 /// The base URL to look for Notes

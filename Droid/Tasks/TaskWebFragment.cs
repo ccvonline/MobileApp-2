@@ -79,9 +79,6 @@ namespace Droid
                                     // append the mobile platform
                                     string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
-                                    // append the campus (this is part of their identity)
-                                    fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
                                     // if we got the token, append it
                                     if( string.IsNullOrEmpty( impersonationToken ) == false )
                                     {
@@ -200,9 +197,6 @@ namespace Droid
                                 {
                                     // append the mobile platform
                                     string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( Url, PrivateGeneralConfig.MobilePlatform );
-
-                                    // also include their campus. this is personal data as well.
-                                    fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                                     // if we got it, append it and load
                                     if ( string.IsNullOrEmpty( impersonationToken ) == false )

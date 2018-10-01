@@ -44,9 +44,11 @@ namespace Droid
 
                     if ( forResume == false )
                     {
+                        string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( AboutConfig.Url, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+
                         TaskWebFragment.HandleUrl( false, 
-                            true, 
-                            AboutConfig.Url,
+                            true,
+                            fullUrl,
                             this, 
                             MainPage );
                     }

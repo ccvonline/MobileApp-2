@@ -32,7 +32,8 @@ namespace iOS
             parentViewController.PushViewController(MainPageVC, false);
 
             // and immediately handle the URL
-            TaskWebViewController.HandleUrl( false, true, AboutConfig.Url, this, MainPageVC, false, true, false, false );
+            string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( AboutConfig.Url, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
+            TaskWebViewController.HandleUrl( false, true, fullUrl, this, MainPageVC, false, true, false, false );
         }
 
         public override bool WantOverrideBackButton (ref bool enabled)
