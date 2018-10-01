@@ -254,9 +254,6 @@ namespace iOS
                             // put the platform we're running
                             string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( processedUrl, PrivateGeneralConfig.MobilePlatform );
 
-                            // build the full url with their preferred campus (since thats personal data)
-                            fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
-
                             // URL encode the value
                             NSString encodedUrlString = fullUrl.UrlEncode( );
 
@@ -351,9 +348,6 @@ namespace iOS
                     {
                         // put the platform we're running
                         string fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( DisplayUrl, PrivateGeneralConfig.MobilePlatform );
-
-                        // include their campus, since that's part of personal data.
-                        fullUrl = Rock.Mobile.Util.Strings.Parsers.AddParamToURL( fullUrl, string.Format( PrivateGeneralConfig.RockCampusContext, MobileApp.Shared.Network.RockMobileUser.Instance.GetRelevantCampus( ) ) );
 
                         // URL encode the value
                         NSString encodedUrlString = fullUrl.UrlEncode( );
