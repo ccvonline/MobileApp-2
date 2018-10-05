@@ -717,7 +717,7 @@ namespace iOS
                         }
                         else
                         {
-                            ReportException( "Error downloading note", null );
+                            ReportException( string.Format( "Error downloading note from {0}", NoteUrl ), null );
                         }
                     } );
             }
@@ -744,14 +744,16 @@ namespace iOS
         {
             try
             {
-                // expect the note and its style sheet to exist.
+                // expect the note and its style sheet to exist, but throw exceptions if they dont.
                 NoteFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( NoteUrl );
                 MemoryStream noteData = ( MemoryStream ) FileCache.Instance.LoadFile( NoteFileName );
+                if( noteData == null ) throw new Exception( string.Format( "Failed to load Note File downloaded from: {0}", NoteUrl ) );
                 string noteXML = Encoding.UTF8.GetString( noteData.ToArray( ), 0, ( int ) noteData.Length );
 
                 string styleSheetUrl = Note.GetStyleSheetUrl( noteXML, StyleSheetDefaultHostDomain );
                 StyleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
                 MemoryStream styleData = ( MemoryStream ) FileCache.Instance.LoadFile( StyleFileName );
+                if( styleData == null ) throw new Exception( string.Format( "Failed to load Style File downloaded from: {0}", styleSheetUrl ) );
                 string styleXML = Encoding.UTF8.GetString( styleData.ToArray( ), 0, ( int ) styleData.Length );
 
                 Note = new Note( noteXML, styleXML );
@@ -767,7 +769,8 @@ namespace iOS
                 UIScrollView.ScrollEnabled = true;
 
                 // take the requested background color
-                UIScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( ControlStyles.mMainNote.mBackgroundColor.Value );
+                UIScrollView.BackgroundColor = Rock.Mobile.UI.Util.GetUIColor( Note.mStyle.mBackgroundColor ?? 0x000000FF );
+
                 View.BackgroundColor = UIScrollView.BackgroundColor; //Make the view itself match too
 
                 // update the height of the scroll view to fit all content

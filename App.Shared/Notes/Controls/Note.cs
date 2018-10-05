@@ -60,7 +60,7 @@ namespace MobileApp
                 /// <summary>
                 /// The style settings for the Note. Will be passed to all children.
                 /// </summary>
-                protected Style mStyle;
+                public Style mStyle;
 
                 /// <summary>
                 /// The bounds (including position) of the note.

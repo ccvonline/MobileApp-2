@@ -650,34 +650,35 @@ namespace MobileApp
                     mHeaderContainer = new Styles.Style( );
                     mHeaderContainer.Initialize();
                     mHeaderContainer.mAlignment = Styles.Alignment.Left;
+                    mHeaderContainer.mBackgroundColor = 0x3E3E3EFF;
+                    mHeaderContainer.mPaddingLeft = .05f;
+                    mHeaderContainer.mPaddingRight = .05f;
+                    mHeaderContainer.mPaddingTop = .02f;
+                    mHeaderContainer.mPaddingBottom = .02f;
 
-                    // Title should be large, bevan, centered and white
-                    // Also, prefer an upper case title.
                     mHeaderTitle = new Styles.Style( );
                     mHeaderTitle.Initialize();
-                    mHeaderTitle.mAlignment = Styles.Alignment.Center;
+                    mHeaderTitle.mAlignment = Styles.Alignment.Left;
                     mHeaderTitle.mTextCase = Styles.TextCase.Upper;
-                    mHeaderTitle.mFont.mName = "Bevan";
-                    mHeaderTitle.mFont.mSize = 18;
-                    mHeaderTitle.mFont.mColor = 0xFFFFFFFF;
+                    mHeaderTitle.mFont.mName = "OpenSans-Bold";
+                    mHeaderTitle.mFont.mSize = 24;
+                    mHeaderTitle.mFont.mColor = 0xAFAFAFFF;
 
-                    // Date should be medium, verdana, left and white
                     mHeaderDate = new Styles.Style( );
                     mHeaderDate.Initialize();
                     mHeaderDate.mAlignment = Styles.Alignment.Left;
                     mHeaderDate.mTextCase = Styles.TextCase.Normal;
-                    mHeaderDate.mFont.mName = "Bevan";
-                    mHeaderDate.mFont.mSize = 12;
-                    mHeaderDate.mFont.mColor = 0xFFFFFFFF;
+                    mHeaderDate.mFont.mName = "OpenSansLight-Regular";
+                    mHeaderDate.mFont.mSize = 16;
+                    mHeaderDate.mFont.mColor = 0xAFAFAFFF;
 
-                    // Speaker should be mediu, verdana, right and white
                     mHeaderSpeaker = new Styles.Style( );
                     mHeaderSpeaker.Initialize();
                     mHeaderSpeaker.mAlignment = Styles.Alignment.Right;
                     mHeaderSpeaker.mTextCase = Styles.TextCase.Normal;
-                    mHeaderSpeaker.mFont.mName = "Bevan";
-                    mHeaderSpeaker.mFont.mSize = 12;
-                    mHeaderSpeaker.mFont.mColor = 0xFFFFFFFF;
+                    mHeaderSpeaker.mFont.mName = "OpenSansLight-Regular";
+                    mHeaderSpeaker.mFont.mSize = 16;
+                    mHeaderSpeaker.mFont.mColor = 0xAFAFAFFF;
                 }
 
                 static void CreateMainNoteStyle()
@@ -688,6 +689,8 @@ namespace MobileApp
 
                     mMainNote.mBackgroundColor = 0x000000FF;
                     mMainNote.mFullWidthHeader = false;
+                    mMainNote.mPaddingLeft = .05f;
+                    mMainNote.mPaddingRight = .05f;
                 }
 
                 static void CreateParagraphStyle()
@@ -725,9 +728,9 @@ namespace MobileApp
 
                     // make reveal boxes redish
                     mRevealBox.mAlignment = Styles.Alignment.Left;
-                    mRevealBox.mFont.mName = "Bevan";
-                    mRevealBox.mFont.mSize = 12;
-                    mRevealBox.mFont.mColor = 0x6d1c1cFF;
+                    mRevealBox.mFont.mName = "OpenSans-Bold";
+                    mRevealBox.mFont.mSize = 18;
+                    mRevealBox.mFont.mColor = 0xC8C8C8FF;
                     mRevealBox.mTextCase = Styles.TextCase.Normal;
                 }
 
@@ -738,14 +741,15 @@ namespace MobileApp
 
                     // Make text input small by default
                     mTextInput.mAlignment = Styles.Alignment.Left;
-                    mTextInput.mFont.mName = "Bevan";
-                    mTextInput.mFont.mSize = 8;
-                    mTextInput.mFont.mColor = 0xFFFFFFFF;
+                    mTextInput.mFont.mName = "OpenSans-Regular";
+                    mTextInput.mFont.mSize = 20;
+                    mTextInput.mFont.mColor = 0xCCCCCCFF;
                     mTextInput.mTextCase = Styles.TextCase.Normal;
+                    mTextInput.mBackgroundColor = 0x3E3E3EFF;
 
-                    mTextInput.mBorderColor = 0x777777FF;
+                    mTextInput.mBorderColor = 0x323232FF;
                     mTextInput.mBorderRadius = 5;
-                    mTextInput.mBorderWidth = 4;
+                    mTextInput.mBorderWidth = 1;
                 }
 
                 static void CreateQuoteStyle()
@@ -755,10 +759,19 @@ namespace MobileApp
 
                     // Make quotes redish
                     mQuote.mAlignment = Styles.Alignment.Left;
-                    mQuote.mFont.mName = "Bevan";
-                    mQuote.mFont.mSize = 12;
-                    mQuote.mFont.mColor = 0x6d1c1cFF;
+                    mQuote.mFont.mName = "OpenSans-Italic";
+                    mQuote.mFont.mSize = 18;
+                    mQuote.mFont.mColor = 0xA7A7A7FF;
+                    mQuote.mBackgroundColor = 0x2D2D2DFF;
                     mQuote.mTextCase = Styles.TextCase.Normal;
+                    mQuote.mPaddingLeft = 10.0f;
+                    mQuote.mPaddingTop = 10.0f;
+                    mQuote.mPaddingRight = 10.0f;
+                    mQuote.mPaddingBottom = 10.0f;
+
+                    mQuote.mBorderColor = 0x3D3D3DFF;
+                    mQuote.mBorderRadius = 5;
+                    mQuote.mBorderWidth = 1;
                 }
 
                 static void CreateTextStyle()
@@ -767,9 +780,9 @@ namespace MobileApp
                     mText.Initialize();
 
                     mText.mAlignment = Styles.Alignment.Left;
-                    mText.mFont.mName = "Bevan";
-                    mText.mFont.mSize = 12;
-                    mText.mFont.mColor = 0xFFFFFFFF;
+                    mText.mFont.mName = "OpenSans-Regular";
+                    mText.mFont.mSize = 18;
+                    mText.mFont.mColor = 0xAFAFAFFF;
                     mText.mTextCase = Styles.TextCase.Normal;
                 }
 
@@ -794,14 +807,15 @@ namespace MobileApp
                     mUserNote = new Styles.Style( );
                     mUserNote.Initialize( );
 
-                    mUserNote.mBorderColor = 0x777777FF;
-                    mUserNote.mBorderRadius = 5;
-                    mUserNote.mBorderWidth = 4;
+                    mUserNote.mBackgroundColor = 0x505050FF;
+                    mUserNote.mBorderColor = 0x323232FF;
+                    mUserNote.mBorderRadius = 2;
+                    mUserNote.mBorderWidth = 1;
 
                     mUserNote.mAlignment = Styles.Alignment.Left;
-                    mUserNote.mFont.mName = "Bevan";
-                    mUserNote.mFont.mSize = 8;
-                    mUserNote.mFont.mColor = 0x777777FF;
+                    mUserNote.mFont.mName = "OpenSans-Regular";
+                    mUserNote.mFont.mSize = 20;
+                    mUserNote.mFont.mColor = 0xCCCCCCFF;
                     mUserNote.mTextCase = Styles.TextCase.Normal;
                 }
 
@@ -842,7 +856,7 @@ namespace MobileApp
                         {
                             switch( reader.NodeType )
                             {
-                            //Find the control elements
+                                //Find the control elements
                                 case XmlNodeType.Element:
                                 {
                                     //most controls don't care about anything other than the basic attributes,
@@ -879,8 +893,9 @@ namespace MobileApp
                             }
                         }
                     } 
-                    catch( Exception )
+                    catch( Exception e )
                     {
+                        throw new Exception( string.Format( "DefaultStyle.xml Error: " + e.Message ) );
                     }
 
                     return result;

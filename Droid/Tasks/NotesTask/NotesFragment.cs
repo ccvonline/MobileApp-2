@@ -703,7 +703,7 @@ namespace Droid
                                                                  UpdateScrollViewHeight );
 
                         // set the requested background color
-                        ScrollView.SetBackgroundColor( ( Android.Graphics.Color )Rock.Mobile.UI.Util.GetUIColor( ControlStyles.mMainNote.mBackgroundColor.Value ) );
+                        ScrollView.SetBackgroundColor( ( Android.Graphics.Color )Rock.Mobile.UI.Util.GetUIColor( Note.mStyle.mBackgroundColor ?? 0x000000FF ) );
 
                         // update the height of the scroll view to fit all content
                         float noteBottom = Note.GetNoteAbsoluteHeight( );
