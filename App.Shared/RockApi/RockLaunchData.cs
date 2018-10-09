@@ -47,9 +47,9 @@ namespace MobileApp
                         Genders.Add( "Female" );
 
                         // in debug builds, turn developer mode on by default
-                        #if DEBUG
+#if DEBUG
                         DeveloperModeEnabled = true;
-                        #endif
+#endif
 
                         News = new List<RockNews>( );
                         NoteDB = new NoteDB( );
@@ -544,7 +544,7 @@ namespace MobileApp
                             {
                                 Rock.Mobile.Util.Debug.WriteLine( "Got NoteDB info." );
                                 Data.NoteDB = noteModel;
-                                Data.NoteDB.ProcessPrivateNotes( false );
+                                Data.NoteDB.ProcessPrivateNotes( Instance.Data.DeveloperModeEnabled );
                                 Data.NoteDB.MakeURLsAbsolute( );
                                 Data.NoteDBTimeStamp = DateTime.Now;
 
