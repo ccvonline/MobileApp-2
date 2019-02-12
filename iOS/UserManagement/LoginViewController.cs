@@ -69,6 +69,8 @@ namespace iOS
 
         UIButton LoginButton { get; set; }
 
+        UIButton ForgotPasswordButton { get; set; }
+
         UILabel AdditionalOptions { get; set; }
         UIButton RegisterButton { get; set; }
         UILabel OrSpacerLabel { get; set; }
@@ -143,6 +145,16 @@ namespace iOS
                         TryRockBind();
                     }
                 };
+
+            // if they forgot their password, kick them out to the forgot password page
+            ForgotPasswordButton = UIButton.FromType( UIButtonType.System );
+            ScrollView.AddSubview( ForgotPasswordButton );
+            ControlStyling.StyleButton( ForgotPasswordButton, LoginStrings.ForgotPasswordButton, ControlStylingConfig.Font_Regular, ControlStylingConfig.Medium_FontSize );
+            ForgotPasswordButton.SizeToFit( );
+            ForgotPasswordButton.TouchUpInside += ( object sender, EventArgs e ) =>
+            {
+                TaskWebViewController.HandleUrl( true, true, LoginConfig.ForgotPassword_Url, null, null, false, false, false );
+            };
 
             AdditionalOptions = new UILabel( );
             ScrollView.AddSubview( AdditionalOptions );
@@ -295,8 +307,9 @@ namespace iOS
 
             AdditionalOptions.Frame = new CGRect( (View.Bounds.Width - AdditionalOptions.Bounds.Width) / 2, LoginResult.Background.Frame.Bottom + 10, AdditionalOptions.Bounds.Width, ControlStyling.ButtonHeight );
 
-            // setup the "Register or Facebook"
-            RegisterButton.Frame = new CGRect( (View.Bounds.Width - buttonWidth) / 2, AdditionalOptions.Frame.Bottom + 5, buttonWidth, ControlStyling.ButtonHeight );
+            // setup the "Forgot account, Register or Facebook"
+            ForgotPasswordButton.Frame = new CGRect( ( View.Bounds.Width - buttonWidth ) / 2, AdditionalOptions.Frame.Bottom + 5, buttonWidth, ControlStyling.ButtonHeight );
+            RegisterButton.Frame = new CGRect( (View.Bounds.Width - buttonWidth) / 2, ForgotPasswordButton.Frame.Bottom + 15, buttonWidth, ControlStyling.ButtonHeight );
             OrSpacerLabel.Frame = new CGRect( (View.Bounds.Width - OrSpacerLabel.Bounds.Width) / 2, RegisterButton.Frame.Bottom + 5, OrSpacerLabel.Bounds.Width, FBImageView.Bounds.Height );
             FacebookLogin.Frame = new CGRect( (View.Bounds.Width - FBImageView.Bounds.Width) / 2, OrSpacerLabel.Frame.Bottom + 5, FBImageView.Bounds.Width, FBImageView.Bounds.Height );
             //

@@ -69,7 +69,7 @@
     <WarningLevel>4</WarningLevel>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer: Shawn Forquer (H9Y636R8ZP)</CodesignKey>
+    <CodesignKey>iPhone Distribution: Christ's Church of the Valley, Inc. (EU273FP4C6)</CodesignKey>
     <MtouchI18n>
     </MtouchI18n>
     <MtouchArch>ARMv7, ARM64</MtouchArch>

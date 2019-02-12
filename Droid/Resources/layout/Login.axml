@@ -141,6 +141,15 @@
                 <Button
                     android:minHeight="5dp"
                     android:padding="4dp"
+                    android:text="Forgot Password"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/forgotPasswordButton" />
+                <Button
+                    android:layout_marginTop="25dp"
+                    android:minHeight="5dp"
+                    android:padding="4dp"
                     android:text="Register"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"

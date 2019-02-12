@@ -24,6 +24,7 @@ using MobileApp.Shared.Analytics;
 using MobileApp.Shared.PrivateConfig;
 using MobileApp.Shared.UI;
 using System.Drawing;
+using Droid.Tasks;
 
 namespace Droid
 {
@@ -44,6 +45,7 @@ namespace Droid
 
         public Springboard SpringboardParent { get; set; }
 
+        Button ForgotPasswordButton { get; set; }
         Button LoginButton { get; set; }
         Button CancelButton { get; set; }
         Button RegisterButton { get; set; }
@@ -135,7 +137,12 @@ namespace Droid
                     SpringboardParent.RegisterNewUser( );
                 };
 
-
+            ForgotPasswordButton = view.FindViewById<Button>( Resource.Id.forgotPasswordButton );
+            ControlStyling.StyleButton( ForgotPasswordButton, LoginStrings.ForgotPasswordButton, ControlStylingConfig.Font_Regular, ControlStylingConfig.Small_FontSize );
+            ForgotPasswordButton.Click += ( object sender, EventArgs e ) =>
+            {
+                TaskWebFragment.HandleUrl( true, true, LoginConfig.ForgotPassword_Url, null, null );
+            };
 
             // get the username field and background
             UsernameLayer = view.FindViewById<View>( Resource.Id.login_background );

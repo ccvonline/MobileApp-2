@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2350;
+                public const int Version = 2360;
 
                 /// <summary>
                 /// The full name of your organization
@@ -116,6 +116,11 @@ namespace MobileApp
                 /// The icon to use representing the More element
                 /// </summary>
                 public const string Element_More_Icon = "";
+            }
+
+            public class LoginConfig
+            {
+                public const string ForgotPassword_Url = "https://ccv.church/forgot-account";
             }
 
             public class NewsConfig
