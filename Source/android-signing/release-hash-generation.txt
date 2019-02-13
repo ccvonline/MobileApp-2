@@ -1,0 +1,3 @@
+Facebook requires the release hash for our Android App. If the ccv-release key is re-generated, run this tool to get the new hash (from the directory containing the key):
+
+keytool -exportcert -alias ccv_release -keystore ./ccv-release.keystore | openssl sha1 -binary | openssl base64

@@ -20,7 +20,7 @@ namespace MobileApp.Shared
             /// <summary>
             /// The permissions the Facebook App should request. You probably shouldn't change this.
             /// </summary>
-            public const string FBAppPermissions = "public_profile, user_friends, email";
+            public const string FBAppPermissions = "public_profile, email";
 
             /// <summary>
             /// These are values that, while generated when the Rock database is created,
