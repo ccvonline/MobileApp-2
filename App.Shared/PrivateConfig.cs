@@ -20,7 +20,13 @@ namespace MobileApp.Shared
             /// <summary>
             /// The permissions the Facebook App should request. You probably shouldn't change this.
             /// </summary>
-            public const string FBAppPermissions = "public_profile, email";
+            public const string FBAppPermissions = "public_profile,email";
+
+
+            /// <summary>
+            /// The version of the Facebook graph to use. Shouldn't be a reason to change this other than version deprecation by Facebook.
+            /// </summary>
+            public const string FBGraphAPIVersion = "3.2";
 
             /// <summary>
             /// These are values that, while generated when the Rock database is created,

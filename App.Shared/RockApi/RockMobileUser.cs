@@ -384,90 +384,74 @@ namespace MobileApp
                 }
 
 #if !__WIN__
-                public delegate void GetUserCredentials( string fromUri, Facebook.FacebookClient session );
+                public delegate void GetUserCredentials( string fromUri );
                 public void BindFacebookAccount( GetUserCredentials getCredentials )
                 {
                     Dictionary<string, object> loginRequest = FacebookManager.Instance.CreateLoginRequest( );
+                    string requestUri = FacebookManager.Instance.GetLoginUrl( loginRequest );
 
-                    Facebook.FacebookClient fbSession = new Facebook.FacebookClient( );
-                    string requestUri = fbSession.GetLoginUrl( loginRequest ).AbsoluteUri;
-
-                    getCredentials( requestUri, fbSession );
+                    getCredentials( requestUri );
                 }
 
-                public bool HasFacebookResponse( string response, Facebook.FacebookClient session )
+                public bool HasFacebookResponse( string response )
                 {
                     // if true is returned, there IS a response, so the caller can call the below FacebookCredentialResult
-                    Facebook.FacebookOAuthResult oauthResult;
-                    return session.TryParseOAuthCallbackUrl( new Uri( response ), out oauthResult );
+                    return FacebookManager.Instance.HasFacebookResponse( new Uri( response ) );
                 }
 
-                public void FacebookCredentialResult( string response, Facebook.FacebookClient session, BindResult result )
+                public void FacebookCredentialResult( string response, BindResult result )
                 {
                     // make sure we got a valid access token
-                    Facebook.FacebookOAuthResult oauthResult;
-                    if( session.TryParseOAuthCallbackUrl (new Uri ( response ), out oauthResult) == true )
+                    if( FacebookManager.Instance.IsAuthenticated( ) )
                     {
-                        if ( oauthResult.IsSuccess )
-                        {
-                            // now attempt to get their basic info
-                            Facebook.FacebookClient fbSession = new Facebook.FacebookClient( oauthResult.AccessToken );
-
-                            string infoRequest = FacebookManager.Instance.CreateInfoRequest( );
-
-                            fbSession.GetTaskAsync( infoRequest ).ContinueWith( t =>
+                        // now attempt to get their basic info
+                        FacebookManager.Instance.FetchBasicInfo( delegate( bool fbResult )
+                            {
+                                // if there was no problem, we are logged in and can send this up to Rock
+                                if ( fbResult == true )
                                 {
-                                    // if there was no problem, we are logged in and can send this up to Rock
-                                    if ( t.IsFaulted == false && t.Exception == null )
-                                    {
-                                        // now login via rock with the facebook credentials to verify we're good
-                                        RockApi.Post_Auth_FacebookLogin( t.Result, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                                    // now login via rock with the facebook credentials to verify we're good
+                                    RockApi.Post_Auth_FacebookLogin( FacebookManager.Instance.BasicInfo, delegate(System.Net.HttpStatusCode statusCode, string statusDescription) 
+                                        {
+                                            if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
                                             {
-                                                if( Rock.Mobile.Network.Util.StatusInSuccessRange( statusCode ) == true )
-                                                {
-                                                    UserID = "facebook_" + FacebookManager.Instance.GetUserID( t.Result );
-                                                    RockPassword = "";
+                                                UserID = "facebook_" + FacebookManager.Instance.GetUserID( );
+                                                RockPassword = "";
 
-                                                    AccessToken = oauthResult.AccessToken;
+                                                AccessToken = FacebookManager.Instance.AccessToken;
 
-                                                    AccountType = BoundAccountType.Facebook;
+                                                AccountType = BoundAccountType.Facebook;
 
-                                                    // save!
-                                                    SaveToDevice( );
+                                                // save!
+                                                SaveToDevice( );
 
-                                                    result( true );
-                                                }
-                                                else
-                                                {
-                                                    result( false );
-                                                }
-                                            });
-                                    }
-                                    else
-                                    {
-                                        // didn't work out.
-                                        result( false );
-                                    }
-                                } );
-                        }
-                        else
-                        {
-                            result( false );
-                        }
+                                                result( true );
+                                            }
+                                            else
+                                            {
+                                                result( false );
+                                            }
+                                        });
+                                }
+                                else
+                                {
+                                    // didn't work out.
+                                    result( false );
+                                }
+                            } );
                     }
                     else
                     {
-                        // didn't work out.
                         result( false );
                     }
                 }
 
-                void SyncFacebookInfoToPerson( object infoObj )
+                void SyncFacebookInfoToPerson( )
                 {
-                    Person.FirstName = FacebookManager.Instance.GetFirstName( infoObj );
-                    Person.NickName = FacebookManager.Instance.GetFirstName( infoObj );
-                    Person.LastName = FacebookManager.Instance.GetLastName( infoObj );
-                    Person.Email = FacebookManager.Instance.GetEmail( infoObj );
+                    Person.FirstName = FacebookManager.Instance.GetFirstName(  );
+                    Person.NickName = FacebookManager.Instance.GetFirstName( );
+                    Person.LastName = FacebookManager.Instance.GetLastName( );
+                    Person.Email = FacebookManager.Instance.GetEmail( );
                 }
 #endif
 

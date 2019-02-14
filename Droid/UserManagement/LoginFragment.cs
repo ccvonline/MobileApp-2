@@ -68,8 +68,6 @@ namespace Droid
 
         WebLayout WebLayout { get; set; }
 
-        Facebook.FacebookClient Session { get; set; }
-
         bool BindingFacebook { get; set; }
 
         public override void OnCreate( Bundle savedInstanceState )
@@ -247,10 +245,8 @@ namespace Droid
                 // go for it.
                 BindingFacebook = true;
 
-                RockMobileUser.Instance.BindFacebookAccount( delegate(string fromUri, Facebook.FacebookClient session )
+                RockMobileUser.Instance.BindFacebookAccount( delegate(string fromUri )
                     {
-                        Session = session;
-
                         ( View as RelativeLayout ).AddView( WebLayout );
 
                         WebLayout.ResetCookies( );
@@ -259,13 +255,13 @@ namespace Droid
                             delegate( bool result, string forwardUrl )
                             {
                                 // either way, wait for a facebook response
-                                if ( RockMobileUser.Instance.HasFacebookResponse( forwardUrl, Session ) )
+                                if ( RockMobileUser.Instance.HasFacebookResponse( forwardUrl ) )
                                 {
                                     BindingFacebook = false;
 
                                     SetUIState( LoginState.Trying );
                                     ( View as RelativeLayout ).RemoveView( WebLayout );
-                                    RockMobileUser.Instance.FacebookCredentialResult( forwardUrl, Session, BindComplete );
+                                    RockMobileUser.Instance.FacebookCredentialResult( forwardUrl, BindComplete );
 
                                     ProfileAnalytic.Instance.Trigger( ProfileAnalytic.Login, "Facebook" );
                                 }

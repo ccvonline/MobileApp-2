@@ -441,7 +441,7 @@ namespace iOS
             SetUIState( LoginState.Trying );
 
             // have our rock mobile user begin the facebook bind process
-            RockMobileUser.Instance.BindFacebookAccount( delegate(string fromUri, Facebook.FacebookClient session) 
+            RockMobileUser.Instance.BindFacebookAccount( delegate(string fromUri ) 
             {
                     // it's ready, so create a webView that will take them to the FBLogin page
                     WebLayout = new WebLayout( ScrollView.Frame );
@@ -484,13 +484,13 @@ namespace iOS
                                             BindComplete( false );
                                         }
                                         // otherwise, try to parse the response and move forward
-                                        else if ( RockMobileUser.Instance.HasFacebookResponse( url, session ) )
+                                        else if ( RockMobileUser.Instance.HasFacebookResponse( url ) )
                                         {
                                             // it is, continue the bind process
                                             BlockerView.Show();
 
                                             WebLayout.ContainerView.RemoveFromSuperview( );
-                                            RockMobileUser.Instance.FacebookCredentialResult( url, session, BindComplete );
+                                            RockMobileUser.Instance.FacebookCredentialResult( url, BindComplete );
 
                                             ProfileAnalytic.Instance.Trigger( ProfileAnalytic.Login, "Facebook" );
                                         }

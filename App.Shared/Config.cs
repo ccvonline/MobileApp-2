@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2370;
+                public const int Version = 2380;
 
                 /// <summary>
                 /// The full name of your organization
@@ -69,7 +69,7 @@ namespace MobileApp
                 /// </summary>
 #if DEBUG
                 public const string RockBaseUrl = "https://dev.ccv.church/";
-                //public const string RockBaseUrl = "https://10.211.55.4:44347/";
+                //public const string RockBaseUrl = "https://10.211.55.21:44347/";
 #else
                 public const string RockBaseUrl = "https://rock.ccv.church/";
 #endif

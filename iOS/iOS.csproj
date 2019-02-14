@@ -122,9 +122,6 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.106.2.1\lib\netstandard2.0\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Facebook">
-      <HintPath>..\packages\facebook-sdk-6.2.2\lib\ios-unified\Facebook.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>

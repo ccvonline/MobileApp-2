@@ -71,9 +71,6 @@
     <Reference Include="GooglePlayServicesLib">
       <HintPath>..\packages\Xamarin.GooglePlayServices.22.0.0.0\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
     </Reference>
-    <Reference Include="Facebook">
-      <HintPath>..\packages\facebook-sdk-6.2.2\lib\android\Facebook.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>

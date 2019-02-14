@@ -26,7 +26,6 @@ namespace Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::FacebookMonoDroid.Resource.String.library_name = global::Droid.Resource.String.library_name;
 			global::HockeyApp.Resource.Color.hockeyapp_background_header = global::Droid.Resource.Color.hockeyapp_background_header;
 			global::HockeyApp.Resource.Color.hockeyapp_background_light = global::Droid.Resource.Color.hockeyapp_background_light;
 			global::HockeyApp.Resource.Color.hockeyapp_background_white = global::Droid.Resource.Color.hockeyapp_background_white;
