@@ -418,14 +418,14 @@ namespace iOS
                     cell.Date.Frame = new CGRect( 10, 
                                                   cell.Title.Frame.Bottom - 7, 
                                                   cell.Date.Bounds.Width, 
-                                                  cell.Date.Bounds.Height );
+                                                  Math.Max( 22, cell.Date.Bounds.Height ) );
 
                     cell.Speaker.Text = latestMessage.Speaker;
                     cell.Speaker.SizeToFit( );
                     cell.Speaker.Frame = new CGRect( cell.Bounds.Width - cell.Speaker.Bounds.Width - 10, 
                                                      cell.Title.Frame.Bottom - 7, 
                                                      cell.Speaker.Bounds.Width, 
-                                                     cell.Speaker.Bounds.Height );
+                                                     Math.Max( 22, cell.Speaker.Bounds.Height ) );
 
 
                     // Position the Watch Button and icon
