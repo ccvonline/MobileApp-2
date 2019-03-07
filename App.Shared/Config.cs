@@ -68,11 +68,14 @@ namespace MobileApp
                 /// This should be the base URL for where your Rock instance is hosted.
                 /// </summary>
 #if DEBUG
-                public const string RockBaseUrl = "https://dev.ccv.church/";
-                //public const string RockBaseUrl = "https://10.211.55.21:44347/";
+#if __ANDROID__ //Android won't allow https with self signed certs, so don't use https for dev.
+                public const string RockBaseUrl = "http://dev.ccv.church/";
+#else //NOT ANDROID
+                public const string RockBaseUrl = "https://jereddev.ccv.church/";
+#endif //__ANDROID__
 #else
                 public const string RockBaseUrl = "https://rock.ccv.church/";
-#endif
+#endif //DEBUG
 
                 /// <summary>
                 /// The base URL to look for Notes
