@@ -1218,8 +1218,10 @@ namespace iOS
                 NotesTask noteTask = NavViewController.CurrentTask as NotesTask;
                 if( noteTask == null || noteTask.IsReading( ) == false )
                 {
-                    // yes, if it's a weekend
-                    if ( DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday )
+                    // yes, if it's a weekend and within our (hardcoded for now) service hours
+                    if ( (DateTime.Now.DayOfWeek == DayOfWeek.Saturday && DateTime.Now.Hour >= 15 && DateTime.Now.Hour <= 20 )  //Saturday from 3pm to 8pm
+                      || (DateTime.Now.DayOfWeek == DayOfWeek.Sunday && DateTime.Now.Hour >= 8 && DateTime.Now.Hour <= 15 ) ) //Sunday from 8am to 3pm
+                     
                     {
                         // make sure there's a series to parse, and a message within that series (if this is a new series, and no messages have been added,
                         // Messages[0] would throw an exception.)

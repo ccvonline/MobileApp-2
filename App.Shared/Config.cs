@@ -33,7 +33,7 @@ namespace MobileApp
             
             public class GeneralConfig
             {
-                public const int Version = 2380;
+                public const int Version = 2390;
 
                 /// <summary>
                 /// The full name of your organization
@@ -71,7 +71,7 @@ namespace MobileApp
 #if __ANDROID__ //Android won't allow https with self signed certs, so don't use https for dev.
                 public const string RockBaseUrl = "http://dev.ccv.church/";
 #else //NOT ANDROID
-                public const string RockBaseUrl = "https://jereddev.ccv.church/";
+                public const string RockBaseUrl = "https://dev.ccv.church/";
 #endif //__ANDROID__
 #else
                 public const string RockBaseUrl = "https://rock.ccv.church/";
