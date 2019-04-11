@@ -113,6 +113,8 @@ namespace MobileApp
                     styles.Add( EditStyling.Style.BoldParagraph );
                     styles.Add( EditStyling.Style.UnderlineParagraph );
                     styles.Add( EditStyling.Style.BulletParagraph );
+                    styles.Add( EditStyling.Style.ItalicizeParagraph );
+                    styles.Add( EditStyling.Style.BoldItalicizeParagraph );
 
                     return styles;
                 }
@@ -155,6 +157,16 @@ namespace MobileApp
                         }
 
                         case EditStyling.Style.BulletParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
+                        }
+
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
                         {
                             return ParentControl.GetStyleValue( style );
                         }
@@ -214,6 +226,18 @@ namespace MobileApp
                         }
 
                         case EditStyling.Style.BulletParagraph:
+                        {
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
+
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
                         {
                             ParentControl.SetStyleValue( style, value );
                             break;

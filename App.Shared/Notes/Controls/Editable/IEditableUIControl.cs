@@ -17,7 +17,9 @@ namespace MobileApp.Shared.Notes
             RevealBox,
             BulletParagraph,
             BoldParagraph,
-            UnderlineParagraph
+            UnderlineParagraph,
+            ItalicizeParagraph,
+            BoldItalicizeParagraph
         }
     }
     

@@ -99,6 +99,8 @@ namespace MobileApp
                     styles.Add( EditStyling.Style.RevealBox );
                     styles.Add( EditStyling.Style.Underline );
                     styles.Add( EditStyling.Style.BoldParagraph );
+                    styles.Add( EditStyling.Style.ItalicizeParagraph );
+                    styles.Add( EditStyling.Style.BoldItalicizeParagraph );
                     styles.Add( EditStyling.Style.UnderlineParagraph );
                     styles.Add( EditStyling.Style.BulletParagraph );
 
@@ -147,6 +149,16 @@ namespace MobileApp
                         {
                             return ParentControl.GetStyleValue( style );
                         }
+
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
+                        {
+                            return ParentControl.GetStyleValue( style );
+                        }
                     }
 
                     return null;
@@ -192,6 +204,17 @@ namespace MobileApp
                             break;
                         }
 
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
+                        {
+                            ParentControl.SetStyleValue( style, value );
+                            break;
+                        }
                         //case EditStyling.Style.Underline:
                         //{
                         //    bool enableUnderline = (bool) value;
@@ -310,7 +333,11 @@ namespace MobileApp
                     if( string.IsNullOrWhiteSpace( PlatformLabel.Text ) == false )
                     {
                         string encodedText = HttpUtility.HtmlEncode( PlatformLabel.Text );
-                        return "<RB>" + encodedText.Trim( new char[] { ' ' } ) + "</RB>";
+
+                        // setup note attributes
+                        string attributeStrings = string.Format( "FontName=\"{0}\" FontSize=\"{1}\"", PlatformLabel.Editable_GetFontName(), PlatformLabel.Editable_GetFontSize() );
+
+                        return "<RB " + attributeStrings  + ">" + encodedText.Trim( new char[] { ' ' } ) + "</RB>";
                     }
                     else
                     {

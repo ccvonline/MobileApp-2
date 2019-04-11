@@ -28,6 +28,8 @@ namespace MobileApp
 
                 public const string sDefaultNewParagraphText = "New Paragraph";
 
+                public const string sDefaultItalicFontName = "OpenSans-Italic";
+                public const string sDefaultBoldItalicFontName = "OpenSans-BoldItalic";
                 public const string sDefaultBoldFontName = "OpenSans-Bold";
                 public const string sDefaultRegularFontName = "OpenSans-Regular";
 
@@ -521,6 +523,16 @@ namespace MobileApp
                             return true;
                         }
 
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            return true;
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
+                        {
+                            return true;
+                        }
+
                         case EditStyling.Style.UnderlineParagraph:
                         {
                             return true;
@@ -548,6 +560,34 @@ namespace MobileApp
                                 if( editableChild != null )
                                 {
                                     editableChild.SetStyleValue( EditStyling.Style.FontName, EditableParagraph.sDefaultBoldFontName );
+                                }
+                            }
+                            break;
+                        }
+
+                        case EditStyling.Style.BoldItalicizeParagraph:
+                        {
+                            // force all children to bold
+                            foreach ( IUIControl child in ChildControls )
+                            {
+                                IEditableUIControl editableChild = child as IEditableUIControl;
+                                if ( editableChild != null )
+                                {
+                                    editableChild.SetStyleValue( EditStyling.Style.FontName, EditableParagraph.sDefaultBoldItalicFontName );
+                                }
+                            }
+                            break;
+                        }
+
+                        case EditStyling.Style.ItalicizeParagraph:
+                        {
+                            // force all children to bold
+                            foreach ( IUIControl child in ChildControls )
+                            {
+                                IEditableUIControl editableChild = child as IEditableUIControl;
+                                if ( editableChild != null )
+                                {
+                                    editableChild.SetStyleValue( EditStyling.Style.FontName, EditableParagraph.sDefaultItalicFontName );
                                 }
                             }
                             break;
@@ -611,6 +651,8 @@ namespace MobileApp
                 {
                     List<EditStyling.Style> styleList = new List<EditStyling.Style>( );
                     styleList.Add( EditStyling.Style.BoldParagraph );
+                    styleList.Add( EditStyling.Style.BoldItalicizeParagraph );
+                    styleList.Add( EditStyling.Style.ItalicizeParagraph );
 
                     return styleList;
                 }
