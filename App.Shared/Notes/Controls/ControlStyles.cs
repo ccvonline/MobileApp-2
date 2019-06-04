@@ -683,11 +683,10 @@ namespace MobileApp
 
                 static void CreateMainNoteStyle()
                 {
-                    // note should have a black background and no alignment
                     mMainNote = new Styles.Style( );
                     mMainNote.Initialize();
 
-                    mMainNote.mBackgroundColor = 0x000000FF;
+                    mMainNote.mBackgroundColor = 0x262626FF;
                     mMainNote.mFullWidthHeader = false;
                     mMainNote.mPaddingLeft = .05f;
                     mMainNote.mPaddingRight = .05f;
