@@ -118,18 +118,12 @@ namespace iOS
         public string NoteUrl { get; set; }
 
         /// <summary>
-        /// If the style sheet URLs aren't absolute, this is the domain to prefix.
-        /// </summary>
-        public string StyleSheetDefaultHostDomain { get; set; }
-
-        /// <summary>
         /// A presentable name for the note. Used for things like email subjects
         /// </summary>
         /// <value>The name of the note presentable.</value>
         public string NoteName { get; set; }
 
         protected string NoteFileName { get; set; }
-        protected string StyleFileName { get; set; }
 
         /// <summary>
         /// The current orientation of the device. We track this
@@ -709,7 +703,7 @@ namespace iOS
                 // show a busy indicator
                 Indicator.StartAnimating( );
 
-                Note.TryDownloadNote( NoteUrl, StyleSheetDefaultHostDomain, forceDownload, delegate ( bool result )
+                Note.TryDownloadNote( NoteUrl, forceDownload, delegate ( bool result )
                     {
                         if( result == true )
                         {
@@ -750,13 +744,7 @@ namespace iOS
                 if( noteData == null ) throw new Exception( string.Format( "Failed to load Note File downloaded from: {0}", NoteUrl ) );
                 string noteXML = Encoding.UTF8.GetString( noteData.ToArray( ), 0, ( int ) noteData.Length );
 
-                string styleSheetUrl = Note.GetStyleSheetUrl( noteXML, StyleSheetDefaultHostDomain );
-                StyleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
-                MemoryStream styleData = ( MemoryStream ) FileCache.Instance.LoadFile( StyleFileName );
-                if( styleData == null ) throw new Exception( string.Format( "Failed to load Style File downloaded from: {0}", styleSheetUrl ) );
-                string styleXML = Encoding.UTF8.GetString( styleData.ToArray( ), 0, ( int ) styleData.Length );
-
-                Note = new Note( noteXML, styleXML );
+                Note = new Note( noteXML );
 
                 float scrollPercentOffset = Note.Create( ( float ) UIScrollView.Bounds.Width,
                                                          ( float ) UIScrollView.Bounds.Height,
@@ -915,11 +903,6 @@ namespace iOS
             if( string.IsNullOrEmpty( NoteFileName ) == false )
             {
                 FileCache.Instance.RemoveFile( NoteFileName );
-            }
-
-            if( string.IsNullOrEmpty( StyleFileName ) == false )
-            {
-                FileCache.Instance.RemoveFile( StyleFileName );
             }
         }
 

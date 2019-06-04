@@ -553,7 +553,7 @@ namespace MobileApp
                                 if( Data.NoteDB.SeriesList[ 0 ].Messages.Count > 0 && 
                                     string.IsNullOrEmpty( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl ) == false )
                                 {
-                                    MobileApp.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, Data.NoteDB.HostDomain, true, delegate
+                                    MobileApp.Shared.Notes.Note.TryDownloadNote( Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl, true, delegate
                                         {
                                             RequestingNoteDB = false;
 

@@ -740,7 +740,6 @@ namespace iOS
                 {
                     noteTask.NoteController.NoteName = Series.Messages[ row ].Name;
                     noteTask.NoteController.NoteUrl = Series.Messages[ row ].NoteUrl;
-                    noteTask.NoteController.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
                     Task.PerformSegue( this, noteTask.NoteController );
                 }

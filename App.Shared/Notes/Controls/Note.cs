@@ -24,11 +24,6 @@ namespace MobileApp
             /// </summary>
             public class Note
             {
-                /// <summary>
-                /// Delegate for notifying the caller when a note is ready to be created via Note.Create()
-                /// </summary>
-                public delegate void OnPreReqsComplete( Note note, Exception e );
-
                 public delegate void MessageBoxResult( int result );
                 public delegate void DisplayMessageBoxDelegate( string title, string message, MessageBoxResult onResult );
 
@@ -97,7 +92,7 @@ namespace MobileApp
                 /// Attempt to download the note and its style sheet. If they are already downloaded, the completion delegate will be called immediately.
                 /// </summary>
                 public delegate void OnTryDownloadComplete( bool result );
-                public static void TryDownloadNote( string noteUrl, string styleSheetDefaultHostDomain, bool forceDownload, OnTryDownloadComplete complete )
+                public static void TryDownloadNote( string noteUrl, bool forceDownload, OnTryDownloadComplete complete )
                 {
                     // see if the note is already downloaded
                     string noteFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( noteUrl );
@@ -115,27 +110,19 @@ namespace MobileApp
                                 {
                                     try
                                     {
-                                        // good, now get the style sheet
+                                        bool success = false;
+
                                         noteData = (MemoryStream)FileCache.Instance.LoadFile( noteFileName );
                                         if ( noteData != null )
                                         {
                                             string body = Encoding.UTF8.GetString( noteData.ToArray( ), 0, (int)noteData.Length );
                                             noteData.Dispose( );
 
-                                            string styleSheetUrl = Note.GetStyleSheetUrl( body, styleSheetDefaultHostDomain );
-                                            string styleFileName = Rock.Mobile.Util.Strings.Parsers.ParseURLToFileName( styleSheetUrl );
+                                            success = true;       
+                                        }
 
-                                            FileCache.Instance.DownloadFileToCache( styleSheetUrl, styleFileName, null,
-                                                delegate
-                                                {
-                                                    // now we can create the notes
-                                                    complete( true );
-                                                } );
-                                        }
-                                        else
-                                        {
-                                            complete( false );
-                                        }
+                                        // now we can create the notes
+                                        complete( success );
                                     }
                                     catch( Exception )
                                     {
@@ -157,56 +144,7 @@ namespace MobileApp
                     }
                 }
 
-                public static string GetStyleSheetUrl( string noteXml, string styleSheetDefaultHostDomain )
-                {
-                    // now use a reader to get each element
-                    //XmlReader reader = XmlReader.Create( new StringReader( noteXml ) );
-                    XmlTextReader reader = new XmlTextReader( new StringReader( noteXml ) );
-
-                    string styleSheetUrl = "";
-
-                    bool finishedReading = false;
-                    while( finishedReading == false && reader.Read( ) )
-                    {
-                        // expect the first element to be "Note"
-                        switch( reader.NodeType )
-                        {
-                            case XmlNodeType.Element:
-                            {
-                                if( reader.Name == "Note" )
-                                {
-                                    styleSheetUrl = reader.GetAttribute( "StyleSheet" );
-                                    if( styleSheetUrl == null )
-                                    {
-                                        throw new Exception( "Could not find attribute 'StyleSheet'. This should be a URL pointing to the style to use." );
-                                    }
-
-                                    // if the style sheet URL is relative, add the default domain (which comes from the note DB) to make it absolute
-                                    if ( styleSheetUrl.StartsWith( "http" ) == false )
-                                    {
-                                        if ( string.IsNullOrEmpty( styleSheetDefaultHostDomain ) == true )
-                                        {
-                                            throw new Exception( "StyleSheet URL is relative, but no absolute domain was provided." );
-                                        }
-
-                                        styleSheetUrl = styleSheetUrl.Insert( 0, styleSheetDefaultHostDomain );
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception( string.Format( "Expected root element to be <Note>. Found <{0}>", reader.Name ) );
-                                }
-
-                                finishedReading = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    return styleSheetUrl;
-                }
-
-                public Note( string noteXml, string styleXml )
+                public Note( string noteXml )
                 {
                     // store our XML
                     NoteXml = noteXml;
@@ -214,7 +152,7 @@ namespace MobileApp
                     mStyle = new Style( );
                     mStyle.Initialize( );
 
-                    ControlStyles.Initialize( styleXml );
+                    ControlStyles.Initialize( );
                 }
 
                 public delegate void NoteSizeChanging( );
@@ -222,19 +160,6 @@ namespace MobileApp
 
                 public float Create( float parentWidth, float parentHeight, object masterView, string userNoteFileName, DisplayMessageBoxDelegate displayMessageBoxDelegate, NoteSizeChanging onNoteSizeChanging )
                 {
-                    // setup our note timer that will wait to load our notes until AFTER the notes are created,
-                    // as opposed to the same tick. This cuts down 500ms from the create time.
-                    /*LoadStateTimer = new System.Timers.Timer();
-                    LoadStateTimer.AutoReset = false;
-                    LoadStateTimer.Interval = 25;
-                    LoadStateTimer.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) => 
-                        {
-                            // when the timer fires, hide the toolbar.
-                            // Although the timer fires on a seperate thread, because we queue the reveal
-                            // on the main (UI) thread, we don't have to worry about race conditions.
-                            Rock.Mobile.Threading.Util.PerformOnUIThread( delegate { LoadState( UserNotePath ); } );
-                        };*/
-
                     OnNoteSizeChanging = onNoteSizeChanging;
 
                     RequestDisplayMessageBox = displayMessageBoxDelegate;
@@ -248,7 +173,6 @@ namespace MobileApp
                     UserNoteControls = new List<UserNote>( ); //store these seperately so we can back them up and test touch input.
 
                     // now use a reader to get each element
-                    //XmlTextReader reader = XmlReader.Create( new StringReader( NoteXml ) ) as XmlTextReader;
                     XmlTextReader reader = new XmlTextReader( new StringReader( NoteXml ) );
 
                     try
@@ -437,14 +361,6 @@ namespace MobileApp
                     Frame = bounds;
 
                     AddControlsToView( );
-
-                    // kick off the timer that will load the user note state
-                    /*if( LoadingNoteState == false )
-                    {
-                        LoadingNoteState = true;
-                        LoadStateTimer.Start( );
-                    }*/
-
                 }
 
                 protected void AddControlsToView( )
@@ -701,128 +617,118 @@ namespace MobileApp
 
                 public void SaveState( float scrollOffsetPercent )
                 {
-                    // if we're waiting for our notes to load, don't allow saving! We'll
-                    // save a blank state over our real notes!
-                    //if( LoadingNoteState == false )
+                    // open a stream
+                    using (StreamWriter writer = new StreamWriter(UserNotePath, false))
                     {
-                        // open a stream
-                        using (StreamWriter writer = new StreamWriter(UserNotePath, false))
+                        NoteState noteState = new NoteState( );
+
+                        // Scroll position
+                        noteState.ScrollOffsetPercent = scrollOffsetPercent;
+
+                        // User Notes
+                        noteState.UserNoteContentList = new List<NoteState.UserNoteContent>( );
+                        foreach( UserNote note in UserNoteControls )
                         {
-                            NoteState noteState = new NoteState( );
-
-                            // Scroll position
-                            noteState.ScrollOffsetPercent = scrollOffsetPercent;
-
-                            // User Notes
-                            noteState.UserNoteContentList = new List<NoteState.UserNoteContent>( );
-                            foreach( UserNote note in UserNoteControls )
-                            {
-                                noteState.UserNoteContentList.Add( note.GetContent( ) );
-                            }
-                            //
-
-
-                            //Reveal Boxes
-                            List<IUIControl> revealBoxes = new List<IUIControl>( );
-                            GetControlOfType<RevealBox>( revealBoxes );
-
-                            noteState.RevealBoxStateList = new List<NoteState.RevealBoxState>( );
-                            foreach( RevealBox revealBox in revealBoxes )
-                            {
-                                noteState.RevealBoxStateList.Add( revealBox.GetState( ) );
-                            }
-                            //
-
-                            //Text Inputs
-                            List<IUIControl> textInputs = new List<IUIControl>( );
-                            GetControlOfType<TextInput>( textInputs );
-
-                            noteState.TextInputStateList = new List<NoteState.TextInputState>( );
-                            foreach( TextInput textInput in textInputs )
-                            {
-                                noteState.TextInputStateList.Add( textInput.GetState( ) );
-                            }
-
-                            // now we can serialize this and save it.
-                            string json = JsonConvert.SerializeObject( noteState );
-                            writer.WriteLine( json );
+                            noteState.UserNoteContentList.Add( note.GetContent( ) );
                         }
+                        //
+
+
+                        //Reveal Boxes
+                        List<IUIControl> revealBoxes = new List<IUIControl>( );
+                        GetControlOfType<RevealBox>( revealBoxes );
+
+                        noteState.RevealBoxStateList = new List<NoteState.RevealBoxState>( );
+                        foreach( RevealBox revealBox in revealBoxes )
+                        {
+                            noteState.RevealBoxStateList.Add( revealBox.GetState( ) );
+                        }
+                        //
+
+                        //Text Inputs
+                        List<IUIControl> textInputs = new List<IUIControl>( );
+                        GetControlOfType<TextInput>( textInputs );
+
+                        noteState.TextInputStateList = new List<NoteState.TextInputState>( );
+                        foreach( TextInput textInput in textInputs )
+                        {
+                            noteState.TextInputStateList.Add( textInput.GetState( ) );
+                        }
+
+                        // now we can serialize this and save it.
+                        string json = JsonConvert.SerializeObject( noteState );
+                        writer.WriteLine( json );
                     }
                 }
 
                 protected NoteState LoadState( string filePath )
                 {
-                    // sanity check to make sure the notes were requested to load.
-                    //if( LoadingNoteState == true )
+                    NoteState noteState = null;
+
+                    // if the file exists
+                    if(System.IO.File.Exists(filePath) == true)
                     {
-                        NoteState noteState = null;
-
-                        // if the file exists
-                        if(System.IO.File.Exists(filePath) == true)
+                        // read it
+                        using (StreamReader reader = new StreamReader(filePath))
                         {
-                            // read it
-                            using (StreamReader reader = new StreamReader(filePath))
-                            {
-                                // grab the stream that reprents a list of all their notes
-                                string json = reader.ReadLine();
+                            // grab the stream that reprents a list of all their notes
+                            string json = reader.ReadLine();
 
-                                if( json != null )
-                                {
-                                    noteState = JsonConvert.DeserializeObject<NoteState>( json ) as NoteState;
-                                }
+                            if( json != null )
+                            {
+                                noteState = JsonConvert.DeserializeObject<NoteState>( json ) as NoteState;
                             }
                         }
-
-                        if( noteState != null )
-                        {
-                            // restore each user note
-                            foreach( NoteState.UserNoteContent note in noteState.UserNoteContentList )
-                            {
-                                // create the note, add it to our list, and to the view
-                                UserNote userNote = new UserNote( new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ), DeviceHeight, note, UserNoteChanged );
-                                UserNoteControls.Add( userNote );
-                                userNote.AddToView( MasterView );
-                            }
-
-                            // we can assume that the states are 1:1 in the same order as the controls,
-                            // because the controls are sorted right after being created, so we're guaranteed
-                            // their order is known. There's no risk they were created in a different order.
-
-                            // collect all the reveal boxes and restore them
-                            List<IUIControl> revealBoxes = new List<IUIControl>( );
-                            GetControlOfType<RevealBox>( revealBoxes );
-
-                            // for the count, take whichever is less, the number of reveal boxes OR the state list,
-                            // because it's possible the note was changed after the last save, and a reveal box
-                            // may have been added / removed.
-                            int revealBoxCount = Math.Min(revealBoxes.Count, noteState.RevealBoxStateList.Count);
-
-                            for(int i = 0; i < revealBoxCount; i++ )
-                            {
-                                RevealBox revealBox = revealBoxes[ i ] as RevealBox;
-                                revealBox.SetRevealed( noteState.RevealBoxStateList[ i ].Revealed );
-                            }
-
-
-                            // collect all the text inputs and restore them
-                            List<IUIControl> textInputList = new List<IUIControl>( );
-                            GetControlOfType<TextInput>( textInputList );
-
-                            // for the count, take whichever is less, the number of text inputs OR the state list,
-                            // because it's possible the note was changed after the last save, and a text input
-                            // may have been added / removed.
-                            int textInputCount = Math.Min(textInputList.Count, noteState.TextInputStateList.Count);
-
-                            for(int i = 0; i < textInputCount; i++ )
-                            {
-                                TextInput textInput = textInputList[i] as TextInput;
-                                textInput.SetText( noteState.TextInputStateList[ i ].Text );
-                            }
-                        }
-
-                        return noteState;
-                        //LoadingNoteState = false;
                     }
+
+                    if( noteState != null )
+                    {
+                        // restore each user note
+                        foreach( NoteState.UserNoteContent note in noteState.UserNoteContentList )
+                        {
+                            // create the note, add it to our list, and to the view
+                            UserNote userNote = new UserNote( new BaseControl.CreateParams( this, Frame.Width, Frame.Height, ref mStyle ), DeviceHeight, note, UserNoteChanged );
+                            UserNoteControls.Add( userNote );
+                            userNote.AddToView( MasterView );
+                        }
+
+                        // we can assume that the states are 1:1 in the same order as the controls,
+                        // because the controls are sorted right after being created, so we're guaranteed
+                        // their order is known. There's no risk they were created in a different order.
+
+                        // collect all the reveal boxes and restore them
+                        List<IUIControl> revealBoxes = new List<IUIControl>( );
+                        GetControlOfType<RevealBox>( revealBoxes );
+
+                        // for the count, take whichever is less, the number of reveal boxes OR the state list,
+                        // because it's possible the note was changed after the last save, and a reveal box
+                        // may have been added / removed.
+                        int revealBoxCount = Math.Min(revealBoxes.Count, noteState.RevealBoxStateList.Count);
+
+                        for(int i = 0; i < revealBoxCount; i++ )
+                        {
+                            RevealBox revealBox = revealBoxes[ i ] as RevealBox;
+                            revealBox.SetRevealed( noteState.RevealBoxStateList[ i ].Revealed );
+                        }
+
+
+                        // collect all the text inputs and restore them
+                        List<IUIControl> textInputList = new List<IUIControl>( );
+                        GetControlOfType<TextInput>( textInputList );
+
+                        // for the count, take whichever is less, the number of text inputs OR the state list,
+                        // because it's possible the note was changed after the last save, and a text input
+                        // may have been added / removed.
+                        int textInputCount = Math.Min(textInputList.Count, noteState.TextInputStateList.Count);
+
+                        for(int i = 0; i < textInputCount; i++ )
+                        {
+                            TextInput textInput = textInputList[i] as TextInput;
+                            textInput.SetText( noteState.TextInputStateList[ i ].Text );
+                        }
+                    }
+
+                    return noteState;
                 }
 
                 public void GetNotesForEmail( out string htmlStream, out string textStream )

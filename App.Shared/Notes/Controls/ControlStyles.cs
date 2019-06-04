@@ -818,10 +818,9 @@ namespace MobileApp
                     mUserNote.mTextCase = Styles.TextCase.Normal;
                 }
 
-                public static void Initialize( string styleSheetXml )
+                public static void Initialize( )
                 {
-                    // Create each control's default style. And put some defaults...for the defaults.
-                    //(Seriously, that way if it doesn't exist in XML we still have a value.)
+                    // Create each control's default style.
                     CreateMainNoteStyle();
                     CreateParagraphStyle();
                     CreateStackPanelStyle();
@@ -834,70 +833,6 @@ namespace MobileApp
                     CreateListItemStyle();
                     CreateListStyle();
                     CreateUserNoteStyle();
-
-                    // otherwise we can directly parse the XML
-                    ParseStyles( styleSheetXml );
-                }
-
-                protected static bool ParseStyles( string styleSheetXml )
-                {
-                    bool result = false;
-
-                    // now use a reader to get each element
-                    //XmlTextReader reader = XmlReader.Create( new StringReader( styleSheetXml ) ) as XmlTextReader;
-                    XmlTextReader reader = new XmlTextReader( new StringReader( styleSheetXml ) );
-                    try
-                    {
-                        bool finishedParsing = false;
-
-                        // look at each element, as they all define styles for our controls
-                        while( finishedParsing == false && reader.Read( ) )
-                        {
-                            switch( reader.NodeType )
-                            {
-                                //Find the control elements
-                                case XmlNodeType.Element:
-                                {
-                                    //most controls don't care about anything other than the basic attributes,
-                                    // so we can use a common Parse function. Certain styles may need to define more specific things,
-                                    // for which we can add special parse classes
-                                    switch( reader.Name )
-                                    {
-                                        case "Note": Notes.Styles.Style.ParseStyleAttributes( reader, ref mMainNote ); break;
-                                        case "Paragraph": Notes.Styles.Style.ParseStyleAttributes( reader, ref mParagraph ); break;
-                                        case "RevealBox": Notes.Styles.Style.ParseStyleAttributes( reader, ref mRevealBox ); break;
-                                        case "TextInput": Notes.Styles.Style.ParseStyleAttributes( reader, ref mTextInput ); break;
-                                        case "Quote": Notes.Styles.Style.ParseStyleAttributes( reader, ref mQuote ); break;
-                                        case "Header.Container": Notes.Styles.Style.ParseStyleAttributes( reader, ref mHeaderContainer ); break;
-                                        case "Header.Speaker": Notes.Styles.Style.ParseStyleAttributes( reader, ref mHeaderSpeaker ); break;
-                                        case "Header.Date": Notes.Styles.Style.ParseStyleAttributes( reader, ref mHeaderDate ); break;
-                                        case "Header.Title": Notes.Styles.Style.ParseStyleAttributes( reader, ref mHeaderTitle ); break;
-                                        case "Text": Notes.Styles.Style.ParseStyleAttributes( reader, ref mText ); break;
-                                        case "List": Notes.Styles.Style.ParseStyleAttributes( reader, ref mList ); break;
-                                        case "ListItem": Notes.Styles.Style.ParseStyleAttributes( reader, ref mListItem ); break;
-                                        case "UserNote": Notes.Styles.Style.ParseStyleAttributes( reader, ref mUserNote ); break;
-                                    }
-                                    break;
-                                }
-
-                                case XmlNodeType.EndElement:
-                                {
-                                    if( reader.Name == "Styles" )
-                                    {
-                                        finishedParsing = true;
-                                        result = true;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    } 
-                    catch( Exception e )
-                    {
-                        throw new Exception( string.Format( "DefaultStyle.xml Error: " + e.Message ) );
-                    }
-
-                    return result;
                 }
             }
         }

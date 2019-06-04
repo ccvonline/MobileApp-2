@@ -97,7 +97,6 @@ namespace Droid
                                     {
                                         NotesPage.NoteName = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].Name;
                                         NotesPage.NoteUrl = RockLaunchData.Instance.Data.NoteDB.SeriesList[ 0 ].Messages[ 0 ].NoteUrl;
-                                        NotesPage.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
                                         PresentFragment( NotesPage, true );
                                     }
@@ -176,7 +175,6 @@ namespace Droid
                                 {
                                     NotesPage.NoteUrl = MainPage.SeriesEntries[ 0 ].Series.Messages[ 0 ].NoteUrl;
                                     NotesPage.NoteName = MainPage.SeriesEntries[ 0 ].Series.Messages[ 0 ].Name;
-                                    NotesPage.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
                                     PresentFragment( NotesPage, true );
                                 }
@@ -219,7 +217,6 @@ namespace Droid
                             {
                                 NotesPage.NoteUrl = DetailsPage.Series.Messages[ buttonId ].NoteUrl;
                                 NotesPage.NoteName = DetailsPage.Series.Messages[ buttonId ].Name;
-                                NotesPage.StyleSheetDefaultHostDomain = RockLaunchData.Instance.Data.NoteDB.HostDomain;
 
                                 PresentFragment( NotesPage, true );
                             }
