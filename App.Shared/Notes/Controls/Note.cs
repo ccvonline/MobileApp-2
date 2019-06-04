@@ -1115,9 +1115,10 @@ namespace MobileApp
                     }
                 }
 
+                public const string sDefaultNoteAttribs = "BackgroundColor=\"#262626FF\" StyleSheet=\"https://rock.ccv.church/content/mobileapp/xml/default_style.xml\"";
                 public string Export( )
                 {
-                    string xmlExport = "<Note StyleSheet=\"https://rock.ccv.church/content/mobileapp/xml/default_style.xml\">";
+                    string xmlExport = "<Note " + sDefaultNoteAttribs + ">";
 
                     // first, sort all controls by Y. That way, if something was created and then moved UP, it won't
                     // have a negative value
