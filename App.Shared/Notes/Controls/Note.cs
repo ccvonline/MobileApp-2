@@ -1115,7 +1115,7 @@ namespace MobileApp
                     }
                 }
 
-                public const string sDefaultNoteAttribs = "BackgroundColor=\"#262626FF\" StyleSheet=\"https://rock.ccv.church/content/mobileapp/xml/default_style.xml\"";
+                public const string sDefaultNoteAttribs = "FullWidthHeader=\"true\" BackgroundColor=\"#262626FF\" StyleSheet=\"https://rock.ccv.church/content/mobileapp/xml/default_style.xml\"";
                 public string Export( )
                 {
                     string xmlExport = "<Note " + sDefaultNoteAttribs + ">";

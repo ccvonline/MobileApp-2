@@ -687,7 +687,7 @@ namespace MobileApp
                     mMainNote.Initialize();
 
                     mMainNote.mBackgroundColor = 0x262626FF;
-                    mMainNote.mFullWidthHeader = false;
+                    mMainNote.mFullWidthHeader = true;
                     mMainNote.mPaddingLeft = .05f;
                     mMainNote.mPaddingRight = .05f;
                 }
