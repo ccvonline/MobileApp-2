@@ -220,7 +220,7 @@ namespace Droid
                 /// <summary>
                 /// Reference to the tutorial overlay image
                 /// </summary>
-                Bitmap TutorialImage { get; set; }
+                Android.Graphics.Bitmap TutorialImage { get; set; }
 
 
                 public NotesFragment( ) : base( )
