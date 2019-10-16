@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{A72997A9-2CAA-402A-AA22-632CB99DC3DD}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RockMobile</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)CoreLocation\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Network\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Math\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Threading\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Profiler\" />
+    <Folder Include="$(MSBuildThisFileDirectory)PlatformSpecific\Android\" />
+    <Folder Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Graphics\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IO\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Media\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Util\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Network\Rock.Client.Extensions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Media\Audio\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\WinSimpleAnimator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoreLocation\iBeacon\Droid_iBeacon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoreLocation\iBeacon\iBeacon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoreLocation\iBeacon\iOS_iBeacon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\HttpWebRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Math\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\Win\Graphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Threading.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profiler\Profiler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\Android\Graphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\Android\System.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\UI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\Graphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\UIScrollViewWrapper.designer.cs">
+      <DependentUpon>UIScrollViewWrapper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\Android\UI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\UIScrollViewWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\DroidSimpleAnimator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\iOSSimpleAnimator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\PlatformAnimators.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\FileCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\PlatformCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\iOSCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\DroidCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\DroidImagePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\PlatformImagePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\iOSImagePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformBaseUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidRevealLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidNative\DroidFadeTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSRevealLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidNative\BorderedRectViews.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSCardCarousel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformCardCarousel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidCardCarousel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidCircleView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformCircleView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSCircleView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSNative\iOSDynamicUITextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformTextField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidTextField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSTextField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformBusyIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSBusyIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidBusyIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformImageView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSImageView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidImageView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Win\WinLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Win\WinRevealLabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Win\WinTextView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Win\WinView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\String.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\AssetConvert.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\Android\Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Debug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformSpecific\iOS\ImageCropViewController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\ApplicationApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\RockApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\Rock.Client.Extensions\Family.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\Rock.Client.Extensions\GuestFamily.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AsyncTaskScheduler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\GroupExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\Location.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\Droid\DroidLocation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\Droid\LocationDelegateService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\Droid\LocationManagerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\iOS\LocationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Location\iOS\iOSLocation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\URL.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\Audio\DroidSoundEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\Audio\PlatformSoundEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Media\Audio\iOSSoundEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\PlatformSwitch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\iOS\iOSSwitch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Droid\DroidSwitch.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)UI\.gitignore" />
+  </ItemGroup>
+</Project>
