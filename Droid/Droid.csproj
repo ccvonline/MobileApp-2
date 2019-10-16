@@ -120,13 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
-    <AndroidResource Include="..\Assets\androidPhotoMask%402x.png">
-      <Link>Resources\drawable-hdpi\androidPhotoMask.png</Link>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable-hdpi\shadow.9.png" />
-    <AndroidResource Include="..\Assets\Icons\Icon%402x.png">
-      <Link>Resources\drawable-hdpi\Icon.png</Link>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\Prayer_Create.axml" />
     <AndroidResource Include="Resources\layout\Profile.axml" />
     <AndroidResource Include="Resources\layout\Notes.axml" />
@@ -141,9 +135,6 @@
     <AndroidResource Include="Resources\layout\Notes_Details.axml" />
     <AndroidResource Include="Resources\layout\Notes_Primary.axml" />
     <AndroidResource Include="Resources\layout\Springboard.axml" />
-    <AndroidResource Include="..\Assets\facebook_login%403x.png">
-      <Link>Resources\drawable-hdpi\facebook_login.png</Link>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\dark_cursor.axml" />
     <AndroidResource Include="Resources\drawable\light_cursor.axml" />
     <AndroidResource Include="Resources\values\themes.xml" />
@@ -158,9 +149,6 @@
     <AndroidResource Include="Resources\layout\OOBEView.axml" />
     <AndroidResource Include="Resources\layout\TaskWebView.axml" />
     <AndroidResource Include="Resources\drawable\RoundButton.axml" />
-    <AndroidResource Include="..\Assets\navbarLogo%402x.png">
-      <Link>Resources\drawable-hdpi\navbarLogo.png</Link>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable-xhdpi\shadow.9.png" />
     <AndroidResource Include="..\Assets\splash_combo_android_xhdpi.png">
       <Link>Resources\drawable-xhdpi\splash_combo_android.png</Link>
@@ -174,9 +162,25 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\GroupInfo.axml" />
     <AndroidResource Include="Resources\layout\BiblePassage.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\androidPhotoMask.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\Icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\facebook_login.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\navbarLogo.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
-  <Import Project="..\..\Rock\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\..\Rock\Rock.Client\Rock.Client.Models.projitems')" />
-  <Import Project="..\..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\..\Rock.Mobile\Rock.Mobile.projitems')" />
+  <Import Project="..\Rock.Mobile\Rock.Mobile.projitems" Label="Shared" Condition="Exists('..\Rock.Mobile\Rock.Mobile.projitems')" />
+  <Import Project="..\Rock.Client\Rock.Client.Models.projitems" Label="Shared" Condition="Exists('..\Rock.Client\Rock.Client.Models.projitems')" />
   <Import Project="..\App.Shared\App.Shared.projitems" Label="Shared" Condition="Exists('..\App.Shared\App.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
